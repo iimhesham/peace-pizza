@@ -767,8 +767,15 @@ function makeSessionCode(){
    LIVE STATUS (optional Firebase Realtime Database, REST only)
 ========================================================= */
 
+/* ضع رابط قاعدة بيانات Firebase بتاعتك هنا مرة واحدة، بعدين احفظ
+   وارفع الملف. بالطريقة دي كل الأجهزة (بتاعتك وبتاعة اللاعبين)
+   هتستخدم نفس القاعدة تلقائيًا من غير ما حد يحتاج يدخلها بنفسه. */
+const DEFAULT_LIVE_DB_URL="https://game-36fb1-default-rtdb.firebaseio.com";
+
 function getLiveDbUrl(){
-  return (localStorage.getItem("liveDbUrl")||"").trim().replace(/\/+$/,"");
+  const stored=(localStorage.getItem("liveDbUrl")||"").trim().replace(/\/+$/,"");
+  if(stored)return stored;
+  return DEFAULT_LIVE_DB_URL.trim().replace(/\/+$/,"");
 }
 
 function saveLiveDbUrl(inputId){
