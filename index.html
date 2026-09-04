@@ -592,13 +592,16 @@ function show(targetId){
 function verifyGM(){
   const inputVal = document.getElementById('gmInput').value.trim();
   const errorMsg = document.getElementById('gmError');
-  
+
+  // Basic GM gate — NOT real security
   if (inputVal === "هشام") {
     errorMsg.classList.add('hidden');
     document.getElementById('gmInput').value = "";
     show('gm');
   } else {
+    errorMsg.textContent = "خطأ: اسم المسؤول غير صحيح.";
     errorMsg.classList.remove('hidden');
+    document.getElementById('gmInput').value = "";
   }
 }
 
