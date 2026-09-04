@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peace Pizza 🍕 — قضية آل سووب</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Bungee&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-base: #08070a;
+  --bg-card: #121016;
+  --bg-card-hover: #191620;
+  --border-color: #2b2533;
+  --text-main: #f0ece1;
+  --text-muted: #9e96a6;
+  --accent-red: #992c2c;
+  --accent-gold: #c5a880;
+  --shadow: 0 20px 40px rgba(0,0,0,0.7);
+  --radius: 16px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background: radial-gradient(circle at 50% 0%, #1e1518 0%, var(--bg-base) 65%);
+  color: var(--text-main);
+  font-family: 'Tajawal', sans-serif;
+  line-height: 1.8;
+  min-height: 100vh;
+  padding: 20px 10px;
+  overflow-x: hidden;
+}
+
+button, input { font-family: 'Tajawal', sans-serif; }
+
+.app {
+  max-width: 950px;
+  margin: 0 auto;
+  perspective: 2000px;
+}
+
+/* قطعة البيتزا الكرتونية المتحركة */
+.cartoon-slice {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  font-size: 40px;
+  animation: floatSlice 2.5s infinite alternate ease-in-out;
+  cursor: pointer;
+  z-index: 999;
+  filter: drop-shadow(3px 3px 0px #000) drop-shadow(-1px -1px 0px #992c2c);
+  user-select: none;
+  transition: transform 0.2s;
+}
+.cartoon-slice:hover {
+  transform: scale(1.25) rotate(15deg);
+}
+@keyframes floatSlice {
+  0% { transform: translateY(0px) rotate(-10deg); }
+  100% { transform: translateY(-12px) rotate(10deg); }
+}
+
+.badge {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--accent-gold);
+  border: 1px solid rgba(197, 168, 128, 0.3);
+  padding: 5px 14px;
+  border-radius: 50px;
+  background: rgba(197, 168, 128, 0.05);
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+}
+
+h1, h2, h3 {
+  font-family: 'Amiri', serif;
+}
+
+.crazy-peace-title {
+  font-family: 'Bungee', cursive, sans-serif;
+  font-size: clamp(38px, 7vw, 65px);
+  font-weight: 900;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ce2b37 0%, #ffffff 40%, #009246 70%, #c5a880 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(4px 4px 0px #000) drop-shadow(-2px -2px 0px #992c2c);
+  letter-spacing: 3px;
+  margin: 15px 0 5px;
+  transform: rotate(-3deg);
+  display: inline-block;
+  animation: crazyPulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes crazyPulse {
+  0% { transform: rotate(-3deg) scale(1); filter: drop-shadow(4px 4px 0px #000) drop-shadow(-2px -2px 0px #992c2c); }
+  100% { transform: rotate(2deg) scale(1.04); filter: drop-shadow(6px 6px 0px #000) drop-shadow(-3px -3px 0px #009246); }
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transform-origin: right center;
+  backface-visibility: hidden;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+.page-flip-in {
+  animation: flipIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+@keyframes flipIn {
+  0% { transform: rotateY(40deg) scale(0.95); opacity: 0; }
+  100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  opacity: 0.3;
+}
+
+.hero {
+  text-align: center;
+  padding: 50px 20px;
+}
+.subtitle {
+  color: var(--text-muted);
+  font-size: 17px;
+  margin-bottom: 30px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 24px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.primary {
+  background: linear-gradient(135deg, #a83232 0%, #7d2020 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(153, 44, 44, 0.4);
+}
+.primary:active {
+  transform: scale(0.96);
+}
+.secondary {
+  background: #231f2b;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+.secondary:hover {
+  background: #2d2838;
+  border-color: var(--text-muted);
+}
+.ghost {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+@media(max-width: 650px){
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 20px; }
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--accent-gold);
+  font-size: 14px;
+}
+input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: #0d0b0f;
+  color: var(--text-main);
+  font-size: 16px;
+}
+input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.15);
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+}
+@media(max-width: 650px){
+  .role-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.role-btn {
+  padding: 20px 10px;
+  border: 1px solid var(--border-color);
+  background: #0d0b0f;
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.role-btn:active { transform: scale(0.95); }
+.role-btn strong {
+  display: block;
+  color: var(--accent-gold);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.role-btn small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.role-btn.selected {
+  border-color: var(--accent-gold);
+  background: rgba(197, 168, 128, 0.15);
+  box-shadow: 0 0 15px rgba(197, 168, 128, 0.25);
+  transform: translateY(-2px);
+}
+
+.notice {
+  background: rgba(197, 168, 128, 0.05);
+  border-right: 4px solid var(--accent-gold);
+  padding: 16px;
+  border-radius: 10px;
+  color: #d6d0c4;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+.secret {
+  background: #171113;
+  border: 1px solid rgba(153, 44, 44, 0.3);
+}
+.secret h3 {
+  color: #e04848;
+}
+
+details {
+  border-top: 1px solid var(--border-color);
+  padding: 16px 0;
+}
+summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+summary::after {
+  content: '+';
+  font-size: 20px;
+  color: var(--accent-gold);
+}
+details[open] summary::after {
+  content: '-';
+}
+details p {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+ul { padding-right: 20px; color: var(--text-muted); }
+li { margin-bottom: 8px; }
+
+.small { font-size: 13px; color: var(--text-muted); }
+.hidden { display: none !important; }
+
+.round {
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 15px 0;
+  background: #0d0b0f;
+}
+.danger { color: #e04848; font-weight: 700; }
+.footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 30px 0;
+}
+hr { border: 0; border-top: 1px solid var(--border-color); margin: 25px 0; }
+</style>
+</head>
+<body>
+
+<!-- قطعة بيتزا كرتونية تفاعلية في الزاوية -->
+<div class="cartoon-slice" title="Peace Pizza 🍕" onclick="playClickSound(); alert('مين القاتل يا ترى؟ ركز في الأدلة كويس! 🕵️‍♂️🍕')">🍕</div>
+
+<div class="app">
+
+  <!-- صفحة البداية -->
+  <section id="landing">
+    <div class="card hero">
+      <div class="badge">عالم التحقيق والغموض</div>
+      <div>
+        <span class="crazy-peace-title">Peace Pizza</span>
+      </div>
+      <p class="subtitle" style="margin-top: 15px;">حيث يجتمع الطعم الرائع والألغاز المعقدة</p>
+
+      <div style="margin-top: 25px;">
+        <button class="btn primary" onclick="playClickSound(); show('home')" style="padding: 16px 36px; font-size: 17px;">دخول اللعبة 🕵️‍♂️</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- الصفحة الرئيسية للعبة -->
+  <section id="home" class="hidden">
+    <div class="card hero">
+      <div class="badge">لعبة تحقيق جنائية • 1909</div>
+      <h1>قضية آل سووب</h1>
+      <p class="subtitle">منزل واحد. ست شخصيات. أربع جولات. والحقيقة مش بالضرورة واضحة.</p>
+      <p style="margin-bottom: 15px; font-weight: 500;">اختار وضع الاستخدام:</p>
+      <div class="grid" style="max-width: 450px; margin: 0 auto;">
+        <button class="btn primary" onclick="playClickSound(); goPlayer()">أنا لاعب</button>
+        <button class="btn secondary" onclick="playClickSound(); show('gm-lock')">أنا الـ GM</button>
+      </div>
+      <p class="small" style="margin-top: 30px;">كل لاعب يفتح نفس الملف على موبايله، يكتب اسمه ويختار رقم شخصيته.</p>
+      <p class="small" style="margin-top: 10px;"><a href="#" onclick="playClickSound(); resetPlayer(); return false;" style="color: var(--text-muted); text-decoration: underline;">مسح بيانات لاعب سابق محفوظة على الجهاز ده</a></p>
+    </div>
+  </section>
+
+  <!-- شاشة حماية الـ GM -->
+  <section id="gm-lock" class="hidden">
+    <div class="card" style="border-color: var(--accent-red); max-width: 500px; margin: 40px auto; text-align: center;">
+      <div class="badge" style="color: #ff9999; border-color: rgba(153,44,44,0.5); background: rgba(153,44,44,0.1);">منطقة محظورة 🔒</div>
+      <h2 style="margin-top: 15px; color: #fceee9;">مدير اللعبة (GM)</h2>
+      <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 15px;">هذه الصفحة مخصصة لمدير اللعبة فقط وتحتوي على الحلول والأسرار الكاملة.</p>
+      
+      <div style="text-align: right; margin-bottom: 15px;">
+        <label for="gmInput">اسم المسؤول / كلمة المرور</label>
+        <input id="gmInput" type="password" placeholder="اكتب كلمة المرور هنا..." autocomplete="off">
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn primary" onclick="playClickSound(); verifyGM()" style="flex: 2;">تحقق ودخول</button>
+        <button class="btn ghost" onclick="playClickSound(); show('home')" style="flex: 1;">رجوع</button>
+      </div>
+      <p id="gmError" class="danger hidden" style="margin-top: 15px; font-size: 14px;">خطأ: اسم المسؤول غير صحيح.</p>
+    </div>
+  </section>
+
+  <!-- شاشة إعداد اللاعب -->
+  <section id="setup" class="hidden">
+    <div class="card">
+      <h2>اختيار الشخصية</h2>
+      <div class="notice">اكتب اسمك ثم اختر رقمًا من 1 إلى 6. بعد التأكيد ستظهر لك معلومات شخصيتك السرية. <b>متوريهاش لحد.</b></div>
+      <div class="notice" style="border-color: var(--accent-red); background: rgba(153,44,44,0.08);"><b>مهم قبل ما تختار:</b> اتفقوا بصوت عالي مين هياخد كل رقم قبل ما كل واحد يفتح الملف على موبايله.</div>
+      <br>
+      <label for="playerName">اسمك الكريم</label>
+      <input id="playerName" placeholder="اكتب اسمك هنا...">
+      <br><br>
+      <label>اختر رقم الشخصية</label>
+      <div class="role-grid" id="roleButtons"></div>
+      <br><br>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn primary" type="button" onclick="playClickSound(); confirmRole()" style="flex: 2;">تأكيد واكتشاف شخصيتي</button>
+        <button class="btn ghost" onclick="playClickSound(); show('home')" style="flex: 1;">رجوع</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- شاشة تفاصيل شخصية اللاعب -->
+  <section id="player" class="hidden">
+    <div class="card">
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+        <div class="badge" id="playerBadge"></div>
+        <div id="mafiaBadge" class="badge hidden" style="background: rgba(153,44,44,0.15); border-color: rgba(153,44,44,0.5); color: #ff9999;">MAFIOSO</div>
+      </div>
+      <h2 id="roleName"></h2>
+      <p id="rolePublic" style="color: var(--text-muted);"></p>
+    </div>
+
+    <div class="card secret">
+      <h3>سري جدًا — معلوماتك الشخصية</h3>
+      <div id="roleSecret" style="margin-top: 10px; color: #f3e6e6;"></div>
+      <hr>
+      <h3>نقطة قوتك في التلاعب</h3>
+      <p id="roleStrength" style="color: var(--text-muted); margin-top: 5px;"></p>
+      <h3 style="margin-top: 15px;">نقطة ضعفك</h3>
+      <p id="roleWeakness" style="color: var(--text-muted); margin-top: 5px;"></p>
+    </div>
+
+    <!-- مفكرة المحقق الشخصية التفاعلية -->
+    <div class="card" style="border-color: var(--accent-gold);">
+      <h3>مفكرة المحقق الشخصية 📝</h3>
+      <p class="small" style="margin-bottom: 10px;">اكتب هنا استنتاجاتك ومشاهداتك أثناء التحقيق، ومحدش غيرك هيشوفها على جهازك.</p>
+      <textarea id="playerNotes" placeholder="مثلاً: الدكتور بينيت مرتبك.. المحامي عنده مصلحة مالية..." style="width:100%; height:90px; background:#0d0b0f; color:var(--text-main); border:1px solid var(--border-color); border-radius:12px; padding:12px; font-family:'Tajawal',sans-serif; resize:vertical;" oninput="autoSaveNotes()"></textarea>
+      <div id="saveStatus" class="small" style="margin-top: 5px; color: var(--accent-gold); text-align: left;"></div>
+    </div>
+
+    <div class="card">
+      <h2>قواعد اللعبة</h2>
+      <div id="rulesPlayer" style="margin-top: 10px;"></div>
+    </div>
+
+    <button class="btn secondary" onclick="playClickSound(); resetPlayer()" style="width: 100%;">مسح الشخصية من هذا الجهاز</button>
+  </section>
+
+  <!-- شاشة لوحة الـ GM -->
+  <section id="gm" class="hidden">
+    <div class="card" style="border-color: var(--accent-gold);">
+      <div class="badge">GM ONLY</div>
+      <h2>لوحة مدير اللعبة</h2>
+      <div class="notice" style="margin-top: 10px;"><b>تحذير:</b> الشاشة دي فيها الحل الحقيقي كامل. متعرضهاش للاعبين نهائياً.</div>
+    </div>
+
+    <div class="card">
+      <h2>الحل الحقيقي</h2>
+      <p style="margin-bottom: 10px;"><b>الفاعل المباشر:</b> د. Bennett Hyde — استخدم السم.</p>
+      <p style="margin-bottom: 10px;"><b>الجاني الثاني:</b> المحامي Thomas Greene — محرّض/مُسهّل، وفّر السم عن طريق معارفه، وأخفى خطاب Margaret. دافعه المال، وليس العاطفة.</p>
+      <p style="margin-bottom: 10px;"><b>Frances, Margaret, Lucy, Pearl:</b> أبرياء 100% من جريمة القتل، لكن لكل واحدة سر آخر يجعلها تبدو مذنبة.</p>
+      <div class="notice" style="margin-top: 15px;">الاتفاق داخل اللعبة: Hyde وGreene لا يعرفان بعضهما ولا يوجد تنسيق ظاهر بينهما حتى الدليل الرابع.</div>
+    </div>
+
+    <div class="card">
+      <h2>نتيجة كل شخصية</h2>
+      <div id="gmRoles"></div>
+    </div>
+
+    <div class="card">
+      <h2>الأدلة الأربعة</h2>
+      <div id="roundsGM"></div>
+    </div>
+
+    <div class="card">
+      <h2>إرشادات الـ GM</h2>
+      <ol style="padding-right: 20px; color: var(--text-muted);">
+        <li style="margin-bottom: 8px;">اقرأ القصة الإطارية في البداية.</li>
+        <li style="margin-bottom: 8px;">وزّع/اترك كل لاعب يختار شخصيته على جهازه.</li>
+        <li style="margin-bottom: 8px;">كل جولة: اقرأ الكلو → 15–20 دقيقة نقاش → فرصة كشف سر واحد عند تحقق شرط الإجماع → تصويت → خروج المتهم.</li>
+        <li>بعد الجولة الرابعة يجب أن يتبقى لاعبان، ثم اقرأ الحل الرسمي.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>الحل الرسمي الذي يُقرأ في النهاية</h2>
+      <p style="color: var(--text-muted); margin-bottom: 15px;">القضية الحقيقية غير محلولة نهائيًا. Hyde حوكم أكثر من مرة، وأُدين مرة ثم أُبطلت الإدانة، وانتهت القضية دون إدانة نهائية.</p>
+    </div>
+
+    <button class="btn ghost" onclick="playClickSound(); show('home')" style="width: 100%;">العودة للرئيسية</button>
+  </section>
+
+  <div class="footer">Peace Pizza 🍕 • قضية آل سووب • لعبة تحقيق منزلية • 1909</div>
+</div>
+
+<script>
+// دالة المؤثرات الصوتية التفاعلية للزرار
+function playClickSound() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);
+    
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.08);
+  } catch(e) {}
+}
+
+// دالة حفظ الملاحظات تلقائياً
+function autoSaveNotes() {
+  const notes = document.getElementById('playerNotes').value;
+  localStorage.setItem('swopePlayerNotes', notes);
+  const status = document.getElementById('saveStatus');
+  status.textContent = 'تم الحفظ تلقائياً ✓';
+  setTimeout(() => { status.textContent = ''; }, 1500);
+}
+
+const roles = [
+{
+n:1,name:"د. Bennett Clark Hyde",
+public:"طبيب معروف ورئيس جمعية أطباء المقاطعة. متجوز Frances Swope. كان حاضر شخصيًا وقت وفاة Hunton وThomas، وهو اللي أعطاهم الكبسولات.",
+secret:"عليك ديون قمار كبيرة محدش يعرف عنها. زواجك من Frances معناه إنك بتستفيد بشكل غير مباشر من ثروة العيلة، وكل وريث بيموت نصيبه بيتوزع. اشتريت مؤخرا كمية سيانيد من صيدلية بحجة «تجارب معملية»، وطلبت عينات تيفويد.",
+strength:"إنت الطبيب. أي معلومة طبية تقولها، حتى لو غلط أو نص الحقيقة، الناس بتصدقها تلقائياً لأنك الخبير.",
+weakness:"إنت آخر واحد المفروض يتصدق لو حاول يفسر حاجة عن الدواء نفسه — الشك بيرجعلك تلقائياً."
+},
+{
+n:2,name:"Frances Swope Hyde",
+public:"بنت Margaret، متجوزة Hyde. بتحب زوجها بشدة وبتدافع عنه قدام الكل.",
+secret:"عارفة إن جوزك مديون بشكل خطير. سمعتيه قبل موت Thomas بيقول جملة غامضة زي «لو حاجة حصلت له، إحنا هنبقى مرتاحين». اتصرفتي إنك متسمعيش.",
+strength:"إنتِ الزوجة المكلومة. الناس بتتردد تضغط عليكِ بقوة.",
+weakness:"أي حاجة تكشف إنك عارفة بالديون أو والجملة الغامضة هتخليكِ تبقي «شريكة بالصمت»."
+},
+{
+n:3,name:"Margaret «Maggie» Swope",
+public:"أرملة أخو Thomas، صاحبة البيت الفعلية، وأم Frances. كل الأحداث حصلت تحت سقفها.",
+secret:"من أول ما Hyde اتجوز بنتك وإنتِ مش مرتاحة له. قبل موت Thomas بأسبوعين كتبتي خطاب لمحامي العيلة Greene تسأليه لو ممكن «تعديل نصيب Hyde وFrances من الوصية» — الخطاب ده اختفى.",
+strength:"إنتِ صاحبة البيت. تعرفي مين دخل ومين دخل وفين كانت الحاجات.",
+weakness:"الخطاب المفقود بيديكي دافع مالي واضح لو اتكشف."
+},
+{
+n:4,name:"Lucy Swope",
+public:"وريثة تانية من العيلة، نصيبها في الوصية أصغر بكتير من نصيب Hyde وFrances.",
+secret:"زرتِ محامي مستقل قبل الوفاة الأولى بأسابيع، وسألتيه: «لو وريث مات، هل ممكن أطعن في توزيع نصيبه؟».",
+strength:"إنتِ فاهمة تفاصيل الوصية والحسابات المالية أكتر من أي حد تاني في الأوضة.",
+weakness:"زيارتك للمحامي المستقل قبل الموت بأسابيع توقيت سيئ جدًا."
+},
+{
+n:5,name:"الممرضة Pearl Kellar",
+public:"ممرضة كانت موجودة في منزل Swope، قريبة من Thomas والعيلة أثناء المرض.",
+secret:"إنتِ لا تثقي في Hyde. لاحظتِ حاجة في طريقة إعطائه الدواء مقلقة، وكتبتي ملاحظاتك في مفكرة خاصة.",
+strength:"إنتِ الشاهدة العينية الوحيدة اللي فعليًا شافت لحظات إدخال الدواء.",
+weakness:"ذاكرتك مش كاملة، وبعض كلامك استنتاج مش مشاهدة فعلية."
+},
+{
+n:6,name:"المحامي Thomas Greene",
+public:"محامي تركة العيلة. المسؤول عن صياغة وتنفيذ وصية Thomas، وعنده النسخة الأصلية منها.",
+secret:"بتاخد عمولة نسبة من كل عملية توزيع تركة بعد وفاة كل وريث — یعنی كل موت في العيلة بيزود دخلك. وإنت اللي «سيبت» خطاب Margaret يختفي.",
+strength:"إنت الوحيد اللي فاهم تفاصيل الوصية والقانون فعليًا.",
+weakness:"العمولة المتصاعدة دي بيان مالي ملموس يضعك تحت الشبهة."
+}
+];
+
+const rounds = [
+{
+title:"الجولة 1 — إيصال السيانيد",
+text:"إيصال شراء سيانيد باسم مستعار من صيدلية في كانساس سيتي، بتاريخ قبل وفاة Thomas بأسبوع واحد بالضبظ.",
+surface:"قراءة سطحية: بيوجه مباشرة على Hyde.",
+deep:"قراءة أعمق: «اسم مستعار» — یعنی مش بالضرورة Hyde نفسه اللي اشتراه."
+},
+{
+title:"الجولة 2 — الخطاب المحروق",
+text:"شهادة خادم قديم: شاف حد بيحرق ورق في مدفأة مكتبة البيت في ليلة اختفاء خطاب Margaret.",
+surface:"قراءة سطحية: بيوجه الشك لمين كان عنده مصلحة يخفي الخطاب.",
+deep:"قراءة أعمق: الخطاب كان في مكتب المحامي مش في البيت أصلاً!"
+},
+{
+title:"الجولة 3 — مفكرة الممرضة",
+text:"صفحة من مفكرة Pearl الخاصة، فيها وصف دقيق لأعراض تشبه التسمم قبل الشك الرسمي، وجنبها سطر إن حد عرض عليها فلوس تسكت.",
+surface:"قراءة سطحية: يدي مصداقية لكلام Pearl ضد Hyde.",
+deep:"قراءة أعمق: هي كتبت الملاحظة بدري جداً، فليه ماتكلمتش وقتها ومنين جه العرض المالي؟"
+},
+{
+title:"الجولة 4 — التويست: الربط الخفي",
+text:"سجل شراء يوضح إن نفس الشخص اللي طلب السيانيد هو اللي طلب عينات التيفويد — بس مش بنفس الاسم، وبنفس خط اليد مع ملحوظة مالية لمحامي التركة.",
+surface:"قراءة سطحية: فيه اتنين وراء الموضوع مش واحد.",
+deep:"قراءة أعمق: خط اليد يربط الشراء بشخص قريب من العيلة مش دكتور بالضرورة."
+}
+];
+
+function show(targetId){
+  document.querySelectorAll('section').forEach(s => {
+    s.classList.add('hidden');
+    s.classList.remove('page-flip-in');
+  });
+  
+  const target = document.getElementById(targetId);
+  if(target){
+    target.classList.remove('hidden');
+    target.classList.add('page-flip-in');
+  }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function verifyGM(){
+  const inputVal = document.getElementById('gmInput').value.trim();
+  const errorMsg = document.getElementById('gmError');
+  
+  if (inputVal === "هشام") {
+    errorMsg.classList.add('hidden');
+    document.getElementById('gmInput').value = "";
+    show('gm');
+  } else {
+    errorMsg.classList.remove('hidden');
+  }
+}
+
+document.getElementById('gmInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') verifyGM();
+});
+
+function buildRoleButtons(){
+  const box = document.getElementById('roleButtons');
+  box.innerHTML = roles.map(r => `<button class="role-btn" type="button" data-n="${r.n}" onclick="playClickSound(); selectRole(${r.n})"><strong>شخصية ${r.n}</strong><small>اضغط للاختيار</small></button>`).join('');
+}
+
+let selected = null;
+function selectRole(n){
+  selected = n;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.toggle('selected', +b.dataset.n === n));
+}
+
+function confirmRole(){
+  const name = document.getElementById('playerName').value.trim();
+  if(!name){ alert('فضلاً، اكتب اسمك الكريم أولاً.'); return; }
+  if(!selected){ alert('فضلاً، اختر رقم الشخصية.'); return; }
+  
+  const r = roles.find(x => x.n === selected);
+  localStorage.setItem('swopePlayer', JSON.stringify({name, role: selected}));
+  renderPlayer(name, r);
+  show('player');
+}
+
+function renderPlayer(name, r){
+  document.getElementById('playerBadge').textContent = `اللاعب: ${name} • الشخصية رقم ${r.n}`;
+  document.getElementById('roleName').textContent = r.name;
+  document.getElementById('rolePublic').innerHTML = `<b>المعلومات العلنية:</b> ${r.public}`;
+  document.getElementById('roleSecret').textContent = r.secret;
+  document.getElementById('mafiaBadge').classList.toggle('hidden', !(r.n === 1 || r.n === 6));
+  document.getElementById('roleStrength').textContent = r.strength;
+  document.getElementById('roleWeakness').textContent = r.weakness;
+  
+  // استرجاع الملاحظات الشخصية المحفوظة
+  document.getElementById('playerNotes').value = localStorage.getItem('swopePlayerNotes') || '';
+
+  document.getElementById('rulesPlayer').innerHTML = `
+  <ul>
+  <li>أنتم 6 لاعبين + Game Master.</li>
+  <li>اللعبة عبارة عن 4 جولات تحقيق.</li>
+  <li>في كل جولة، الـGM هيقدم دليل جديد ويبدأ النقاش.</li>
+  <li>بعد كل جولة: نقاش لمدة 15–20 دقيقة → تصويت → اتهام شخص واحد يخرج من اللعبة.</li>
+  <li>إذا حصل إجماع، يمكن لشخص واحد فقط كشف سره الشخصي اختيارياً.</li>
+  <li>اللعبة تستمر حتى يتبقى لاعبان، وبعدها الـGM يكشف الحل الرسمي.</li>
+  </ul>`;
+}
+
+function goPlayer(){
+  const saved = localStorage.getItem('swopePlayer');
+  if(saved){
+    try{
+      const p = JSON.parse(saved), r = roles.find(x => x.n === p.role);
+      if(r){ renderPlayer(p.name, r); show('player'); return; }
+    }catch(e){}
+  }
+  show('setup');
+}
+
+function resetPlayer(){
+  localStorage.removeItem('swopePlayer');
+  localStorage.removeItem('swopePlayerNotes');
+  selected = null;
+  document.getElementById('playerName').value = '';
+  document.getElementById('playerNotes').value = '';
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+  show('setup');
+}
+
+function buildGM(){
+  document.getElementById('gmRoles').innerHTML = roles.map(r => {
+    const guilty = (r.n === 1 || r.n === 6);
+    return `<div class="round"><b>${r.n} — ${r.name}</b><br><span class="${guilty ? 'danger' : ''}">${guilty ? 'مذنب — ' + (r.n === 1 ? 'الفاعل المباشر' : 'محرّض/مُسهّل') : 'بريء من جريمة القتل'}</span></div>`;
+  }).join('');
+  
+  document.getElementById('roundsGM').innerHTML = rounds.map(x => `
+    <details><summary>${x.title}</summary>
+      <p><b>الدليل:</b> ${x.text}</p>
+      <p><b>السطحية:</b> ${x.surface}</p>
+      <p><b>الأعمق:</b> ${x.deep}</p>
+    </details>`).join('');
+}
+
+document.getElementById('playerName').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') confirmRole();
+});
+
+buildRoleButtons(); 
+buildGM();
+
+const saved = localStorage.getItem('swopePlayer');
+if(saved){
+  try{
+    const p = JSON.parse(saved), r = roles.find(x => x.n === p.role);
+    if(r){ renderPlayer(p.name, r); }
+  }catch(e){}
+}
+</script>
+</body>
+</html>
