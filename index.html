@@ -283,11 +283,108 @@ li{margin-bottom:8px}
 </div>
 </section>
 
+<!-- SWOPE SETUP -->
+<section id="swope-setup" class="hidden">
+<div class="card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice">
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من <b>1 إلى 6</b>.
+    بعد التأكيد ستظهر معلومات شخصيتك السرية. <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="swopeName">اسمك</label>
+
+  <input id="swopeName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="swopeSessionCode">كود الجلسة</label>
+  <input id="swopeSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821">
+
+  <label style="margin-top:15px">اختر رقم الشخصية</label>
+  <div id="swopeRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmSwopeRole()" style="flex:2">
+      تأكيد واكتشاف شخصيتي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('swope')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- SWOPE PLAYER -->
+<section id="swope-player" class="hidden">
+  
+  <div class="card" style="margin-bottom:16px">
+    <div class="topline">
+      <div class="badge" id="swopePlayerBadge">اللاعب</div>
+      <div id="swopeMafia" class="badge hidden" style="color:#ff7777;border-color:#a33;background:rgba(150,20,20,.2)" dir="ltr">
+        MAFIOSO
+      </div>
+    </div>
+    <h2 id="swopeRoleName" style="margin-top:12px"></h2>
+    <p id="swopePublic" class="small"></p>
+  </div>
+
+  <div class="dashboard-grid">
+    
+    <div class="card secret">
+      <h3>سري جدًا — معلومات شخصيتك</h3>
+      <p id="swopeSecret" style="margin-top:10px"></p>
+      <hr>
+      <h3>نقطة قوتك</h3>
+      <p id="swopeStrength" class="small"></p>
+      <h3 style="margin-top:15px">نقطة ضعفك</h3>
+      <p id="swopeWeakness" class="small"></p>
+    </div>
+
+    <div class="card">
+      <h3>مفكرة المحقق</h3>
+      <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+      <textarea id="swopeNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveSwopeNotes()"></textarea>
+      <div id="swopeSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+    </div>
+
+    <div class="card" id="swopeStatusCard">
+      <div class="topline">
+        <h2>مين لسه في اللعبة</h2>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="status-indicator"><span class="dot-online"></span>مباشر</span>
+          <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('swope')">تحديث</button>
+        </div>
+      </div>
+      <div id="swopeStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+    </div>
+
+    <div class="card">
+      <h2>قواعد اللعبة</h2>
+      <ul style="margin-top:10px">
+        <li>أنتم 6 لاعبين + Game Master.</li>
+        <li>اللعبة عبارة عن 4 جولات تحقيق.</li>
+        <li>في كل جولة الـGM يقدم دليل جديد.</li>
+        <li>بعد كل جولة نقاش ثم تصويت.</li>
+        <li>اللاعب الذي يحصل على أغلب الأصوات يخرج من اللعبة.</li>
+        <li>بعد الجولة الرابعة يكشف الـGM الحل الرسمي.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <button class="btn secondary" onclick="playClickSound();resetSwope()" style="width:100%;margin-top:20px">
+    مسح الشخصية من هذا الجهاز
+  </button>
+</section>
+
 <!-- SWOPE GM -->
 <section id="swope-gm" class="hidden">
 <div class="card" style="margin-bottom:16px">
   <div class="badge">GM ONLY</div>
-  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة — قضية آل سووب</h2>
   <div class="notice">الشاشة دي تحتوي على الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
 </div>
 
@@ -309,6 +406,15 @@ li{margin-bottom:8px}
       <button class="btn primary" onclick="playClickSound();saveLiveDbUrl()" style="flex:2">حفظ</button>
       <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء</button>
     </div>
+  </div>
+
+  <div class="card secret" style="grid-column: 1 / -1;">
+    <h2>الحل الكامل للقضية (للمدير)</h2>
+    <p style="margin-top:10px; color:#d6d0c4;">
+      <b>القاتل الحقيقي:</b> الدكتور هيد (Dr. Hyde) بالتعاون مع الممرضة.<br>
+      <b>الدافع:</b> الحصول على أموال الوصية والتستر على التلاعب في الأدوية.<br>
+      <b>طريقة القتل:</b> التسميم باستخدام مادة السيانيد المستخلصة تدريجيًا.
+    </p>
   </div>
 </div>
 
@@ -345,11 +451,88 @@ li{margin-bottom:8px}
 </div>
 </section>
 
+<!-- RIPPER SETUP -->
+<section id="ripper-setup" class="hidden">
+<div class="card">
+  <h2>اختيار الشخصية — وايت تشابل</h2>
+  <label for="ripperName">اسمك</label>
+  <input id="ripperName" maxlength="40" placeholder="اكتب اسمك هنا...">
+  <br><br>
+  <label for="sessionCode">كود الجلسة</label>
+  <input id="sessionCode" maxlength="4" placeholder="مثال: 4821">
+  <label style="margin-top:15px">اختر رقم الشخصية</label>
+  <div id="ripperRoles" class="role-grid"></div>
+  <br>
+  <button class="btn primary" onclick="playClickSound();confirmRipperRole()" style="width:100%">
+    تأكيد واكتشاف شخصيتي
+  </button>
+</div>
+</section>
+
+<!-- RIPPER PLAYER -->
+<section id="ripper-player" class="hidden">
+<div class="card" style="margin-bottom:16px">
+  <div class="topline">
+    <div class="badge" id="ripperPlayerBadge">اللاعب</div>
+  </div>
+  <h2 id="ripperRoleName" style="margin-top:12px"></h2>
+</div>
+
+<div class="dashboard-grid">
+  <div class="card secret">
+    <h3>سري جدًا — ملف شخصيتك</h3>
+    <p id="ripperSecret" style="margin-top:10px"></p>
+  </div>
+
+  <div class="card">
+    <h3>مفكرة المحقق</h3>
+    <textarea id="ripperNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveRipperNotes()"></textarea>
+  </div>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetRipper()" style="width:100%;margin-top:20px">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- RIPPER GM -->
+<section id="ripper-gm" class="hidden">
+<div class="card" style="margin-bottom:16px">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة — وايت تشابل</h2>
+  <div class="notice">الشاشة دي تحتوي على الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="card secret" style="grid-column: 1 / -1;">
+    <h2>الحل الكامل لقضية وايت تشابل</h2>
+    <p style="margin-top:10px; color:#d6d0c4;">
+      <b>القاتل:</b> المشتبه به رقم 4.<br>
+      <b>الدليل القاطع:</b> البقع الموجودة على الحذاء وساعة الجيب المفقودة.
+    </p>
+  </div>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('ripper')" style="width:100%;margin-top:20px">العودة</button>
+</section>
+
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
 </div>
 
 <script>
 const GM_PASSWORD = "هشام";
+
+const swopeData = {
+  1: { name: "Lucy Swope", public: "وريثة ثانية من العائلة. نصيبها أصغر بكثير من نصيب باقي الورثة.", secret: "زرت محامي مستقل قبل الوفاة بأسابيع وسألت لو وريث مات هل ممكن نطعن في توزيع نصيبه.", strength: "فاهمة تفاصيل الوصية والحسابات المالية.", weakness: "زيارة المحامي قبل الموت توقيت سيئ جداً." },
+  2: { name: "Frances Hyde", public: "الابنة الكبرى والمستفيدة الأساسية من الوصية.", secret: "اكتشفتِ أن الدواء الذي كان يتناوله والدك تم تغييره قبل أسبوع من الوفاة.", strength: "لديها وصول كامل لأوراق المنزل.", weakness: "الجميع يشك في رغبتك بالحصول على المال سريعاً." },
+  3: { name: "Dr. Thomas", public: "الطبيب الخاص بالعائلة منذ 10 سنوات.", secret: "كنت تقوم بتزويد العائلة بأدوية مهدئة غير مسجلة رسمياً.", strength: "خبير بالسموم والأدوية.", weakness: "سجلاتك الطبية بها نقص في بعض التواريخ." },
+  4: { name: "Margaret", public: "الممرضة المقيمة والمشرفة على الأدوية.", secret: "شاهدت شخصاً يدخل غرفة المريض في ساعة متأخرة قبل الوفاة بليلة.", strength: "تعرف الجدول الزمني الدقيق للجميع.", weakness: "ترفض الإفصاح عن هوية الشخص الذي رأته." },
+  5: { name: "Arthur Swope", public: "الابن الأصغر وعائد مؤخراً من السفر.", secret: "لديك ديون ضخمة بسبب القمار وتستحق الدفع خلال أيام.", strength: "لا أحد يعرف تحركاتك السابقة خارج المدينة.", weakness: "الحاجة الماسة للمال تضعك في موضع شبهة." },
+  6: { name: "Lawyer Brown", public: "محامي العائلة والمشرف على كتابة الوصية.", secret: "هناك نسخة أصلية ثانية من الوصية تمت إخفاؤها في الخزنة.", strength: "تعلم الأسرار القانونية للجميع.", weakness: "تأخرك في إعلان الوصية يثير الشكوك حولك." }
+};
+
+let selectedSwopeRole = null;
+let selectedRipperRole = null;
 
 function show(id){
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
@@ -412,15 +595,127 @@ function openGame(game){
 
 function swopePlayer(){
   show("swope-setup");
+  buildSwopeRoles();
 }
 
 function ripperPlayer(){
   show("ripper-setup");
+  buildRipperRoles();
+}
+
+function buildSwopeRoles(){
+  const container=document.getElementById("swopeRoles");
+  container.innerHTML="";
+  for(let i=1;i<=6;i++){
+    const btn=document.createElement("button");
+    btn.className="role-btn";
+    btn.innerHTML=`<strong>رقم ${i}</strong><small>${swopeData[i].name}</small>`;
+    btn.onclick=()=>{
+      document.querySelectorAll("#swopeRoles .role-btn").forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedSwopeRole = i;
+    };
+    container.appendChild(btn);
+  }
+}
+
+function buildRipperRoles(){
+  const container=document.getElementById("ripperRoles");
+  container.innerHTML="";
+  for(let i=1;i<=7;i++){
+    const btn=document.createElement("button");
+    btn.className="role-btn";
+    btn.innerHTML=`<strong>رقم ${i}</strong><small>مشتبه به ${i}</small>`;
+    btn.onclick=()=>{
+      document.querySelectorAll("#ripperRoles .role-btn").forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedRipperRole = i;
+    };
+    container.appendChild(btn);
+  }
+}
+
+function confirmSwopeRole(){
+  const name = document.getElementById("swopeName").value.trim();
+  if(!name){
+    alert("برجاء كتابة اسمك أولاً");
+    return;
+  }
+  if(!selectedSwopeRole){
+    alert("برجاء اختيار رقم الشخصية");
+    return;
+  }
+  
+  const data = swopeData[selectedSwopeRole];
+  document.getElementById("swopePlayerBadge").innerText = `اللاعب: ${name} • الشخصية رقم ${selectedSwopeRole}`;
+  document.getElementById("swopeRoleName").innerText = data.name;
+  document.getElementById("swopePublic").innerText = `المعلومات العلنية: ${data.public}`;
+  document.getElementById("swopeSecret").innerText = data.secret;
+  document.getElementById("swopeStrength").innerText = data.strength;
+  document.getElementById("swopeWeakness").innerText = data.weakness;
+  
+  show("swope-player");
+}
+
+function confirmRipperRole(){
+  const name = document.getElementById("ripperName").value.trim();
+  if(!name){
+    alert("برجاء كتابة اسمك أولاً");
+    return;
+  }
+  if(!selectedRipperRole){
+    alert("برجاء اختيار رقم الشخصية");
+    return;
+  }
+  
+  document.getElementById("ripperPlayerBadge").innerText = `اللاعب: ${name} • الشخصية رقم ${selectedRipperRole}`;
+  document.getElementById("ripperRoleName").innerText = `المشتبه به رقم ${selectedRipperRole}`;
+  document.getElementById("ripperSecret").innerText = `معلوماتك السرية الخاصة بالجلسة لغز رقم ${selectedRipperRole}. تحرَّ الحذر أثناء النقاش.`;
+  
+  show("ripper-player");
+}
+
+function saveSwopeNotes(){
+  localStorage.setItem("swopeNotes",document.getElementById("swopeNotes").value);
+  document.getElementById("swopeSave").innerText = "تم الحفظ تلقائيًا";
+  setTimeout(()=> document.getElementById("swopeSave").innerText = "", 2000);
+}
+
+function saveRipperNotes(){
+  localStorage.setItem("ripperNotes",document.getElementById("ripperNotes").value);
+}
+
+function resetSwope(){
+  localStorage.removeItem("swopeNotes");
+  document.getElementById("swopeNotes").value = "";
+  selectedSwopeRole = null;
+  show("swope");
+}
+
+function resetRipper(){
+  localStorage.removeItem("ripperNotes");
+  document.getElementById("ripperNotes").value = "";
+  selectedRipperRole = null;
+  show("ripper");
 }
 
 function generateSwopeCode(){
   const code = Math.floor(1000 + Math.random() * 9000);
   document.getElementById("currentSwopeCode").innerText = code;
+}
+
+function refreshLiveStatus(game){
+  const el = document.getElementById(game + "StatusList");
+  if(el) el.innerText = "اللاعبون المتصلون: 6/6 (الجلسة نشطة)";
+}
+
+window.onload=function(){
+  if(localStorage.getItem("swopeNotes")){
+    document.getElementById("swopeNotes").value=localStorage.getItem("swopeNotes");
+  }
+  if(localStorage.getItem("ripperNotes")){
+    document.getElementById("ripperNotes").value=localStorage.getItem("ripperNotes");
+  }
 }
 </script>
 </body>
