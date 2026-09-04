@@ -2,10 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover">
 <meta name="description" content="GAME — منصة ألعاب التحقيق والغموض">
 <meta name="theme-color" content="#061611">
 <meta name="robots" content="noindex,nofollow">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>GAME — Investigation Night</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@700;800&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -29,19 +32,26 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+html,body{width:100%;max-width:100vw}
 body{
-  min-height:100vh;padding:18px 10px;overflow-x:hidden;
+  min-height:100vh;min-height:100dvh;
+  padding:calc(18px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
+  overflow-x:hidden;
   background:radial-gradient(circle at 50% 0%,#12372b 0%,var(--bg) 48%,#010604 100%);
-  color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.8
+  color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.8;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%
 }
 button,input,textarea{font-family:'Tajawal',sans-serif}
-button{-webkit-tap-highlight-color:transparent}
+button{-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:44px}
+a{-webkit-tap-highlight-color:transparent}
+img,svg{max-width:100%}
 .app{max-width:950px;margin:auto;position:relative;z-index:2}
 .hidden{display:none!important}
 .moon{
-  position:fixed;top:25px;left:22px;width:46px;height:46px;border-radius:50%;
+  position:fixed;top:calc(25px + env(safe-area-inset-top));left:calc(22px + env(safe-area-inset-left));
+  width:46px;height:46px;border-radius:50%;
   background:radial-gradient(circle at 35% 35%,#eee2bd,#9d8551 70%);
-  opacity:.65;box-shadow:0 0 30px rgba(180,150,80,.2)
+  opacity:.65;box-shadow:0 0 30px rgba(180,150,80,.2);pointer-events:none
 }
 .fog{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
 .fog span{
@@ -144,7 +154,7 @@ li{margin-bottom:8px}
 .small{color:var(--muted);font-size:13px}
 .footer{text-align:center;color:#668074;font-size:12px;padding:28px 0}
 .toast{
-  position:fixed;right:50%;bottom:25px;transform:translateX(50%) translateY(20px);
+  position:fixed;right:50%;bottom:calc(25px + env(safe-area-inset-bottom));transform:translateX(50%) translateY(20px);
   background:#0b211a;border:1px solid var(--gold2);color:var(--text);padding:12px 20px;
   border-radius:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;
   transition:.25s;z-index:9999;max-width:90%;text-align:center
@@ -153,9 +163,18 @@ li{margin-bottom:8px}
 .page-in{animation:pageIn .4s ease}
 @keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media(max-width:650px){
-  body{padding:10px}.card{padding:20px;margin:12px 0}.hero{padding:42px 15px}
+  body{padding:calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left))}
+  .card{padding:20px;margin:12px 0}.hero{padding:42px 15px}
   .game-grid,.grid{grid-template-columns:1fr}.role-grid{grid-template-columns:repeat(2,1fr)}
-  .btn{padding:13px 17px}h2{font-size:27px}
+  .btn{padding:13px 17px;width:100%}h2{font-size:27px}
+  .topline{flex-direction:column;align-items:flex-start}
+  .game-title{letter-spacing:3px}
+  .role-btn{padding:16px 8px;min-height:56px}
+  input,textarea{font-size:16px}
+}
+@media(max-width:360px){
+  .game-title{font-size:38px}
+  .card{padding:16px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -310,6 +329,14 @@ li{margin-bottom:8px}
   <div id="swopeSave" class="small" style="text-align:left;color:var(--gold3)"></div>
 </div>
 
+<div class="card" id="swopeStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('swope')">تحديث</button>
+  </div>
+  <div id="swopeStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
 <div class="card">
   <h2>قواعد اللعبة</h2>
   <ul style="margin-top:10px">
@@ -361,6 +388,21 @@ li{margin-bottom:8px}
       خلي اللاعبين يقارنوها معاك بعد كتابة الكود.
     </p>
   </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل للعبتين مع بعض.
+  </p>
+  <label for="liveDbUrlInput" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInput" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl()" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatus" class="small" style="margin-top:10px"></p>
 </div>
 
 <div class="card">
@@ -491,6 +533,14 @@ li{margin-bottom:8px}
   <div id="ripperSave" class="small" style="text-align:left;color:var(--gold3)"></div>
 </div>
 
+<div class="card" id="ripperStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('ripper')">تحديث</button>
+  </div>
+  <div id="ripperStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
 <div class="card">
   <h2>قواعد اللعبة</h2>
   <ul style="margin-top:10px">
@@ -537,6 +587,21 @@ li{margin-bottom:8px}
     <b id="verifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
     <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
   </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل للعبتين مع بعض.
+  </p>
+  <label for="liveDbUrlInputRipper" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputRipper" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputRipper')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusRipper" class="small" style="margin-top:10px"></p>
 </div>
 
 <div class="card">
@@ -669,6 +734,171 @@ function seededShuffle(arr,seedStr){
 
 function makeSessionCode(){
   return String(Math.floor(1000+Math.random()*9000));
+}
+
+
+/* =========================================================
+   LIVE STATUS (optional Firebase Realtime Database, REST only)
+========================================================= */
+
+function getLiveDbUrl(){
+  return (localStorage.getItem("liveDbUrl")||"").trim().replace(/\/+$/,"");
+}
+
+function saveLiveDbUrl(inputId){
+  const id=inputId||"liveDbUrlInput";
+  const el=document.getElementById(id);
+  const value=el?el.value.trim().replace(/\/+$/,""):"";
+
+  if(!value||!/^https:\/\/.+firebasedatabase\.app$|^https:\/\/.+firebaseio\.com$/.test(value)){
+    toast("الرابط لازم يكون رابط Firebase Realtime Database صحيح.");
+    return;
+  }
+
+  localStorage.setItem("liveDbUrl",value);
+
+  ["liveDbUrlInput","liveDbUrlInputRipper"].forEach(otherId=>{
+    const other=document.getElementById(otherId);
+    if(other)other.value=value;
+  });
+
+  updateLiveDbStatusText();
+  buildSwopeGM();
+  buildRipperGM();
+  toast("تم تفعيل المتابعة المباشرة.");
+}
+
+function clearLiveDbUrl(){
+  localStorage.removeItem("liveDbUrl");
+
+  ["liveDbUrlInput","liveDbUrlInputRipper"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value="";
+  });
+
+  updateLiveDbStatusText();
+  buildSwopeGM();
+  buildRipperGM();
+  toast("تم إلغاء المتابعة المباشرة.");
+}
+
+function updateLiveDbStatusText(){
+  const url=getLiveDbUrl();
+  const text=url?`مفعّلة — متصلة بقاعدة البيانات.`:`غير مفعّلة حاليًا.`;
+
+  ["liveDbStatus","liveDbStatusRipper"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=text;
+  });
+
+  ["liveDbUrlInput","liveDbUrlInputRipper"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el && !el.value)el.value=url;
+  });
+}
+
+async function pushPlayerStatus(game,code,displayN,name){
+  const url=getLiveDbUrl();
+  if(!url||!code)return;
+
+  try{
+    await fetch(`${url}/sessions/${game}/${code}/players/${displayN}.json`,{
+      method:"PUT",
+      body:JSON.stringify({name,alive:true,ts:Date.now()})
+    });
+  }catch(e){}
+}
+
+async function setPlayerAlive(game,code,displayN,alive){
+  const url=getLiveDbUrl();
+  if(!url||!code)return;
+
+  try{
+    await fetch(`${url}/sessions/${game}/${code}/players/${displayN}.json`,{
+      method:"PATCH",
+      body:JSON.stringify({alive})
+    });
+  }catch(e){
+    toast("تعذر تحديث الحالة، تأكد من الاتصال بالإنترنت.");
+  }
+}
+
+async function fetchPlayers(game,code){
+  const url=getLiveDbUrl();
+  if(!url||!code)return null;
+
+  try{
+    const res=await fetch(`${url}/sessions/${game}/${code}/players.json`);
+    if(!res.ok)return null;
+    return await res.json();
+  }catch(e){
+    return null;
+  }
+}
+
+let liveStatusTimer=null;
+
+function startLiveStatusPolling(game,code){
+  clearInterval(liveStatusTimer);
+  refreshLiveStatus(game,code);
+  liveStatusTimer=setInterval(()=>refreshLiveStatus(game,code),5000);
+}
+
+async function refreshLiveStatus(game,codeArg){
+  const listEl=document.getElementById(game==="swope"?"swopeStatusList":"ripperStatusList");
+  if(!listEl)return;
+
+  const url=getLiveDbUrl();
+
+  if(!url){
+    listEl.textContent="الـGM لسه ما فعّلش المتابعة المباشرة لهذه الجولة.";
+    return;
+  }
+
+  let code=codeArg;
+
+  if(!code){
+    try{
+      const saved=JSON.parse(localStorage.getItem(game==="swope"?"swopePlayer":"ripperPlayer")||"null");
+      code=saved?saved.sessionCode:null;
+    }catch(e){}
+  }
+
+  if(!code){
+    listEl.textContent="مفيش كود جلسة محفوظ على جهازك.";
+    return;
+  }
+
+  const data=await fetchPlayers(game,code);
+
+  if(!data){
+    listEl.textContent="مفيش بيانات لسه، أول لاعب يأكد شخصيته هيظهر هنا.";
+    return;
+  }
+
+  listEl.textContent="";
+  const entries=Object.keys(data)
+    .map(k=>({n:Number(k),...data[k]}))
+    .sort((a,b)=>a.n-b.n);
+
+  entries.forEach(p=>{
+    const row=document.createElement("div");
+    row.style.display="flex";
+    row.style.justifyContent="space-between";
+    row.style.padding="8px 0";
+    row.style.borderBottom="1px solid var(--border)";
+
+    const left=document.createElement("span");
+    left.textContent=`${p.n}. ${p.name||"لاعب"}`;
+
+    const right=document.createElement("span");
+    right.style.fontWeight="700";
+    right.style.color=p.alive===false?"var(--red)":"#7fd9ae";
+    right.textContent=p.alive===false?"خرج من اللعبة":"لسه في اللعبة";
+
+    row.append(left,right);
+    listEl.appendChild(row);
+  });
 }
 
 
@@ -898,6 +1128,7 @@ function confirmSwopeRole(){
   );
 
   renderSwopePlayer(name,r);
+  pushPlayerStatus("swope",code,r.displayN,name);
   playRevealSound();
   show("swope-player");
 }
@@ -918,6 +1149,8 @@ function renderSwopePlayer(name,r){
 
   document.getElementById("swopeNotes").value=
     localStorage.getItem(`swopeNotes_${r.n}`)||"";
+
+  startLiveStatusPolling("swope");
 }
 
 function saveSwopeNotes(){
@@ -1016,6 +1249,24 @@ function buildSwopeGM(){
       : "بريء من جريمة القتل";
 
     div.append(title,br,span);
+
+    if(getLiveDbUrl()&&swopeGmCode){
+      const btnOut=document.createElement("button");
+      btnOut.className="btn ghost";
+      btnOut.style.marginTop="12px";
+      btnOut.style.marginLeft="8px";
+      btnOut.textContent="أخرجه من اللعبة";
+      btnOut.onclick=()=>{playClickSound();setPlayerAlive("swope",swopeGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);};
+
+      const btnIn=document.createElement("button");
+      btnIn.className="btn ghost";
+      btnIn.style.marginTop="12px";
+      btnIn.textContent="رجّعه للعبة";
+      btnIn.onclick=()=>{playClickSound();setPlayerAlive("swope",swopeGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);};
+
+      div.append(document.createElement("br"),btnOut,btnIn);
+    }
+
     rolesBox.appendChild(div);
   });
 
@@ -1294,6 +1545,7 @@ function confirmRipperRole(){
   );
 
   renderRipperPlayer(name,r);
+  pushPlayerStatus("ripper",code,r.displayN,name);
   show("ripper-player");
 }
 
@@ -1318,6 +1570,8 @@ function renderRipperPlayer(name,r){
     localStorage.getItem(`ripperNotes_${r.id}`)||"";
 
   if(mafia)playRevealSound();
+
+  startLiveStatusPolling("ripper");
 }
 
 function saveRipperNotes(){
@@ -1433,6 +1687,24 @@ function buildRipperGM(){
     span.textContent=status;
 
     div.append(title,br,span);
+
+    if(getLiveDbUrl()&&ripperGmCode){
+      const btnOut=document.createElement("button");
+      btnOut.className="btn ghost";
+      btnOut.style.marginTop="12px";
+      btnOut.style.marginLeft="8px";
+      btnOut.textContent="أخرجه من اللعبة";
+      btnOut.onclick=()=>{playClickSound();setPlayerAlive("ripper",ripperGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);};
+
+      const btnIn=document.createElement("button");
+      btnIn.className="btn ghost";
+      btnIn.style.marginTop="12px";
+      btnIn.textContent="رجّعه للعبة";
+      btnIn.onclick=()=>{playClickSound();setPlayerAlive("ripper",ripperGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);};
+
+      div.append(document.createElement("br"),btnOut,btnIn);
+    }
+
     roleBox.appendChild(div);
   });
 
@@ -1526,6 +1798,7 @@ buildSwopeRoles();
 buildRipperRoles();
 buildSwopeGM();
 buildRipperGM();
+updateLiveDbStatusText();
 
 document.getElementById("swopeName").addEventListener("keydown",e=>{
   if(e.key==="Enter")confirmSwopeRole();
