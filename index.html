@@ -1,38 +1,31 @@
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="GAME — منصة ألعاب التحقيق والغموض">
+<meta name="theme-color" content="#061611">
+<meta name="robots" content="noindex,nofollow">
 
-<!-- اللعبة للاستخدام الخاص وليست صفحة عامة لمحركات البحث -->
-<meta name="robots" content="noindex, nofollow, noarchive">
+<title>GAME — Investigation Night</title>
 
-<meta name="theme-color" content="#08070a">
-<meta name="description" content="لعبة تحقيق وغموض منزلية">
-
-<title>Peace Pizza 🍕 — قضية آل سووب</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Bungee&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@700;800&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg-base:#08070a;
-  --bg-card:#121016;
-  --bg-card-hover:#191620;
-  --bg-input:#0d0b0f;
-  --border-color:#2b2533;
-
-  --text-main:#f0ece1;
-  --text-muted:#9e96a6;
-
-  --accent-red:#992c2c;
-  --accent-red-light:#e04848;
-  --accent-gold:#c5a880;
-
-  --success:#75b798;
-
-  --shadow:0 20px 40px rgba(0,0,0,.7);
+  --bg:#030b08;
+  --card:#0a1d17;
+  --card2:#0d251d;
+  --border:#1b4335;
+  --text:#f0eadc;
+  --muted:#9db2a8;
+  --emerald:#0d6b50;
+  --emerald2:#17936f;
+  --gold:#8a6a2f;
+  --gold2:#b18a45;
+  --gold3:#d4b675;
+  --red:#a95a4d;
+  --shadow:0 20px 45px rgba(0,0,0,.72);
   --radius:16px;
 }
 
@@ -47,19 +40,17 @@ html{
 }
 
 body{
+  min-height:100vh;
+  padding:18px 10px;
+  overflow-x:hidden;
   background:
-    radial-gradient(circle at 50% 0%, #1e1518 0%, var(--bg-base) 65%);
-  color:var(--text-main);
+    radial-gradient(circle at 50% 0%,#12372b 0%,var(--bg) 48%,#010604 100%);
+  color:var(--text);
   font-family:'Tajawal',sans-serif;
   line-height:1.8;
-  min-height:100vh;
-  padding:20px 10px;
-  overflow-x:hidden;
 }
 
-button,
-input,
-textarea{
+button,input,textarea{
   font-family:'Tajawal',sans-serif;
 }
 
@@ -67,239 +58,164 @@ button{
   -webkit-tap-highlight-color:transparent;
 }
 
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-summary:focus-visible{
-  outline:2px solid var(--accent-gold);
-  outline-offset:3px;
-}
-
 .app{
   max-width:950px;
-  margin:0 auto;
-  perspective:2000px;
+  margin:auto;
+  position:relative;
+  z-index:2;
 }
 
-/* =========================
-   Floating Pizza
-========================= */
+.hidden{
+  display:none!important;
+}
 
-.cartoon-slice{
+.moon{
   position:fixed;
-  bottom:20px;
-  left:20px;
-  font-size:40px;
-  animation:floatSlice 2.5s infinite alternate ease-in-out;
-  cursor:pointer;
-  z-index:999;
-  filter:
-    drop-shadow(3px 3px 0 #000)
-    drop-shadow(-1px -1px 0 var(--accent-red));
-  user-select:none;
-  transition:transform .2s;
+  top:25px;
+  left:22px;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#eee2bd,#9d8551 70%);
+  opacity:.65;
+  box-shadow:0 0 30px rgba(180,150,80,.2);
 }
 
-.cartoon-slice:hover{
-  transform:scale(1.25) rotate(15deg);
+.fog{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
 }
 
-@keyframes floatSlice{
-  0%{
-    transform:translateY(0) rotate(-10deg);
-  }
-  100%{
-    transform:translateY(-12px) rotate(10deg);
-  }
+.fog span{
+  position:absolute;
+  width:60vw;
+  height:60vw;
+  max-width:520px;
+  max-height:520px;
+  bottom:-10%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(180,160,110,.05),transparent 70%);
+  filter:blur(30px);
+  animation:fog 26s ease-in-out infinite;
 }
 
-/* =========================
-   Typography
-========================= */
+.fog span:nth-child(1){left:-10%}
+.fog span:nth-child(2){
+  right:-15%;
+  bottom:5%;
+  animation-duration:32s;
+}
+.fog span:nth-child(3){
+  left:30%;
+  bottom:-20%;
+  animation-duration:38s;
+}
 
-h1,
-h2,
-h3{
+@keyframes fog{
+  0%,100%{transform:translate(0,0)}
+  50%{transform:translate(4%,-3%)}
+}
+
+section{
+  width:100%;
+}
+
+.card{
+  background:linear-gradient(145deg,rgba(11,33,26,.97),rgba(4,15,11,.99));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:30px;
+  margin:20px 0;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  width:100%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold2),transparent);
+  opacity:.6;
+}
+
+.hero{
+  text-align:center;
+  padding:55px 20px;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 14px;
+  border-radius:50px;
+  border:1px solid rgba(177,138,69,.42);
+  background:rgba(138,106,47,.08);
+  color:var(--gold3);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.kicker{
+  margin-top:15px;
+  color:#8fc6b1;
+  font-size:13px;
+  letter-spacing:3px;
+}
+
+.game-title{
+  font-family:'Playfair Display','Amiri',serif;
+  font-size:clamp(48px,10vw,82px);
+  color:var(--gold3);
+  letter-spacing:5px;
+  text-shadow:3px 3px 0 #000,0 0 25px rgba(13,107,80,.35);
+  margin:12px 0;
+}
+
+.subtitle{
+  max-width:700px;
+  margin:12px auto 30px;
+  color:var(--muted);
+  font-size:16px;
+}
+
+.divider{
+  width:140px;
+  height:1px;
+  margin:15px auto;
+  background:linear-gradient(90deg,transparent,var(--gold2),transparent);
+}
+
+h1,h2,h3{
   font-family:'Amiri',serif;
 }
 
-h1{
-  font-size:clamp(32px,6vw,48px);
-}
-
 h2{
-  font-size:clamp(26px,5vw,36px);
+  font-size:30px;
 }
 
 h3{
   font-size:22px;
 }
 
-/* =========================
-   Badge
-========================= */
-
-.badge{
-  font-size:11px;
-  letter-spacing:1px;
-  color:var(--accent-gold);
-  border:1px solid rgba(197,168,128,.3);
-  padding:5px 14px;
-  border-radius:50px;
-  background:rgba(197,168,128,.05);
-  text-transform:uppercase;
-  font-weight:700;
-  display:inline-block;
-}
-
-/* =========================
-   Peace Pizza Logo
-========================= */
-
-.crazy-peace-title{
-  font-family:'Bungee',cursive,sans-serif;
-  font-size:clamp(38px,7vw,65px);
-  font-weight:900;
-  text-transform:uppercase;
-
-  background:
-    linear-gradient(
-      135deg,
-      #ce2b37 0%,
-      #ffffff 40%,
-      #009246 70%,
-      #c5a880 100%
-    );
-
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-
-  filter:
-    drop-shadow(4px 4px 0 #000)
-    drop-shadow(-2px -2px 0 var(--accent-red));
-
-  letter-spacing:3px;
-  margin:15px 0 5px;
-  transform:rotate(-3deg);
-  display:inline-block;
-
-  animation:crazyPulse 3s infinite alternate ease-in-out;
-}
-
-@keyframes crazyPulse{
-  0%{
-    transform:rotate(-3deg) scale(1);
-    filter:
-      drop-shadow(4px 4px 0 #000)
-      drop-shadow(-2px -2px 0 var(--accent-red));
-  }
-
-  100%{
-    transform:rotate(2deg) scale(1.04);
-    filter:
-      drop-shadow(6px 6px 0 #000)
-      drop-shadow(-3px -3px 0 #009246);
-  }
-}
-
-/* =========================
-   Cards
-========================= */
-
-.card{
-  background:var(--bg-card);
-  border:1px solid var(--border-color);
-  border-radius:var(--radius);
-  padding:30px;
-  margin:20px 0;
-  box-shadow:var(--shadow);
-
-  position:relative;
-  overflow:hidden;
-
-  transform-origin:right center;
-  backface-visibility:hidden;
-
-  transition:
-    transform .4s ease,
-    opacity .3s ease,
-    border-color .2s ease;
-}
-
-.card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  right:0;
-  width:100%;
-  height:3px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      var(--accent-gold),
-      transparent
-    );
-
-  opacity:.3;
-}
-
-.page-flip-in{
-  animation:flipIn .5s cubic-bezier(.25,1,.5,1) forwards;
-}
-
-@keyframes flipIn{
-  0%{
-    transform:rotateY(40deg) scale(.95);
-    opacity:0;
-  }
-
-  100%{
-    transform:rotateY(0) scale(1);
-    opacity:1;
-  }
-}
-
-.hero{
-  text-align:center;
-  padding:50px 20px;
-}
-
-.subtitle{
-  color:var(--text-muted);
-  font-size:17px;
-  margin-bottom:30px;
-}
-
-/* =========================
-   Buttons
-========================= */
-
 .btn{
   border:0;
   border-radius:12px;
   padding:14px 24px;
-
   cursor:pointer;
-
-  font-weight:700;
   font-size:15px;
-
-  transition:
-    transform .15s ease,
-    background .2s ease,
-    border-color .2s ease,
-    box-shadow .2s ease;
-
+  font-weight:700;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-
-  min-height:50px;
-  touch-action:manipulation;
+  transition:.2s;
 }
 
 .btn:hover{
@@ -310,111 +226,148 @@ h3{
   transform:scale(.97);
 }
 
-.primary{
-  background:
-    linear-gradient(
-      135deg,
-      #a83232 0%,
-      #7d2020 100%
-    );
-
-  color:#fff;
-
-  box-shadow:
-    0 4px 15px rgba(153,44,44,.4);
+.btn:focus-visible,
+input:focus-visible,
+textarea:focus-visible{
+  outline:2px solid var(--gold3);
+  outline-offset:2px;
 }
 
-.primary:hover{
-  box-shadow:
-    0 7px 20px rgba(153,44,44,.5);
+.primary{
+  color:#fff8e9;
+  background:linear-gradient(135deg,#9b7938,#69501f);
+  box-shadow:0 5px 18px rgba(110,82,29,.35);
 }
 
 .secondary{
-  background:#231f2b;
-  color:var(--text-main);
-  border:1px solid var(--border-color);
+  color:var(--text);
+  background:#12372c;
+  border:1px solid #285846;
 }
 
 .secondary:hover{
-  background:#2d2838;
-  border-color:var(--text-muted);
+  background:#164333;
 }
 
 .ghost{
+  color:var(--muted);
   background:transparent;
-  border:1px solid var(--border-color);
-  color:var(--text-muted);
+  border:1px solid var(--border);
 }
-
-.ghost:hover{
-  background:rgba(255,255,255,.03);
-  color:var(--text-main);
-}
-
-/* =========================
-   Grid
-========================= */
 
 .grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:15px;
-  margin-top:20px;
+  max-width:600px;
+  margin:20px auto 0;
 }
 
-/* =========================
-   Forms
-========================= */
+.game-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+  margin-top:25px;
+}
 
-label{
-  display:block;
-  font-weight:700;
-  margin-bottom:8px;
-  color:var(--accent-gold);
+.game-card{
+  padding:28px 22px;
+  border:1px solid var(--border);
+  background:linear-gradient(145deg,#0c241c,#06140f);
+  border-radius:16px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.game-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--gold2);
+  box-shadow:0 12px 30px rgba(0,0,0,.4);
+}
+
+.game-card .number{
+  font-family:'Playfair Display',serif;
+  font-size:42px;
+  color:var(--gold3);
+}
+
+.game-card h2{
+  margin:5px 0;
+}
+
+.game-card p{
+  color:var(--muted);
   font-size:14px;
 }
 
-input,
-textarea{
+.game-card .tag{
+  display:inline-block;
+  margin-top:15px;
+  padding:4px 12px;
+  border-radius:50px;
+  background:rgba(138,106,47,.1);
+  color:var(--gold3);
+  font-size:11px;
+}
+
+.notice{
+  background:rgba(138,106,47,.06);
+  border-right:4px solid var(--gold);
+  padding:16px;
+  border-radius:10px;
+  color:#d6d0c4;
+  font-size:14px;
+  margin:12px 0;
+}
+
+.secret{
+  background:linear-gradient(145deg,#0d211a,#06130e);
+  border-color:rgba(13,107,80,.55);
+}
+
+.secret h3{
+  color:#84c8b0;
+}
+
+.danger{
+  color:#df8b7f;
+  font-weight:700;
+}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  color:var(--gold3);
+  font-size:14px;
+  font-weight:700;
+}
+
+input,textarea{
   width:100%;
-
-  padding:14px 18px;
-
-  border:1px solid var(--border-color);
+  padding:14px 17px;
+  border:1px solid var(--border);
   border-radius:12px;
-
-  background:var(--bg-input);
-  color:var(--text-main);
-
+  background:#06140f;
+  color:var(--text);
   font-size:16px;
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease;
 }
 
 input::placeholder,
 textarea::placeholder{
-  color:#6f6875;
+  color:#657e72;
 }
 
 input:focus,
 textarea:focus{
-  outline:none;
-  border-color:var(--accent-gold);
-
-  box-shadow:
-    0 0 0 3px rgba(197,168,128,.15);
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(138,106,47,.14);
 }
 
 textarea{
   min-height:110px;
   resize:vertical;
 }
-
-/* =========================
-   Role Selection
-========================= */
 
 .role-grid{
   display:grid;
@@ -424,322 +377,210 @@ textarea{
 }
 
 .role-btn{
-  position:relative;
-
-  padding:22px 10px;
-
-  border:1px solid var(--border-color);
-  background:var(--bg-input);
-
+  padding:20px 10px;
+  border:1px solid var(--border);
+  background:#071710;
   border-radius:14px;
-
+  color:var(--text);
   cursor:pointer;
-  text-align:center;
-
-  transition:
-    transform .2s ease,
-    border-color .2s ease,
-    background .2s ease,
-    box-shadow .2s ease;
-
-  min-height:105px;
+  transition:.2s;
 }
 
 .role-btn:hover{
-  border-color:#62576c;
-  background:#141118;
-  transform:translateY(-2px);
+  background:#0b231b;
+  border-color:#3b725e;
 }
 
-.role-btn:active{
-  transform:scale(.96);
+.role-btn.selected{
+  border-color:var(--gold2);
+  background:rgba(138,106,47,.14);
+  box-shadow:0 0 15px rgba(138,106,47,.18);
+  transform:translateY(-2px);
 }
 
 .role-btn strong{
   display:block;
-  color:var(--accent-gold);
-  font-size:22px;
-  margin-bottom:3px;
+  color:var(--gold3);
+  font-size:16px;
 }
 
 .role-btn small{
-  color:var(--text-muted);
+  color:var(--muted);
   font-size:12px;
 }
 
-.role-btn.selected{
-  border-color:var(--accent-gold);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(197,168,128,.18),
-      rgba(197,168,128,.06)
-    );
-
-  box-shadow:
-    0 0 0 1px rgba(197,168,128,.15),
-    0 0 20px rgba(197,168,128,.2);
-
-  transform:translateY(-3px);
-}
-
-.role-btn.selected::after{
-  content:'✓';
-
-  position:absolute;
-  top:7px;
-  left:9px;
-
-  width:22px;
-  height:22px;
-
-  border-radius:50%;
-
+.topline{
   display:flex;
   align-items:center;
-  justify-content:center;
-
-  background:var(--accent-gold);
-  color:#111;
-
-  font-size:13px;
-  font-weight:900;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-/* =========================
-   Notices
-========================= */
-
-.notice{
-  background:rgba(197,168,128,.05);
-
-  border-right:4px solid var(--accent-gold);
-
-  padding:16px;
-
-  border-radius:10px;
-
-  color:#d6d0c4;
-
-  font-size:15px;
-
-  margin-bottom:15px;
+.round{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  margin:15px 0;
+  background:#071710;
 }
 
-.notice-danger{
-  border-color:var(--accent-red);
-  background:rgba(153,44,44,.08);
+.round strong{
+  color:var(--gold3);
 }
 
-/* =========================
-   Secret Area
-========================= */
-
-.secret{
-  background:#171113;
-  border:1px solid rgba(153,44,44,.3);
+.evidence{
+  background:linear-gradient(145deg,#1a1409,#0f0c05);
+  border:1px solid rgba(177,138,69,.5);
+  border-radius:12px;
+  padding:14px 16px;
+  margin-top:10px;
+  font-size:14px;
+  color:#e6d9bd;
 }
 
-.secret h3{
-  color:var(--accent-red-light);
+.private-note{
+  background:rgba(169,90,77,.08);
+  border:1px dashed rgba(169,90,77,.55);
+  border-radius:12px;
+  padding:14px 16px;
+  margin-top:10px;
+  font-size:14px;
 }
-
-/* =========================
-   GM
-========================= */
-
-.gm-card{
-  border-color:var(--accent-gold);
-}
-
-.gm-warning{
-  border-right-color:var(--accent-red);
-  background:rgba(153,44,44,.08);
-}
-
-/* =========================
-   Details / Clues
-========================= */
 
 details{
-  border-top:1px solid var(--border-color);
+  border-top:1px solid var(--border);
   padding:16px 0;
-}
-
-details:first-child{
-  border-top:0;
 }
 
 summary{
   cursor:pointer;
   font-weight:700;
-  color:var(--text-main);
-  font-size:16px;
-
   display:flex;
   justify-content:space-between;
   align-items:center;
-
-  list-style:none;
-}
-
-summary::-webkit-details-marker{
-  display:none;
 }
 
 summary::after{
-  content:'+';
+  content:"+";
+  color:var(--gold3);
   font-size:20px;
-  color:var(--accent-gold);
 }
 
 details[open] summary::after{
-  content:'−';
+  content:"−";
 }
 
 details p{
   margin-top:10px;
-  color:var(--text-muted);
-  font-size:15px;
+  color:var(--muted);
+  font-size:14px;
 }
 
-/* =========================
-   Lists
-========================= */
+.round-nav{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
 
-ul{
-  padding-right:20px;
-  color:var(--text-muted);
+.round-chip{
+  padding:8px 16px;
+  border-radius:50px;
+  border:1px solid var(--border);
+  background:#071710;
+  color:var(--muted);
+  cursor:pointer;
+  font-weight:700;
+}
+
+.round-chip.active{
+  border-color:var(--gold2);
+  color:var(--gold3);
+  background:rgba(138,106,47,.14);
+}
+
+hr{
+  border:0;
+  border-top:1px solid var(--border);
+  margin:25px 0;
+}
+
+ul,ol{
+  padding-right:22px;
+  color:var(--muted);
 }
 
 li{
   margin-bottom:8px;
 }
 
-ol{
-  padding-right:20px;
-  color:var(--text-muted);
-}
-
-/* =========================
-   Generic
-========================= */
-
 .small{
+  color:var(--muted);
   font-size:13px;
-  color:var(--text-muted);
-}
-
-.hidden{
-  display:none !important;
-}
-
-.round{
-  border:1px solid var(--border-color);
-  border-radius:14px;
-  padding:20px;
-  margin:15px 0;
-  background:var(--bg-input);
-}
-
-.danger{
-  color:var(--accent-red-light);
-  font-weight:700;
-}
-
-.success{
-  color:var(--success);
-  font-weight:700;
 }
 
 .footer{
   text-align:center;
-  color:var(--text-muted);
+  color:#668074;
   font-size:12px;
-  padding:30px 0;
+  padding:28px 0;
 }
-
-hr{
-  border:0;
-  border-top:1px solid var(--border-color);
-  margin:25px 0;
-}
-
-/* =========================
-   Toast
-========================= */
 
 .toast{
   position:fixed;
-
-  left:50%;
-  bottom:28px;
-
-  transform:
-    translateX(-50%)
-    translateY(120px);
-
-  width:min(90%,420px);
-
-  padding:14px 18px;
-
+  right:50%;
+  bottom:25px;
+  transform:translateX(50%) translateY(20px);
+  background:#0b211a;
+  border:1px solid var(--gold2);
+  color:var(--text);
+  padding:12px 20px;
   border-radius:12px;
-
-  background:#201b25;
-  border:1px solid var(--border-color);
-
-  color:var(--text-main);
-
-  text-align:center;
-
-  box-shadow:0 15px 35px rgba(0,0,0,.55);
-
-  z-index:2000;
-
+  box-shadow:var(--shadow);
   opacity:0;
-
-  transition:
-    transform .3s ease,
-    opacity .3s ease;
-
   pointer-events:none;
+  transition:.25s;
+  z-index:9999;
+  max-width:90%;
+  text-align:center;
 }
 
 .toast.show{
   opacity:1;
-  transform:
-    translateX(-50%)
-    translateY(0);
+  transform:translateX(50%) translateY(0);
 }
 
-.toast.error{
-  border-color:rgba(224,72,72,.55);
+.page-in{
+  animation:pageIn .4s ease;
 }
 
-.toast.success{
-  border-color:rgba(117,183,152,.45);
+@keyframes pageIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
-
-/* =========================
-   Responsive
-========================= */
 
 @media(max-width:650px){
-
   body{
-    padding:10px 8px;
+    padding:10px;
   }
 
   .card{
     padding:20px;
-    margin:14px 0;
+    margin:12px 0;
   }
 
   .hero{
-    padding:38px 16px;
+    padding:42px 15px;
   }
 
+  .game-grid,
   .grid{
     grid-template-columns:1fr;
   }
@@ -748,54 +589,22 @@ hr{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .role-btn{
-    min-height:100px;
-    padding:18px 8px;
-  }
-
-  .cartoon-slice{
-    left:12px;
-    bottom:12px;
-    font-size:32px;
-  }
-
   .btn{
-    padding:13px 16px;
+    padding:13px 17px;
+  }
+
+  h2{
+    font-size:27px;
   }
 }
-
-@media(max-width:380px){
-
-  .role-grid{
-    gap:8px;
-  }
-
-  .role-btn strong{
-    font-size:19px;
-  }
-
-  .role-btn small{
-    font-size:11px;
-  }
-
-  .crazy-peace-title{
-    letter-spacing:1px;
-  }
-}
-
-/* =========================
-   Reduced Motion
-========================= */
 
 @media(prefers-reduced-motion:reduce){
-
   *,
   *::before,
   *::after{
-    animation-duration:.01ms !important;
-    animation-iteration-count:1 !important;
-    scroll-behavior:auto !important;
-    transition-duration:.01ms !important;
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important;
   }
 }
 </style>
@@ -803,1818 +612,2394 @@ hr{
 
 <body>
 
-<!-- Floating Pizza -->
-<div
-  class="cartoon-slice"
-  title="Peace Pizza"
-  role="button"
-  tabindex="0"
-  aria-label="زر البيتزا"
-  onclick="pizzaMessage()"
-  onkeydown="if(event.key==='Enter'||event.key===' ') pizzaMessage()"
->
-  🍕
+<div class="moon"></div>
+
+<div class="fog">
+  <span></span>
+  <span></span>
+  <span></span>
 </div>
+
+<div id="toast" class="toast"></div>
 
 <div class="app">
 
-  <!-- =========================
-       LANDING
-  ========================== -->
+<!-- ================= LANDING ================= -->
 
-  <section id="landing">
+<section id="landing">
+  <div class="card hero">
 
-    <div class="card hero">
+    <div class="badge">GAME • INVESTIGATION NIGHT</div>
 
-      <div class="badge">
-        عالم التحقيق والغموض
-      </div>
+    <div class="kicker">MYSTERY • STRATEGY • DECEPTION</div>
 
-      <div>
-        <span class="crazy-peace-title">
-          Peace Pizza
-        </span>
-      </div>
+    <div class="game-title">GAME</div>
 
-      <p
-        class="subtitle"
-        style="margin-top:15px;"
-      >
-        حيث يجتمع الطعم الرائع والألغاز المعقدة
-      </p>
+    <div class="divider"></div>
 
-      <div style="margin-top:25px;">
+    <p class="subtitle">
+      ليلة واحدة. أكثر من قضية. مجموعة من الأسرار.
+      اختار اللعبة وابدأ التحقيق.
+    </p>
 
-        <button
-          class="btn primary"
-          onclick="playClickSound(); show('home')"
-          style="padding:16px 36px;font-size:17px;"
-        >
-          دخول اللعبة
-        </button>
+    <button class="btn primary"
+            onclick="playClickSound();show('games')">
+      دخول
+    </button>
 
-      </div>
-
-    </div>
-
-  </section>
+  </div>
+</section>
 
 
-  <!-- =========================
-       HOME
-  ========================== -->
+<!-- ================= GAME SELECT ================= -->
 
-  <section id="home" class="hidden">
+<section id="games" class="hidden">
 
-    <div class="card hero">
+  <div class="card hero">
 
-      <div class="badge">
-        لعبة تحقيق جنائية • 1909
-      </div>
+    <div class="badge">SELECT YOUR CASE</div>
 
-      <h1>
-        قضية آل سووب
-      </h1>
+    <h1 style="margin-top:12px">اختار القضية</h1>
 
-      <p class="subtitle">
-        منزل واحد. ست شخصيات. أربع جولات. والحقيقة مش بالضرورة واضحة.
-      </p>
+    <p class="subtitle">
+      كل لعبة لها شخصياتها وأدلتها ونظامها الخاص.
+    </p>
 
-      <p style="margin-bottom:15px;font-weight:500;">
-        اختار وضع الاستخدام:
-      </p>
+    <div class="game-grid">
 
-      <div
-        class="grid"
-        style="max-width:450px;margin:0 auto;"
-      >
+      <button class="game-card"
+              onclick="playClickSound();openGame('swope')">
 
-        <button
-          class="btn primary"
-          onclick="playClickSound(); goPlayer()"
-        >
-          أنا لاعب
-        </button>
+        <div class="number">01</div>
 
-        <button
-          class="btn secondary"
-          onclick="playClickSound(); openGM()"
-        >
-          أنا الـ GM
-        </button>
+        <h2>قضية آل سووب</h2>
 
-      </div>
-
-      <p
-        class="small"
-        style="margin-top:30px;"
-      >
-        كل لاعب يفتح نفس الملف على موبايله، يكتب اسمه ويختار رقم شخصيته.
-      </p>
-
-      <p
-        class="small"
-        style="margin-top:10px;"
-      >
-        <a
-          href="#"
-          onclick="playClickSound(); resetPlayer(); return false;"
-          style="color:var(--text-muted);text-decoration:underline;"
-        >
-          مسح بيانات لاعب سابق محفوظة على الجهاز ده
-        </a>
-      </p>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       GM LOCK
-  ========================== -->
-
-  <section id="gm-lock" class="hidden">
-
-    <div
-      class="card"
-      style="
-        border-color:var(--accent-red);
-        max-width:500px;
-        margin:40px auto;
-        text-align:center;
-      "
-    >
-
-      <div
-        class="badge"
-        style="
-          color:#ff9999;
-          border-color:rgba(153,44,44,.5);
-          background:rgba(153,44,44,.1);
-        "
-      >
-        منطقة محظورة
-      </div>
-
-      <h2
-        style="
-          margin-top:15px;
-          color:#fceee9;
-        "
-      >
-        مدير اللعبة (GM)
-      </h2>
-
-      <p
-        style="
-          color:var(--text-muted);
-          margin-bottom:25px;
-          font-size:15px;
-        "
-      >
-        هذه الصفحة مخصصة لمدير اللعبة فقط وتحتوي على الحلول والأسرار الكاملة.
-      </p>
-
-      <div
-        style="
-          text-align:right;
-          margin-bottom:15px;
-        "
-      >
-
-        <label for="gmInput">
-          اسم المسؤول / كلمة المرور
-        </label>
-
-        <input
-          id="gmInput"
-          type="password"
-          placeholder="اكتب كلمة المرور هنا..."
-          autocomplete="off"
-          autocapitalize="none"
-          spellcheck="false"
-        >
-
-      </div>
-
-      <div
-        style="
-          display:flex;
-          gap:10px;
-          margin-top:20px;
-        "
-      >
-
-        <button
-          class="btn primary"
-          onclick="playClickSound(); verifyGM()"
-          style="flex:2;"
-        >
-          تحقق ودخول
-        </button>
-
-        <button
-          class="btn ghost"
-          onclick="playClickSound(); show('home')"
-          style="flex:1;"
-        >
-          رجوع
-        </button>
-
-      </div>
-
-      <p
-        id="gmError"
-        class="danger hidden"
-        style="
-          margin-top:15px;
-          font-size:14px;
-        "
-      >
-        خطأ: اسم المسؤول غير صحيح.
-      </p>
-
-    </div>
-
-  </section>
-
-
-  <!-- =========================
-       PLAYER SETUP
-  ========================== -->
-
-  <section id="setup" class="hidden">
-
-    <div class="card">
-
-      <h2>
-        اختيار الشخصية
-      </h2>
-
-      <div class="notice">
-
-        اكتب اسمك ثم اختر رقمًا من 1 إلى 6.
-        بعد التأكيد ستظهر لك معلومات شخصيتك السرية.
-        <b>متوريهاش لحد.</b>
-
-      </div>
-
-      <div class="notice notice-danger">
-
-        <b>مهم قبل ما تختار:</b>
-        اتفقوا بصوت عالي مين هياخد كل رقم قبل ما كل واحد يفتح الملف على موبايله.
-
-      </div>
-
-      <div style="margin-top:20px;">
-
-        <label for="playerName">
-          اسمك الكريم
-        </label>
-
-        <input
-          id="playerName"
-          placeholder="اكتب اسمك هنا..."
-          maxlength="40"
-          autocomplete="name"
-          spellcheck="false"
-        >
-
-      </div>
-
-      <div style="margin-top:25px;">
-
-        <label>
-          اختر رقم الشخصية
-        </label>
-
-        <div
-          class="role-grid"
-          id="roleButtons"
-        ></div>
-
-        <p
-          id="selectionHint"
-          class="small"
-          style="
-            text-align:center;
-            margin-top:12px;
-          "
-        >
-          لم يتم اختيار رقم بعد.
+        <p>
+          لغز عائلي. ست شخصيات.
+          أسرار ووصية وسم.
         </p>
 
-      </div>
+        <span class="tag">MISSOURI • 1909</span>
 
-      <div
-        style="
-          display:flex;
-          gap:10px;
-          margin-top:25px;
-        "
-      >
+      </button>
 
-        <button
-          class="btn primary"
-          type="button"
-          onclick="playClickSound(); confirmRole()"
-          style="flex:2;"
-        >
-          تأكيد واكتشاف شخصيتي
-        </button>
 
-        <button
-          class="btn ghost"
-          onclick="playClickSound(); show('home')"
-          style="flex:1;"
-        >
-          رجوع
-        </button>
+      <button class="game-card"
+              onclick="playClickSound();openGame('ripper')">
 
-      </div>
+        <div class="number">02</div>
+
+        <h2>ملف قاتل وايت تشابل</h2>
+
+        <p>
+          سبعة مشتبه بهم.
+          أربع جولات. قاتل وربما شريك.
+        </p>
+
+        <span class="tag">WHITECHAPEL • 1888</span>
+
+      </button>
 
     </div>
 
-  </section>
-
-
-  <!-- =========================
-       PLAYER
-  ========================== -->
-
-  <section id="player" class="hidden">
-
-    <div class="card">
-
-      <div
-        style="
-          display:flex;
-          gap:10px;
-          flex-wrap:wrap;
-          margin-bottom:12px;
-        "
-      >
-
-        <div
-          class="badge"
-          id="playerBadge"
-        ></div>
-
-        <div
-          id="mafiaBadge"
-          class="badge hidden"
-          style="
-            background:rgba(153,44,44,.15);
-            border-color:rgba(153,44,44,.5);
-            color:#ff9999;
-          "
-        >
-          MAFIOSO
-        </div>
-
-      </div>
-
-      <h2 id="roleName"></h2>
-
-      <p
-        id="rolePublic"
-        style="color:var(--text-muted);"
-      ></p>
-
-    </div>
-
-
-    <!-- SECRET INFORMATION -->
-
-    <div class="card secret">
-
-      <h3>
-        سري جدًا — معلوماتك الشخصية
-      </h3>
-
-      <div
-        id="roleSecret"
-        style="
-          margin-top:10px;
-          color:#f3e6e6;
-        "
-      ></div>
-
-      <hr>
-
-      <h3>
-        نقطة قوتك في التلاعب
-      </h3>
-
-      <p
-        id="roleStrength"
-        style="
-          color:var(--text-muted);
-          margin-top:5px;
-        "
-      ></p>
-
-      <h3 style="margin-top:15px;">
-        نقطة ضعفك
-      </h3>
-
-      <p
-        id="roleWeakness"
-        style="
-          color:var(--text-muted);
-          margin-top:5px;
-        "
-      ></p>
-
-    </div>
-
-
-    <!-- PLAYER NOTES -->
-
-    <div
-      class="card"
-      style="border-color:var(--accent-gold);"
-    >
-
-      <h3>
-        مفكرة المحقق الشخصية
-      </h3>
-
-      <p
-        class="small"
-        style="margin-bottom:10px;"
-      >
-        اكتب هنا استنتاجاتك ومشاهداتك أثناء التحقيق.
-        الملاحظات دي محفوظة على جهازك فقط.
-      </p>
-
-      <textarea
-        id="playerNotes"
-        placeholder="مثلاً: الدكتور بينيت مرتبك.. المحامي عنده مصلحة مالية..."
-        maxlength="5000"
-        oninput="autoSaveNotes()"
-      ></textarea>
-
-      <div
-        id="saveStatus"
-        class="small"
-        style="
-          margin-top:5px;
-          color:var(--accent-gold);
-          text-align:left;
-          min-height:20px;
-        "
-      ></div>
-
-    </div>
-
-
-    <!-- RULES -->
-
-    <div class="card">
-
-      <h2>
-        قواعد اللعبة
-      </h2>
-
-      <div
-        id="rulesPlayer"
-        style="margin-top:10px;"
-      ></div>
-
-    </div>
-
-
-    <button
-      class="btn secondary"
-      onclick="playClickSound(); resetPlayer()"
-      style="width:100%;"
-    >
-      مسح الشخصية من هذا الجهاز
+    <button class="btn ghost"
+            onclick="playClickSound();show('landing')"
+            style="width:100%;margin-top:20px">
+      رجوع
     </button>
 
-  </section>
-
-
-  <!-- =========================
-       GM DASHBOARD
-  ========================== -->
-
-  <section id="gm" class="hidden">
-
-    <div
-      class="card gm-card"
-    >
-
-      <div class="badge">
-        GM ONLY
-      </div>
-
-      <h2>
-        لوحة مدير اللعبة
-      </h2>
-
-      <div
-        class="notice gm-warning"
-        style="margin-top:10px;"
-      >
-        <b>تحذير:</b>
-        الشاشة دي فيها الحل الحقيقي كامل.
-        متعرضهاش للاعبين نهائيًا.
-      </div>
-
-    </div>
-
-
-    <!-- SOLUTION -->
-
-    <div class="card">
-
-      <h2>
-        الحل الحقيقي
-      </h2>
-
-      <p style="margin-bottom:10px;">
-        <b>الفاعل المباشر:</b>
-        د. Bennett Hyde — استخدم السم.
-      </p>
-
-      <p style="margin-bottom:10px;">
-        <b>الجاني الثاني:</b>
-        المحامي Thomas Greene — محرّض/مُسهّل،
-        وفّر السم عن طريق معارفه، وأخفى خطاب Margaret.
-        دافعه المال، وليس العاطفة.
-      </p>
-
-      <p style="margin-bottom:10px;">
-        <b>Frances, Margaret, Lucy, Pearl:</b>
-        أبرياء 100% من جريمة القتل،
-        لكن لكل واحدة سر آخر يجعلها تبدو مذنبة.
-      </p>
-
-      <div
-        class="notice"
-        style="margin-top:15px;"
-      >
-        الاتفاق داخل اللعبة:
-        Hyde وGreene لا يعرفان بعضهما ولا يوجد تنسيق ظاهر بينهما حتى الدليل الرابع.
-      </div>
-
-    </div>
-
-
-    <!-- ROLES -->
-
-    <div class="card">
-
-      <h2>
-        نتيجة كل شخصية
-      </h2>
-
-      <div id="gmRoles"></div>
-
-    </div>
-
-
-    <!-- ROUNDS -->
-
-    <div class="card">
-
-      <h2>
-        الأدلة الأربعة
-      </h2>
-
-      <div id="roundsGM"></div>
-
-    </div>
-
-
-    <!-- GM INSTRUCTIONS -->
-
-    <div class="card">
-
-      <h2>
-        إرشادات الـ GM
-      </h2>
-
-      <ol>
-
-        <li style="margin-bottom:8px;">
-          اقرأ القصة الإطارية في البداية.
-        </li>
-
-        <li style="margin-bottom:8px;">
-          وزّع/اترك كل لاعب يختار شخصيته على جهازه.
-        </li>
-
-        <li style="margin-bottom:8px;">
-          كل جولة:
-          اقرأ الكلو →
-          15–20 دقيقة نقاش →
-          فرصة كشف سر واحد عند تحقق شرط الإجماع →
-          تصويت →
-          خروج المتهم.
-        </li>
-
-        <li>
-          بعد الجولة الرابعة يجب أن يتبقى لاعبان،
-          ثم اقرأ الحل الرسمي.
-        </li>
-
-      </ol>
-
-    </div>
-
-
-    <!-- OFFICIAL ENDING -->
-
-    <div class="card">
-
-      <h2>
-        الحل الرسمي الذي يُقرأ في النهاية
-      </h2>
-
-      <p
-        style="
-          color:var(--text-muted);
-          margin-bottom:15px;
-        "
-      >
-        القضية الحقيقية غير محلولة نهائيًا.
-        Hyde حوكم أكثر من مرة، وأُدين مرة ثم أُبطلت الإدانة،
-        وانتهت القضية دون إدانة نهائية.
-      </p>
-
-    </div>
-
-
-    <button
-      class="btn ghost"
-      onclick="playClickSound(); show('home')"
-      style="width:100%;"
-    >
-      العودة للرئيسية
-    </button>
-
-  </section>
-
-
-  <!-- FOOTER -->
-
-  <div class="footer">
-    Peace Pizza 🍕 • قضية آل سووب • لعبة تحقيق منزلية • 1909
   </div>
 
+</section>
+
+
+<!-- ========================================================= -->
+<!-- ====================== SWOPE ============================ -->
+<!-- ========================================================= -->
+
+<section id="swope" class="hidden">
+
+  <div class="card hero">
+
+    <div class="badge">MISSOURI • 1909</div>
+
+    <h1>قضية آل سووب</h1>
+
+    <p class="subtitle">
+      منزل واحد. ست شخصيات. أربع جولات.
+      والحقيقة مش بالضرورة واضحة.
+    </p>
+
+    <div class="grid">
+
+      <button class="btn primary"
+              onclick="playClickSound();swopePlayer()">
+        أنا لاعب
+      </button>
+
+      <button class="btn secondary"
+              onclick="playClickSound();show('swope-gm-lock')">
+        أنا الـ GM
+      </button>
+
+    </div>
+
+    <button class="btn ghost"
+            onclick="playClickSound();show('games')"
+            style="width:100%;margin-top:15px">
+      اختيار لعبة أخرى
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ================= SWOPE GM LOCK ================= -->
+
+<section id="swope-gm-lock" class="hidden">
+
+  <div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+
+    <div class="badge">GM ONLY</div>
+
+    <h2 style="margin-top:15px">مدير اللعبة</h2>
+
+    <p class="small" style="margin:15px 0 25px">
+      الصفحة دي تحتوي على الحل الكامل والأسرار.
+    </p>
+
+    <label for="swopeGmInput">كلمة المرور</label>
+
+    <input id="swopeGmInput"
+           type="password"
+           autocomplete="off"
+           placeholder="اكتب كلمة المرور...">
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+
+      <button class="btn primary"
+              onclick="playClickSound();verifySwopeGM()"
+              style="flex:2">
+        دخول
+      </button>
+
+      <button class="btn ghost"
+              onclick="playClickSound();show('swope')"
+              style="flex:1">
+        رجوع
+      </button>
+
+    </div>
+
+    <p id="swopeGmError"
+       class="danger hidden"
+       style="margin-top:15px">
+      كلمة المرور غير صحيحة.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ================= SWOPE SETUP ================= -->
+
+<section id="swope-setup" class="hidden">
+
+  <div class="card">
+
+    <h2>اختيار الشخصية</h2>
+
+    <div class="notice">
+      اكتب اسمك ثم اختر رقمًا من 1 إلى 6.
+      بعد التأكيد ستظهر معلومات شخصيتك السرية.
+      <b>متوريهاش لحد.</b>
+    </div>
+
+    <div class="notice"
+         style="border-color:var(--red)">
+      <b>مهم:</b>
+      اتفقوا مين هياخد كل رقم قبل ما كل واحد يفتح الملف.
+    </div>
+
+    <label for="swopeName">اسمك</label>
+
+    <input id="swopeName"
+           maxlength="40"
+           autocomplete="name"
+           placeholder="اكتب اسمك هنا...">
+
+    <br><br>
+
+    <label>اختر رقم الشخصية</label>
+
+    <div id="swopeRoles" class="role-grid"></div>
+
+    <br>
+
+    <div style="display:flex;gap:10px">
+
+      <button class="btn primary"
+              onclick="playClickSound();confirmSwopeRole()"
+              style="flex:2">
+        تأكيد واكتشاف شخصيتي
+      </button>
+
+      <button class="btn ghost"
+              onclick="playClickSound();show('swope')"
+              style="flex:1">
+        رجوع
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= SWOPE PLAYER ================= -->
+
+<section id="swope-player" class="hidden">
+
+  <div class="card">
+
+    <div class="topline">
+
+      <div class="badge" id="swopePlayerBadge"></div>
+
+      <div id="swopeMafia"
+           class="badge hidden"
+           style="color:#ff7777;border-color:#a33;background:rgba(150,20,20,.2)"
+           dir="ltr">
+        MAFIOSO
+      </div>
+
+    </div>
+
+    <h2 id="swopeRoleName" style="margin-top:12px"></h2>
+
+    <p id="swopePublic" class="small"></p>
+
+  </div>
+
+
+  <div class="card secret">
+
+    <h3>سري جدًا — معلومات شخصيتك</h3>
+
+    <p id="swopeSecret"
+       style="margin-top:10px"></p>
+
+    <hr>
+
+    <h3>نقطة قوتك</h3>
+
+    <p id="swopeStrength" class="small"></p>
+
+    <h3 style="margin-top:15px">نقطة ضعفك</h3>
+
+    <p id="swopeWeakness" class="small"></p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h3>مفكرة المحقق</h3>
+
+    <p class="small">
+      الملاحظات محفوظة على جهازك فقط.
+    </p>
+
+    <textarea id="swopeNotes"
+              maxlength="3000"
+              placeholder="اكتب استنتاجاتك..."
+              oninput="saveSwopeNotes()"></textarea>
+
+    <div id="swopeSave"
+         class="small"
+         style="text-align:left;color:var(--gold3)">
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>قواعد اللعبة</h2>
+
+    <ul style="margin-top:10px">
+
+      <li>أنتم 6 لاعبين + Game Master.</li>
+
+      <li>اللعبة عبارة عن 4 جولات تحقيق.</li>
+
+      <li>في كل جولة الـGM يقدم دليل جديد.</li>
+
+      <li>بعد كل جولة نقاش ثم تصويت.</li>
+
+      <li>اللاعب الذي يحصل على أغلب الأصوات يخرج من اللعبة.</li>
+
+      <li>بعد الجولة الرابعة يكشف الـGM الحل الرسمي.</li>
+
+    </ul>
+
+  </div>
+
+
+  <button class="btn secondary"
+          onclick="playClickSound();resetSwope()"
+          style="width:100%">
+    مسح الشخصية من هذا الجهاز
+  </button>
+
+</section>
+
+
+<!-- ================= SWOPE GM ================= -->
+
+<section id="swope-gm" class="hidden">
+
+  <div class="card">
+
+    <div class="badge">GM ONLY</div>
+
+    <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+
+    <div class="notice">
+      الشاشة دي تحتوي على الحل والأسرار كاملة.
+      متعرضهاش للاعبين.
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>الحل الحقيقي</h2>
+
+    <p style="margin-top:12px">
+      <b>الفاعل المباشر:</b>
+      د. Bennett Clark Hyde — استخدم السم.
+    </p>
+
+    <p style="margin-top:10px">
+      <b>الجاني الثاني:</b>
+      Thomas Greene — محرّض/مُسهّل،
+      وفّر السم عن طريق معارفه وأخفى خطاب Margaret.
+    </p>
+
+    <p style="margin-top:10px">
+      Frances وMargaret وLucy وPearl أبرياء من جريمة القتل.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>الشخصيات</h2>
+
+    <div id="swopeGMroles"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>الأدلة</h2>
+
+    <div id="swopeRounds"></div>
+
+  </div>
+
+
+  <button class="btn ghost"
+          onclick="playClickSound();show('swope')"
+          style="width:100%">
+    العودة
+  </button>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- ===================== WHITECHAPEL ======================= -->
+<!-- ========================================================= -->
+
+<section id="ripper" class="hidden">
+
+  <div class="card hero">
+
+    <div class="badge">WHITECHAPEL • 1888</div>
+
+    <h1>ملف قاتل وايت تشابل</h1>
+
+    <p class="subtitle">
+      سبع شخصيات. أربع جولات.
+      أدلة مادية وشهادات.
+    </p>
+
+    <div class="grid">
+
+      <button class="btn primary"
+              onclick="playClickSound();ripperPlayer()">
+        أنا لاعب
+      </button>
+
+      <button class="btn secondary"
+              onclick="playClickSound();show('ripper-gm-lock')">
+        أنا الـ GM
+      </button>
+
+    </div>
+
+    <button class="btn ghost"
+            onclick="playClickSound();show('games')"
+            style="width:100%;margin-top:15px">
+      اختيار لعبة أخرى
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ================= RIPPER GM LOCK ================= -->
+
+<section id="ripper-gm-lock" class="hidden">
+
+  <div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+
+    <div class="badge">GM ONLY</div>
+
+    <h2 style="margin-top:15px">مدير اللعبة</h2>
+
+    <p class="small" style="margin:15px 0 25px">
+      الصفحة دي تحتوي على الحل الكامل والأدلة السرية.
+    </p>
+
+    <label for="ripperGmInput">كلمة المرور</label>
+
+    <input id="ripperGmInput"
+           type="password"
+           autocomplete="off"
+           placeholder="اكتب كلمة المرور...">
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+
+      <button class="btn primary"
+              onclick="playClickSound();verifyRipperGM()"
+              style="flex:2">
+        دخول
+      </button>
+
+      <button class="btn ghost"
+              onclick="playClickSound();show('ripper')"
+              style="flex:1">
+        رجوع
+      </button>
+
+    </div>
+
+    <p id="ripperGmError"
+       class="danger hidden"
+       style="margin-top:15px">
+      كلمة المرور غير صحيحة.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- ================= RIPPER SETUP ================= -->
+
+<section id="ripper-setup" class="hidden">
+
+  <div class="card">
+
+    <h2>اختيار الشخصية</h2>
+
+    <div class="notice">
+      اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM،
+      ثم اختر رقمًا من <b>1 إلى 7</b>.
+      <b>متوريهاش لحد.</b>
+    </div>
+
+    <label for="ripperName">اسمك</label>
+
+    <input id="ripperName"
+           maxlength="40"
+           autocomplete="name"
+           placeholder="اكتب اسمك هنا...">
+
+    <br><br>
+
+    <label for="sessionCode">كود الجلسة</label>
+
+    <input id="sessionCode"
+           maxlength="4"
+           inputmode="numeric"
+           autocomplete="off"
+           placeholder="مثال: 4821"
+           oninput="checkRipperCode()">
+
+    <p id="codeMessage"
+       class="small"
+       style="min-height:22px;margin-top:6px">
+    </p>
+
+    <label>اختر رقم الشخصية</label>
+
+    <div id="ripperRoles" class="role-grid"></div>
+
+    <br>
+
+    <div style="display:flex;gap:10px">
+
+      <button class="btn primary"
+              onclick="playClickSound();confirmRipperRole()"
+              style="flex:2">
+        تأكيد واكتشاف شخصيتي
+      </button>
+
+      <button class="btn ghost"
+              onclick="playClickSound();show('ripper')"
+              style="flex:1">
+        رجوع
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= RIPPER PLAYER ================= -->
+
+<section id="ripper-player" class="hidden">
+
+  <div class="card">
+
+    <div class="topline">
+
+      <div class="badge" id="ripperPlayerBadge"></div>
+
+      <div id="ripperMafia"
+           class="badge hidden"
+           dir="ltr"
+           style="color:#ff6b6b;border-color:#dc3737;background:rgba(150,20,20,.2);font-weight:900">
+        MAFIOSO
+      </div>
+
+    </div>
+
+    <h2 id="ripperRoleName"
+        style="margin-top:12px"></h2>
+
+    <p id="ripperPublic"
+       class="small"></p>
+
+  </div>
+
+
+  <div class="card secret">
+
+    <h3>سري جدًا — ملف شخصيتك</h3>
+
+    <p id="ripperSecret"
+       style="margin-top:10px"></p>
+
+    <hr>
+
+    <h3>نقطة قوتك</h3>
+
+    <p id="ripperStrength" class="small"></p>
+
+    <h3 style="margin-top:15px">نقطة ضعفك</h3>
+
+    <p id="ripperWeakness" class="small"></p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h3>مفكرة المحقق</h3>
+
+    <p class="small">
+      الملاحظات محفوظة على جهازك فقط.
+    </p>
+
+    <textarea id="ripperNotes"
+              maxlength="3000"
+              placeholder="اكتب استنتاجاتك..."
+              oninput="saveRipperNotes()"></textarea>
+
+    <div id="ripperSave"
+         class="small"
+         style="text-align:left;color:var(--gold3)">
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>قواعد اللعبة</h2>
+
+    <ul style="margin-top:10px">
+
+      <li>أنتم 7 لاعبين + Game Master.</li>
+
+      <li>اللعبة 4 جولات تحقيق.</li>
+
+      <li>في كل جولة يقدم الـGM دليلًا ودليلًا ماديًا.</li>
+
+      <li>قد تصل ملاحظة سرية لشخص واحد.</li>
+
+      <li>بعد النقاش يتم التصويت.</li>
+
+      <li>الذي يحصل على أغلب الأصوات يخرج من التصويت التالي.</li>
+
+      <li>في الجولة الرابعة الجميع يقدم اتهامه النهائي.</li>
+
+    </ul>
+
+  </div>
+
+
+  <button class="btn secondary"
+          onclick="playClickSound();resetRipper()"
+          style="width:100%">
+    مسح الشخصية من هذا الجهاز
+  </button>
+
+</section>
+
+
+<!-- ================= RIPPER GM ================= -->
+
+<section id="ripper-gm" class="hidden">
+
+  <div class="card">
+
+    <div class="badge">GM ONLY</div>
+
+    <h2 style="margin-top:12px">
+      لوحة مدير اللعبة
+    </h2>
+
+    <div class="notice">
+      الشاشة دي فيها الحل والأسرار كاملة.
+      متعرضهاش للاعبين.
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>إدارة كود الجلسة</h2>
+
+    <p class="small" style="margin-top:10px">
+      أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+      نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+    </p>
+
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+
+      <button class="btn primary"
+              onclick="playClickSound();generateRipperCode()">
+        توليد كود جديد
+      </button>
+
+      <strong style="color:var(--gold3)">
+        الكود:
+        <span id="currentRipperCode"
+              dir="ltr">
+          غير محدد
+        </span>
+      </strong>
+
+    </div>
+
+    <div class="notice" style="margin-top:15px">
+
+      كلمة التحقق:
+
+      <b id="verifyCode"
+         dir="ltr"
+         style="color:var(--gold3);letter-spacing:2px">
+        ---
+      </b>
+
+      <p class="small" style="margin-top:6px">
+        خلي اللاعبين يقارنوها معاك بعد كتابة الكود.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>الجولة الحالية</h2>
+
+    <div id="ripperRoundNav"
+         class="round-nav">
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>الحل الكامل</h2>
+
+    <p style="margin-top:10px">
+
+      <b>الفاعل المباشر:</b>
+      Aaron Kosminski — Jack the Ripper في سيناريو اللعبة.
+
+    </p>
+
+    <p style="margin-top:10px">
+
+      <b>الشريك المُسهّل:</b>
+      George Chapman — Mafioso الثاني.
+
+    </p>
+
+    <p class="small" style="margin-top:15px">
+
+      مهم:
+      هذا الحل خاص بالسيناريو فقط.
+      هوية Jack the Ripper الحقيقية لم تُحسم تاريخيًا،
+      والعلاقة بين Kosminski وChapman هنا اختراع للعبة.
+
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>نتيجة الشخصيات</h2>
+
+    <div id="ripperGMroles"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>الأدلة الأربع</h2>
+
+    <div id="ripperRounds"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>إرشادات الـGM</h2>
+
+    <ol>
+
+      <li>
+        أنشئ كود جلسة جديد.
+      </li>
+
+      <li>
+        أعط الكود لكل اللاعبين.
+      </li>
+
+      <li>
+        كل لاعب يختار رقمًا.
+      </li>
+
+      <li>
+        اقرأ دليل كل جولة.
+      </li>
+
+      <li>
+        سلّم الملاحظات الخاصة لصاحبها فقط.
+      </li>
+
+      <li>
+        اترك وقتًا للنقاش ثم التصويت.
+      </li>
+
+      <li>
+        في الجولة الرابعة اقرأ الحل النهائي.
+      </li>
+
+    </ol>
+
+  </div>
+
+
+  <button class="btn ghost"
+          onclick="playClickSound();show('ripper')"
+          style="width:100%">
+    العودة
+  </button>
+
+</section>
+
+
+<div class="footer">
+  GAME • INVESTIGATION NIGHT
 </div>
 
-
-<!-- TOAST -->
-
-<div
-  id="toast"
-  class="toast"
-  role="status"
-  aria-live="polite"
-></div>
+</div>
 
 
 <script>
 
 /* =========================================================
-   SOUND
+   GENERAL
 ========================================================= */
 
-let audioCtx = null;
+function show(id){
+
+  document.querySelectorAll("section").forEach(section=>{
+    section.classList.add("hidden");
+  });
+
+  const target=document.getElementById(id);
+
+  if(target){
+    target.classList.remove("hidden");
+    target.classList.remove("page-in");
+
+    void target.offsetWidth;
+
+    target.classList.add("page-in");
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+
+let toastTimer;
+
+function toast(message){
+
+  const t=document.getElementById("toast");
+
+  t.textContent=message;
+
+  t.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    t.classList.remove("show");
+  },2500);
+}
+
 
 function playClickSound(){
 
   try{
 
-    if(!audioCtx){
-      audioCtx = new (
-        window.AudioContext ||
-        window.webkitAudioContext
-      )();
-    }
+    const AudioContext=
+      window.AudioContext||
+      window.webkitAudioContext;
 
-    if(audioCtx.state === 'suspended'){
-      audioCtx.resume();
-    }
+    const a=new AudioContext();
 
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    const o=a.createOscillator();
+    const g=a.createGain();
 
-    osc.type = 'triangle';
+    o.type="triangle";
 
-    osc.frequency.setValueAtTime(
-      300,
-      audioCtx.currentTime
+    o.frequency.setValueAtTime(
+      260,
+      a.currentTime
     );
 
-    osc.frequency.exponentialRampToValueAtTime(
-      120,
-      audioCtx.currentTime + .08
+    o.frequency.exponentialRampToValueAtTime(
+      110,
+      a.currentTime+.08
     );
 
-    gain.gain.setValueAtTime(
+    g.gain.setValueAtTime(
       .12,
-      audioCtx.currentTime
+      a.currentTime
     );
 
-    gain.gain.linearRampToValueAtTime(
+    g.gain.linearRampToValueAtTime(
       .01,
-      audioCtx.currentTime + .08
+      a.currentTime+.08
     );
 
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    o.connect(g);
+    g.connect(a.destination);
 
-    osc.start();
-    osc.stop(
-      audioCtx.currentTime + .08
-    );
+    o.start();
 
-  }catch(e){
-    /* الصوت اختياري، فلا نوقف اللعبة لو المتصفح رفضه */
+    o.stop(a.currentTime+.08);
+
+  }catch(e){}
+
+}
+
+
+function openGame(game){
+
+  if(game==="swope"){
+    show("swope");
   }
-}
 
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer = null;
-
-function showToast(message, type='normal'){
-
-  const toast =
-    document.getElementById('toast');
-
-  toast.textContent = message;
-
-  toast.className =
-    'toast show ' +
-    (type === 'error'
-      ? 'error'
-      : type === 'success'
-        ? 'success'
-        : '');
-
-  clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(() => {
-
-    toast.classList.remove('show');
-
-  }, 2500);
-}
-
-
-/* =========================================================
-   PIZZA MESSAGE
-========================================================= */
-
-function pizzaMessage(){
-
-  playClickSound();
-
-  showToast(
-    'مين القاتل يا ترى؟ ركز في الأدلة كويس!',
-    'success'
-  );
-}
-
-
-/* =========================================================
-   PLAYER DATA
-========================================================= */
-
-const roles = [
-
-  {
-    n:1,
-
-    name:"د. Bennett Clark Hyde",
-
-    public:
-      "طبيب معروف ورئيس جمعية أطباء المقاطعة. متجوز Frances Swope. كان حاضر شخصيًا وقت وفاة Hunton وThomas، وهو اللي أعطاهم الكبسولات.",
-
-    secret:
-      "عليك ديون قمار كبيرة محدش يعرف عنها. زواجك من Frances معناه إنك بتستفيد بشكل غير مباشر من ثروة العيلة، وكل وريث بيموت نصيبه بيتوزع. اشتريت مؤخرا كمية سيانيد من صيدلية بحجة «تجارب معملية»، وطلبت عينات تيفويد.",
-
-    strength:
-      "إنت الطبيب. أي معلومة طبية تقولها، حتى لو غلط أو نص الحقيقة، الناس بتصدقها تلقائياً لأنك الخبير.",
-
-    weakness:
-      "إنت آخر واحد المفروض يتصدق لو حاول يفسر حاجة عن الدواء نفسه — الشك بيرجعلك تلقائياً."
-  },
-
-  {
-    n:2,
-
-    name:"Frances Swoope Hyde",
-
-    public:
-      "بنت Margaret، متجوزة Hyde. بتحب زوجها بشدة وبتدافع عنه قدام الكل.",
-
-    secret:
-      "عارفة إن جوزك مديون بشكل خطير. سمعتيه قبل موت Thomas بيقول جملة غامضة زي «لو حاجة حصلت له، إحنا هنبقى مرتاحين». اتصرفتي إنك متسمعيش.",
-
-    strength:
-      "إنتِ الزوجة المكلومة. الناس بتتردد تضغط عليكِ بقوة.",
-
-    weakness:
-      "أي حاجة تكشف إنك عارفة بالديون أو والجملة الغامضة هتخليكِ تبقي «شريكة بالصمت»."
-  },
-
-  {
-    n:3,
-
-    name:"Margaret «Maggie» Swoop",
-
-    public:
-      "أرملة أخو Thomas، صاحبة البيت الفعلية، وأم Frances. كل الأحداث حصلت تحت سقفها.",
-
-    secret:
-      "من أول ما Hyde اتجوز بنتك وإنتِ مش مرتاحة له. قبل موت Thomas بأسبوعين كتبتي خطاب لمحامي العيلة Greene تسأليه لو ممكن «تعديل نصيب Hyde وFrances من الوصية» — الخطاب ده اختفى.",
-
-    strength:
-      "إنتِ صاحبة البيت. تعرفي مين دخل ومين دخل وفين كانت الحاجات.",
-
-    weakness:
-      "الخطاب المفقود بيديكي دافع مالي واضح لو اتكشف."
-  },
-
-  {
-    n:4,
-
-    name:"Lucy Swoop",
-
-    public:
-      "وريثة تانية من العيلة، نصيبها في الوصية أصغر بكتير من نصيب Hyde وFrances.",
-
-    secret:
-      "زرتِ محامي مستقل قبل الوفاة الأولى بأسابيع، وسألتيه: «لو وريث مات، هل ممكن أطعن في توزيع نصيبه؟».",
-
-    strength:
-      "إنتِ فاهمة تفاصيل الوصية والحسابات المالية أكتر من أي حد تاني في الأوضة.",
-
-    weakness:
-      "زيارتك للمحامي المستقل قبل الموت بأسابيع توقيت سيئ جدًا."
-  },
-
-  {
-    n:5,
-
-    name:"الممرضة Pearl Kellar",
-
-    public:
-      "ممرضة كانت موجودة في منزل Swoop، قريبة من Thomas والعيلة أثناء المرض.",
-
-    secret:
-      "إنتِ لا تثقي في Hyde. لاحظتِ حاجة في طريقة إعطائه الدواء مقلقة، وكتبتي ملاحظاتك في مفكرة خاصة.",
-
-    strength:
-      "إنتِ الشاهدة العينية الوحيدة اللي فعليًا شافت لحظات إدخال الدواء.",
-
-    weakness:
-      "ذاكرتك مش كاملة، وبعض كلامك استنتاج مش مشاهدة فعلية."
-  },
-
-  {
-    n:6,
-
-    name:"المحامي Thomas Greene",
-
-    public:
-      "محامي تركة العيلة. المسؤول عن صياغة وتنفيذ وصية Thomas، وعنده النسخة الأصلية منها.",
-
-    secret:
-      "بتاخد عمولة نسبة من كل عملية توزيع تركة بعد وفاة كل وريث — يعني كل موت في العيلة بيزود دخلك. وإنت اللي «سيبت» خطاب Margaret يختفي.",
-
-    strength:
-      "إنت الوحيد اللي فاهم تفاصيل الوصية والقانون فعليًا.",
-
-    weakness:
-      "العمولة المتصاعدة دي بيان مالي ملموس يضعك تحت الشبهة."
+  if(game==="ripper"){
+    show("ripper");
   }
+
+}
+
+
+/* =========================================================
+   SWOPE
+========================================================= */
+
+const swopeRoles=[
+
+{
+n:1,
+name:"د. Bennett Clark Hyde",
+public:"طبيب معروف ورئيس جمعية أطباء المقاطعة. متجوز Frances Swope. كان حاضر وقت وفاة Hunton وThomas، وهو اللي أعطاهم الكبسولات.",
+secret:"عليك ديون قمار كبيرة محدش يعرف عنها. زواجك من Frances معناه إنك بتستفيد بشكل غير مباشر من ثروة العيلة. اشتريت كمية سيانيد من صيدلية بحجة تجارب معملية.",
+strength:"إنت الطبيب. أي معلومة طبية تقولها الناس بتصدقها تلقائيًا.",
+weakness:"إنت آخر واحد المفروض يتصدق لو حاول يفسر حاجة عن الدواء نفسه.",
+killer:true
+},
+
+{
+n:2,
+name:"Frances Swope Hyde",
+public:"بنت Margaret، متجوزة Hyde. بتحب زوجها بشدة وبتدافع عنه.",
+secret:"عارفة إن جوزك مديون بشكل خطير. سمعتيه قبل موت Thomas بيقول جملة غامضة عن إنكم هتبقوا مرتاحين.",
+strength:"إنتِ الزوجة المكلومة، والناس بتتردد تضغط عليكِ.",
+weakness:"أي حاجة تكشف إنك عارفة بالديون والجملة الغامضة هتخليكِ شريكة بالصمت.",
+killer:false
+},
+
+{
+n:3,
+name:"Margaret «Maggie» Swope",
+public:"أرملة أخو Thomas، صاحبة البيت الفعلية، وأم Frances.",
+secret:"من أول ما Hyde اتجوز بنتك وإنتِ مش مرتاحة له. كتبتي خطاب لمحامي العيلة Greene تسأليه عن تعديل نصيب Hyde وFrances من الوصية، والخطاب اختفى.",
+strength:"إنتِ صاحبة البيت وتعرفي مين دخل وفين كانت الحاجات.",
+weakness:"الخطاب المفقود يعطيكي دافعًا ماليًا واضحًا.",
+killer:false
+},
+
+{
+n:4,
+name:"Lucy Swope",
+public:"وريثة تانية من العيلة، نصيبها أصغر بكتير من نصيب Hyde وFrances.",
+secret:"زرتِ محامي مستقل قبل الوفاة بأسابيع وسألتي لو وريث مات هل ممكن تطعني في توزيع نصيبه.",
+strength:"فاهمة تفاصيل الوصية والحسابات المالية.",
+weakness:"زيارة المحامي قبل الموت بأسابيع توقيت سيئ جدًا.",
+killer:false
+},
+
+{
+n:5,
+name:"الممرضة Pearl Kellar",
+public:"ممرضة كانت موجودة في منزل Swope وقريبة من Thomas والعيلة أثناء المرض.",
+secret:"لا تثقي في Hyde. لاحظتِ شيئًا مقلقًا في طريقة إعطائه الدواء وكتبتي ملاحظاتك.",
+strength:"إنتِ الشاهدة العينية التي شافت لحظات إدخال الدواء.",
+weakness:"ذاكرتك مش كاملة وبعض كلامك استنتاج.",
+killer:false
+},
+
+{
+n:6,
+name:"المحامي Thomas Greene",
+public:"محامي تركة العيلة والمسؤول عن صياغة وتنفيذ الوصية.",
+secret:"بتاخد عمولة من عمليات توزيع التركة، وكل موت في العيلة ممكن يزود دخلك. وإنت اللي سبت خطاب Margaret يختفي.",
+strength:"إنت الوحيد اللي فاهم تفاصيل الوصية والقانون.",
+weakness:"العمولة المتصاعدة تضعك تحت الشبهة.",
+killer:true
+}
 
 ];
 
 
-/* =========================================================
-   ROUNDS
-========================================================= */
+const swopeRounds=[
 
-const rounds = [
+{
+title:"الجولة 1 — إيصال السيانيد",
+text:"إيصال شراء سيانيد باسم مستعار من صيدلية في Kansas City، قبل وفاة Thomas بأسبوع.",
+surface:"يوجه الشك مباشرة إلى Hyde.",
+deep:"اسم مستعار يعني إن المشتري ليس بالضرورة Hyde."
+},
 
-  {
-    title:"الجولة 1 — إيصال السيانيد",
+{
+title:"الجولة 2 — الخطاب المحروق",
+text:"شهادة خادم قديم رأى شخصًا يحرق أوراقًا في مدفأة مكتبة البيت.",
+surface:"يوجه الشك لمن لديه مصلحة في إخفاء الخطاب.",
+deep:"الخطاب كان في مكتب المحامي وليس في البيت."
+},
 
-    text:
-      "إيصال شراء سيانيد باسم مستعار من صيدلية في كانساس سيتي، بتاريخ قبل وفاة Thomas بأسبوع واحد بالضبط.",
+{
+title:"الجولة 3 — مفكرة الممرضة",
+text:"صفحة من مفكرة Pearl تصف أعراضًا تشبه التسمم، ومعها ملاحظة أن شخصًا عرض عليها المال لتسكت.",
+surface:"تدعم كلام Pearl ضد Hyde.",
+deep:"لماذا لم تتكلم وقتها؟ ومن أين جاء العرض المالي؟"
+},
 
-    surface:
-      "قراءة سطحية: بيوجه مباشرة على Hyde.",
-
-    deep:
-      "قراءة أعمق: «اسم مستعار» — يعني مش بالضرورة Hyde نفسه اللي اشتراه."
-  },
-
-  {
-    title:"الجولة 2 — الخطاب المحروق",
-
-    text:
-      "شهادة خادم قديم: شاف حد بيحرق ورق في مدفأة مكتبة البيت في ليلة اختفاء خطاب Margaret.",
-
-    surface:
-      "قراءة سطحية: بيوجه الشك لمين كان عنده مصلحة يخفي الخطاب.",
-
-    deep:
-      "قراءة أعمق: الخطاب كان في مكتب المحامي مش في البيت أصلاً!"
-  },
-
-  {
-    title:"الجولة 3 — مفكرة الممرضة",
-
-    text:
-      "صفحة من مفكرة Pearl الخاصة، فيها وصف دقيق لأعراض تشبه التسمم قبل الشك الرسمي، وجنبها سطر إن حد عرض عليها فلوس تسكت.",
-
-    surface:
-      "قراءة سطحية: يدي مصداقية لكلام Pearl ضد Hyde.",
-
-    deep:
-      "قراءة أعمق: هي كتبت الملاحظة بدري جداً، فليه ماتكلمتش وقتها ومنين جه العرض المالي؟"
-  },
-
-  {
-    title:"الجولة 4 — التويست: الربط الخفي",
-
-    text:
-      "سجل شراء يوضح إن نفس الشخص اللي طلب السيانيد هو اللي طلب عينات التيفويد — بس مش بنفس الاسم، وبنفس خط اليد مع ملحوظة مالية لمحامي التركة.",
-
-    surface:
-      "قراءة سطحية: فيه اتنين وراء الموضوع مش واحد.",
-
-    deep:
-      "قراءة أعمق: خط اليد يربط الشراء بشخص قريب من العيلة مش دكتور بالضرورة."
-  }
+{
+title:"الجولة 4 — الربط الخفي",
+text:"سجل شراء يربط السيانيد بعينات التيفويد، مع خط يد وملحوظة مالية لمحامي التركة.",
+surface:"يوحي بوجود أكثر من شخص.",
+deep:"الحل هو Hyde كفاعل مباشر وGreene كشريك."
+}
 
 ];
 
 
-/* =========================================================
-   STORAGE KEYS
-========================================================= */
+let swopeSelected=null;
 
-const PLAYER_KEY = 'swopePlayer';
 
-function notesKey(roleNumber){
+function swopePlayer(){
 
-  return 'swopePlayerNotes_' + roleNumber;
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function show(targetId){
-
-  document
-    .querySelectorAll('section')
-    .forEach(section => {
-
-      section.classList.add('hidden');
-
-      section.classList.remove(
-        'page-flip-in'
-      );
-
-    });
-
-  const target =
-    document.getElementById(targetId);
-
-  if(target){
-
-    target.classList.remove('hidden');
-
-    /*
-      Force reflow so the animation
-      restarts every time.
-    */
-    void target.offsetWidth;
-
-    target.classList.add(
-      'page-flip-in'
-    );
-
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-}
-
-
-/* =========================================================
-   GM
-========================================================= */
-
-function openGM(){
-
-  const input =
-    document.getElementById('gmInput');
-
-  const error =
-    document.getElementById('gmError');
-
-  if(input){
-    input.value = '';
-  }
-
-  if(error){
-    error.classList.add('hidden');
-  }
-
-  show('gm-lock');
-
-  setTimeout(() => {
-
-    if(input){
-      input.focus();
-    }
-
-  },300);
-}
-
-
-function verifyGM(){
-
-  const input =
-    document.getElementById('gmInput');
-
-  const error =
-    document.getElementById('gmError');
-
-  const inputVal =
-    input.value.trim();
-
-  /*
-    Basic GM convenience gate.
-
-    IMPORTANT:
-    This is NOT real security.
-    The password is inside client-side JavaScript.
-  */
-
-  if(inputVal === 'هشام'){
-
-    error.classList.add('hidden');
-
-    input.value = '';
-
-    show('gm');
-
-    showToast(
-      'تم الدخول إلى لوحة الـGM.',
-      'success'
-    );
-
-  }else{
-
-    error.textContent =
-      'خطأ: اسم المسؤول غير صحيح.';
-
-    error.classList.remove('hidden');
-
-    input.value = '';
-
-    input.focus();
-
-    showToast(
-      'كلمة المرور غير صحيحة.',
-      'error'
-    );
-  }
-}
-
-
-/* =========================================================
-   ROLE SELECTION
-========================================================= */
-
-let selected = null;
-
-
-function buildRoleButtons(){
-
-  const box =
-    document.getElementById('roleButtons');
-
-  /*
-    Intentionally:
-    DO NOT render role names here.
-    Players only see numbers.
-  */
-
-  box.innerHTML =
-    roles.map(role => {
-
-      return `
-        <button
-          class="role-btn"
-          type="button"
-          data-n="${role.n}"
-          aria-label="اختيار الشخصية رقم ${role.n}"
-          aria-pressed="false"
-          onclick="playClickSound(); selectRole(${role.n})"
-        >
-          <strong>
-            ${role.n}
-          </strong>
-
-          <small>
-            شخصية رقم ${role.n}
-          </small>
-        </button>
-      `;
-
-    }).join('');
-}
-
-
-function selectRole(n){
-
-  selected = Number(n);
-
-  document
-    .querySelectorAll('.role-btn')
-    .forEach(button => {
-
-      const isSelected =
-        Number(button.dataset.n) === selected;
-
-      button.classList.toggle(
-        'selected',
-        isSelected
-      );
-
-      button.setAttribute(
-        'aria-pressed',
-        String(isSelected)
-      );
-
-    });
-
-  const hint =
-    document.getElementById(
-      'selectionHint'
-    );
-
-  if(hint){
-
-    hint.textContent =
-      `تم اختيار الشخصية رقم ${selected} ✓`;
-
-    hint.style.color =
-      'var(--accent-gold)';
-
-  }
-}
-
-
-/* =========================================================
-   PLAYER CONFIRM
-========================================================= */
-
-function confirmRole(){
-
-  const nameInput =
-    document.getElementById('playerName');
-
-  const name =
-    nameInput.value.trim();
-
-  if(!name){
-
-    showToast(
-      'اكتب اسمك الأول.',
-      'error'
-    );
-
-    nameInput.focus();
-
-    return;
-  }
-
-  if(!selected){
-
-    showToast(
-      'اختار رقم الشخصية الأول.',
-      'error'
-    );
-
-    return;
-  }
-
-  const role =
-    roles.find(
-      item => item.n === selected
-    );
-
-  if(!role){
-
-    showToast(
-      'حصل خطأ في اختيار الشخصية.',
-      'error'
-    );
-
-    return;
-  }
-
-  /*
-    Store only the player name and role.
-  */
-
-  localStorage.setItem(
-    PLAYER_KEY,
-    JSON.stringify({
-      name:name,
-      role:selected
-    })
-  );
-
-  renderPlayer(
-    name,
-    role
-  );
-
-  show('player');
-
-  showToast(
-    'تم حفظ شخصيتك على الجهاز.',
-    'success'
-  );
-}
-
-
-/* =========================================================
-   PLAYER RENDER
-========================================================= */
-
-function renderPlayer(name, role){
-
-  /*
-    textContent is intentionally used
-    for player-controlled / dynamic text.
-    This prevents HTML injection through
-    the player name.
-  */
-
-  const badge =
-    document.getElementById(
-      'playerBadge'
-    );
-
-  badge.textContent =
-    `اللاعب: ${name} • الشخصية رقم ${role.n}`;
-
-
-  const roleName =
-    document.getElementById(
-      'roleName'
-    );
-
-  roleName.textContent =
-    role.name;
-
-
-  const rolePublic =
-    document.getElementById(
-      'rolePublic'
-    );
-
-  rolePublic.textContent =
-    'المعلومات العلنية: ' +
-    role.public;
-
-
-  const roleSecret =
-    document.getElementById(
-      'roleSecret'
-    );
-
-  roleSecret.textContent =
-    role.secret;
-
-
-  const mafiaBadge =
-    document.getElementById(
-      'mafiaBadge'
-    );
-
-  /*
-    Only roles 1 and 6
-    receive the MAFIOSO badge.
-  */
-
-  mafiaBadge.classList.toggle(
-    'hidden',
-    !(role.n === 1 || role.n === 6)
-  );
-
-
-  const roleStrength =
-    document.getElementById(
-      'roleStrength'
-    );
-
-  roleStrength.textContent =
-    role.strength;
-
-
-  const roleWeakness =
-    document.getElementById(
-      'roleWeakness'
-    );
-
-  roleWeakness.textContent =
-    role.weakness;
-
-
-  /*
-    Notes are separated by role.
-    This prevents notes from one character
-    appearing for another character.
-  */
-
-  const notes =
-    localStorage.getItem(
-      notesKey(role.n)
-    ) || '';
-
-  const notesBox =
-    document.getElementById(
-      'playerNotes'
-    );
-
-  notesBox.value =
-    notes;
-
-
-  /*
-    Rules are static content.
-    innerHTML is okay here because
-    nothing comes from the player.
-  */
-
-  document.getElementById(
-    'rulesPlayer'
-  ).innerHTML = `
-
-    <ul>
-
-      <li>
-        أنتم 6 لاعبين + Game Master.
-      </li>
-
-      <li>
-        اللعبة عبارة عن 4 جولات تحقيق.
-      </li>
-
-      <li>
-        في كل جولة، الـGM هيقدم دليل جديد ويبدأ النقاش.
-      </li>
-
-      <li>
-        بعد كل جولة:
-        نقاش لمدة 15–20 دقيقة →
-        تصويت →
-        اتهام شخص واحد يخرج من اللعبة.
-      </li>
-
-      <li>
-        إذا حصل إجماع،
-        يمكن لشخص واحد فقط كشف سره الشخصي اختيارياً.
-      </li>
-
-      <li>
-        اللعبة تستمر حتى يتبقى لاعبان،
-        وبعدها الـGM يكشف الحل الرسمي.
-      </li>
-
-    </ul>
-
-  `;
-
-}
-
-
-/* =========================================================
-   PLAYER NAVIGATION
-========================================================= */
-
-function goPlayer(){
-
-  const saved =
-    localStorage.getItem(
-      PLAYER_KEY
-    );
+  const saved=localStorage.getItem("swopePlayer");
 
   if(saved){
 
     try{
 
-      const player =
-        JSON.parse(saved);
+      const p=JSON.parse(saved);
 
-      const role =
-        roles.find(
-          item => item.n === Number(player.role)
+      const r=swopeRoles.find(
+        x=>x.n===p.role
+      );
+
+      if(r){
+
+        renderSwopePlayer(
+          p.name,
+          r
         );
 
-      if(
-        role &&
-        typeof player.name === 'string' &&
-        player.name.trim()
-      ){
-
-        renderPlayer(
-          player.name,
-          role
-        );
-
-        show('player');
+        show("swope-player");
 
         return;
       }
 
-    }catch(error){
+    }catch(e){}
 
-      localStorage.removeItem(
-        PLAYER_KEY
-      );
-
-    }
   }
 
-  /*
-    New player.
-  */
-
-  selected = null;
-
-  document.getElementById(
-    'playerName'
-  ).value = '';
-
-  document.getElementById(
-    'selectionHint'
-  ).textContent =
-    'لم يتم اختيار رقم بعد.';
-
-  document.getElementById(
-    'selectionHint'
-  ).style.color =
-    'var(--text-muted)';
-
-  document
-    .querySelectorAll('.role-btn')
-    .forEach(button => {
-
-      button.classList.remove(
-        'selected'
-      );
-
-      button.setAttribute(
-        'aria-pressed',
-        'false'
-      );
-
-    });
-
-  show('setup');
-
-  setTimeout(() => {
-
-    document.getElementById(
-      'playerName'
-    ).focus();
-
-  },300);
+  show("swope-setup");
 }
 
 
-/* =========================================================
-   NOTES
-========================================================= */
+function buildSwopeRoles(){
 
-function autoSaveNotes(){
+  const box=
+    document.getElementById("swopeRoles");
 
-  const savedPlayer =
-    localStorage.getItem(
-      PLAYER_KEY
+  box.textContent="";
+
+  swopeRoles.forEach(r=>{
+
+    const b=document.createElement("button");
+
+    b.className="role-btn";
+
+    b.type="button";
+
+    b.dataset.role=r.n;
+
+    const strong=document.createElement("strong");
+
+    strong.textContent=`شخصية ${r.n}`;
+
+    const small=document.createElement("small");
+
+    small.textContent="اضغط للاختيار";
+
+    b.append(
+      strong,
+      small
     );
 
-  if(!savedPlayer){
-    return;
-  }
+    b.addEventListener(
+      "click",
+      ()=>{
+        playClickSound();
+        swopeSelected=r.n;
 
-  try{
-
-    const player =
-      JSON.parse(savedPlayer);
-
-    const roleNumber =
-      Number(player.role);
-
-    if(!roleNumber){
-      return;
-    }
-
-    const notes =
-      document.getElementById(
-        'playerNotes'
-      ).value;
-
-    localStorage.setItem(
-      notesKey(roleNumber),
-      notes
+        document
+          .querySelectorAll("#swopeRoles .role-btn")
+          .forEach(x=>{
+            x.classList.toggle(
+              "selected",
+              Number(x.dataset.role)===r.n
+            );
+          });
+      }
     );
 
-    const status =
-      document.getElementById(
-        'saveStatus'
-      );
-
-    status.textContent =
-      'تم الحفظ تلقائياً ✓';
-
-    clearTimeout(
-      autoSaveNotes.timer
-    );
-
-    autoSaveNotes.timer =
-      setTimeout(() => {
-
-        status.textContent = '';
-
-      },1500);
-
-  }catch(error){
-    /* Ignore malformed local data */
-  }
-}
-
-
-/* =========================================================
-   RESET PLAYER
-========================================================= */
-
-function resetPlayer(){
-
-  localStorage.removeItem(
-    PLAYER_KEY
-  );
-
-  /*
-    Remove notes for all six roles.
-  */
-
-  roles.forEach(role => {
-
-    localStorage.removeItem(
-      notesKey(role.n)
-    );
+    box.appendChild(b);
 
   });
 
-  selected = null;
+}
 
-  const nameInput =
-    document.getElementById(
-      'playerName'
-    );
 
-  if(nameInput){
-    nameInput.value = '';
+function confirmSwopeRole(){
+
+  const name=
+    document.getElementById("swopeName")
+    .value.trim();
+
+  if(!name){
+
+    toast("اكتب اسمك الأول.");
+
+    return;
   }
 
-  const notes =
-    document.getElementById(
-      'playerNotes'
-    );
+  if(!swopeSelected){
 
-  if(notes){
-    notes.value = '';
+    toast("اختر رقم الشخصية.");
+
+    return;
   }
 
-  const status =
-    document.getElementById(
-      'saveStatus'
-    );
+  const r=swopeRoles.find(
+    x=>x.n===swopeSelected
+  );
 
-  if(status){
-    status.textContent = '';
+  localStorage.setItem(
+    "swopePlayer",
+    JSON.stringify({
+      name,
+      role:r.n
+    })
+  );
+
+  renderSwopePlayer(
+    name,
+    r
+  );
+
+  show("swope-player");
+
+}
+
+
+function renderSwopePlayer(name,r){
+
+  document.getElementById(
+    "swopePlayerBadge"
+  ).textContent=
+    `اللاعب: ${name} • الشخصية رقم ${r.n}`;
+
+  document.getElementById(
+    "swopeRoleName"
+  ).textContent=r.name;
+
+  document.getElementById(
+    "swopePublic"
+  ).textContent=
+    `المعلومات العلنية: ${r.public}`;
+
+  document.getElementById(
+    "swopeSecret"
+  ).textContent=r.secret;
+
+  document.getElementById(
+    "swopeStrength"
+  ).textContent=r.strength;
+
+  document.getElementById(
+    "swopeWeakness"
+  ).textContent=r.weakness;
+
+  document.getElementById(
+    "swopeMafia"
+  ).classList.toggle(
+    "hidden",
+    !r.killer
+  );
+
+  document.getElementById(
+    "swopeNotes"
+  ).value=
+    localStorage.getItem(
+      `swopeNotes_${r.n}`
+    )||"";
+
+}
+
+
+function saveSwopeNotes(){
+
+  const p=JSON.parse(
+    localStorage.getItem("swopePlayer")||"null"
+  );
+
+  if(!p)return;
+
+  localStorage.setItem(
+    `swopeNotes_${p.role}`,
+    document.getElementById("swopeNotes").value
+  );
+
+  const s=document.getElementById("swopeSave");
+
+  s.textContent="تم الحفظ تلقائيًا ✓";
+
+  setTimeout(()=>{
+    s.textContent="";
+  },1200);
+
+}
+
+
+function resetSwope(){
+
+  const p=JSON.parse(
+    localStorage.getItem("swopePlayer")||"null"
+  );
+
+  if(p){
+    localStorage.removeItem(
+      `swopeNotes_${p.role}`
+    );
   }
+
+  localStorage.removeItem("swopePlayer");
+
+  swopeSelected=null;
+
+  document.getElementById(
+    "swopeName"
+  ).value="";
 
   document
-    .querySelectorAll('.role-btn')
-    .forEach(button => {
+    .querySelectorAll("#swopeRoles .role-btn")
+    .forEach(x=>x.classList.remove("selected"));
 
-      button.classList.remove(
-        'selected'
-      );
+  show("swope-setup");
 
-      button.setAttribute(
-        'aria-pressed',
-        'false'
-      );
+}
 
-    });
 
-  const hint =
+function verifySwopeGM(){
+
+  const value=
+    document.getElementById("swopeGmInput")
+    .value.trim();
+
+  /*
+    Convenience gate only.
+    ليست حماية أمنية حقيقية.
+  */
+
+  if(value==="هشام"){
+
     document.getElementById(
-      'selectionHint'
-    );
+      "swopeGmError"
+    ).classList.add("hidden");
 
-  if(hint){
+    document.getElementById(
+      "swopeGmInput"
+    ).value="";
 
-    hint.textContent =
-      'لم يتم اختيار رقم بعد.';
+    buildSwopeGM();
 
-    hint.style.color =
-      'var(--text-muted)';
+    show("swope-gm");
+
+  }else{
+
+    document.getElementById(
+      "swopeGmError"
+    ).classList.remove("hidden");
+
   }
 
-  show('setup');
+}
 
-  showToast(
-    'تم مسح بيانات اللاعب من الجهاز.',
-    'success'
+
+function buildSwopeGM(){
+
+  const rolesBox=
+    document.getElementById("swopeGMroles");
+
+  rolesBox.textContent="";
+
+  swopeRoles.forEach(r=>{
+
+    const div=document.createElement("div");
+
+    div.className="round";
+
+    div.innerHTML=
+      `<b>رقم ${r.n} — ${r.name}</b><br>
+       <span class="${r.killer?'danger':''}">
+       ${r.killer
+         ?"مذنب — "+(r.n===1?"الفاعل المباشر":"الجاني الثاني")
+         :"بريء من جريمة القتل"}
+       </span>`;
+
+    rolesBox.appendChild(div);
+
+  });
+
+
+  const roundsBox=
+    document.getElementById("swopeRounds");
+
+  roundsBox.textContent="";
+
+  swopeRounds.forEach(round=>{
+
+    const d=document.createElement("details");
+
+    const s=document.createElement("summary");
+
+    s.textContent=round.title;
+
+    const p1=document.createElement("p");
+
+    p1.innerHTML=
+      `<b>الدليل:</b> ${round.text}`;
+
+    const p2=document.createElement("p");
+
+    p2.innerHTML=
+      `<b>السطحية:</b> ${round.surface}`;
+
+    const p3=document.createElement("p");
+
+    p3.innerHTML=
+      `<b>الأعمق:</b> ${round.deep}`;
+
+    d.append(
+      s,
+      p1,
+      p2,
+      p3
+    );
+
+    roundsBox.appendChild(d);
+
+  });
+
+}
+
+
+/* =========================================================
+   RIPPER
+========================================================= */
+
+const ripperRoles=[
+
+{
+id:1,
+name:"Aaron Kosminski",
+public:"حلاق بولندي يعيش في Whitechapel. رجل هادئ ومنعزل نسبيًا ويعرف الأزقة والحي جيدًا.",
+secret:"أنت الفاعل المباشر في سيناريو اللعبة: Jack the Ripper. تتحرك ليلًا وتعرف طرق الهروب. George Chapman غطى عليك ليلة واحدة على الأقل. لا تذكر اسمه أبدًا.",
+strength:"معرفتك بالحي ممتازة ويمكنك تصحيح التفاصيل الجغرافية والزمنية.",
+weakness:"كلما تحدثت بثقة زائدة عن تفاصيل الجريمة تزيد الشبهة عليك.",
+killer:true
+},
+
+{
+id:2,
+name:"Montague John Druitt",
+public:"محامٍ ومدرس من عائلة محترمة، وأصبح لاحقًا أحد الأسماء المرتبطة بالقضية.",
+secret:"أنت لست القاتل. كنت في وضع نفسي سيئ قبل اختفائك، لكنك لم ترتكب جرائم Whitechapel.",
+strength:"سمعتك تجعل اتهامك يحتاج إلى دليل أقوى.",
+weakness:"توقيت اختفائك ووفاتك يجعل كل شرح تقدمه يبدو دفاعيًا.",
+killer:false
+},
+
+{
+id:3,
+name:"Michael Ostrog",
+public:"رجل روسي متعدد الأسماء وله سجل إجرامي طويل.",
+secret:"لا تملك alibi واضحًا، لكنك في هذا السيناريو لست القاتل. لديك معلومة عن تحركات أحد رجال المنطقة.",
+strength:"بارع في الكذب وتغيير روايتك.",
+weakness:"اختلاف الأسماء والقصص السابقة في حياتك يجعل الجميع يشك أنك تخفي أكثر.",
+killer:false
+},
+
+{
+id:4,
+name:"Francis Tumblety",
+public:"أمريكي غريب الأطوار يعمل في الطب، ارتبط اسمه لاحقًا باشتباه أحد مسؤولي الشرطة.",
+secret:"أنت لست Jack. تم توقيفك في 1888 على خلفية قضية أخرى ثم خرجت بكفالة وغادرت البلاد.",
+strength:"شخصيتك الواثقة تسمح لك بقلب الضغط على الآخرين.",
+weakness:"سمعتك ومغادرتك لندن تجعلك هاربًا محتملًا.",
+killer:false
+},
+
+{
+id:5,
+name:"George Chapman",
+public:"حلاق بولندي يعمل في نفس دائرة الحلاقين بالحي.",
+secret:"أنت الشريك المُسهّل في سيناريو اللعبة. رأيت ما يكفي لتعرف حقيقة Kosminski وسكتّ. غطيت غيابه وساعدت في التخلص من موس حلاقة. لا تربط نفسك به.",
+strength:"خبرتك بالأدوات والمواد الخطرة تجعلك مقنعًا.",
+weakness:"أي سؤال عن نشاطك الخاص بالمواد يضغط عليك.",
+accomplice:true,
+killer:false
+},
+
+{
+id:6,
+name:"John Pizer — Leather Apron",
+public:"عامل يهودي في Whitechapel اشتهر صحفيًا بلقب Leather Apron.",
+secret:"أنت بريء. الصحافة ضخمت صورتك. لديك حجة قوية بشأن مكانك في إحدى الليالي.",
+strength:"تفهم كيف تتحول الإشاعات إلى حقائق.",
+weakness:"سمعتك الصحفية تجعل دفاعك يبدو كأنه هروب.",
+killer:false
+},
+
+{
+id:7,
+name:"George Hutchinson",
+public:"شاهد ظهر بعد مقتل Mary Jane Kelly وقال إنه رأى رجلًا مع الضحية قبل الجريمة.",
+secret:"أنت لست القاتل. لكن جزءًا من وصفك لم يكن يقينًا كاملًا، وأضفت تفاصيل لأنك أردت أن تكون شهادتك مفيدة.",
+strength:"تستطيع دفع النقاش نحو تفاصيل المظهر والسلوك.",
+weakness:"أي تناقض في شهادتك قد يجعل الجميع يفترض أنك اخترعت القصة.",
+killer:false
+}
+
+];
+
+
+const ripperRounds=[
+
+{
+title:"الجولة 1 — خمس جرائم في خمسة أسابيع",
+text:"تبدأ القضية بتذكير اللاعبين بالجرائم الخمس المعروفة عادة باسم Canonical Five: Nichols، Chapman، Stride، Eddowes، وKelly.",
+evidence:"قطعة من مئزر جلدي ممزق وملطخ عُثر عليها قرب إحدى الجرائم.",
+privateRole:6,
+private:"وصلتك معلومة إن شرطي جه يسأل عليك في محلك قبل النشرة الرسمية بالاسم. متقولش المصدر لحد.",
+surface:"المئزر يوجه الشبهة إلى Leather Apron.",
+deep:"المئزر وحده لا يثبت هوية القاتل."
+},
+
+{
+title:"الجولة 2 — شاهد واثق أكثر من اللازم",
+text:"ملخص شهادة شاهد رأى رجلًا مع Mary Jane Kelly قبل مقتلها. الوصف مفصل لكن الذاكرة قد تكون غير كاملة.",
+evidence:"نسخة من محضر الشهادة الرسمي بخط اليد.",
+privateRole:7,
+private:"فكرت تضيف تفصيلة صغيرة زيادة في وصفك عشان تقنع الشرطة إنك شفت كل حاجة. متقولش لحد.",
+surface:"يمكن أن يجعل Hutchinson مشبوهًا.",
+deep:"الشهادة لا تصلح كإثبات قطعي."
+},
+
+{
+title:"الجولة 3 — من يعرف الأزقة؟",
+text:"التحركات داخل Whitechapel كانت تتطلب معرفة جيدة بالمنطقة، وعدة مشتبه بهم كانوا يعيشون أو يعملون بالقرب منها.",
+evidence:"موس حلاقة ملفوف في ورق جريدة قديم، ملطخ بدم جاف.",
+privateRole:5,
+private:"لاحظت إن صاحب المحل اللي بتشتغل جنبه بيتجنب الكلام عن ليلة معينة. إنت عارف السبب، بس مش وقته.",
+surface:"الحلاقون يصبحون أكثر إثارة للشك.",
+deep:"المهنة والمعرفة بالمكان ليست دليل قتل."
+},
+
+{
+title:"الجولة 4 — الخيط الذي لا يثبت وحده",
+text:"يعرض الـGM أن Kosminski ارتبط لاحقًا باشتباه مسؤولي شرطة، بينما ارتبط Druitt وOstrog وTumblety أيضًا باشتباهات مختلفة.",
+evidence:"صفحة من دفتر حسابات محل حلاقة فيها دفعة نقدية غامضة بتاريخ يطابق ليلة إحدى الجرائم.",
+privateRole:null,
+private:"",
+surface:"الدفعة الغامضة تفتح احتمال وجود أكثر من شخص.",
+deep:"الحل داخل اللعبة: Kosminski فاعل مباشر وChapman شريك."
+}
+
+];
+
+
+let ripperSelected=null;
+
+let ripperGmCode=
+  localStorage.getItem("ripperGmCode")||"";
+
+
+function ripperPlayer(){
+
+  const saved=
+    localStorage.getItem("ripperPlayer");
+
+  if(saved){
+
+    try{
+
+      const p=JSON.parse(saved);
+
+      const roles=
+        getRipperRoles(p.sessionCode);
+
+      const r=roles.find(
+        x=>x.id===p.roleId
+      );
+
+      if(r){
+
+        renderRipperPlayer(
+          p.name,
+          r
+        );
+
+        show("ripper-player");
+
+        return;
+      }
+
+    }catch(e){}
+
+  }
+
+  show("ripper-setup");
+
+}
+
+
+function hashCode(str){
+
+  let hash=0;
+
+  for(let i=0;i<str.length;i++){
+
+    hash=
+      (hash<<5)-
+      hash+
+      str.charCodeAt(i);
+
+    hash|=0;
+  }
+
+  return Math.abs(hash);
+}
+
+
+function seededShuffle(arr,seedStr){
+
+  let seed=hashCode(seedStr);
+
+  const a=[...arr];
+
+  for(
+    let i=a.length-1;
+    i>0;
+    i--
+  ){
+
+    seed=
+      (seed*9301+49297)%233280;
+
+    const j=
+      Math.floor(
+        (seed/233280)*(i+1)
+      );
+
+    [
+      a[i],
+      a[j]
+    ]=[
+      a[j],
+      a[i]
+    ];
+
+  }
+
+  return a;
+
+}
+
+
+function getRipperRoles(code){
+
+  if(!code){
+
+    return ripperRoles.map(
+      r=>({...r,displayN:r.id})
+    );
+
+  }
+
+  return seededShuffle(
+    ripperRoles,
+    code
+  ).map(
+    (r,i)=>({
+      ...r,
+      displayN:i+1
+    })
   );
+
 }
 
 
-/* =========================================================
-   GM CONTENT
-========================================================= */
+function verifyRipperCode(code){
 
-function buildGM(){
+  const roles=
+    getRipperRoles(code);
 
-  const gmRoles =
-    document.getElementById(
-      'gmRoles'
+  const order=
+    roles
+      .slice()
+      .sort(
+        (a,b)=>a.displayN-b.displayN
+      )
+      .map(r=>r.id)
+      .join("");
+
+  const h=
+    hashCode(
+      order+"#"+code
     );
 
-  gmRoles.innerHTML =
-    roles.map(role => {
+  return "3AWAEM-"+String(
+    10+(h%90)
+  );
 
-      const guilty =
-        role.n === 1 ||
-        role.n === 6;
-
-      const result =
-        guilty
-          ? (
-              role.n === 1
-                ? 'مذنب — الفاعل المباشر'
-                : 'مذنب — محرّض/مُسهّل'
-            )
-          : 'بريء من جريمة القتل';
-
-      return `
-
-        <div class="round">
-
-          <b>
-            ${role.n} — ${role.name}
-          </b>
-
-          <br>
-
-          <span
-            class="${guilty ? 'danger' : ''}"
-          >
-            ${result}
-          </span>
-
-        </div>
-
-      `;
-
-    }).join('');
-
-
-  const roundsGM =
-    document.getElementById(
-      'roundsGM'
-    );
-
-  roundsGM.innerHTML =
-    rounds.map(round => {
-
-      return `
-
-        <details>
-
-          <summary>
-            ${round.title}
-          </summary>
-
-          <p>
-            <b>الدليل:</b>
-            ${round.text}
-          </p>
-
-          <p>
-            <b>السطحية:</b>
-            ${round.surface}
-          </p>
-
-          <p>
-            <b>الأعمق:</b>
-            ${round.deep}
-          </p>
-
-        </details>
-
-      `;
-
-    }).join('');
 }
 
 
-/* =========================================================
-   KEYBOARD SUPPORT
-========================================================= */
+function checkRipperCode(){
 
-document
-  .getElementById('gmInput')
-  .addEventListener(
-    'keydown',
-    event => {
+  const value=
+    document.getElementById(
+      "sessionCode"
+    ).value.trim();
 
-      if(event.key === 'Enter'){
+  const msg=
+    document.getElementById(
+      "codeMessage"
+    );
 
-        event.preventDefault();
+  if(value===""){
 
-        verifyGM();
+    msg.textContent=
+      "من غير كود، هيتم استخدام الترتيب الافتراضي.";
+
+    return;
+  }
+
+  if(!/^\d{4}$/.test(value)){
+
+    msg.textContent=
+      "كود الجلسة لازم يكون 4 أرقام.";
+
+    msg.style.color=
+      "var(--red)";
+
+    return;
+  }
+
+  msg.style.color=
+    "var(--muted)";
+
+  msg.textContent=
+    `كلمة التحقق: ${verifyRipperCode(value)}`;
+
+}
+
+
+function buildRipperRoles(){
+
+  const box=
+    document.getElementById(
+      "ripperRoles"
+    );
+
+  box.textContent="";
+
+  for(let n=1;n<=7;n++){
+
+    const b=
+      document.createElement("button");
+
+    b.className="role-btn";
+
+    b.type="button";
+
+    b.dataset.role=n;
+
+    const strong=
+      document.createElement("strong");
+
+    strong.textContent=
+      `شخصية ${n}`;
+
+    const small=
+      document.createElement("small");
+
+    small.textContent=
+      "اضغط للاختيار";
+
+    b.append(
+      strong,
+      small
+    );
+
+    b.addEventListener(
+      "click",
+      ()=>{
+        playClickSound();
+
+        ripperSelected=n;
+
+        document
+          .querySelectorAll("#ripperRoles .role-btn")
+          .forEach(x=>{
+            x.classList.toggle(
+              "selected",
+              Number(x.dataset.role)===n
+            );
+          });
+      }
+    );
+
+    box.appendChild(b);
+
+  }
+
+}
+
+
+function confirmRipperRole(){
+
+  const name=
+    document.getElementById(
+      "ripperName"
+    ).value.trim();
+
+  const code=
+    document.getElementById(
+      "sessionCode"
+    ).value.trim();
+
+  if(!name){
+
+    toast("اكتب اسمك الأول.");
+
+    return;
+  }
+
+  if(
+    code!=="" &&
+    !/^\d{4}$/.test(code)
+  ){
+
+    toast("كود الجلسة لازم يكون 4 أرقام.");
+
+    return;
+  }
+
+  if(!ripperSelected){
+
+    toast("اختر رقم الشخصية.");
+
+    return;
+  }
+
+  const roles=
+    getRipperRoles(code);
+
+  const r=
+    roles.find(
+      x=>x.displayN===ripperSelected
+    );
+
+  localStorage.setItem(
+    "ripperPlayer",
+    JSON.stringify({
+      name,
+      roleId:r.id,
+      sessionCode:code
+    })
+  );
+
+  renderRipperPlayer(
+    name,
+    r
+  );
+
+  show("ripper-player");
+
+}
+
+
+function playRevealSound(){
+
+  try{
+
+    const AudioContext=
+      window.AudioContext||
+      window.webkitAudioContext;
+
+    const a=new AudioContext();
+
+    const t=a.currentTime;
+
+    [196,146.8,110].forEach(
+      (f,i)=>{
+
+        const o=a.createOscillator();
+        const g=a.createGain();
+
+        o.type="sine";
+
+        o.frequency.value=f;
+
+        g.gain.setValueAtTime(
+          0,
+          t+i*.05
+        );
+
+        g.gain.linearRampToValueAtTime(
+          .09,
+          t+.05+i*.05
+        );
+
+        g.gain.linearRampToValueAtTime(
+          0,
+          t+.9+i*.05
+        );
+
+        o.connect(g);
+        g.connect(a.destination);
+
+        o.start(t+i*.05);
+
+        o.stop(t+1+i*.05);
 
       }
+    );
+
+  }catch(e){}
+
+}
+
+
+function renderRipperPlayer(name,r){
+
+  document.getElementById(
+    "ripperPlayerBadge"
+  ).textContent=
+    `اللاعب: ${name} • الشخصية رقم ${r.displayN}`;
+
+  document.getElementById(
+    "ripperRoleName"
+  ).textContent=r.name;
+
+  document.getElementById(
+    "ripperPublic"
+  ).textContent=
+    `المعلومات العلنية: ${r.public}`;
+
+  document.getElementById(
+    "ripperSecret"
+  ).textContent=r.secret;
+
+  document.getElementById(
+    "ripperStrength"
+  ).textContent=r.strength;
+
+  document.getElementById(
+    "ripperWeakness"
+  ).textContent=r.weakness;
+
+  const mafia=
+    r.killer||
+    r.accomplice;
+
+  document.getElementById(
+    "ripperMafia"
+  ).classList.toggle(
+    "hidden",
+    !mafia
+  );
+
+  document.getElementById(
+    "ripperNotes"
+  ).value=
+    localStorage.getItem(
+      `ripperNotes_${r.id}`
+    )||"";
+
+  if(mafia){
+    playRevealSound();
+  }
+
+}
+
+
+function saveRipperNotes(){
+
+  const p=JSON.parse(
+    localStorage.getItem(
+      "ripperPlayer"
+    )||"null"
+  );
+
+  if(!p)return;
+
+  localStorage.setItem(
+    `ripperNotes_${p.roleId}`,
+    document.getElementById(
+      "ripperNotes"
+    ).value
+  );
+
+  const s=
+    document.getElementById(
+      "ripperSave"
+    );
+
+  s.textContent=
+    "تم الحفظ تلقائيًا ✓";
+
+  setTimeout(()=>{
+    s.textContent="";
+  },1200);
+
+}
+
+
+function resetRipper(){
+
+  const p=JSON.parse(
+    localStorage.getItem(
+      "ripperPlayer"
+    )||"null"
+  );
+
+  if(p){
+
+    localStorage.removeItem(
+      `ripperNotes_${p.roleId}`
+    );
+
+  }
+
+  localStorage.removeItem(
+    "ripperPlayer"
+  );
+
+  ripperSelected=null;
+
+  document.getElementById(
+    "ripperName"
+  ).value="";
+
+  document.getElementById(
+    "sessionCode"
+  ).value="";
+
+  document.getElementById(
+    "codeMessage"
+  ).textContent="";
+
+  document
+    .querySelectorAll("#ripperRoles .role-btn")
+    .forEach(x=>{
+      x.classList.remove("selected");
+    });
+
+  show("ripper-setup");
+
+}
+
+
+function generateRipperCode(){
+
+  ripperGmCode=
+    String(
+      Math.floor(
+        1000+
+        Math.random()*9000
+      )
+    );
+
+  localStorage.setItem(
+    "ripperGmCode",
+    ripperGmCode
+  );
+
+  buildRipperGM();
+
+  toast(
+    "تم إنشاء توزيع عشوائي جديد."
+  );
+
+}
+
+
+function setCurrentRound(n){
+
+  localStorage.setItem(
+    "ripperCurrentRound",
+    n
+  );
+
+  document
+    .querySelectorAll(
+      ".round-chip"
+    )
+    .forEach(x=>{
+      x.classList.remove("active");
+    });
+
+  const chip=
+    document.getElementById(
+      `ripperChip${n}`
+    );
+
+  if(chip){
+    chip.classList.add("active");
+  }
+
+}
+
+
+function buildRipperGM(){
+
+  document.getElementById(
+    "currentRipperCode"
+  ).textContent=
+    ripperGmCode||"غير محدد";
+
+  document.getElementById(
+    "verifyCode"
+  ).textContent=
+    verifyRipperCode(
+      ripperGmCode
+    );
+
+
+  const roles=
+    getRipperRoles(
+      ripperGmCode
+    );
+
+
+  const roleBox=
+    document.getElementById(
+      "ripperGMroles"
+    );
+
+  roleBox.textContent="";
+
+
+  roles.forEach(r=>{
+
+    const div=
+      document.createElement("div");
+
+    div.className="round";
+
+    let status=
+      "بريء من جرائم Whitechapel";
+
+    if(r.killer){
+      status=
+        "الفاعل المباشر — Jack the Ripper";
+    }
+    else if(r.accomplice){
+      status=
+        "الشريك المُسهّل — Mafioso الثاني";
+    }
+
+    div.innerHTML=
+      `<b>رقم ${r.displayN}: ${r.name}</b><br>
+       <span class="${r.killer||r.accomplice?"danger":""}">
+       ${status}
+       </span>`;
+
+    roleBox.appendChild(div);
+
+  });
+
+
+  const roundsBox=
+    document.getElementById(
+      "ripperRounds"
+    );
+
+  roundsBox.textContent="";
+
+
+  ripperRounds.forEach(round=>{
+
+    const d=
+      document.createElement("details");
+
+    const s=
+      document.createElement("summary");
+
+    s.textContent=
+      round.title;
+
+    const p=
+      document.createElement("p");
+
+    p.innerHTML=
+      `<b>الدليل:</b> ${round.text}`;
+
+    const e=
+      document.createElement("div");
+
+    e.className="evidence";
+
+    e.innerHTML=
+      `<b>الدليل المادي:</b> ${round.evidence}`;
+
+    d.append(
+      s,
+      p,
+      e
+    );
+
+
+    if(round.privateRole){
+
+      const mapped=
+        roles.find(
+          r=>r.id===round.privateRole
+        );
+
+      const note=
+        document.createElement(
+          "div"
+        );
+
+      note.className=
+        "private-note";
+
+      note.innerHTML=
+        `<b>ملاحظة خاصة — شخصية رقم ${mapped.displayN} فقط:</b>
+         ${round.private}`;
+
+      d.appendChild(note);
+
+    }
+
+
+    const p2=
+      document.createElement("p");
+
+    p2.innerHTML=
+      `<b>السطحية:</b> ${round.surface}`;
+
+    const p3=
+      document.createElement("p");
+
+    p3.innerHTML=
+      `<b>الأعمق:</b> ${round.deep}`;
+
+    d.append(
+      p2,
+      p3
+    );
+
+    roundsBox.appendChild(d);
+
+  });
+
+
+  const nav=
+    document.getElementById(
+      "ripperRoundNav"
+    );
+
+  nav.textContent="";
+
+
+  ripperRounds.forEach(
+    (round,i)=>{
+
+      const b=
+        document.createElement(
+          "button"
+        );
+
+      b.className="round-chip";
+
+      b.id=
+        `ripperChip${i+1}`;
+
+      b.type="button";
+
+      b.textContent=
+        `الجولة ${i+1}`;
+
+      b.addEventListener(
+        "click",
+        ()=>{
+          setCurrentRound(i+1);
+        }
+      );
+
+      nav.appendChild(b);
 
     }
   );
 
 
-document
-  .getElementById('playerName')
-  .addEventListener(
-    'keydown',
-    event => {
+  const savedRound=
+    Number(
+      localStorage.getItem(
+        "ripperCurrentRound"
+      )||0
+    );
 
-      if(event.key === 'Enter'){
+  if(savedRound){
+    setCurrentRound(savedRound);
+  }
 
-        event.preventDefault();
-
-        /*
-          Enter from the name field
-          confirms the whole selection.
-        */
-
-        confirmRole();
-
-      }
-
-    }
-  );
+}
 
 
 /* =========================================================
-   INITIALIZATION
+   INIT
 ========================================================= */
 
-buildRoleButtons();
+buildSwopeRoles();
 
-buildGM();
+buildRipperRoles();
+
+buildSwopeGM();
+
+buildRipperGM();
 
 
-/*
-  We intentionally do NOT automatically
-  open the player's secret screen on page load.
+document.getElementById(
+  "swopeName"
+).addEventListener(
+  "keydown",
+  e=>{
+    if(e.key==="Enter"){
+      confirmSwopeRole();
+    }
+  }
+);
 
-  The player must press "أنا لاعب"
-  before seeing their stored character.
-*/
+
+document.getElementById(
+  "ripperName"
+).addEventListener(
+  "keydown",
+  e=>{
+    if(e.key==="Enter"){
+      confirmRipperRole();
+    }
+  }
+);
+
+
+document.getElementById(
+  "swopeGmInput"
+).addEventListener(
+  "keydown",
+  e=>{
+    if(e.key==="Enter"){
+      verifySwopeGM();
+    }
+  }
+);
+
+
+document.getElementById(
+  "ripperGmInput"
+).addEventListener(
+  "keydown",
+  e=>{
+    if(e.key==="Enter"){
+      verifyRipperGM();
+    }
+  }
+);
+
+
+/* Restore current players */
+
+try{
+
+  const swope=
+    JSON.parse(
+      localStorage.getItem(
+        "swopePlayer"
+      )||"null"
+    );
+
+  if(swope){
+
+    const r=
+      swopeRoles.find(
+        x=>x.n===swope.role
+      );
+
+    if(r){
+      renderSwopePlayer(
+        swope.name,
+        r
+      );
+    }
+
+  }
+
+}catch(e){}
+
+
+try{
+
+  const ripper=
+    JSON.parse(
+      localStorage.getItem(
+        "ripperPlayer"
+      )||"null"
+    );
+
+  if(ripper){
+
+    const roles=
+      getRipperRoles(
+        ripper.sessionCode
+      );
+
+    const r=
+      roles.find(
+        x=>x.id===ripper.roleId
+      );
+
+    if(r){
+
+      renderRipperPlayer(
+        ripper.name,
+        r
+      );
+
+    }
+
+  }
+
+}catch(e){}
 
 </script>
 
 </body>
 </html>
-```
