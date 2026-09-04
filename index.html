@@ -274,109 +274,13 @@ li{margin-bottom:8px}
   <h2 style="margin-top:15px">مدير اللعبة</h2>
   <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأسرار.</p>
   <label for="swopeGmInput">كلمة المرور</label>
-  <input id="swopeGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <input id="swopeGmInput" type="text" autocomplete="off" placeholder="اكتب كلمة المرور...">
   <div style="display:flex;gap:10px;margin-top:20px">
     <button class="btn primary" onclick="playClickSound();verifySwopeGM()" style="flex:2">دخول</button>
     <button class="btn ghost" onclick="playClickSound();show('swope')" style="flex:1">رجوع</button>
   </div>
   <p id="swopeGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
 </div>
-</section>
-
-<!-- SWOPE SETUP -->
-<section id="swope-setup" class="hidden">
-<div class="card">
-  <h2>اختيار الشخصية</h2>
-
-  <div class="notice">
-    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من <b>1 إلى 6</b>.
-    بعد التأكيد ستظهر معلومات شخصيتك السرية. <b>متوريهاش لحد.</b>
-  </div>
-
-  <label for="swopeName">اسمك</label>
-  <input id="swopeName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
-
-  <br><br>
-
-  <label for="swopeSessionCode">كود الجلسة</label>
-  <input id="swopeSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
-         placeholder="مثال: 4821">
-
-  <label style="margin-top:15px">اختر رقم الشخصية</label>
-  <div id="swopeRoles" class="role-grid"></div>
-
-  <br>
-
-  <div style="display:flex;gap:10px">
-    <button class="btn primary" onclick="playClickSound();confirmSwopeRole()" style="flex:2">
-      تأكيد واكتشاف شخصيتي
-    </button>
-    <button class="btn ghost" onclick="playClickSound();show('swope')" style="flex:1">رجوع</button>
-  </div>
-</div>
-</section>
-
-<!-- SWOPE PLAYER -->
-<section id="swope-player" class="hidden">
-  
-  <div class="card" style="margin-bottom:16px">
-    <div class="topline">
-      <div class="badge" id="swopePlayerBadge">اللاعب: ممم • الشخصية رقم 1</div>
-      <div id="swopeMafia" class="badge hidden" style="color:#ff7777;border-color:#a33;background:rgba(150,20,20,.2)" dir="ltr">
-        MAFIOSO
-      </div>
-    </div>
-    <h2 id="swopeRoleName" style="margin-top:12px">Lucy Swope</h2>
-    <p id="swopePublic" class="small">المعلومات العلنية: وريثة ثانية من العائلة. نصيبها أصغر بكثير من نصيب Francesg Hyde</p>
-  </div>
-
-  <div class="dashboard-grid">
-    
-    <div class="card secret">
-      <h3>سري جدًا — معلومات شخصيتك</h3>
-      <p id="swopeSecret" style="margin-top:10px">زرت محامي مستقل قبل الوفاة بأسابيع وسألتي لو وريث مات هل ممكن نطعن في توزيع نصيبه.</p>
-      <hr>
-      <h3>نقطة قوتك</h3>
-      <p id="swopeStrength" class="small">فاهمة تفاصيل الوصية الحسابات المالية.</p>
-      <h3 style="margin-top:15px">نقطة ضعفك</h3>
-      <p id="swopeWeakness" class="small">زيارة المحامي قبل الموت بأسابيع توقيت سيئ جداً.</p>
-    </div>
-
-    <div class="card">
-      <h3>مفكرة المحقق</h3>
-      <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
-      <textarea id="swopeNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveSwopeNotes()"></textarea>
-      <div id="swopeSave" class="small" style="text-align:left;color:var(--gold3)"></div>
-    </div>
-
-    <div class="card" id="swopeStatusCard">
-      <div class="topline">
-        <h2>مين لسه في اللعبة</h2>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="status-indicator"><span class="dot-online"></span>مباشر</span>
-          <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('swope')">تحديث</button>
-        </div>
-      </div>
-      <div id="swopeStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
-    </div>
-
-    <div class="card">
-      <h2>قواعد اللعبة</h2>
-      <ul style="margin-top:10px">
-        <li>أنتم 6 لاعبين + Game Master.</li>
-        <li>اللعبة عبارة عن 4 جولات تحقيق.</li>
-        <li>في كل جولة الـGM يقدم دليل جديد.</li>
-        <li>بعد كل جولة نقاش ثم تصويت.</li>
-        <li>اللاعب الذي يحصل على أغلب الأصوات يخرج من اللعبة.</li>
-        <li>بعد الجولة الرابعة يكشف الـGM الحل الرسمي.</li>
-      </ul>
-    </div>
-
-  </div>
-
-  <button class="btn secondary" onclick="playClickSound();resetSwope()" style="width:100%;margin-top:20px">
-    مسح الشخصية من هذا الجهاز
-  </button>
 </section>
 
 <!-- SWOPE GM -->
@@ -432,7 +336,7 @@ li{margin-bottom:8px}
   <h2 style="margin-top:15px">مدير اللعبة</h2>
   <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأدلة السرية.</p>
   <label for="ripperGmInput">كلمة المرور</label>
-  <input id="ripperGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <input id="ripperGmInput" type="text" autocomplete="off" placeholder="اكتب كلمة المرور...">
   <div style="display:flex;gap:10px;margin-top:20px">
     <button class="btn primary" onclick="playClickSound();verifyRipperGM()" style="flex:2">دخول</button>
     <button class="btn ghost" onclick="playClickSound();show('ripper')" style="flex:1">رجوع</button>
@@ -441,56 +345,11 @@ li{margin-bottom:8px}
 </div>
 </section>
 
-<!-- RIPPER SETUP -->
-<section id="ripper-setup" class="hidden">
-<div class="card">
-  <h2>اختيار الشخصية</h2>
-  <label for="ripperName">اسمك</label>
-  <input id="ripperName" maxlength="40" placeholder="اكتب اسمك هنا...">
-  <br><br>
-  <label for="sessionCode">كود الجلسة</label>
-  <input id="sessionCode" maxlength="4" placeholder="مثال: 4821">
-  <label style="margin-top:15px">اختر رقم الشخصية</label>
-  <div id="ripperRoles" class="role-grid"></div>
-  <br>
-  <button class="btn primary" onclick="playClickSound();confirmRipperRole()" style="width:100%">
-    تأكيد واكتشاف شخصيتي
-  </button>
-</div>
-</section>
-
-<!-- RIPPER PLAYER -->
-<section id="ripper-player" class="hidden">
-<div class="card" style="margin-bottom:16px">
-  <div class="topline">
-    <div class="badge" id="ripperPlayerBadge">اللاعب</div>
-  </div>
-  <h2 id="ripperRoleName" style="margin-top:12px"></h2>
-</div>
-
-<div class="dashboard-grid">
-  <div class="card secret">
-    <h3>سري جدًا — ملف شخصيتك</h3>
-    <p id="ripperSecret" style="margin-top:10px"></p>
-  </div>
-
-  <div class="card">
-    <h3>مفكرة المحقق</h3>
-    <textarea id="ripperNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveRipperNotes()"></textarea>
-  </div>
-</div>
-
-<button class="btn secondary" onclick="playClickSound();resetRipper()" style="width:100%;margin-top:20px">
-  مسح الشخصية من هذا الجهاز
-</button>
-</section>
-
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
 </div>
 
 <script>
-const SWOPE_PASS = "1234";
-const RIPPER_PASS = "1234";
+const GM_PASSWORD = "هشام";
 
 function show(id){
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
@@ -520,11 +379,13 @@ function playClickSound(){
 }
 
 function verifySwopeGM(){
-  const val = document.getElementById("swopeGmInput").value;
+  const inputEl = document.getElementById("swopeGmInput");
+  const val = inputEl ? inputEl.value.trim() : "";
   const err = document.getElementById("swopeGmError");
-  if(val === SWOPE_PASS){
+  
+  if(val === GM_PASSWORD){
     if(err) err.classList.add("hidden");
-    document.getElementById("swopeGmInput").value = "";
+    inputEl.value = "";
     show("swope-gm");
   } else {
     if(err) err.classList.remove("hidden");
@@ -532,11 +393,13 @@ function verifySwopeGM(){
 }
 
 function verifyRipperGM(){
-  const val = document.getElementById("ripperGmInput").value;
+  const inputEl = document.getElementById("ripperGmInput");
+  const val = inputEl ? inputEl.value.trim() : "";
   const err = document.getElementById("ripperGmError");
-  if(val === RIPPER_PASS){
+  
+  if(val === GM_PASSWORD){
     if(err) err.classList.add("hidden");
-    document.getElementById("ripperGmInput").value = "";
+    inputEl.value = "";
     show("ripper-gm");
   } else {
     if(err) err.classList.remove("hidden");
@@ -549,79 +412,15 @@ function openGame(game){
 
 function swopePlayer(){
   show("swope-setup");
-  buildSwopeRoles();
 }
 
 function ripperPlayer(){
   show("ripper-setup");
-  buildRipperRoles();
 }
 
-function buildSwopeRoles(){
-  const container=document.getElementById("swopeRoles");
-  container.innerHTML="";
-  for(let i=1;i<=6;i++){
-    const btn=document.createElement("button");
-    btn.className="role-btn";
-    btn.innerHTML=`<strong>رقم ${i}</strong><small>شخصية غامضة</small>`;
-    btn.onclick=()=>{
-      document.querySelectorAll("#swopeRoles .role-btn").forEach(b=>b.classList.remove("selected"));
-      btn.classList.add("selected");
-      btn.dataset.roleNum=i;
-    };
-    container.appendChild(btn);
-  }
-}
-
-function buildRipperRoles(){
-  const container=document.getElementById("ripperRoles");
-  container.innerHTML="";
-  for(let i=1;i<=7;i++){
-    const btn=document.createElement("button");
-    btn.className="role-btn";
-    btn.innerHTML=`<strong>رقم ${i}</strong><small>مشتبه به</small>`;
-    btn.onclick=()=>{
-      document.querySelectorAll("#ripperRoles .role-btn").forEach(b=>b.classList.remove("selected"));
-      btn.classList.add("selected");
-      btn.dataset.roleNum=i;
-    };
-    container.appendChild(btn);
-  }
-}
-
-function confirmSwopeRole(){
-  show("swope-player");
-}
-
-function confirmRipperRole(){
-  show("ripper-player");
-}
-
-function saveSwopeNotes(){
-  localStorage.setItem("swopeNotes",document.getElementById("swopeNotes").value);
-}
-
-function saveRipperNotes(){
-  localStorage.setItem("ripperNotes",document.getElementById("ripperNotes").value);
-}
-
-function resetSwope(){
-  localStorage.removeItem("swopeNotes");
-  show("swope");
-}
-
-function resetRipper(){
-  localStorage.removeItem("ripperNotes");
-  show("ripper");
-}
-
-window.onload=function(){
-  if(localStorage.getItem("swopeNotes")){
-    document.getElementById("swopeNotes").value=localStorage.getItem("swopeNotes");
-  }
-  if(localStorage.getItem("ripperNotes")){
-    document.getElementById("ripperNotes").value=localStorage.getItem("ripperNotes");
-  }
+function generateSwopeCode(){
+  const code = Math.floor(1000 + Math.random() * 9000);
+  document.getElementById("currentSwopeCode").innerText = code;
 }
 </script>
 </body>
