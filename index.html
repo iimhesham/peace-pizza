@@ -163,18 +163,38 @@ li{margin-bottom:8px}
 .page-in{animation:pageIn .4s ease}
 @keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media(max-width:650px){
-  body{padding:calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left))}
-  .card{padding:20px;margin:12px 0}.hero{padding:42px 15px}
-  .game-grid,.grid{grid-template-columns:1fr}.role-grid{grid-template-columns:repeat(2,1fr)}
-  .btn{padding:13px 17px;width:100%}h2{font-size:27px}
-  .topline{flex-direction:column;align-items:flex-start}
+  body{padding:calc(10px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));line-height:1.55}
+  .card{padding:14px;margin:8px 0}.hero{padding:26px 12px}
+  .game-grid,.grid{grid-template-columns:1fr;gap:10px}.role-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .btn{padding:11px 14px;width:100%;font-size:14px;min-height:40px}
+  h1{font-size:24px}h2{font-size:19px}h3{font-size:16px}
+  .topline{flex-direction:column;align-items:flex-start;gap:6px}
   .game-title{letter-spacing:3px}
-  .role-btn{padding:16px 8px;min-height:56px}
-  input,textarea{font-size:16px}
+  .subtitle{font-size:14px;margin:8px auto 16px}
+  .kicker{margin-top:8px}
+  .divider{margin:10px auto}
+  .badge{padding:4px 11px;font-size:10px}
+  .role-btn{padding:10px 4px;min-height:44px}
+  .role-btn strong{font-size:13px}.role-btn small{font-size:10px}
+  .notice{padding:10px;font-size:13px;margin:8px 0}
+  .round{padding:12px;margin:8px 0}
+  .evidence,.private-note{padding:10px 12px;font-size:13px;margin-top:8px}
+  textarea{min-height:80px}
+  input,textarea{font-size:16px;padding:11px 13px}
+  label{margin-bottom:6px}
+  .game-card{padding:18px 14px}
+  .game-card .number{font-size:32px}
+  .game-card p{font-size:13px}
+  details{padding:10px 0}
+  ul,ol{padding-right:18px}
+  li{margin-bottom:5px}
+  .footer{padding:16px 0}
+  .small{font-size:12px}
 }
 @media(max-width:360px){
   .game-title{font-size:38px}
-  .card{padding:16px}
+  .card{padding:12px}
+  .role-grid{gap:6px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
