@@ -137,6 +137,8 @@ textarea{min-height:110px;resize:vertical}
 .role-btn small{color:var(--muted);font-size:12px}
 .topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .round{border:1px solid var(--border);border-radius:14px;padding:20px;margin:15px 0;background:#071710}
+.round.taken{border-color:var(--emerald2);background:linear-gradient(145deg,rgba(23,147,111,.12),rgba(7,23,16,1))}
+.taken-badge{display:inline-block;margin-right:8px;padding:3px 11px;border-radius:50px;background:rgba(23,147,111,.18);color:#7fd9ae;font-size:11px;font-weight:700;vertical-align:middle}
 .round strong,.round b{color:var(--gold3)}
 .evidence{background:linear-gradient(145deg,#1a1409,#0f0c05);border:1px solid rgba(177,138,69,.5);border-radius:12px;padding:14px 16px;margin-top:10px;font-size:14px;color:#e6d9bd}
 .private-note{background:rgba(169,90,77,.08);border:1px dashed rgba(169,90,77,.55);border-radius:12px;padding:14px 16px;margin-top:10px;font-size:14px}
@@ -2016,10 +2018,18 @@ async function buildSwopeGM(){
 
   roles.forEach(r=>{
     const div=document.createElement("div");
-    div.className="round";
+    const taken=swopePlayers&&swopePlayers[r.displayN]&&swopePlayers[r.displayN].name;
+    div.className=taken?"round taken":"round";
 
     const title=document.createElement("b");
     title.textContent=`رقم ${r.displayN} — ${r.name}`;
+
+    if(taken){
+      const badge=document.createElement("span");
+      badge.className="taken-badge";
+      badge.textContent="✓ اتاخدت";
+      title.appendChild(badge);
+    }
 
     const br=document.createElement("br");
 
@@ -2493,7 +2503,8 @@ async function buildRipperGM(){
 
   roles.forEach(r=>{
     const div=document.createElement("div");
-    div.className="round";
+    const taken=ripperPlayers&&ripperPlayers[r.displayN]&&ripperPlayers[r.displayN].name;
+    div.className=taken?"round taken":"round";
 
     let status="بريء من جرائم Whitechapel";
 
@@ -2505,6 +2516,13 @@ async function buildRipperGM(){
 
     const title=document.createElement("b");
     title.textContent=`رقم ${r.displayN}: ${r.name}`;
+
+    if(taken){
+      const badge=document.createElement("span");
+      badge.className="taken-badge";
+      badge.textContent="✓ اتاخدت";
+      title.appendChild(badge);
+    }
 
     const br=document.createElement("br");
 
@@ -2985,7 +3003,8 @@ async function buildElwellGM(){
 
   roles.forEach(r=>{
     const div=document.createElement("div");
-    div.className="round";
+    const taken=elwellPlayers&&elwellPlayers[r.displayN]&&elwellPlayers[r.displayN].name;
+    div.className=taken?"round taken":"round";
 
     let status="بريء من جريمة القتل";
 
@@ -2997,6 +3016,13 @@ async function buildElwellGM(){
 
     const title=document.createElement("b");
     title.textContent=`رقم ${r.displayN} — ${r.name}`;
+
+    if(taken){
+      const badge=document.createElement("span");
+      badge.className="taken-badge";
+      badge.textContent="✓ اتاخدت";
+      title.appendChild(badge);
+    }
 
     const br=document.createElement("br");
 
