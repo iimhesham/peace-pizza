@@ -74,6 +74,11 @@ section{width:100%}
   content:"";position:absolute;top:0;right:0;width:100%;height:2px;
   background:linear-gradient(90deg,transparent,var(--gold2),transparent);opacity:.6
 }
+.gm-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.gm-col{display:flex;flex-direction:column}
+.gm-col .card{margin:0 0 20px}
+.gm-col .card:last-child{margin-bottom:0}
+@media (max-width:720px){.gm-grid{grid-template-columns:1fr}}
 .hero{text-align:center;padding:55px 20px}
 .badge{
   display:inline-block;padding:5px 14px;border-radius:50px;
@@ -138,7 +143,9 @@ textarea{min-height:110px;resize:vertical}
 .topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .round{border:1px solid var(--border);border-radius:14px;padding:20px;margin:15px 0;background:#071710}
 .round.taken{border-color:var(--emerald2);background:linear-gradient(145deg,rgba(23,147,111,.12),rgba(7,23,16,1))}
+.round.out{border-color:var(--red);opacity:.6}
 .taken-badge{display:inline-block;margin-right:8px;padding:3px 11px;border-radius:50px;background:rgba(23,147,111,.18);color:#7fd9ae;font-size:11px;font-weight:700;vertical-align:middle}
+.out-badge{display:inline-block;margin-right:8px;padding:3px 11px;border-radius:50px;background:rgba(169,90,77,.2);color:var(--red);font-size:11px;font-weight:700;vertical-align:middle}
 .round strong,.round b{color:var(--gold3)}
 .evidence{background:linear-gradient(145deg,#1a1409,#0f0c05);border:1px solid rgba(177,138,69,.5);border-radius:12px;padding:14px 16px;margin-top:10px;font-size:14px;color:#e6d9bd}
 .private-note{background:rgba(169,90,77,.08);border:1px dashed rgba(169,90,77,.55);border-radius:12px;padding:14px 16px;margin-top:10px;font-size:14px}
@@ -439,6 +446,9 @@ li{margin-bottom:8px}
   <div class="notice">الشاشة دي تحتوي على الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
 </div>
 
+<div class="gm-grid">
+<div class="gm-col">
+
 <div class="card">
   <h2>إدارة كود الجلسة</h2>
   <p class="small" style="margin-top:10px">
@@ -498,12 +508,8 @@ li{margin-bottom:8px}
   </button>
 </div>
 
-<div class="card">
-  <h2>الحل الحقيقي</h2>
-  <p style="margin-top:12px"><b>الفاعل المباشر:</b> د. Bennett Clark Hyde — استخدم السم.</p>
-  <p style="margin-top:10px"><b>الجاني الثاني:</b> Thomas Greene — محرّض/مُسهّل، وفّر السم عن طريق معارفه وأخفى خطاب Margaret.</p>
-  <p style="margin-top:10px">Frances وMargaret وLucy وPearl أبرياء من جريمة القتل.</p>
 </div>
+<div class="gm-col">
 
 <div class="card">
   <div class="topline">
@@ -511,6 +517,16 @@ li{margin-bottom:8px}
     <button class="btn ghost" onclick="playClickSound();buildSwopeGM()">تحديث الأسماء</button>
   </div>
   <div id="swopeGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الحل الحقيقي</h2>
+  <p style="margin-top:12px"><b>الفاعل المباشر:</b> د. Bennett Clark Hyde — استخدم السم.</p>
+  <p style="margin-top:10px"><b>الجاني الثاني:</b> Thomas Greene — محرّض/مُسهّل، وفّر السم عن طريق معارفه وأخفى خطاب Margaret.</p>
+  <p style="margin-top:10px">Frances وMargaret وLucy وPearl أبرياء من جريمة القتل.</p>
 </div>
 
 <div class="card">
@@ -671,6 +687,9 @@ li{margin-bottom:8px}
   <div class="notice">الشاشة دي فيها الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
 </div>
 
+<div class="gm-grid">
+<div class="gm-col">
+
 <div class="card">
   <h2>إدارة كود الجلسة</h2>
   <p class="small" style="margin-top:10px">
@@ -724,6 +743,20 @@ li{margin-bottom:8px}
   </button>
 </div>
 
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>نتيجة الشخصيات حسب الكود</h2>
+    <button class="btn ghost" onclick="playClickSound();buildRipperGM()">تحديث الأسماء</button>
+  </div>
+  <div id="ripperGMroles"></div>
+</div>
+
+</div>
+</div>
+
 <div class="card">
   <h2>الحل الكامل</h2>
   <p style="margin-top:10px"><b>الفاعل المباشر:</b> Aaron Kosminski — Jack the Ripper في سيناريو اللعبة.</p>
@@ -732,14 +765,6 @@ li{margin-bottom:8px}
     مهم: هذا الحل خاص بالسيناريو فقط. هوية Jack the Ripper الحقيقية لم تُحسم تاريخيًا،
     والعلاقة بين Kosminski وChapman هنا اختراع للعبة.
   </p>
-</div>
-
-<div class="card">
-  <div class="topline">
-    <h2>نتيجة الشخصيات حسب الكود</h2>
-    <button class="btn ghost" onclick="playClickSound();buildRipperGM()">تحديث الأسماء</button>
-  </div>
-  <div id="ripperGMroles"></div>
 </div>
 
 <div class="card">
@@ -904,6 +929,9 @@ li{margin-bottom:8px}
   <div class="notice">الشاشة دي تحتوي على الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
 </div>
 
+<div class="gm-grid">
+<div class="gm-col">
+
 <div class="card">
   <h2>إدارة كود الجلسة</h2>
   <p class="small" style="margin-top:10px">
@@ -963,12 +991,8 @@ li{margin-bottom:8px}
   </button>
 </div>
 
-<div class="card">
-  <h2>الحل الحقيقي</h2>
-  <p style="margin-top:12px"><b>الفاعل المباشر:</b> المافيوسو — أطلق النار على إيلويل بمسدس عيار .45 كان مخبأً في العلية.</p>
-  <p style="margin-top:10px"><b>الجانية الثانية:</b> ماريا لارسن — لم تطلق النار، لكنها سهّلت الهروب من نافذة الطابق الثالث وأخفت أدلة بعد الجريمة.</p>
-  <p style="margin-top:10px">فيولا كراوس، السيدة "ذاكرة المخمل"، وفيكتور فون شليغيل أبرياء من جريمة القتل.</p>
 </div>
+<div class="gm-col">
 
 <div class="card">
   <div class="topline">
@@ -976,6 +1000,16 @@ li{margin-bottom:8px}
     <button class="btn ghost" onclick="playClickSound();buildElwellGM()">تحديث الأسماء</button>
   </div>
   <div id="elwellGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الحل الحقيقي</h2>
+  <p style="margin-top:12px"><b>الفاعل المباشر:</b> أنجلو دي لوكا — أطلق النار على إيلويل بمسدس عيار .45 كان مخبأً في العلية.</p>
+  <p style="margin-top:10px"><b>الجانية الثانية:</b> ماريا لارسن — لم تطلق النار، لكنها سهّلت الهروب من نافذة الطابق الثالث وأخفت أدلة بعد الجريمة.</p>
+  <p style="margin-top:10px">فيولا كراوس، السيدة "ذاكرة المخمل"، وفيكتور فون شليغيل أبرياء من جريمة القتل.</p>
 </div>
 
 <div class="card">
@@ -1372,6 +1406,7 @@ async function refreshLiveStatus(game,codeArg,playersArg){
   }
 
   listEl.textContent="";
+  const myN=getSavedPlayerDisplayN(game);
   const entries=Object.keys(data)
     .map(k=>({n:Number(k),...data[k]}))
     .sort((a,b)=>a.n-b.n);
@@ -1384,7 +1419,8 @@ async function refreshLiveStatus(game,codeArg,playersArg){
     row.style.borderBottom="1px solid var(--border)";
 
     const left=document.createElement("span");
-    left.textContent=`${p.n}. ${p.name||"لاعب"}`;
+    left.textContent=`${p.n}. ${p.name||"لاعب"}`+(p.n===myN?" (انت)":"");
+    if(p.n===myN)left.style.fontWeight="700";
 
     const right=document.createElement("span");
     right.style.fontWeight="700";
@@ -1463,6 +1499,14 @@ async function submitVote(game,targetDisplayN){
     return;
   }
 
+  // امنع اللاعب اللي خرج من اللعبة من إنه يصوّت أو يغيّر صوته.
+  const players=await fetchPlayers(game,code);
+  if(players&&players[voterN]&&players[voterN].alive===false){
+    toast("خرجت من اللعبة، متقدرش تصوّت تاني.");
+    refreshVoteUI(game);
+    return;
+  }
+
   const round=await getCurrentRoundLive(game,code);
   if(!round){
     toast("الـGM لسه ما حددش الجولة الحالية.");
@@ -1521,6 +1565,15 @@ async function refreshVoteUI(game,codeArg,playersArg){
   // من غير طلب إضافي لنفس البيانات.
   const players=playersArg!==undefined?playersArg:await fetchPlayers(game,code);
   const voterN=getSavedPlayerDisplayN(game);
+
+  // اللاعب اللي خرج من اللعبة مايشوفش أزرار التصويت خالص، وبدل كده
+  // بيشوف رسالة واضحة إنه خارج.
+  if(players&&voterN&&players[voterN]&&players[voterN].alive===false){
+    statusEl.textContent="خرجت من اللعبة، متقدرش تصوّت تاني، لكن كمّل متابعة باقي الأحداث.";
+    targetsEl.textContent="";
+    return;
+  }
+
   const votes=await fetchVotes(game,code,round)||{};
   const myVote=voterN?votes[voterN]:null;
 
@@ -2018,13 +2071,20 @@ async function buildSwopeGM(){
 
   roles.forEach(r=>{
     const div=document.createElement("div");
-    const taken=swopePlayers&&swopePlayers[r.displayN]&&swopePlayers[r.displayN].name;
-    div.className=taken?"round taken":"round";
+    const pdata=swopePlayers&&swopePlayers[r.displayN];
+    const taken=pdata&&pdata.name;
+    const isOut=taken&&pdata.alive===false;
+    div.className=isOut?"round out":(taken?"round taken":"round");
 
     const title=document.createElement("b");
     title.textContent=`رقم ${r.displayN} — ${r.name}`;
 
-    if(taken){
+    if(isOut){
+      const badge=document.createElement("span");
+      badge.className="out-badge";
+      badge.textContent="خرج من اللعبة";
+      title.appendChild(badge);
+    }else if(taken){
       const badge=document.createElement("span");
       badge.className="taken-badge";
       badge.textContent="✓ اتاخدت";
@@ -2063,13 +2123,13 @@ async function buildSwopeGM(){
       btnOut.style.marginTop="12px";
       btnOut.style.marginLeft="8px";
       btnOut.textContent="أخرجه من اللعبة";
-      btnOut.onclick=()=>{playClickSound();setPlayerAlive("swope",swopeGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);};
+      btnOut.onclick=async()=>{playClickSound();await setPlayerAlive("swope",swopeGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);buildSwopeGM();};
 
       const btnIn=document.createElement("button");
       btnIn.className="btn ghost";
       btnIn.style.marginTop="12px";
       btnIn.textContent="رجّعه للعبة";
-      btnIn.onclick=()=>{playClickSound();setPlayerAlive("swope",swopeGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);};
+      btnIn.onclick=async()=>{playClickSound();await setPlayerAlive("swope",swopeGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);buildSwopeGM();};
 
       div.append(document.createElement("br"),btnOut,btnIn);
     }
@@ -2503,8 +2563,10 @@ async function buildRipperGM(){
 
   roles.forEach(r=>{
     const div=document.createElement("div");
-    const taken=ripperPlayers&&ripperPlayers[r.displayN]&&ripperPlayers[r.displayN].name;
-    div.className=taken?"round taken":"round";
+    const pdata=ripperPlayers&&ripperPlayers[r.displayN];
+    const taken=pdata&&pdata.name;
+    const isOut=taken&&pdata.alive===false;
+    div.className=isOut?"round out":(taken?"round taken":"round");
 
     let status="بريء من جرائم Whitechapel";
 
@@ -2517,7 +2579,12 @@ async function buildRipperGM(){
     const title=document.createElement("b");
     title.textContent=`رقم ${r.displayN}: ${r.name}`;
 
-    if(taken){
+    if(isOut){
+      const badge=document.createElement("span");
+      badge.className="out-badge";
+      badge.textContent="خرج من اللعبة";
+      title.appendChild(badge);
+    }else if(taken){
       const badge=document.createElement("span");
       badge.className="taken-badge";
       badge.textContent="✓ اتاخدت";
@@ -2554,13 +2621,13 @@ async function buildRipperGM(){
       btnOut.style.marginTop="12px";
       btnOut.style.marginLeft="8px";
       btnOut.textContent="أخرجه من اللعبة";
-      btnOut.onclick=()=>{playClickSound();setPlayerAlive("ripper",ripperGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);};
+      btnOut.onclick=async()=>{playClickSound();await setPlayerAlive("ripper",ripperGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);buildRipperGM();};
 
       const btnIn=document.createElement("button");
       btnIn.className="btn ghost";
       btnIn.style.marginTop="12px";
       btnIn.textContent="رجّعه للعبة";
-      btnIn.onclick=()=>{playClickSound();setPlayerAlive("ripper",ripperGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);};
+      btnIn.onclick=async()=>{playClickSound();await setPlayerAlive("ripper",ripperGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);buildRipperGM();};
 
       div.append(document.createElement("br"),btnOut,btnIn);
     }
@@ -2663,7 +2730,7 @@ const elwellRoles=[
 {
 n:1,name:"ماريا لارسن",
 public:"الخادمة المخلصة في منزل إيلويل، هي من عثرت على الجثة صباح الجريمة وتملك مفاتيح المنزل.",
-secret:"أنتِ الجانية الثانية في سيناريو اللعبة. لم تطلقي النار، لكنكِ ساعدتِ المافيوسو على الهروب من نافذة الطابق الثالث بعد الجريمة، وأخفيتِ ملابس نسائية وردية من غرفة النوم لحماية سمعة الجميع. متقوليش لحد.",
+secret:"أنتِ الجانية الثانية في سيناريو اللعبة. لم تطلقي النار، لكنكِ ساعدتِ أنجلو دي لوكا على الهروب من نافذة الطابق الثالث بعد الجريمة، وأخفيتِ ملابس نسائية وردية من غرفة النوم لحماية سمعة الجميع. متقوليش لحد.",
 strength:"إنتِ الشاهدة الوحيدة اللي كانت موجودة في المنزل وعثرت على الجثة، فكلامك عن الترتيب الداخلي موثوق.",
 weakness:"مفكرتك الصغيرة وتصرفك بعد الجريمة (إخفاء الأدلة وترتيب الغرفة) يفتحان الشك حواليكِ.",
 killer:false,accomplice:true
@@ -2693,8 +2760,8 @@ weakness:"إشعار الطلاق من فيولا بيربطك بدافع الغ
 killer:false
 },
 {
-n:5,name:"المافيوسو",
-public:"صديق مقرب قديم لإيلويل من دوائر المراهنات على الخيل، وكان يعرفه من سنين طويلة.",
+n:5,name:"أنجلو دي لوكا",
+public:"صديق مقرب قديم لإيلويل من دوائر المراهنات على الخيل، معروف بينهم بلقب «المافيوسو»، وكان يعرفه من سنين طويلة.",
 secret:"أنت الفاعل المباشر في سيناريو اللعبة. كنت مديون لإيلويل بمبلغ كبير بسبب الرهانات، ودخلت المنزل من نافذة مفتوحة في الطابق الثالث مستخدمًا مسدسًا كنت خبأته سابقًا في العلية. ماريا لارسن ساعدتك على الهروب. لا تذكر اسمها أبدًا.",
 strength:"معرفتك القديمة بترتيب المنزل وعادات إيلويل الصباحية بتخليك مقنع لما تتكلم عن التوقيت.",
 weakness:"ادعاؤك إنك كنت في مكتب الفروسية وقت الجريمة سهل الطعن فيه لو حد سأل بالتفصيل.",
@@ -2729,7 +2796,7 @@ title:"الجولة 4 — الاتهام النهائي",
 text:"وقت المواجهة: كل لاعب يقدم اتهامه النهائي بناءً على الجدول الزمني، الأدلة العاطفية، والدليل المادي.",
 evidence:"سجل شراء قديم يربط بين ديون مراهنات كبيرة ومعرفة سابقة بترتيب غرفة العلية في منزل إيلويل.",
 surface:"يوحي بوجود دافع مادي واضح إلى جانب الدوافع العاطفية.",
-deep:"الحل داخل اللعبة: المافيوسو فاعل مباشر، وماريا لارسن جانية ثانية سهّلت الهروب."
+deep:"الحل داخل اللعبة: أنجلو دي لوكا فاعل مباشر، وماريا لارسن جانية ثانية سهّلت الهروب."
 }
 ];
 
@@ -3003,8 +3070,10 @@ async function buildElwellGM(){
 
   roles.forEach(r=>{
     const div=document.createElement("div");
-    const taken=elwellPlayers&&elwellPlayers[r.displayN]&&elwellPlayers[r.displayN].name;
-    div.className=taken?"round taken":"round";
+    const pdata=elwellPlayers&&elwellPlayers[r.displayN];
+    const taken=pdata&&pdata.name;
+    const isOut=taken&&pdata.alive===false;
+    div.className=isOut?"round out":(taken?"round taken":"round");
 
     let status="بريء من جريمة القتل";
 
@@ -3017,7 +3086,12 @@ async function buildElwellGM(){
     const title=document.createElement("b");
     title.textContent=`رقم ${r.displayN} — ${r.name}`;
 
-    if(taken){
+    if(isOut){
+      const badge=document.createElement("span");
+      badge.className="out-badge";
+      badge.textContent="خرج من اللعبة";
+      title.appendChild(badge);
+    }else if(taken){
       const badge=document.createElement("span");
       badge.className="taken-badge";
       badge.textContent="✓ اتاخدت";
@@ -3054,13 +3128,13 @@ async function buildElwellGM(){
       btnOut.style.marginTop="12px";
       btnOut.style.marginLeft="8px";
       btnOut.textContent="أخرجه من اللعبة";
-      btnOut.onclick=()=>{playClickSound();setPlayerAlive("elwell",elwellGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);};
+      btnOut.onclick=async()=>{playClickSound();await setPlayerAlive("elwell",elwellGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);buildElwellGM();};
 
       const btnIn=document.createElement("button");
       btnIn.className="btn ghost";
       btnIn.style.marginTop="12px";
       btnIn.textContent="رجّعه للعبة";
-      btnIn.onclick=()=>{playClickSound();setPlayerAlive("elwell",elwellGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);};
+      btnIn.onclick=async()=>{playClickSound();await setPlayerAlive("elwell",elwellGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);buildElwellGM();};
 
       div.append(document.createElement("br"),btnOut,btnIn);
     }
