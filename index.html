@@ -162,6 +162,46 @@ li{margin-bottom:8px}
 .toast.show{opacity:1;transform:translateX(50%) translateY(0)}
 .page-in{animation:pageIn .4s ease}
 @keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== Vote tally (shared by all games) ===== */
+.vote-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.vote-row .vname{flex:1;font-weight:700}
+.vote-bar-track{flex:2;height:10px;border-radius:6px;background:#0c241c;overflow:hidden}
+.vote-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3))}
+.vote-count{min-width:26px;text-align:center;font-weight:900;color:var(--gold3)}
+.vote-row.leading .vname{color:var(--red)}
+.vote-row.leading .vote-bar-fill{background:linear-gradient(90deg,#7a2c22,#c0574a)}
+.vote-target-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.vote-target-btn{padding:14px 8px;border-radius:12px;border:1px solid var(--border);background:#071710;color:var(--text);cursor:pointer}
+.vote-target-btn.selected{border-color:var(--gold2);background:rgba(138,106,47,.16)}
+.vote-target-btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* ===== Elwell theme (black + red, 3rd story) ===== */
+.theme-elwell{--card:#170707;--card2:#1c0909;--border:#4a1512;--gold:#7a2118;--gold2:#a5352a;--gold3:#d9564a;--emerald:#7a2118;--emerald2:#a5352a;background:radial-gradient(circle at 50% 0%,#2a0d0a 0%,#050101 60%,#000 100%);border-radius:16px;padding:6px}
+.theme-elwell.card,
+#elwell .card,#elwell-gm-lock .card,#elwell-setup .card,#elwell-player .card,#elwell-gm .card{
+  background:linear-gradient(145deg,rgba(20,6,6,.97),rgba(5,1,1,.99));
+  border-color:#4a1512
+}
+#elwell .card::before,#elwell-gm-lock .card::before,#elwell-setup .card::before,#elwell-player .card::before,#elwell-gm .card::before{
+  background:linear-gradient(90deg,transparent,#a5352a,transparent)
+}
+#elwell .game-title,#elwell .badge,#elwell h1,#elwell h2,#elwell h3,
+#elwell-gm-lock h2,#elwell-setup h2,#elwell-player h2,#elwell-player h3,#elwell-gm h2{color:#d9564a}
+#elwell .badge,#elwell-gm-lock .badge,#elwell-setup .badge,#elwell-player .badge,#elwell-gm .badge{
+  border-color:rgba(165,53,42,.5);background:rgba(122,33,24,.12);color:#e77a6f
+}
+#elwell .primary,#elwell-gm-lock .primary,#elwell-setup .primary,#elwell-player .primary,#elwell-gm .primary{
+  background:linear-gradient(135deg,#7a2118,#3d0f0a);box-shadow:0 5px 18px rgba(122,33,24,.4)
+}
+#elwell .secondary,#elwell-setup .secondary{background:#210a09;border:1px solid #5c1a15}
+#elwell .role-btn.selected,#elwell-setup .role-btn.selected{border-color:#a5352a;background:rgba(122,33,24,.18);box-shadow:0 0 15px rgba(165,53,42,.25)}
+#elwell-player .secret{background:linear-gradient(145deg,#1c0808,#0a0303);border-color:rgba(165,53,42,.55)}
+#elwell-player .secret h3{color:#e77a6f}
+#elwell .notice,#elwell-gm .notice{background:rgba(122,33,24,.08);border-right-color:#7a2118;color:#e8d6d3}
+#elwell .round,#elwell-gm .round{background:#160707;border-color:#4a1512}
+#elwell-gm .evidence{background:linear-gradient(145deg,#1c1006,#0f0904);border-color:rgba(165,53,42,.5);color:#ecd9c9}
+.elwell-icons{font-size:22px;letter-spacing:10px;opacity:.85;margin-top:6px}
 @media(max-width:650px){
   body{padding:calc(10px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));line-height:1.55}
   .card{padding:14px;margin:8px 0}.hero{padding:26px 12px}
@@ -190,6 +230,7 @@ li{margin-bottom:8px}
   li{margin-bottom:5px}
   .footer{padding:16px 0}
   .small{font-size:12px}
+  .vote-target-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:360px){
   .game-title{font-size:38px}
@@ -242,6 +283,13 @@ li{margin-bottom:8px}
       <h2>ملف قاتل وايت تشابل</h2>
       <p>سبعة مشتبه بهم. أربع جولات تحقيق.</p>
       <span class="tag">WHITECHAPEL • 1888</span>
+    </button>
+
+    <button class="game-card" onclick="playClickSound();openGame('elwell')" style="border-color:#4a1512">
+      <div class="number" style="color:#d9564a">03</div>
+      <h2 style="color:#d9564a">ملف قضية إيلويل</h2>
+      <p>خمس شخصيات. غرفة مغلقة. أربع جولات.</p>
+      <span class="tag" style="background:rgba(122,33,24,.15);color:#e77a6f">NEW YORK • 1920</span>
     </button>
   </div>
 
@@ -349,6 +397,12 @@ li{margin-bottom:8px}
   <div id="swopeSave" class="small" style="text-align:left;color:var(--gold3)"></div>
 </div>
 
+<div class="card" id="swopeVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="swopeVoteStatus">جاري التحميل...</p>
+  <div id="swopeVoteTargets" class="vote-target-grid"></div>
+</div>
+
 <div class="card" id="swopeStatusCard">
   <div class="topline">
     <h2>مين لسه في اللعبة</h2>
@@ -426,6 +480,23 @@ li{margin-bottom:8px}
 </div>
 
 <div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="swopeRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="swopeVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('swope')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="swopeVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="swopeEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('swope')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+<div class="card">
   <h2>الحل الحقيقي</h2>
   <p style="margin-top:12px"><b>الفاعل المباشر:</b> د. Bennett Clark Hyde — استخدم السم.</p>
   <p style="margin-top:10px"><b>الجاني الثاني:</b> Thomas Greene — محرّض/مُسهّل، وفّر السم عن طريق معارفه وأخفى خطاب Margaret.</p>
@@ -452,7 +523,8 @@ li{margin-bottom:8px}
     <li>أعطِ الكود لكل اللاعبين.</li>
     <li>خلي كل لاعب يكتب نفس الكود ويختار رقمًا.</li>
     <li>استخدم كلمة التحقق للتأكد أن التوزيع متطابق.</li>
-    <li>اقرأ دليل كل جولة.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
+    <li>بعد النقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
     <li>في الجولة الرابعة اقرأ الحل النهائي.</li>
   </ol>
 </div>
@@ -556,6 +628,12 @@ li{margin-bottom:8px}
   <div id="ripperSave" class="small" style="text-align:left;color:var(--gold3)"></div>
 </div>
 
+<div class="card" id="ripperVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="ripperVoteStatus">جاري التحميل...</p>
+  <div id="ripperVoteTargets" class="vote-target-grid"></div>
+</div>
+
 <div class="card" id="ripperStatusCard">
   <div class="topline">
     <h2>مين لسه في اللعبة</h2>
@@ -632,6 +710,18 @@ li{margin-bottom:8px}
   <div id="ripperRoundNav" class="round-nav"></div>
 </div>
 
+<div class="card" id="ripperVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('ripper')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="ripperVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="ripperEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('ripper')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
 <div class="card">
   <h2>الحل الكامل</h2>
   <p style="margin-top:10px"><b>الفاعل المباشر:</b> Aaron Kosminski — Jack the Ripper في سيناريو اللعبة.</p>
@@ -661,14 +751,250 @@ li{margin-bottom:8px}
     <li>أنشئ كود جلسة جديد.</li>
     <li>أعط الكود لكل اللاعبين.</li>
     <li>كل لاعب يختار رقمًا.</li>
-    <li>اقرأ دليل كل جولة.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
     <li>سلّم الملاحظات الخاصة لصاحبها فقط.</li>
-    <li>اترك وقتًا للنقاش ثم التصويت.</li>
+    <li>اترك وقتًا للنقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
     <li>في الجولة الرابعة اقرأ الحل النهائي.</li>
   </ol>
 </div>
 
 <button class="btn ghost" onclick="playClickSound();show('ripper')" style="width:100%">العودة</button>
+</section>
+
+<!-- ELWELL HOME -->
+<section id="elwell" class="hidden theme-elwell">
+<div class="card hero">
+  <div class="badge">NEW YORK • 1920</div>
+  <h1>ملف قضية جو إيلويل</h1>
+  <div class="elwell-icons">🔪 🍷 🔫 🍷 🔪</div>
+  <p class="subtitle">غرفة مغلقة. لا سلاح. لا مخرج. خمس شخصيات. أربع جولات.</p>
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();elwellPlayer()">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('elwell-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- ELWELL GM LOCK -->
+<section id="elwell-gm-lock" class="hidden theme-elwell">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأسرار.</p>
+  <label for="elwellGmInput">كلمة المرور</label>
+  <input id="elwellGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyElwellGM()" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('elwell')" style="flex:1">رجوع</button>
+  </div>
+  <p id="elwellGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- ELWELL SETUP -->
+<section id="elwell-setup" class="hidden theme-elwell">
+<div class="card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice">
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من <b>1 إلى 5</b>.
+    بعد التأكيد ستظهر معلومات شخصيتك السرية. <b>متوريهاش لحد.</b>
+  </div>
+
+  <div class="notice" style="border-color:var(--red)">
+    <b>مهم:</b> لازم كل اللاعبين يستخدموا نفس كود الجلسة الذي أنشأه الـGM.
+  </div>
+
+  <label for="elwellName">اسمك</label>
+  <input id="elwellName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="elwellSessionCode">كود الجلسة</label>
+  <input id="elwellSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkElwellCode()">
+
+  <p id="elwellCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر رقم الشخصية</label>
+  <div id="elwellRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmElwellRole()" style="flex:2">
+      تأكيد واكتشاف شخصيتي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('elwell')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- ELWELL PLAYER -->
+<section id="elwell-player" class="hidden theme-elwell">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="elwellPlayerBadge"></div>
+    <div id="elwellMafia" class="badge hidden"
+         style="color:#ff7777;border-color:#a33;background:rgba(150,20,20,.2)" dir="ltr">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="elwellRoleName" style="margin-top:12px"></h2>
+  <p id="elwellPublic" class="small"></p>
+</div>
+
+<div class="card secret">
+  <h3>سري جدًا — معلومات شخصيتك</h3>
+  <p id="elwellSecret" style="margin-top:10px"></p>
+  <hr>
+  <h3>نقطة قوتك</h3>
+  <p id="elwellStrength" class="small"></p>
+  <h3 style="margin-top:15px">نقطة ضعفك</h3>
+  <p id="elwellWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="elwellNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveElwellNotes()"></textarea>
+  <div id="elwellSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="elwellVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="elwellVoteStatus">جاري التحميل...</p>
+  <div id="elwellVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="elwellStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('elwell')">تحديث</button>
+  </div>
+  <div id="elwellStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>أنتم 5 لاعبين + Game Master.</li>
+    <li>اللعبة عبارة عن 4 جولات تحقيق.</li>
+    <li>في كل جولة الـGM يقدم دليل جديد.</li>
+    <li>بعد كل جولة نقاش ثم تصويت.</li>
+    <li>اللاعب الذي يحصل على أغلب الأصوات يخرج بصمت من اللعبة.</li>
+    <li>بعد الجولة الرابعة يكشف الـGM الحل الرسمي.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetElwell()" style="width:100%">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- ELWELL GM -->
+<section id="elwell-gm" class="hidden theme-elwell">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي تحتوي على الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+    نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+  </p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateElwellCode()">
+      توليد كود جديد
+    </button>
+
+    <strong style="color:var(--gold3)">
+      الكود:
+      <span id="currentElwellCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="elwellVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">
+      خلي اللاعبين يقارنوها معاك بعد كتابة الكود.
+    </p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل للألعاب التلاتة مع بعض.
+  </p>
+  <label for="liveDbUrlInputElwell" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputElwell" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputElwell')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusElwell" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="elwellRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="elwellVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('elwell')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="elwellVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="elwellEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('elwell')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+<div class="card">
+  <h2>الحل الحقيقي</h2>
+  <p style="margin-top:12px"><b>الفاعل المباشر:</b> المافيوسو — أطلق النار على إيلويل بمسدس عيار .45 كان مخبأً في العلية.</p>
+  <p style="margin-top:10px"><b>الجانية الثانية:</b> ماريا لارسن — لم تطلق النار، لكنها سهّلت الهروب من نافذة الطابق الثالث وأخفت أدلة بعد الجريمة.</p>
+  <p style="margin-top:10px">فيولا كراوس، السيدة "ذاكرة المخمل"، وفيكتور فون شليغيل أبرياء من جريمة القتل.</p>
+</div>
+
+<div class="card">
+  <div class="topline">
+    <h2>الشخصيات حسب كود الجلسة</h2>
+    <button class="btn ghost" onclick="playClickSound();buildElwellGM()">تحديث الأسماء</button>
+  </div>
+  <div id="elwellGMroles"></div>
+</div>
+
+<div class="card">
+  <h2>الأدلة</h2>
+  <div id="elwellRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>ولّد كود جلسة جديد.</li>
+    <li>أعطِ الكود لكل اللاعبين.</li>
+    <li>خلي كل لاعب يكتب نفس الكود ويختار رقمًا.</li>
+    <li>استخدم كلمة التحقق للتأكد أن التوزيع متطابق.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
+    <li>بعد النقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
+    <li>في الجولة الرابعة اقرأ الحل النهائي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('elwell')" style="width:100%">العودة</button>
 </section>
 
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
@@ -733,7 +1059,7 @@ function playRevealSound(){
 }
 
 function openGame(game){
-  show(game==="swope"?"swope":"ripper");
+  show(game);
 }
 
 function hashCode(str){
@@ -772,6 +1098,9 @@ function makeSessionCode(){
    هتستخدم نفس القاعدة تلقائيًا من غير ما حد يحتاج يدخلها بنفسه. */
 const DEFAULT_LIVE_DB_URL="https://game-36fb1-default-rtdb.firebaseio.com";
 
+const LIVE_DB_INPUT_IDS=["liveDbUrlInput","liveDbUrlInputRipper","liveDbUrlInputElwell"];
+const LIVE_DB_STATUS_IDS=["liveDbStatus","liveDbStatusRipper","liveDbStatusElwell"];
+
 function getLiveDbUrl(){
   const stored=(localStorage.getItem("liveDbUrl")||"").trim().replace(/\/+$/,"");
   if(stored)return stored;
@@ -790,24 +1119,26 @@ function saveLiveDbUrl(inputId){
 
   localStorage.setItem("liveDbUrl",value);
 
-  ["liveDbUrlInput","liveDbUrlInputRipper"].forEach(otherId=>{
+  LIVE_DB_INPUT_IDS.forEach(otherId=>{
     const other=document.getElementById(otherId);
     if(other)other.value=value;
   });
 
   if(swopeGmCode)activateSession("swope",swopeGmCode);
   if(ripperGmCode)activateSession("ripper",ripperGmCode);
+  if(elwellGmCode)activateSession("elwell",elwellGmCode);
 
   updateLiveDbStatusText();
   buildSwopeGM();
   buildRipperGM();
+  buildElwellGM();
   toast("تم تفعيل المتابعة المباشرة.");
 }
 
 function clearLiveDbUrl(){
   localStorage.removeItem("liveDbUrl");
 
-  ["liveDbUrlInput","liveDbUrlInputRipper"].forEach(id=>{
+  LIVE_DB_INPUT_IDS.forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.value="";
   });
@@ -815,6 +1146,7 @@ function clearLiveDbUrl(){
   updateLiveDbStatusText();
   buildSwopeGM();
   buildRipperGM();
+  buildElwellGM();
   toast("تم إلغاء المتابعة المباشرة.");
 }
 
@@ -822,12 +1154,12 @@ function updateLiveDbStatusText(){
   const url=getLiveDbUrl();
   const text=url?`مفعّلة — متصلة بقاعدة البيانات.`:`غير مفعّلة حاليًا.`;
 
-  ["liveDbStatus","liveDbStatusRipper"].forEach(id=>{
+  LIVE_DB_STATUS_IDS.forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.textContent=text;
   });
 
-  ["liveDbUrlInput","liveDbUrlInputRipper"].forEach(id=>{
+  LIVE_DB_INPUT_IDS.forEach(id=>{
     const el=document.getElementById(id);
     if(el && !el.value)el.value=url;
   });
@@ -903,11 +1235,16 @@ let liveStatusTimer=null;
 function startLiveStatusPolling(game,code){
   clearInterval(liveStatusTimer);
   refreshLiveStatus(game,code);
-  liveStatusTimer=setInterval(()=>refreshLiveStatus(game,code),5000);
+  refreshVoteUI(game,code);
+  liveStatusTimer=setInterval(()=>{
+    refreshLiveStatus(game,code);
+    refreshVoteUI(game,code);
+  },5000);
 }
 
 async function refreshLiveStatus(game,codeArg){
-  const listEl=document.getElementById(game==="swope"?"swopeStatusList":"ripperStatusList");
+  const listElId={swope:"swopeStatusList",ripper:"ripperStatusList",elwell:"elwellStatusList"}[game];
+  const listEl=document.getElementById(listElId);
   if(!listEl)return;
 
   const url=getLiveDbUrl();
@@ -920,10 +1257,7 @@ async function refreshLiveStatus(game,codeArg){
   let code=codeArg;
 
   if(!code){
-    try{
-      const saved=JSON.parse(localStorage.getItem(game==="swope"?"swopePlayer":"ripperPlayer")||"null");
-      code=saved?saved.sessionCode:null;
-    }catch(e){}
+    code=getSavedPlayerCode(game);
   }
 
   if(!code){
@@ -961,6 +1295,277 @@ async function refreshLiveStatus(game,codeArg){
     row.append(left,right);
     listEl.appendChild(row);
   });
+}
+
+
+/* =========================================================
+   GENERIC VOTING (shared by swope / ripper / elwell)
+========================================================= */
+
+function getSavedPlayerCode(game){
+  const key={swope:"swopePlayer",ripper:"ripperPlayer",elwell:"elwellPlayer"}[game];
+  try{
+    const saved=JSON.parse(localStorage.getItem(key)||"null");
+    return saved?saved.sessionCode:null;
+  }catch(e){
+    return null;
+  }
+}
+
+function getSavedPlayerDisplayN(game){
+  const key={swope:"swopePlayer",ripper:"ripperPlayer",elwell:"elwellPlayer"}[game];
+  try{
+    const saved=JSON.parse(localStorage.getItem(key)||"null");
+    if(!saved)return null;
+    const roles=GAME_ROLE_GETTERS[game](saved.sessionCode);
+    const idField=game==="swope"?"n":(game==="ripper"?"id":"n");
+    const r=roles.find(x=>x[idField]===saved.roleId);
+    return r?r.displayN:null;
+  }catch(e){
+    return null;
+  }
+}
+
+async function setCurrentRoundLive(game,code,round){
+  const url=getLiveDbUrl();
+  if(!url||!code)return;
+  try{
+    await fetch(`${url}/sessions/${game}/${code}/currentRound.json`,{
+      method:"PUT",
+      body:JSON.stringify(round)
+    });
+  }catch(e){}
+}
+
+async function getCurrentRoundLive(game,code){
+  const url=getLiveDbUrl();
+  if(!url||!code)return 0;
+  try{
+    const res=await fetch(`${url}/sessions/${game}/${code}/currentRound.json`);
+    if(!res.ok)return 0;
+    const data=await res.json();
+    return Number(data)||0;
+  }catch(e){
+    return 0;
+  }
+}
+
+async function submitVote(game,targetDisplayN){
+  const url=getLiveDbUrl();
+  const code=getSavedPlayerCode(game);
+  const voterN=getSavedPlayerDisplayN(game);
+
+  if(!url){
+    toast("الـGM لسه ما فعّلش المتابعة المباشرة، التصويت محتاجها.");
+    return;
+  }
+  if(!code||!voterN){
+    toast("محتاج تأكد شخصيتك الأول.");
+    return;
+  }
+
+  const round=await getCurrentRoundLive(game,code);
+  if(!round){
+    toast("الـGM لسه ما حددش الجولة الحالية.");
+    return;
+  }
+
+  try{
+    await fetch(`${url}/sessions/${game}/${code}/votes/${round}/${voterN}.json`,{
+      method:"PUT",
+      body:JSON.stringify(targetDisplayN)
+    });
+    playClickSound();
+    toast("اتسجل صوتك.");
+    refreshVoteUI(game);
+  }catch(e){
+    toast("تعذر تسجيل الصوت، تأكد من الاتصال.");
+  }
+}
+
+async function fetchVotes(game,code,round){
+  const url=getLiveDbUrl();
+  if(!url||!code||!round)return null;
+  try{
+    const res=await fetch(`${url}/sessions/${game}/${code}/votes/${round}.json`);
+    if(!res.ok)return null;
+    return await res.json();
+  }catch(e){
+    return null;
+  }
+}
+
+async function refreshVoteUI(game,codeArg){
+  const statusElId={swope:"swopeVoteStatus",ripper:"ripperVoteStatus",elwell:"elwellVoteStatus"}[game];
+  const targetsElId={swope:"swopeVoteTargets",ripper:"ripperVoteTargets",elwell:"elwellVoteTargets"}[game];
+  const statusEl=document.getElementById(statusElId);
+  const targetsEl=document.getElementById(targetsElId);
+  if(!statusEl||!targetsEl)return;
+
+  const url=getLiveDbUrl();
+  const code=codeArg||getSavedPlayerCode(game);
+
+  if(!url||!code){
+    statusEl.textContent="التصويت هيظهر هنا لما الـGM يفعّل المتابعة المباشرة.";
+    targetsEl.textContent="";
+    return;
+  }
+
+  const round=await getCurrentRoundLive(game,code);
+  if(!round){
+    statusEl.textContent="لسه مفيش تصويت مفتوح، استنى الـGM.";
+    targetsEl.textContent="";
+    return;
+  }
+
+  const players=await fetchPlayers(game,code);
+  const voterN=getSavedPlayerDisplayN(game);
+  const votes=await fetchVotes(game,code,round)||{};
+  const myVote=voterN?votes[voterN]:null;
+
+  statusEl.textContent=myVote
+    ? `صوّتت للشخصية رقم ${myVote} في الجولة ${round}. تقدر تغيّر صوتك.`
+    : `التصويت مفتوح للجولة ${round}. اختر رقم الشخصية اللي تشك فيها.`;
+
+  targetsEl.textContent="";
+  if(!players)return;
+
+  Object.keys(players)
+    .map(k=>Number(k))
+    .sort((a,b)=>a-b)
+    .forEach(n=>{
+      const p=players[n];
+      const alive=p.alive!==false;
+      const b=document.createElement("button");
+      b.className="vote-target-btn"+(myVote===n?" selected":"");
+      b.type="button";
+      b.textContent=`${n}. ${p.name||"لاعب"}`;
+      if(!alive)b.disabled=true;
+      b.onclick=()=>submitVote(game,n);
+      targetsEl.appendChild(b);
+    });
+}
+
+async function buildVoteTally(game){
+  const tallyElId={swope:"swopeVoteTally",ripper:"ripperVoteTally",elwell:"elwellVoteTally"}[game];
+  const tallyEl=document.getElementById(tallyElId);
+  if(!tallyEl)return;
+
+  const gmCode={swope:swopeGmCode,ripper:ripperGmCode,elwell:elwellGmCode}[game];
+
+  if(!getLiveDbUrl()||!gmCode){
+    tallyEl.innerHTML=`<p class="small">فعّل المتابعة المباشرة وولّد كود جلسة الأول.</p>`;
+    return;
+  }
+
+  const round=Number(localStorage.getItem(`${game}CurrentRound`)||0);
+
+  if(!round){
+    tallyEl.innerHTML=`<p class="small">اختر الجولة الحالية بالأعلى الأول.</p>`;
+    return;
+  }
+
+  const [players,votes]=await Promise.all([
+    fetchPlayers(game,gmCode),
+    fetchVotes(game,gmCode,round)
+  ]);
+
+  const counts={};
+  if(votes){
+    Object.values(votes).forEach(target=>{
+      counts[target]=(counts[target]||0)+1;
+    });
+  }
+
+  const entries=Object.keys(counts).map(n=>({n:Number(n),count:counts[n]}));
+  entries.sort((a,b)=>b.count-a.count);
+  const maxCount=entries.length?entries[0].count:0;
+
+  tallyEl.innerHTML="";
+
+  if(!entries.length){
+    tallyEl.innerHTML=`<p class="small">مفيش أصوات مسجلة لسه للجولة ${round}.</p>`;
+    return;
+  }
+
+  entries.forEach(e=>{
+    const name=players&&players[e.n]&&players[e.n].name?players[e.n].name:`شخصية ${e.n}`;
+    const row=document.createElement("div");
+    row.className="vote-row"+(e.count===maxCount?" leading":"");
+
+    const vname=document.createElement("span");
+    vname.className="vname";
+    vname.textContent=`${e.n}. ${name}`;
+
+    const track=document.createElement("div");
+    track.className="vote-bar-track";
+    const fill=document.createElement("div");
+    fill.className="vote-bar-fill";
+    fill.style.width=`${maxCount?(e.count/maxCount*100):0}%`;
+    track.appendChild(fill);
+
+    const count=document.createElement("span");
+    count.className="vote-count";
+    count.textContent=e.count;
+
+    row.append(vname,track,count);
+    tallyEl.appendChild(row);
+  });
+}
+
+async function eliminateTopVoted(game){
+  const gmCode={swope:swopeGmCode,ripper:ripperGmCode,elwell:elwellGmCode}[game];
+  const round=Number(localStorage.getItem(`${game}CurrentRound`)||0);
+
+  if(!getLiveDbUrl()||!gmCode||!round){
+    toast("محتاج تفعّل المتابعة المباشرة وتحدد الجولة الأول.");
+    return;
+  }
+
+  const votes=await fetchVotes(game,gmCode,round);
+  if(!votes){
+    toast("مفيش أصوات مسجلة لسه.");
+    return;
+  }
+
+  const counts={};
+  Object.values(votes).forEach(target=>{
+    counts[target]=(counts[target]||0)+1;
+  });
+
+  let topN=null,topCount=-1;
+  Object.keys(counts).forEach(n=>{
+    if(counts[n]>topCount){topCount=counts[n];topN=Number(n);}
+  });
+
+  if(topN===null){
+    toast("مفيش نتيجة واضحة.");
+    return;
+  }
+
+  await setPlayerAlive(game,gmCode,topN,false);
+  toast(`الشخصية رقم ${topN} خرجت من اللعبة بصمت.`);
+
+  const buildFn={swope:buildSwopeGM,ripper:buildRipperGM,elwell:buildElwellGM}[game];
+  buildFn();
+  buildVoteTally(game);
+}
+
+function setCurrentRoundGeneric(game,n){
+  localStorage.setItem(`${game}CurrentRound`,n);
+
+  const prefix={swope:"swopeChip",ripper:"ripperChip",elwell:"elwellChip"}[game];
+
+  document.querySelectorAll(`#${game}-gm .round-chip, #${game}RoundNav .round-chip`)
+    .forEach(x=>x.classList.remove("active"));
+
+  const chip=document.getElementById(`${prefix}${n}`);
+  if(chip)chip.classList.add("active");
+
+  const gmCode={swope:swopeGmCode,ripper:ripperGmCode,elwell:elwellGmCode}[game];
+  if(gmCode)setCurrentRoundLive(game,gmCode,n);
+
+  buildVoteTally(game);
 }
 
 
@@ -1389,6 +1994,31 @@ async function buildSwopeGM(){
     d.append(s,p1,p2,p3);
     roundsBox.appendChild(d);
   });
+
+  const nav=document.getElementById("swopeRoundNav");
+  nav.textContent="";
+
+  swopeRounds.forEach((round,i)=>{
+    const b=document.createElement("button");
+    b.className="round-chip";
+    b.id=`swopeChip${i+1}`;
+    b.type="button";
+    b.textContent=`الجولة ${i+1}`;
+
+    b.addEventListener("click",()=>{
+      setCurrentRoundGeneric("swope",i+1);
+    });
+
+    nav.appendChild(b);
+  });
+
+  const savedRound=Number(localStorage.getItem("swopeCurrentRound")||0);
+  if(savedRound){
+    const chip=document.getElementById(`swopeChip${savedRound}`);
+    if(chip)chip.classList.add("active");
+  }
+
+  buildVoteTally("swope");
 }
 
 
@@ -1744,17 +2374,6 @@ function generateRipperCode(){
   toast("تم إنشاء توزيع عشوائي جديد.");
 }
 
-function setCurrentRound(n){
-  localStorage.setItem("ripperCurrentRound",n);
-
-  document.querySelectorAll(".round-chip")
-    .forEach(x=>x.classList.remove("active"));
-
-  const chip=document.getElementById(`ripperChip${n}`);
-
-  if(chip)chip.classList.add("active");
-}
-
 async function buildRipperGM(){
   document.getElementById("currentRipperCode").textContent=
     ripperGmCode||"غير محدد";
@@ -1900,7 +2519,7 @@ async function buildRipperGM(){
     b.textContent=`الجولة ${i+1}`;
 
     b.addEventListener("click",()=>{
-      setCurrentRound(i+1);
+      setCurrentRoundGeneric("ripper",i+1);
     });
 
     nav.appendChild(b);
@@ -1910,7 +2529,477 @@ async function buildRipperGM(){
     localStorage.getItem("ripperCurrentRound")||0
   );
 
-  if(savedRound)setCurrentRound(savedRound);
+  if(savedRound){
+    const chip=document.getElementById(`ripperChip${savedRound}`);
+    if(chip)chip.classList.add("active");
+  }
+
+  buildVoteTally("ripper");
+}
+
+
+/* =========================================================
+   ELWELL DATA (New York, 1920 — locked room)
+========================================================= */
+
+const elwellRoles=[
+{
+n:1,name:"ماريا لارسن",
+public:"الخادمة المخلصة في منزل إيلويل، هي من عثرت على الجثة صباح الجريمة وتملك مفاتيح المنزل.",
+secret:"أنتِ الجانية الثانية في سيناريو اللعبة. لم تطلقي النار، لكنكِ ساعدتِ المافيوسو على الهروب من نافذة الطابق الثالث بعد الجريمة، وأخفيتِ ملابس نسائية وردية من غرفة النوم لحماية سمعة الجميع. متقوليش لحد.",
+strength:"إنتِ الشاهدة الوحيدة اللي كانت موجودة في المنزل وعثرت على الجثة، فكلامك عن الترتيب الداخلي موثوق.",
+weakness:"مفكرتك الصغيرة وتصرفك بعد الجريمة (إخفاء الأدلة وترتيب الغرفة) يفتحان الشك حواليكِ.",
+killer:false,accomplice:true
+},
+{
+n:2,name:"فيولا كراوس",
+public:"مغنية أوبرا وعشيقة إيلويل، معروفة في الصحف باسم صاحبة \"الوردة الوردية\" بعد تهديد قديم له.",
+secret:"كتبتِ رسالة اعتذار لإيلويل عن خلاف حاد بينكما ليلة 10 يونيو، وكنتِ خايفة إنه هيسيب اسمك يتلطخ في فضيحة عامة.",
+strength:"معرفتك بعلاقات إيلويل العاطفية تخليكِ مصدر معلومات مهم عن باقي المشتبه بهم.",
+weakness:"دفتر يومياتك يوثق خيانات إيلويل، ولو ظهر هيوجه الشك ليكِ فورًا.",
+killer:false
+},
+{
+n:3,name:"السيدة «ذاكرة المخمل»",
+public:"أرملة من أعيان المجتمع ومنافسة قديمة لإيلويل على طاولات البريدج.",
+secret:"عندك خطاب حب قديم من إيلويل، ومازلتِ تحملين غيظًا من رفضه ليكِ لصالح نساء أصغر سنًا.",
+strength:"مكانتك الاجتماعية تخلي الناس يترددوا قبل ما يتهموكِ مباشرة.",
+weakness:"مفيش دليل قاطع على تواجدك في مسرح الجريمة، لكن الخطاب القديم بيفتح باب الشك.",
+killer:false
+},
+{
+n:4,name:"فيكتور فون شليغيل",
+public:"صناعي ومستثمر، وزوج فيولا كراوس السابق. كان على نفس طاولة العشاء ليلة الجريمة بمحض الصدفة.",
+secret:"عندك علاقة غرامية سرية باسم مستعار، وطلاقك من فيولا لسه بيسبب لك غيرة وثأر شخصي محدش يعرف عنه.",
+strength:"ادعاؤك إنك كنت بصحبة خطيبتك طول الليل بيديك حجة غياب قوية ظاهريًا.",
+weakness:"إشعار الطلاق من فيولا بيربطك بدافع الغيرة في عيون باقي اللاعبين.",
+killer:false
+},
+{
+n:5,name:"المافيوسو",
+public:"صديق مقرب قديم لإيلويل من دوائر المراهنات على الخيل، وكان يعرفه من سنين طويلة.",
+secret:"أنت الفاعل المباشر في سيناريو اللعبة. كنت مديون لإيلويل بمبلغ كبير بسبب الرهانات، ودخلت المنزل من نافذة مفتوحة في الطابق الثالث مستخدمًا مسدسًا كنت خبأته سابقًا في العلية. ماريا لارسن ساعدتك على الهروب. لا تذكر اسمها أبدًا.",
+strength:"معرفتك القديمة بترتيب المنزل وعادات إيلويل الصباحية بتخليك مقنع لما تتكلم عن التوقيت.",
+weakness:"ادعاؤك إنك كنت في مكتب الفروسية وقت الجريمة سهل الطعن فيه لو حد سأل بالتفصيل.",
+killer:true
+}
+];
+
+const elwellRounds=[
+{
+title:"الجولة 1 — تسلسل الأحداث وساعة الجريمة",
+text:"جدول زمني متضارب لليلة 10 يونيو: رواية تقول إن إيلويل وصل المنزل حوالي 2:30 صباحًا، وأخرى تقول إنه كان في مقهى حتى 3:45 صباحًا.",
+evidence:"سجل مكالمات هاتفية مثير للجدل يشمل مكالمة الساعة 4:39 صباحًا ومكالمة أخرى الساعة 6:09، رغم أن الخادمة أكدت أن الهاتف كان معطلاً.",
+surface:"يفتح الشك في أكثر من رواية عن تحركات إيلويل الأخيرة.",
+deep:"التناقض في التوقيت يوحي بأن أحد الشهود يكذب أو يخفي شيئًا."
+},
+{
+title:"الجولة 2 — الأدلة العاطفية",
+text:"رسالة اعتذار مرتبطة بخلاف حاد بين إيلويل وفيولا كراوس ليلة الجريمة، بجانب إشعار طلاق يخص فيكتور فون شليغيل.",
+evidence:"دفتر يوميات يوثق علاقات إيلويل المتعددة، وخطاب حب قديم موقّع من السيدة «ذاكرة المخمل».",
+surface:"يوجه الشك نحو الغيرة والانتقام العاطفي كدافع رئيسي.",
+deep:"الأدلة العاطفية كثيرة لكنها لا تثبت من كان في المنزل وقت إطلاق النار."
+},
+{
+title:"الجولة 3 — الدليل المادي",
+text:"العثور على قطعة ملابس داخلية وردية مخفية في البدروم، اعترفت الخادمة بإخفائها بعد الجريمة.",
+evidence:"قذيفة عيار .45 على الأرض، مع غياب تام للمسدس نفسه رغم تفتيش المنزل بالكامل.",
+surface:"يطرح سؤال: من كان يملك مفاتيح المنزل أو طريقة دخول أخرى؟",
+deep:"غياب السلاح يوحي بأن القاتل خطط للهروب مسبقًا عبر مخرج غير الأبواب المقفلة."
+},
+{
+title:"الجولة 4 — الاتهام النهائي",
+text:"وقت المواجهة: كل لاعب يقدم اتهامه النهائي بناءً على الجدول الزمني، الأدلة العاطفية، والدليل المادي.",
+evidence:"سجل شراء قديم يربط بين ديون مراهنات كبيرة ومعرفة سابقة بترتيب غرفة العلية في منزل إيلويل.",
+surface:"يوحي بوجود دافع مادي واضح إلى جانب الدوافع العاطفية.",
+deep:"الحل داخل اللعبة: المافيوسو فاعل مباشر، وماريا لارسن جانية ثانية سهّلت الهروب."
+}
+];
+
+let elwellSelected=null;
+let elwellGmCode=localStorage.getItem("elwellGmCode")||"";
+
+
+/* =========================================================
+   ELWELL SESSION
+========================================================= */
+
+function getElwellRoles(code){
+  if(!code){
+    return elwellRoles.map(r=>({...r,displayN:r.n}));
+  }
+
+  return seededShuffle(
+    elwellRoles,
+    "ELWELL-"+code
+  ).map((r,i)=>({...r,displayN:i+1}));
+}
+
+function verifyElwellCode(code){
+  if(!code)return "---";
+
+  const roles=getElwellRoles(code);
+  const order=roles
+    .slice()
+    .sort((a,b)=>a.displayN-b.displayN)
+    .map(r=>r.n)
+    .join("");
+
+  const h=hashCode("ELWELL#"+order+"#"+code);
+
+  return "ELWELL-"+String(10+(h%90));
+}
+
+function elwellPlayer(){
+  const saved=localStorage.getItem("elwellPlayer");
+
+  if(saved){
+    try{
+      const p=JSON.parse(saved);
+      const roles=getElwellRoles(p.sessionCode);
+      const r=roles.find(x=>x.n===p.roleId);
+
+      if(r){
+        renderElwellPlayer(p.name,r);
+        show("elwell-player");
+        return;
+      }
+    }catch(e){}
+  }
+
+  show("elwell-setup");
+}
+
+function buildElwellRoles(){
+  const box=document.getElementById("elwellRoles");
+  box.textContent="";
+
+  for(let n=1;n<=5;n++){
+    const b=document.createElement("button");
+    b.className="role-btn";
+    b.type="button";
+    b.dataset.role=n;
+
+    const strong=document.createElement("strong");
+    strong.textContent=`شخصية ${n}`;
+
+    const small=document.createElement("small");
+    small.textContent="اضغط للاختيار";
+
+    b.append(strong,small);
+
+    b.addEventListener("click",()=>{
+      playClickSound();
+      elwellSelected=n;
+
+      document.querySelectorAll("#elwellRoles .role-btn")
+        .forEach(x=>x.classList.toggle(
+          "selected",
+          Number(x.dataset.role)===n
+        ));
+    });
+
+    box.appendChild(b);
+  }
+}
+
+function checkElwellCode(){
+  const value=document.getElementById("elwellSessionCode").value.trim();
+  const msg=document.getElementById("elwellCodeMessage");
+
+  if(value===""){
+    msg.textContent="اكتب كود الجلسة الذي أعطاه لك الـGM.";
+    msg.style.color="var(--muted)";
+    return;
+  }
+
+  if(!/^\d{4}$/.test(value)){
+    msg.textContent="كود الجلسة لازم يكون 4 أرقام.";
+    msg.style.color="var(--red)";
+    return;
+  }
+
+  msg.style.color="var(--gold3)";
+  msg.textContent=`كلمة التحقق: ${verifyElwellCode(value)}`;
+}
+
+async function confirmElwellRole(){
+  const name=document.getElementById("elwellName").value.trim();
+  const code=document.getElementById("elwellSessionCode").value.trim();
+
+  if(!name){
+    toast("اكتب اسمك الأول.");
+    return;
+  }
+
+  if(!/^\d{4}$/.test(code)){
+    toast("اكتب كود الجلسة المكون من 4 أرقام.");
+    return;
+  }
+
+  if(!elwellSelected){
+    toast("اختر رقم الشخصية.");
+    return;
+  }
+
+  if(getLiveDbUrl()){
+    const active=await isSessionActive("elwell",code);
+    if(!active){
+      toast("كود الجلسة ده لسه مش موجود. تأكد إن الـGM بدأ اللعبة بنفس الكود.");
+      return;
+    }
+  }
+
+  const roles=getElwellRoles(code);
+  const r=roles.find(x=>x.displayN===elwellSelected);
+
+  if(!r){
+    toast("حصل خطأ في توزيع الشخصية.");
+    return;
+  }
+
+  localStorage.setItem(
+    "elwellPlayer",
+    JSON.stringify({
+      name,
+      roleId:r.n,
+      sessionCode:code
+    })
+  );
+
+  renderElwellPlayer(name,r);
+  pushPlayerStatus("elwell",code,r.displayN,name);
+  playRevealSound();
+  show("elwell-player");
+}
+
+function renderElwellPlayer(name,r){
+  document.getElementById("elwellPlayerBadge").textContent=
+    `اللاعب: ${name} • الشخصية رقم ${r.displayN}`;
+
+  document.getElementById("elwellRoleName").textContent=r.name;
+  document.getElementById("elwellPublic").textContent=
+    `المعلومات العلنية: ${r.public}`;
+
+  document.getElementById("elwellSecret").textContent=r.secret;
+  document.getElementById("elwellStrength").textContent=r.strength;
+  document.getElementById("elwellWeakness").textContent=r.weakness;
+
+  const mafia=r.killer||r.accomplice;
+
+  document.getElementById("elwellMafia").classList.toggle("hidden",!mafia);
+
+  document.getElementById("elwellNotes").value=
+    localStorage.getItem(`elwellNotes_${r.n}`)||"";
+
+  if(mafia)playRevealSound();
+
+  startLiveStatusPolling("elwell");
+}
+
+function saveElwellNotes(){
+  const p=JSON.parse(
+    localStorage.getItem("elwellPlayer")||"null"
+  );
+
+  if(!p)return;
+
+  localStorage.setItem(
+    `elwellNotes_${p.roleId}`,
+    document.getElementById("elwellNotes").value
+  );
+
+  const s=document.getElementById("elwellSave");
+  s.textContent="تم الحفظ تلقائيًا ✓";
+
+  setTimeout(()=>s.textContent="",1200);
+}
+
+function resetElwell(){
+  const p=JSON.parse(
+    localStorage.getItem("elwellPlayer")||"null"
+  );
+
+  if(p){
+    localStorage.removeItem(`elwellNotes_${p.roleId}`);
+  }
+
+  localStorage.removeItem("elwellPlayer");
+
+  elwellSelected=null;
+
+  document.getElementById("elwellName").value="";
+  document.getElementById("elwellSessionCode").value="";
+  document.getElementById("elwellCodeMessage").textContent="";
+
+  document.querySelectorAll("#elwellRoles .role-btn")
+    .forEach(x=>x.classList.remove("selected"));
+
+  show("elwell-setup");
+}
+
+function verifyElwellGM(){
+  const value=document.getElementById("elwellGmInput").value.trim();
+
+  if(value==="هشام"){
+    document.getElementById("elwellGmError").classList.add("hidden");
+    document.getElementById("elwellGmInput").value="";
+    buildElwellGM();
+    show("elwell-gm");
+  }else{
+    document.getElementById("elwellGmError").classList.remove("hidden");
+  }
+}
+
+function generateElwellCode(){
+  elwellGmCode=makeSessionCode();
+
+  localStorage.setItem(
+    "elwellGmCode",
+    elwellGmCode
+  );
+
+  activateSession("elwell",elwellGmCode);
+
+  buildElwellGM();
+
+  toast("تم إنشاء توزيع عشوائي جديد.");
+}
+
+async function buildElwellGM(){
+  document.getElementById("currentElwellCode").textContent=
+    elwellGmCode||"غير محدد";
+
+  document.getElementById("elwellVerifyCode").textContent=
+    elwellGmCode
+      ? verifyElwellCode(elwellGmCode)
+      : "---";
+
+  const roles=getElwellRoles(elwellGmCode);
+  const rolesBox=document.getElementById("elwellGMroles");
+  rolesBox.textContent="";
+
+  let elwellPlayers=null;
+  if(getLiveDbUrl()&&elwellGmCode){
+    elwellPlayers=await fetchPlayers("elwell",elwellGmCode);
+  }
+
+  roles.forEach(r=>{
+    const div=document.createElement("div");
+    div.className="round";
+
+    let status="بريء من جريمة القتل";
+
+    if(r.killer){
+      status="مذنب — الفاعل المباشر";
+    }else if(r.accomplice){
+      status="مذنبة — الجانية الثانية (سهّلت الهروب)";
+    }
+
+    const title=document.createElement("b");
+    title.textContent=`رقم ${r.displayN} — ${r.name}`;
+
+    const br=document.createElement("br");
+
+    const span=document.createElement("span");
+    span.className=(r.killer||r.accomplice)?"danger":"";
+    span.textContent=status;
+
+    div.append(title,br,span);
+
+    if(elwellPlayers&&elwellPlayers[r.displayN]&&elwellPlayers[r.displayN].name){
+      const playerLine=document.createElement("div");
+      playerLine.style.marginTop="8px";
+      playerLine.style.color="var(--gold3)";
+      playerLine.style.fontWeight="700";
+      playerLine.textContent=`اللاعب: ${elwellPlayers[r.displayN].name}`;
+      div.appendChild(playerLine);
+    }else if(getLiveDbUrl()&&elwellGmCode){
+      const playerLine=document.createElement("div");
+      playerLine.style.marginTop="8px";
+      playerLine.style.color="var(--muted)";
+      playerLine.style.fontSize="13px";
+      playerLine.textContent="لسه محدش اختار الشخصية دي";
+      div.appendChild(playerLine);
+    }
+
+    if(getLiveDbUrl()&&elwellGmCode){
+      const btnOut=document.createElement("button");
+      btnOut.className="btn ghost";
+      btnOut.style.marginTop="12px";
+      btnOut.style.marginLeft="8px";
+      btnOut.textContent="أخرجه من اللعبة";
+      btnOut.onclick=()=>{playClickSound();setPlayerAlive("elwell",elwellGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);};
+
+      const btnIn=document.createElement("button");
+      btnIn.className="btn ghost";
+      btnIn.style.marginTop="12px";
+      btnIn.textContent="رجّعه للعبة";
+      btnIn.onclick=()=>{playClickSound();setPlayerAlive("elwell",elwellGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);};
+
+      div.append(document.createElement("br"),btnOut,btnIn);
+    }
+
+    rolesBox.appendChild(div);
+  });
+
+  const roundsBox=document.getElementById("elwellRounds");
+  roundsBox.textContent="";
+
+  elwellRounds.forEach(round=>{
+    const d=document.createElement("details");
+    const s=document.createElement("summary");
+    s.textContent=round.title;
+
+    const p1=document.createElement("p");
+    const b1=document.createElement("b");
+    b1.textContent="الدليل: ";
+    p1.append(b1,document.createTextNode(round.text));
+
+    const e=document.createElement("div");
+    e.className="evidence";
+    const eb=document.createElement("b");
+    eb.textContent="الدليل المادي: ";
+    e.append(eb,document.createTextNode(round.evidence));
+
+    const p2=document.createElement("p");
+    const b2=document.createElement("b");
+    b2.textContent="السطحية: ";
+    p2.append(b2,document.createTextNode(round.surface));
+
+    const p3=document.createElement("p");
+    const b3=document.createElement("b");
+    b3.textContent="الأعمق: ";
+    p3.append(b3,document.createTextNode(round.deep));
+
+    d.append(s,p1,e,p2,p3);
+    roundsBox.appendChild(d);
+  });
+
+  const nav=document.getElementById("elwellRoundNav");
+  nav.textContent="";
+
+  elwellRounds.forEach((round,i)=>{
+    const b=document.createElement("button");
+    b.className="round-chip";
+    b.id=`elwellChip${i+1}`;
+    b.type="button";
+    b.textContent=`الجولة ${i+1}`;
+
+    b.addEventListener("click",()=>{
+      setCurrentRoundGeneric("elwell",i+1);
+    });
+
+    nav.appendChild(b);
+  });
+
+  const savedRound=Number(localStorage.getItem("elwellCurrentRound")||0);
+  if(savedRound){
+    const chip=document.getElementById(`elwellChip${savedRound}`);
+    if(chip)chip.classList.add("active");
+  }
+
+  buildVoteTally("elwell");
 }
 
 
@@ -1918,10 +3007,14 @@ async function buildRipperGM(){
    INIT
 ========================================================= */
 
+const GAME_ROLE_GETTERS={swope:getSwopeRoles,ripper:getRipperRoles,elwell:getElwellRoles};
+
 buildSwopeRoles();
 buildRipperRoles();
+buildElwellRoles();
 buildSwopeGM();
 buildRipperGM();
+buildElwellGM();
 updateLiveDbStatusText();
 
 document.getElementById("swopeName").addEventListener("keydown",e=>{
@@ -1932,12 +3025,20 @@ document.getElementById("ripperName").addEventListener("keydown",e=>{
   if(e.key==="Enter")confirmRipperRole();
 });
 
+document.getElementById("elwellName").addEventListener("keydown",e=>{
+  if(e.key==="Enter")confirmElwellRole();
+});
+
 document.getElementById("swopeGmInput").addEventListener("keydown",e=>{
   if(e.key==="Enter")verifySwopeGM();
 });
 
 document.getElementById("ripperGmInput").addEventListener("keydown",e=>{
   if(e.key==="Enter")verifyRipperGM();
+});
+
+document.getElementById("elwellGmInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter")verifyElwellGM();
 });
 
 
@@ -1972,6 +3073,24 @@ try{
 
     if(r){
       renderRipperPlayer(ripper.name,r);
+    }
+  }
+}catch(e){}
+
+
+/* RESTORE ELWELL */
+
+try{
+  const elwell=JSON.parse(
+    localStorage.getItem("elwellPlayer")||"null"
+  );
+
+  if(elwell){
+    const roles=getElwellRoles(elwell.sessionCode);
+    const r=roles.find(x=>x.n===elwell.roleId);
+
+    if(r){
+      renderElwellPlayer(elwell.name,r);
     }
   }
 }catch(e){}
