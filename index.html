@@ -446,6 +446,16 @@ li{margin-bottom:8px}
   <div class="notice">الشاشة دي تحتوي على الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
 </div>
 
+<div class="card">
+  <h2>افتتاح القضية</h2>
+  <p class="small" style="margin-top:6px">اقرأها للاعبين بصوت عالي قبل ما توزّع كود الجلسة.</p>
+  <p style="margin-top:14px;white-space:pre-line">سنة 1909، مدينة Kansas City، ولاية Missouri. عيلة سووب من أغنى وأشهر عائلات المدينة.
+
+في فترة قصيرة، مات كل من Hunton وThomas من نفس العائلة، والطبيب اللي كان حاضر في الحالتين هو د. Bennett Clark Hyde، متجوز حديثًا من Frances، حفيدة العيلة. بدأت الشكوك تدور حوالين البيت: هل موت الاتنين كان صدفة؟ ولا فيه حد استفاد من التوقيت ده؟
+
+كل واحد في البيت عنده حاجة يخبيها — دين، وصية، خطاب اختفى، أو ملاحظة كان المفروض تتقال من زمان. الليلة، انتوا هتلعبوا أدوار الشخصيات دي. أربع جولات تحقيق، وفي كل جولة دليل جديد. اللي هيحصل بعد كده، في إيديكم.</p>
+</div>
+
 <div class="gm-grid">
 <div class="gm-col">
 
@@ -685,6 +695,18 @@ li{margin-bottom:8px}
   <div class="badge">GM ONLY</div>
   <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
   <div class="notice">الشاشة دي فيها الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="card">
+  <h2>افتتاح القضية</h2>
+  <p class="small" style="margin-top:6px">اقرأها للاعبين بصوت عالي قبل ما توزّع كود الجلسة.</p>
+  <p style="margin-top:14px;white-space:pre-line">خريف 1888، حي Whitechapel في شرق لندن. خلال خمسة أسابيع، خمس نساء قُتلن بنفس الأسلوب الوحشي تقريبًا — الجرائم المعروفة تاريخيًا باسم Canonical Five: Nichols، Chapman، Stride، Eddowes، وKelly.
+
+الشرطة والصحافة ملانة بأسماء مشتبه بهم: حلاقين، أطباء، عمال، وحتى شهود عيان. كل واحد له رواية، وكل رواية فيها ثغرة.
+
+الليلة، انتوا السبعة اللي هيمثلوا أشهر المشتبه بهم في القضية. ملحوظة مهمة: هوية Jack the Ripper الحقيقية لم تُحسم تاريخيًا لحد النهاردة، والحل بتاع الليلة دي اختراع خاص باللعبة مش ادعاء تاريخي.
+
+أربع جولات، في كل جولة دليل ودليل مادي. خلوا نقاشكم يفضل قريب من الأدلة، لأن أول واحد يتسرّع هيبقى أول واحد يتشك فيه.</p>
 </div>
 
 <div class="gm-grid">
@@ -927,6 +949,16 @@ li{margin-bottom:8px}
   <div class="badge">GM ONLY</div>
   <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
   <div class="notice">الشاشة دي تحتوي على الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="card">
+  <h2>افتتاح القضية</h2>
+  <p class="small" style="margin-top:6px">اقرأها للاعبين بصوت عالي قبل ما توزّع كود الجلسة.</p>
+  <p style="margin-top:14px;white-space:pre-line">صباح 11 يونيو 1920، نيويورك. جو إيلويل، لاعب بردج مشهور ورجل نساء معروف، اتلقى ميتًا في مكتبه بطلقة في الرأس. الغريب إن الباب كان مقفول من جوه، والنوافذ كمان — جريمة غرفة مغلقة كلاسيكية، ومفيش سلاح اتلاقى في مسرح الجريمة وقتها.
+
+حوالين إيلويل كانت دايرة من العلاقات المعقدة: عشيقته فيولا كراوس، أرملة من طبقة المجتمع الراقي بتحمل خطاب حب قديم منه، طليقها فيكتور فون شليغيل اللي كان قاعد على نفس طاولة العشاء بالصدفة، خادمته ماريا لارسن اللي هي اللي لقت الجثة، وصديق قديم من دوائر المراهنات على الخيل اسمه أنجلو دي لوكا.
+
+الليلة، انتوا الخمسة دول. أربع جولات تحقيق، كل جولة بتضيف قطعة من اللغز — من التوقيت المتضارب، للأدلة العاطفية، للدليل المادي في مسرح الجريمة. الغرفة كانت مقفولة... بس مش كل الأبواب هي طريقة الدخول الوحيدة.</p>
 </div>
 
 <div class="gm-grid">
@@ -2908,393 +2940,3 @@ function checkElwellCode(){
 }
 
 async function confirmElwellRole(){
-  const name=document.getElementById("elwellName").value.trim();
-  const code=document.getElementById("elwellSessionCode").value.trim();
-
-  if(!name){
-    toast("اكتب اسمك الأول.");
-    return;
-  }
-
-  if(!/^\d{4}$/.test(code)){
-    toast("اكتب كود الجلسة المكون من 4 أرقام.");
-    return;
-  }
-
-  if(!elwellSelected){
-    toast("اختر رقم الشخصية.");
-    return;
-  }
-
-  if(getLiveDbUrl()){
-    const active=await isSessionActive("elwell",code);
-    if(!active){
-      toast("كود الجلسة ده لسه مش موجود. تأكد إن الـGM بدأ اللعبة بنفس الكود.");
-      return;
-    }
-  }
-
-  const roles=getElwellRoles(code);
-  const r=roles.find(x=>x.displayN===elwellSelected);
-
-  if(!r){
-    toast("حصل خطأ في توزيع الشخصية.");
-    return;
-  }
-
-  localStorage.setItem(
-    "elwellPlayer",
-    JSON.stringify({
-      name,
-      roleId:r.n,
-      sessionCode:code
-    })
-  );
-
-  renderElwellPlayer(name,r);
-  pushPlayerStatus("elwell",code,r.displayN,name);
-  playRevealSound();
-  show("elwell-player");
-}
-
-function renderElwellPlayer(name,r){
-  document.getElementById("elwellPlayerBadge").textContent=
-    `اللاعب: ${name} • الشخصية رقم ${r.displayN}`;
-
-  document.getElementById("elwellRoleName").textContent=r.name;
-  document.getElementById("elwellPublic").textContent=
-    `المعلومات العلنية: ${r.public}`;
-
-  document.getElementById("elwellSecret").textContent=r.secret;
-  document.getElementById("elwellStrength").textContent=r.strength;
-  document.getElementById("elwellWeakness").textContent=r.weakness;
-
-  const mafia=r.killer||r.accomplice;
-
-  document.getElementById("elwellMafia").classList.toggle("hidden",!mafia);
-
-  document.getElementById("elwellNotes").value=
-    localStorage.getItem(`elwellNotes_${r.n}`)||"";
-
-  if(mafia)playRevealSound();
-
-  startLiveStatusPolling("elwell");
-}
-
-function saveElwellNotes(){
-  const p=JSON.parse(
-    localStorage.getItem("elwellPlayer")||"null"
-  );
-
-  if(!p)return;
-
-  localStorage.setItem(
-    `elwellNotes_${p.roleId}`,
-    document.getElementById("elwellNotes").value
-  );
-
-  const s=document.getElementById("elwellSave");
-  s.textContent="تم الحفظ تلقائيًا ✓";
-
-  setTimeout(()=>s.textContent="",1200);
-}
-
-function resetElwell(){
-  const p=JSON.parse(
-    localStorage.getItem("elwellPlayer")||"null"
-  );
-
-  if(p){
-    localStorage.removeItem(`elwellNotes_${p.roleId}`);
-  }
-
-  localStorage.removeItem("elwellPlayer");
-
-  elwellSelected=null;
-
-  document.getElementById("elwellName").value="";
-  document.getElementById("elwellSessionCode").value="";
-  document.getElementById("elwellCodeMessage").textContent="";
-
-  document.querySelectorAll("#elwellRoles .role-btn")
-    .forEach(x=>x.classList.remove("selected"));
-
-  show("elwell-setup");
-}
-
-function verifyElwellGM(){
-  const value=document.getElementById("elwellGmInput").value.trim();
-
-  if(value==="هشام"){
-    document.getElementById("elwellGmError").classList.add("hidden");
-    document.getElementById("elwellGmInput").value="";
-    buildElwellGM();
-    show("elwell-gm");
-  }else{
-    document.getElementById("elwellGmError").classList.remove("hidden");
-  }
-}
-
-function generateElwellCode(){
-  elwellGmCode=makeSessionCode();
-
-  localStorage.setItem(
-    "elwellGmCode",
-    elwellGmCode
-  );
-
-  activateSession("elwell",elwellGmCode);
-
-  buildElwellGM();
-
-  toast("تم إنشاء توزيع عشوائي جديد.");
-}
-
-async function buildElwellGM(){
-  document.getElementById("currentElwellCode").textContent=
-    elwellGmCode||"غير محدد";
-
-  document.getElementById("elwellVerifyCode").textContent=
-    elwellGmCode
-      ? verifyElwellCode(elwellGmCode)
-      : "---";
-
-  const roles=getElwellRoles(elwellGmCode);
-  const rolesBox=document.getElementById("elwellGMroles");
-  rolesBox.textContent="";
-
-  let elwellPlayers=null;
-  if(getLiveDbUrl()&&elwellGmCode){
-    elwellPlayers=await fetchPlayers("elwell",elwellGmCode);
-  }
-
-  roles.forEach(r=>{
-    const div=document.createElement("div");
-    const pdata=elwellPlayers&&elwellPlayers[r.displayN];
-    const taken=pdata&&pdata.name;
-    const isOut=taken&&pdata.alive===false;
-    div.className=isOut?"round out":(taken?"round taken":"round");
-
-    let status="بريء من جريمة القتل";
-
-    if(r.killer){
-      status="مذنب — الفاعل المباشر";
-    }else if(r.accomplice){
-      status="مذنبة — الجانية الثانية (سهّلت الهروب)";
-    }
-
-    const title=document.createElement("b");
-    title.textContent=`رقم ${r.displayN} — ${r.name}`;
-
-    if(isOut){
-      const badge=document.createElement("span");
-      badge.className="out-badge";
-      badge.textContent="خرج من اللعبة";
-      title.appendChild(badge);
-    }else if(taken){
-      const badge=document.createElement("span");
-      badge.className="taken-badge";
-      badge.textContent="✓ اتاخدت";
-      title.appendChild(badge);
-    }
-
-    const br=document.createElement("br");
-
-    const span=document.createElement("span");
-    span.className=(r.killer||r.accomplice)?"danger":"";
-    span.textContent=status;
-
-    div.append(title,br,span);
-
-    if(elwellPlayers&&elwellPlayers[r.displayN]&&elwellPlayers[r.displayN].name){
-      const playerLine=document.createElement("div");
-      playerLine.style.marginTop="8px";
-      playerLine.style.color="var(--gold3)";
-      playerLine.style.fontWeight="700";
-      playerLine.textContent=`اللاعب: ${elwellPlayers[r.displayN].name}`;
-      div.appendChild(playerLine);
-    }else if(getLiveDbUrl()&&elwellGmCode){
-      const playerLine=document.createElement("div");
-      playerLine.style.marginTop="8px";
-      playerLine.style.color="var(--muted)";
-      playerLine.style.fontSize="13px";
-      playerLine.textContent="لسه محدش اختار الشخصية دي";
-      div.appendChild(playerLine);
-    }
-
-    if(getLiveDbUrl()&&elwellGmCode){
-      const btnOut=document.createElement("button");
-      btnOut.className="btn ghost";
-      btnOut.style.marginTop="12px";
-      btnOut.style.marginLeft="8px";
-      btnOut.textContent="أخرجه من اللعبة";
-      btnOut.onclick=async()=>{playClickSound();await setPlayerAlive("elwell",elwellGmCode,r.displayN,false);toast(`${r.name} خرج من اللعبة`);buildElwellGM();};
-
-      const btnIn=document.createElement("button");
-      btnIn.className="btn ghost";
-      btnIn.style.marginTop="12px";
-      btnIn.textContent="رجّعه للعبة";
-      btnIn.onclick=async()=>{playClickSound();await setPlayerAlive("elwell",elwellGmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);buildElwellGM();};
-
-      div.append(document.createElement("br"),btnOut,btnIn);
-    }
-
-    rolesBox.appendChild(div);
-  });
-
-  const roundsBox=document.getElementById("elwellRounds");
-  roundsBox.textContent="";
-
-  elwellRounds.forEach(round=>{
-    const d=document.createElement("details");
-    const s=document.createElement("summary");
-    s.textContent=round.title;
-
-    const p1=document.createElement("p");
-    const b1=document.createElement("b");
-    b1.textContent="الدليل: ";
-    p1.append(b1,document.createTextNode(round.text));
-
-    const e=document.createElement("div");
-    e.className="evidence";
-    const eb=document.createElement("b");
-    eb.textContent="الدليل المادي: ";
-    e.append(eb,document.createTextNode(round.evidence));
-
-    const p2=document.createElement("p");
-    const b2=document.createElement("b");
-    b2.textContent="السطحية: ";
-    p2.append(b2,document.createTextNode(round.surface));
-
-    const p3=document.createElement("p");
-    const b3=document.createElement("b");
-    b3.textContent="الأعمق: ";
-    p3.append(b3,document.createTextNode(round.deep));
-
-    d.append(s,p1,e,p2,p3);
-    roundsBox.appendChild(d);
-  });
-
-  const nav=document.getElementById("elwellRoundNav");
-  nav.textContent="";
-
-  elwellRounds.forEach((round,i)=>{
-    const b=document.createElement("button");
-    b.className="round-chip";
-    b.id=`elwellChip${i+1}`;
-    b.type="button";
-    b.textContent=`الجولة ${i+1}`;
-
-    b.addEventListener("click",()=>{
-      setCurrentRoundGeneric("elwell",i+1);
-    });
-
-    nav.appendChild(b);
-  });
-
-  const savedRound=Number(localStorage.getItem("elwellCurrentRound")||0);
-  if(savedRound){
-    const chip=document.getElementById(`elwellChip${savedRound}`);
-    if(chip)chip.classList.add("active");
-  }
-
-  buildVoteTally("elwell");
-}
-
-
-/* =========================================================
-   INIT
-========================================================= */
-
-const GAME_ROLE_GETTERS={swope:getSwopeRoles,ripper:getRipperRoles,elwell:getElwellRoles};
-
-buildSwopeRoles();
-buildRipperRoles();
-buildElwellRoles();
-buildSwopeGM();
-buildRipperGM();
-buildElwellGM();
-updateLiveDbStatusText();
-
-document.getElementById("swopeName").addEventListener("keydown",e=>{
-  if(e.key==="Enter")confirmSwopeRole();
-});
-
-document.getElementById("ripperName").addEventListener("keydown",e=>{
-  if(e.key==="Enter")confirmRipperRole();
-});
-
-document.getElementById("elwellName").addEventListener("keydown",e=>{
-  if(e.key==="Enter")confirmElwellRole();
-});
-
-document.getElementById("swopeGmInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter")verifySwopeGM();
-});
-
-document.getElementById("ripperGmInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter")verifyRipperGM();
-});
-
-document.getElementById("elwellGmInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter")verifyElwellGM();
-});
-
-
-/* RESTORE SWOPE */
-
-try{
-  const swope=JSON.parse(
-    localStorage.getItem("swopePlayer")||"null"
-  );
-
-  if(swope){
-    const roles=getSwopeRoles(swope.sessionCode);
-    const r=roles.find(x=>x.n===swope.roleId);
-
-    if(r){
-      renderSwopePlayer(swope.name,r);
-    }
-  }
-}catch(e){}
-
-
-/* RESTORE RIPPER */
-
-try{
-  const ripper=JSON.parse(
-    localStorage.getItem("ripperPlayer")||"null"
-  );
-
-  if(ripper){
-    const roles=getRipperRoles(ripper.sessionCode);
-    const r=roles.find(x=>x.id===ripper.roleId);
-
-    if(r){
-      renderRipperPlayer(ripper.name,r);
-    }
-  }
-}catch(e){}
-
-
-/* RESTORE ELWELL */
-
-try{
-  const elwell=JSON.parse(
-    localStorage.getItem("elwellPlayer")||"null"
-  );
-
-  if(elwell){
-    const roles=getElwellRoles(elwell.sessionCode);
-    const r=roles.find(x=>x.n===elwell.roleId);
-
-    if(r){
-      renderElwellPlayer(elwell.name,r);
-    }
-  }
-}catch(e){}
-
-</script>
-
-</body>
-</html>
