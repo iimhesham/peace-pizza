@@ -2,10 +2,12 @@
    INIT
 ========================================================= */
 
-const GAME_ROLE_GETTERS={ripper:getRipperRoles};
+const GAME_ROLE_GETTERS={ripper:getRipperRoles,mabhouh:getMabhouhRoles};
 
 buildRipperRoles();
 buildRipperGM();
+buildMabhouhRoles();
+buildMabhouhGM();
 updateLiveDbStatusText();
 
 document.getElementById("ripperName").addEventListener("keydown",e=>{
@@ -14,6 +16,14 @@ document.getElementById("ripperName").addEventListener("keydown",e=>{
 
 document.getElementById("ripperGmInput").addEventListener("keydown",e=>{
   if(e.key==="Enter")verifyRipperGM();
+});
+
+document.getElementById("mabhouhName").addEventListener("keydown",e=>{
+  if(e.key==="Enter")confirmMabhouhRole();
+});
+
+document.getElementById("mabhouhGmInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter")verifyMabhouhGM();
 });
 
 
@@ -31,6 +41,23 @@ try{
 
     if(r){
       renderRipperPlayer(ripper.name,r);
+    }
+  }
+}catch(e){}
+
+/* RESTORE MABHOUH */
+
+try{
+  const mabhouh=JSON.parse(
+    localStorage.getItem("mabhouhPlayer")||"null"
+  );
+
+  if(mabhouh){
+    const roles=getMabhouhRoles(mabhouh.sessionCode);
+    const r=roles.find(x=>x.id===mabhouh.roleId);
+
+    if(r){
+      renderMabhouhPlayer(mabhouh.name,r);
     }
   }
 }catch(e){}

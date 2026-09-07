@@ -24,8 +24,8 @@ const SESSION_MAX_AGE_MS=7*24*60*60*1000; // 7 أيام
    بين كل عملية تنضيف والتانية على نفس الجهاز. */
 const CLEANUP_THROTTLE_MS=60*60*1000; // ساعة
 
-const LIVE_DB_INPUT_IDS=["liveDbUrlInput","liveDbUrlInputRipper"];
-const LIVE_DB_STATUS_IDS=["liveDbStatus","liveDbStatusRipper"];
+const LIVE_DB_INPUT_IDS=["liveDbUrlInput","liveDbUrlInputRipper","liveDbUrlInputMabhouh"];
+const LIVE_DB_STATUS_IDS=["liveDbStatus","liveDbStatusRipper","liveDbStatusMabhouh"];
 
 function getLiveDbUrl(){
   const stored=(localStorage.getItem("liveDbUrl")||"").trim().replace(/\/+$/,"");
@@ -51,9 +51,11 @@ function saveLiveDbUrl(inputId){
   });
 
   if(ripperGmCode)activateSession("ripper",ripperGmCode);
+  if(mabhouhGmCode)activateSession("mabhouh",mabhouhGmCode);
 
   updateLiveDbStatusText();
   buildRipperGM();
+  buildMabhouhGM();
   toast("تم تفعيل المتابعة المباشرة.");
 }
 
@@ -67,6 +69,7 @@ function clearLiveDbUrl(){
 
   updateLiveDbStatusText();
   buildRipperGM();
+  buildMabhouhGM();
   toast("تم إلغاء المتابعة المباشرة.");
 }
 
@@ -241,7 +244,7 @@ async function pollLiveStatusOnce(){
 }
 
 async function refreshLiveStatus(game,codeArg,playersArg){
-  const listElId={ripper:"ripperStatusList"}[game];
+  const listElId={ripper:"ripperStatusList",mabhouh:"mabhouhStatusList"}[game];
   const listEl=document.getElementById(listElId);
   if(!listEl)return;
 
