@@ -302,7 +302,7 @@ li{margin-bottom:8px}
 .fb-whistle{font-size:44px;text-align:center;display:block;margin-bottom:6px;filter:drop-shadow(0 0 16px rgba(55,125,255,.45))}
 .fb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:560px;margin:20px auto 0}
 .fb-card{aspect-ratio:4/3;perspective:900px;cursor:pointer;min-width:0}
-.fb-card-inner{position:relative;width:100%;height:100%;transition:transform .65s cubic-bezier(.2,.85,.2,1);transform-style:preserve-3d}
+.fb-card-inner{position:relative;width:100%;height:100%;transition:transform .38s ease;transform-style:preserve-3d}
 .fb-card.flipped .fb-card-inner{transform:rotateY(180deg)}
 .fb-card-face{position:absolute;inset:0;border-radius:13px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;padding:8px;text-align:center}
 .fb-card-back{background:linear-gradient(155deg,#122d62,#061126);border:1px solid #31589d;box-shadow:inset 0 0 0 1px rgba(255,255,255,.045),0 14px 28px rgba(0,0,0,.42);flex-direction:column;gap:6px;color:#6e91d2}
@@ -321,8 +321,8 @@ body.mode-football{background:#02050d !important;color:#eef4ff;transition:backgr
 body.mode-football .app{background:#02050d !important}
 body.mode-football .moon,body.mode-football .fog{display:none}
 body.mode-football #toast{background:linear-gradient(135deg,#0b1f49,#061126)!important;border:1px solid #3f7dff!important;color:#e8f0ff!important;box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 22px rgba(48,112,255,.18)!important}
-body.mode-football .page-in{animation:footballIn .65s cubic-bezier(.2,.8,.2,1)}
-@keyframes footballIn{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+body.mode-football .page-in{animation:footballIn .28s ease-out}
+@keyframes footballIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(max-width:650px){.mode-grid{grid-template-columns:1fr;gap:12px}.mode-card{padding:26px 16px 20px}.fb-grid{grid-template-columns:repeat(3,1fr);gap:8px;max-width:390px;margin-top:16px}.fb-card-face{border-radius:11px;padding:6px}.fb-card-front span{font-size:14px}.fb-card-back .fb-ball-svg{width:28px;height:28px}.fb-card-back .fb-index{font-size:16px}}
 </style>
 </head>
@@ -3061,7 +3061,13 @@ function shuffledCopy(arr){
 }
 
 function dealPasswordCards(){
-  passwordDeal=shuffledCopy(FOOTBALL_PLAYERS).slice(0,10);
+  // Keep the full database, but make most rounds noticeably easier.
+  // The first 250 names are the familiar/core pool; 2 cards may come from the full database for variety.
+  const easyPool=FOOTBALL_PLAYERS.slice(0,250);
+  const hardPool=FOOTBALL_PLAYERS.slice(250);
+  const easy=shuffledCopy(easyPool).slice(0,8);
+  const harder=shuffledCopy(hardPool).slice(0,2);
+  passwordDeal=shuffledCopy(easy.concat(harder));
   passwordFlipped=new Array(passwordDeal.length).fill(false);
   renderPasswordGrid();
   toast("اتوزعوا عشرة أسامي جديدة");
