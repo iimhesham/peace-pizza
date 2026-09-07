@@ -88,6 +88,13 @@
       <p>اتلعبت. مقفولة.</p>
       <span class="tag" style="background:rgba(122,33,24,.15);color:#e77a6f">NEW YORK • 1920</span>
     </button>
+
+    <button class="game-card" onclick="playClickSound();openGame('mabhouh')">
+      <div class="number">04</div>
+      <h2>ملف محمود المبحوح</h2>
+      <p>خمسة مشتبه بهم. عملية استخباراتية معقدة.</p>
+      <span class="tag">DUBAI • 2010</span>
+    </button>
   </div>
 
   <button class="btn ghost" onclick="playClickSound();show('hub')" style="width:100%;margin-top:20px">رجوع</button>
@@ -421,6 +428,292 @@
 <button class="btn ghost" onclick="playClickSound();show('ripper')" style="width:100%">العودة</button>
 </section>
 
+<!-- ========================================================
+     MABHOUH CASE — ملف محمود المبحوح
+======================================================== -->
+<section id="mabhouh" class="hidden">
+<div class="card hero">
+  <div class="badge">DUBAI • 2010</div>
+  <h1>ملف محمود المبحوح</h1>
+  <p class="subtitle">خمس شخصيات. ثلاث جولات تحقيق.</p>
+
+  <div class="notice">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px">
+      19 يناير 2010. دبي. محمود المبحوح، قيادي عسكري بارز في حركة حماس، يصل للمدينة وينزل في فندق البستان روتانا.
+      في اليوم التالي، بيتم العثور عليه ميتًا في غرفته رقم 230.
+    </p>
+    <p style="margin-top:10px">
+      شرطة دبي بتفتح تحقيق ضخم، وبتستخدم مئات الساعات من تسجيلات كاميرات المراقبة في المطار والفندق والشوارع
+      عشان تعيد بناء كل خطوة حصلت قبل وبعد الحادثة. النتيجة كانت مذهلة: مجموعة من الأشخاص دخلوا دبي بشكل منفصل،
+      بجوازات سفر وهويات مختلفة، بعضهم من فرنسا وإيرلندا وبريطانيا وألمانيا، وبعضهم تابع تحركات الضحية من المطار
+      للفندق من غير ما يبان إنهم مع بعض.
+    </p>
+    <p style="margin-top:10px">
+      شرطة دبي أعلنت في البداية عن 11 مشتبهًا بيهم، وبعدين وسّعت القائمة لـ26 شخصًا. الشرطة اتهمت جهاز الموساد
+      الإسرائيلي بالوقوف وراء العملية، لكن إسرائيل ما اعترفتش رسميًا بالمسؤولية، وفضل جزء كبير من القضية متنازع
+      عليه لحد النهاردة.
+    </p>
+    <p style="margin-top:10px">
+      والآن، تُعاد القضية من جديد. خمسة أشخاص من ضمن المشتبه بهم وجدوا أنفسهم داخل دائرة الشك.
+      كل واحد فيهم كان له دور ما في العملية — لكن واحدًا بس هو اللي كان مسؤولًا عن اللحظة الأخيرة.
+    </p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();mabhouhPlayer()">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('mabhouh-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- MABHOUH GM LOCK -->
+<section id="mabhouh-gm-lock" class="hidden">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأدلة السرية.</p>
+  <label for="mabhouhGmInput">كلمة المرور</label>
+  <input id="mabhouhGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyMabhouhGM()" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="flex:1">رجوع</button>
+  </div>
+  <p id="mabhouhGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- MABHOUH SETUP -->
+<section id="mabhouh-setup" class="hidden">
+<div class="card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice">
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من <b>1 إلى 5</b>.
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="mabhouhName">اسمك</label>
+  <input id="mabhouhName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="mabhouhSessionCode">كود الجلسة</label>
+  <input id="mabhouhSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkMabhouhCode()">
+
+  <p id="mabhouhCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر رقم الشخصية</label>
+  <div id="mabhouhRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmMabhouhRole()" style="flex:2">
+      تأكيد واكتشاف شخصيتي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- MABHOUH PLAYER -->
+<section id="mabhouh-player" class="hidden">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="mabhouhPlayerBadge"></div>
+    <div id="mabhouhMafia" class="badge hidden" dir="ltr"
+         style="color:#ff6b6b;border-color:#dc3737;background:rgba(150,20,20,.2);font-weight:900">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="mabhouhRoleName" style="margin-top:12px"></h2>
+  <p id="mabhouhPublic" class="small"></p>
+</div>
+
+<div class="card secret">
+  <h3>سري جدًا — ملف شخصيتك</h3>
+  <p id="mabhouhSecret" style="margin-top:10px"></p>
+  <hr>
+  <h3>نقطة قوتك</h3>
+  <p id="mabhouhStrength" class="small"></p>
+  <h3 style="margin-top:15px">نقطة ضعفك</h3>
+  <p id="mabhouhWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="mabhouhNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveMabhouhNotes()"></textarea>
+  <div id="mabhouhSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="mabhouhVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="mabhouhVoteStatus">جاري التحميل...</p>
+  <div id="mabhouhVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="mabhouhStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('mabhouh')">تحديث</button>
+  </div>
+  <div id="mabhouhStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>أنتم 5 لاعبين + Game Master.</li>
+    <li>اللعبة 3 جولات تحقيق.</li>
+    <li>في كل جولة يقدم الـGM دليلًا ودليلًا ماديًا.</li>
+    <li>قد تصل ملاحظة سرية لشخص واحد.</li>
+    <li>بعد النقاش يتم التصويت.</li>
+    <li>الذي يحصل على أغلب الأصوات يخرج من التصويت التالي.</li>
+    <li>في الجولة الثالثة الجميع يقدم اتهامه النهائي.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetMabhouh()" style="width:100%">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- MABHOUH GM -->
+<section id="mabhouh-gm" class="hidden">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+    نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+  </p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateMabhouhCode()">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="currentMabhouhCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="mabhouhVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل لكل الألعاب مع بعض.
+  </p>
+  <label for="liveDbUrlInputMabhouh" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputMabhouh" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputMabhouh')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusMabhouh" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="mabhouhRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="mabhouhVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('mabhouh')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="mabhouhVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="mabhouhEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('mabhouh')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>نتيجة الشخصيات حسب الكود</h2>
+    <button class="btn ghost" onclick="playClickSound();buildMabhouhGM()">تحديث الأسماء</button>
+  </div>
+  <div id="mabhouhGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الحل الكامل</h2>
+
+  <div class="notice">
+    <b>القصة كاملة (تقدر تحكيها بصوتك):</b>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، Michael Bodenheimer هو العقل والفاعل الوحيد وراء اللحظة الأخيرة من العملية.
+      هويته كانت مبنية على وثيقة سفر حقيقية الشكل، مش هوية مزوّرة واضحة زي هويات باقي الفريق، وده اللي خلاه
+      الأصعب في الاكتشاف من بين كل الأسماء المعلنة.
+    </p>
+    <p style="margin-top:10px">
+      الأربعة الآخرين (Elvinger، Folliard، Daveron، Keely) كل واحد فيهم شاف جزء بسيط بس من الصورة الكاملة:
+      واحد نسّق الحجوزات، واتنين تابعوا تحركات الهدف من بعيد، وواحد أمّن خط الرجوع بعد العملية.
+      محدش فيهم كان يعرف إن Bodenheimer هو اللي هيدخل فعليًا، وده بالظبط اللي خلى كل واحد فيهم قادر يدافع عن
+      نفسه بصدق تام من غير ما يكون بيكذب.
+    </p>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، Bodenheimer وصل دبي متأخر عن باقي الفريق، أكّد رقم غرفة الهدف شخصيًا عند الاستقبال
+      قبل الحادثة بوقت قصير جدًا، واستغل التوقيت اللي يكون فيه الفندق أقل ازدحامًا. الرابط الوحيد اللي ممكن
+      يوصّل له هو تطابق توقيت تأكيد الغرفة مع توقيت دخوله، وده تفصيلة صعب جدًا حد يلاحظها من غير مراجعة دقيقة
+      جدًا للتسجيلات والسجلات مع بعض.
+    </p>
+  </div>
+
+  <p style="margin-top:10px"><b>الـMafioso:</b> Michael Bodenheimer — المسؤول الوحيد عن تنفيذ العملية في سيناريو اللعبة.</p>
+  <p class="small" style="margin-top:15px">
+    مهم: هذا الحل خاص بالسيناريو فقط، وهو تبسيط متعمد لعملية حقيقية كانت أكبر وأعقد بكثير من شخص واحد.
+    قضية محمود المبحوح الحقيقية لم تُحسم قضائيًا، واتهام الموساد بقي اتهامًا معلنًا من شرطة دبي ولم تعترف
+    إسرائيل رسميًا بالمسؤولية عنه.
+  </p>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="mabhouhRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد.</li>
+    <li>أعط الكود لكل اللاعبين.</li>
+    <li>كل لاعب يختار رقمًا.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
+    <li>سلّم الملاحظات الخاصة لصاحبها فقط.</li>
+    <li>اترك وقتًا للنقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
+    <li>في الجولة الثالثة اقرأ الحل النهائي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="width:100%">العودة</button>
+</section>
+
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
 </div>
 
@@ -429,8 +722,9 @@
 <script src="js/voting.js"></script>
 <script src="js/ripper-data.js"></script>
 <script src="js/ripper.js"></script>
+<script src="js/mabhouh-data.js"></script>
+<script src="js/mabhouh.js"></script>
 <script src="js/football.js"></script>
-<script src="js/init.js"></script> 
-<script src="js/api.js"></script>
+<script src="js/init.js"></script>
 </body>
 </html>
