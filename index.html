@@ -302,11 +302,11 @@ li{margin-bottom:8px}
 .fb-whistle{font-size:44px;text-align:center;display:block;margin-bottom:6px;filter:drop-shadow(0 0 16px rgba(55,125,255,.45))}
 .fb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:560px;margin:20px auto 0}
 .fb-card{aspect-ratio:4/3;perspective:900px;cursor:pointer;min-width:0}
-.fb-card-inner{position:relative;width:100%;height:100%;transition:transform .38s ease;transform-style:preserve-3d}
+.fb-card-inner{position:relative;width:100%;height:100%;transition:transform .22s linear;transform-style:preserve-3d}
 .fb-card.flipped .fb-card-inner{transform:rotateY(180deg)}
 .fb-card-face{position:absolute;inset:0;border-radius:13px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;padding:8px;text-align:center}
 .fb-card-back{background:linear-gradient(155deg,#122d62,#061126);border:1px solid #31589d;box-shadow:inset 0 0 0 1px rgba(255,255,255,.045),0 14px 28px rgba(0,0,0,.42);flex-direction:column;gap:6px;color:#6e91d2}
-.fb-card-back .fb-ball{font-size:22px}.fb-card-back .fb-index{font-family:'Teko',sans-serif;font-size:18px;color:#6f91d1}
+.ui-x{font-family:Arial,sans-serif;font-size:.72em;font-weight:900;display:inline-block;vertical-align:middle;margin-right:2px}.fb-card-back .fb-ball{font-size:0}.fb-card-back .fb-index{font-family:'Teko',sans-serif;font-size:18px;color:#6f91d1}
 .fb-card-front{background:linear-gradient(155deg,#1c4381,#0a1d43);border:1px solid var(--blue2);transform:rotateY(180deg);box-shadow:0 0 30px rgba(48,116,255,.2)}
 .fb-card-front span{font-family:'Teko',sans-serif;font-size:18px;line-height:1.08;color:#dbe8ff;font-weight:600}
 .fb-controls{display:flex;gap:10px;margin-top:22px}
@@ -317,12 +317,12 @@ li{margin-bottom:8px}
 .fb-app .btn.primary{background:linear-gradient(135deg,#245ed1,#173b8c);border-color:#4c86ff;color:#fff;box-shadow:0 8px 24px rgba(35,94,210,.28)}
 .fb-app .btn.primary:hover{background:linear-gradient(135deg,#3475ef,#1d4da9);transform:translateY(-1px)}
 .fb-ball-svg{width:52px;height:52px;display:block}.fb-card-back .fb-ball-svg{width:34px;height:34px;opacity:.78}
-body.mode-football{background:#02050d !important;color:#eef4ff;transition:background .55s ease}
+body.mode-football{background:#02050d !important;color:#eef4ff;transition:background .12s linear}
 body.mode-football .app{background:#02050d !important}
 body.mode-football .moon,body.mode-football .fog{display:none}
-body.mode-football #toast{background:linear-gradient(135deg,#0b1f49,#061126)!important;border:1px solid #3f7dff!important;color:#e8f0ff!important;box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 22px rgba(48,112,255,.18)!important}
-body.mode-football .page-in{animation:footballIn .28s ease-out}
-@keyframes footballIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+body.mode-football #toast{background:linear-gradient(135deg,#0b1f49,#061126)!important;border:1px solid #3f7dff!important;color:#e8f0ff!important;box-shadow:0 10px 24px rgba(0,0,0,.5),0 0 14px rgba(48,112,255,.12)!important;transition:opacity .10s linear,transform .10s linear}
+body.mode-football .page-in{animation:footballIn .10s linear}
+@keyframes footballIn{from{opacity:.98;transform:none}to{opacity:1;transform:none}}
 @media(max-width:650px){.mode-grid{grid-template-columns:1fr;gap:12px}.mode-card{padding:26px 16px 20px}.fb-grid{grid-template-columns:repeat(3,1fr);gap:8px;max-width:390px;margin-top:16px}.fb-card-face{border-radius:11px;padding:6px}.fb-card-front span{font-size:14px}.fb-card-back .fb-ball-svg{width:28px;height:28px}.fb-card-back .fb-index{font-size:16px}}
 </style>
 </head>
@@ -356,12 +356,12 @@ body.mode-football .page-in{animation:footballIn .28s ease-out}
 
   <div class="mode-grid">
     <div class="mode-card stories" onclick="playClickSound();show('games')">
-      <span class="glyph">📖</span>
+      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 5.5v15M8 7h8M8 11h8"/></svg></span>
       <h3>القصص</h3>
       <p>ألعاب تحقيق وغموض، بأدوار وأدلة.</p>
     </div>
     <div class="mode-card password" onclick="playClickSound();show('password')">
-      <span class="glyph">⚽</span>
+      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="m12 7 2.8 2-1.1 3.4H10.3L9.2 9zM9.2 9 6.4 7.8M14.8 9l2.8-1.2M10.3 12.4 8 14.8M13.7 12.4l2.3 2.4M12 7V4.5M8 14.8l-.7 3M16 14.8l.7 3"/></svg></span>
       <h3>باسورد</h3>
       <p>لعبة كلمة السر بأسامي لاعبين الكورة.</p>
     </div>
@@ -380,7 +380,7 @@ body.mode-football .page-in{animation:footballIn .28s ease-out}
 
   <div class="game-grid">
     <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
-      <div class="number">01 ❌</div>
+      <div class="number">01 <span class="ui-x" aria-hidden="true">×</span></div>
       <h2>قضية آل سووب</h2>
       <p>اتلعبت. مقفولة.</p>
       <span class="tag">MISSOURI • 1909</span>
@@ -394,7 +394,7 @@ body.mode-football .page-in{animation:footballIn .28s ease-out}
     </button>
 
     <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1);border-color:#4a1512" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
-      <div class="number" style="color:#d9564a">03 ❌</div>
+      <div class="number" style="color:#d9564a">03 <span class="ui-x" aria-hidden="true">×</span></div>
       <h2 style="color:#d9564a">ملف قضية إيلويل</h2>
       <p>اتلعبت. مقفولة.</p>
       <span class="tag" style="background:rgba(122,33,24,.15);color:#e77a6f">NEW YORK • 1920</span>
