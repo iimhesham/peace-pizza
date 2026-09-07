@@ -54,6 +54,11 @@
       <h3>باسورد</h3>
       <p>لعبة كلمة السر بأسامي لاعبين الكورة.</p>
     </div>
+    <div class="mode-card trivia" onclick="playClickSound();show('trivia');initTriviaSetup()">
+      <span class="glyph" aria-hidden="true" style="font-size:34px">🏆</span>
+      <h3>مبارزة المعلومات</h3>
+      <p>أسئلة كورة بين لاعبين، بالذكاء الاصطناعي.</p>
+    </div>
   </div>
 
   <button class="btn ghost" onclick="playClickSound();show('landing')" style="width:100%;margin-top:20px">رجوع</button>
@@ -142,6 +147,170 @@
     <button class="btn primary" onclick="playClickSound();dealPasswordCards()" style="flex:2">خلط جديد</button>
     <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع</button>
   </div>
+</div>
+</section>
+
+<!-- ========================================================
+     TRIVIA DUEL — مبارزة المعلومات
+======================================================== -->
+<section id="trivia" class="hidden">
+<div class="card hero">
+  <div class="badge">DUEL • مبارزة المعلومات</div>
+  <h1 style="margin-top:12px">مبارزة المعلومات</h1>
+  <p class="subtitle">6 تصنيفات، 36 سؤال، لاعبين على جهاز واحد. الأسئلة بتتولد بالذكاء الاصطناعي وقت اللعب.</p>
+
+  <details style="text-align:right;margin-top:10px">
+    <summary>قواعد اللعبة</summary>
+    <div id="triviaRulesList" style="margin-top:12px;display:grid;gap:10px"></div>
+  </details>
+
+  <div class="notice" style="text-align:right;margin-top:20px">
+    <b>مفتاح Gemini API</b>
+    <p class="small" style="margin-top:6px">كل مجموعة تحط مفتاح Gemini API بتاعها (مجاني من Google AI Studio) عشان الأسئلة تتولد. المفتاح بيتخزن على المتصفح بتاعك بس.</p>
+    <input id="triviaApiKeyInput" type="text" placeholder="الصق مفتاح Gemini API هنا" style="margin-top:10px" dir="ltr">
+    <div class="grid" style="grid-template-columns:1fr;margin-top:10px">
+      <button class="btn secondary" onclick="saveTriviaApiKey()">حفظ المفتاح</button>
+    </div>
+    <p id="triviaApiKeyStatus" class="small" style="margin-top:8px"></p>
+  </div>
+
+  <div style="margin-top:20px;text-align:right">
+    <label>اسم اللعبة</label>
+    <input id="triviaGameName" type="text" placeholder="مثلاً: مبارزة الأصحاب">
+  </div>
+  <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:14px">
+    <div style="text-align:right">
+      <label>اسم اللاعب الأول</label>
+      <input id="triviaPlayer1Name" type="text" placeholder="اللاعب 1">
+    </div>
+    <div style="text-align:right">
+      <label>اسم اللاعب الثاني</label>
+      <input id="triviaPlayer2Name" type="text" placeholder="اللاعب 2">
+    </div>
+  </div>
+
+  <div style="margin-top:24px;text-align:right">
+    <div class="topline">
+      <label style="margin:0">اختار 6 تصنيفات</label>
+      <span id="triviaCategoryCount" class="badge">0/6</span>
+    </div>
+
+    <p class="small" style="margin-top:10px">تصنيفات كورة</p>
+    <div id="triviaFootballCategories" class="tv-cat-group"></div>
+
+    <p class="small" style="margin-top:16px">تصنيفات عامة</p>
+    <div id="triviaOtherCategories" class="tv-cat-group"></div>
+
+    <div class="round" style="margin-top:16px">
+      <p class="small" style="margin:0 0 10px">عايز تضيف تصنيف مخصص؟</p>
+      <input id="triviaCustomName" type="text" placeholder="اسم التصنيف">
+      <div style="display:flex;gap:16px;margin:12px 0">
+        <label style="display:flex;align-items:center;gap:6px;margin:0;font-weight:400;color:var(--text)">
+          <input type="radio" name="triviaCustomType" value="football" class="tv-radio" checked>
+          كورة
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;margin:0;font-weight:400;color:var(--text)">
+          <input type="radio" name="triviaCustomType" value="other" class="tv-radio">
+          عامة
+        </label>
+      </div>
+      <button class="btn ghost" style="width:100%" onclick="addTriviaCustomCategory()">إضافة التصنيف</button>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:24px">
+    <button class="btn primary" onclick="startTriviaGame()">ابدأ اللعبة</button>
+    <button class="btn ghost" onclick="playClickSound();show('hub')">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- TRIVIA — loading -->
+<section id="trivia-loading" class="hidden">
+<div class="card hero" style="max-width:480px;margin:60px auto;text-align:center">
+  <div class="badge">DUEL</div>
+  <h2 style="margin-top:15px">بنولّد الأسئلة...</h2>
+  <p class="subtitle">استنوا شوية، الذكاء الاصطناعي بيجهز 36 سؤال ليكم.</p>
+  <p id="triviaLoadingNote" class="small" style="color:var(--gold3)"></p>
+</div>
+</section>
+
+<!-- TRIVIA — error -->
+<section id="trivia-error" class="hidden">
+<div class="card hero" style="max-width:480px;margin:60px auto;text-align:center">
+  <div class="badge" style="border-color:rgba(169,90,77,.5);color:#df8b7f">خطأ</div>
+  <h2 style="margin-top:15px">حصلت مشكلة</h2>
+  <p id="triviaErrorMessage" class="notice" style="text-align:center"></p>
+  <div class="grid" style="margin-top:20px">
+    <button class="btn primary" onclick="retryTriviaGeneration()">حاول تاني</button>
+    <button class="btn ghost" onclick="playClickSound();show('trivia');initTriviaSetup()">رجوع للإعداد</button>
+  </div>
+</div>
+</section>
+
+<!-- TRIVIA — board -->
+<section id="trivia-board" class="hidden">
+<div class="card hero" style="max-width:900px">
+  <div class="topline">
+    <div class="badge">DUEL</div>
+    <button class="btn ghost" onclick="playClickSound();show('hub')" style="padding:8px 16px">رجوع للرئيسية</button>
+  </div>
+  <h2 id="triviaBoardTitle" style="margin-top:12px">مبارزة المعلومات</h2>
+
+  <div id="triviaScoreboard" class="tv-scoreboard"></div>
+
+  <div class="tv-board">
+    <div class="tv-board-inner">
+      <div id="triviaBoardHead" class="tv-row"></div>
+      <div id="triviaBoardBody"></div>
+    </div>
+  </div>
+
+  <p id="triviaTurnLabel" class="subtitle" style="margin-top:18px"></p>
+</div>
+</section>
+
+<!-- TRIVIA — question -->
+<section id="trivia-question" class="hidden">
+<div class="card hero" style="max-width:640px">
+  <div class="topline">
+    <button class="btn ghost" onclick="backFromTriviaQuestion()" style="padding:8px 16px">رجوع</button>
+    <span id="triviaQPoints" class="badge"></span>
+  </div>
+
+  <p id="triviaQCategory" class="small" style="text-align:center;margin-top:10px;color:var(--gold3);font-weight:700"></p>
+  <p id="triviaQTurn" class="subtitle" style="margin-top:2px"></p>
+
+  <div style="text-align:center;margin:20px 0">
+    <span id="triviaTimer" class="tv-timer">60</span>
+    <p id="triviaTimeUpNote" class="small hidden" style="color:var(--red);margin-top:8px">انتهى الوقت!</p>
+  </div>
+
+  <div class="notice" style="text-align:center;font-size:18px">
+    <p id="triviaQText" style="margin:0"></p>
+  </div>
+
+  <div id="triviaQShowBtn" style="text-align:center;margin-top:20px">
+    <button class="btn primary" onclick="revealTriviaAnswer(false)">اظهر الإجابة</button>
+  </div>
+
+  <div id="triviaQAnswerBox" class="tv-answer-box hidden">
+    <span class="small">الإجابة</span>
+    <strong id="triviaQAnswerText"></strong>
+  </div>
+
+  <div id="triviaQPlayers" style="display:grid;gap:10px;margin-top:16px"></div>
+</div>
+</section>
+
+<!-- TRIVIA — end -->
+<section id="trivia-end" class="hidden">
+<div class="card hero" style="max-width:480px;margin:40px auto;text-align:center">
+  <div class="badge">انتهت اللعبة</div>
+  <div id="triviaWinnerAnnounce" style="margin:20px 0"></div>
+  <div id="triviaFinalScores" style="display:grid;gap:10px;margin-bottom:20px"></div>
+  <button class="btn primary" style="width:100%" onclick="playTriviaAgain()">العب تاني</button>
+  <button class="btn ghost" style="width:100%;margin-top:10px" onclick="playClickSound();show('hub')">الرئيسية</button>
 </div>
 </section>
 
@@ -430,6 +599,8 @@
 <script src="js/ripper-data.js"></script>
 <script src="js/ripper.js"></script>
 <script src="js/football.js"></script>
+<script src="js/trivia-data.js"></script>
+<script src="js/trivia.js"></script>
 <script src="js/init.js"></script>
 </body>
 </html>
