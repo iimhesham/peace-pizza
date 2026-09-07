@@ -1,6 +1,6 @@
 // js/api.js
 
-const API_KEY = "حط_المفتاح_بتاعك_هنا"; // ضع مفتاح Gemini API هنا
+const API_KEY = "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"; // ضع مفتاح Gemini API هنا
 
 async function generateGameData(selectedCategories, language = 'ar') {
   if (!API_KEY || API_KEY === "حط_المفتاح_بتاعك_هنا") {
