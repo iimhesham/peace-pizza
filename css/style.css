@@ -308,3 +308,56 @@ body.mode-football #toast{background:linear-gradient(135deg,#0b1f49,#061126)!imp
 body.mode-football .page-in{animation:footballIn .10s linear}
 @keyframes footballIn{from{opacity:.98;transform:none}to{opacity:1;transform:none}}
 @media(max-width:650px){.mode-grid{grid-template-columns:1fr;gap:12px}.mode-card{padding:26px 16px 20px}.fb-grid{grid-template-columns:repeat(3,1fr);gap:8px;max-width:390px;margin-top:16px}.fb-card-face{border-radius:11px;padding:6px}.fb-card-front span{font-size:14px}.fb-card-back .fb-ball-svg{width:28px;height:28px}.fb-card-back .fb-index{font-size:16px}}
+
+/* =========================================================
+   TRIVIA DUEL — مبارزة المعلومات
+========================================================= */
+.mode-card.trivia{
+  background:linear-gradient(160deg,#241a0c,#140f06);border-color:#86641f;
+  box-shadow:0 12px 30px rgba(0,0,0,.4)
+}
+.mode-card.trivia:hover{border-color:var(--gold3)}
+.mode-card.trivia .glyph{filter:drop-shadow(0 0 10px rgba(212,182,117,.5))}
+
+.tv-cat-group{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+@media(min-width:560px){.tv-cat-group{grid-template-columns:repeat(4,1fr)}}
+
+.tv-scoreboard{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.tv-player-chip{
+  padding:12px 14px;border-radius:14px;border:2px solid transparent;
+  background:#071710;text-align:center;transition:.2s
+}
+.tv-player-chip.active{border-color:var(--gold2);background:rgba(138,106,47,.14);box-shadow:0 0 15px rgba(138,106,47,.18)}
+.tv-player-name{display:block;font-weight:700;color:var(--text);font-size:14px}
+.tv-player-score{display:block;color:var(--gold3);font-weight:900;font-size:18px;margin-top:4px}
+
+.tv-board{overflow-x:auto;margin-top:10px}
+.tv-board-inner{min-width:560px}
+.tv-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:8px}
+.tv-head-cell{
+  text-align:center;padding:8px 4px;border-radius:10px;background:rgba(138,106,47,.1);
+  color:var(--gold3);font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.tv-cell{
+  aspect-ratio:4/3;border-radius:10px;border:1px solid var(--border);cursor:pointer;
+  background:linear-gradient(145deg,#12372c,#0a2019);color:#fff;font-weight:900;
+  display:flex;align-items:center;justify-content:center;transition:.2s
+}
+.tv-cell:hover{transform:translateY(-2px);border-color:var(--gold2)}
+.tv-cell.done{background:#0d0d0d;color:#555;cursor:not-allowed;border-color:var(--border)}
+.tv-cell.empty{background:transparent;border:none;color:#3a3a3a;cursor:default}
+.tv-cell-points{font-size:18px}
+
+.tv-timer{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:14px;
+  background:#06140f;border:1px solid var(--border);font-size:30px;font-weight:900;color:var(--text)
+}
+.tv-timer.warn{color:var(--red);animation:tvPulse 1s infinite}
+@keyframes tvPulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+.tv-answer-box{
+  background:rgba(23,147,111,.12);border:2px solid var(--emerald2);border-radius:14px;
+  padding:16px;text-align:center;margin:16px 0
+}
+.tv-answer-box strong{display:block;font-size:22px;color:#8fe3c4;margin-top:6px}
+.tv-radio{width:auto;padding:0;border:none;background:transparent;accent-color:var(--gold2)}
