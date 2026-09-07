@@ -254,69 +254,81 @@ async function callTriviaApi(prompt){
 
   try {
     if (key.startsWith("gsk_")) {
-      // Groq API Call
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${key}`,
-          "Content-Type": "application/json"
-        },
-        signal: controller.signal,
-        body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
-          response_format: { type: "json_object" },
-          messages: [{ role: "user", content: prompt }],
-          temperature: 0.7
-        })
-      });
+      // تجربة موديلات Groq المتاحة تلقائياً لتفادي خطأ 404
+      const groqModels = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"];
+      let lastRes;
 
-      clearTimeout(timeoutId);
+      for (const modelName of groqModels) {
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${key}`,
+            "Content-Type": "application/json"
+          },
+          signal: controller.signal,
+          body: JSON.stringify({
+            model: modelName,
+            response_format: { type: "json_object" },
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.7
+          })
+        });
 
-      if (!res.ok) {
-        let msg = `خطأ في اتصال Groq API (كود ${res.status})`;
-        if (res.status === 401) msg = "مفتاح Groq API غير صحيح أو تم إلغاؤه.";
-        if (res.status === 429) msg = "تم تجاوز حد الطلبات في Groq API. جرب بعد قليل.";
-        const err = new Error(msg);
-        err.status = res.status;
-        throw err;
+        if (res.ok) {
+          clearTimeout(timeoutId);
+          const data = await res.json();
+          const text = data?.choices?.[0]?.message?.content;
+          if (!text) throw new Error("رد فارغ من Groq API.");
+          return text;
+        }
+        lastRes = res;
       }
 
-      const data = await res.json();
-      const text = data?.choices?.[0]?.message?.content;
-      if (!text) throw new Error("رد فارغ من Groq API.");
-      return text;
+      clearTimeout(timeoutId);
+      let msg = `خطأ في اتصال Groq API (كود ${lastRes.status})`;
+      if (lastRes.status === 401) msg = "مفتاح Groq API غير صحيح أو تم إلغاؤه.";
+      if (lastRes.status === 429) msg = "تم تجاوز حد الطلبات في Groq API. جرب بعد قليل.";
+      const err = new Error(msg);
+      err.status = lastRes.status;
+      throw err;
 
     } else {
-      // Gemini API Call
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        signal: controller.signal,
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7, responseMimeType: "application/json" }
-        })
-      });
+      // تجربة موديلات Gemini المتاحة تلقائياً لتفادي خطأ 404
+      const geminiModels = ["gemini-1.5-flash", "gemini-2.5-flash", "gemini-2.0-flash"];
+      let lastRes;
 
-      clearTimeout(timeoutId);
+      for (const modelName of geminiModels) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`;
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          signal: controller.signal,
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7, responseMimeType: "application/json" }
+          })
+        });
 
-      if (!res.ok) {
-        let msg = `خطأ في اتصال Gemini API (كود ${res.status})`;
-        if (res.status === 400 || res.status === 403) msg = "مفتاح Gemini API غير صحيح أو محظور.";
-        if (res.status === 429) msg = "تم تجاوز حد الطلبات لـ Gemini. حاول بعد قليل.";
-        if (res.status === 503) msg = "سيرفر Gemini مشغول حالياً (503).";
-        const err = new Error(msg);
-        err.status = res.status;
-        throw err;
+        if (res.ok) {
+          clearTimeout(timeoutId);
+          const data = await res.json();
+          const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!text) throw new Error("رد فارغ من Gemini API.");
+          return text;
+        }
+        lastRes = res;
       }
 
-      const data = await res.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error("رد فارغ من Gemini API.");
-      return text;
+      clearTimeout(timeoutId);
+      let msg = `خطأ في اتصال Gemini API (كود ${lastRes.status})`;
+      if (lastRes.status === 400 || lastRes.status === 403) msg = "مفتاح Gemini API غير صحيح أو محظور.";
+      if (lastRes.status === 429) msg = "تم تجاوز حد الطلبات لـ Gemini. حاول بعد قليل.";
+      if (lastRes.status === 503) msg = "سيرفر Gemini مشغول حالياً (503).";
+      const err = new Error(msg);
+      err.status = lastRes.status;
+      throw err;
     }
   } catch (err) {
     clearTimeout(timeoutId);
