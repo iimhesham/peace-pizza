@@ -244,9 +244,12 @@ async function callTriviaGemini(prompt){
   const timeoutId=setTimeout(()=>controller.abort(),120000);
 
   try{
-    const res=await fetch(`${TRIVIA_API_URL}?key=${encodeURIComponent(key)}`,{
+    const res=await fetch(TRIVIA_API_URL,{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
+      headers:{
+        "Content-Type":"application/json",
+        "x-goog-api-key":key
+      },
       signal:controller.signal,
       body:JSON.stringify({
         contents:[{parts:[{text:prompt}]}],
@@ -257,13 +260,19 @@ async function callTriviaGemini(prompt){
     clearTimeout(timeoutId);
 
     if(!res.ok){
+      let msg;
       if(res.status===429){
-        throw new Error("تم تجاوز الحد المسموح من الطلبات. استنوا شوية وجربوا تاني.");
+        msg="تم تجاوز الحد المسموح من الطلبات. استنوا شوية وجربوا تاني.";
+      }else if(res.status===400||res.status===403){
+        msg="مفتاح Gemini API غلط أو مش شغال. راجعوه.";
+      }else if(res.status===503){
+        msg="السيرفر مزنوق حاليًا (503). بنعيد المحاولة تلقائي...";
+      }else{
+        msg="خطأ في الاتصال بالـ API (كود "+res.status+").";
       }
-      if(res.status===400||res.status===403){
-        throw new Error("مفتاح Gemini API غلط أو مش شغال. راجعوه.");
-      }
-      throw new Error("خطأ في الاتصال بالـ API (كود "+res.status+").");
+      const err=new Error(msg);
+      err.status=res.status;
+      throw err;
     }
 
     const data=await res.json();
@@ -280,30 +289,39 @@ async function callTriviaGemini(prompt){
   }
 }
 
+function waitMs(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
 async function generateTriviaQuestions(categories){
   const prompt=buildTriviaPrompt(categories);
+  const maxAttempts=3;
+  let lastErr;
 
-  const attempt=async()=>{
-    const text=await callTriviaGemini(prompt);
-    const parsed=parseTriviaResponse(text);
-    if(!parsed.categories||parsed.categories.length!==6){
-      throw new Error("رد غير مكتمل من الـ API (لازم 6 تصنيفات بالظبط).");
-    }
-    return mapTriviaCategories(parsed,categories);
-  };
-
-  try{
-    return await attempt();
-  }catch(firstErr){
-    triviaState.retryCount++;
-    document.getElementById("triviaLoadingNote").textContent=
-      "أول محاولة فشلت، بنجرب تاني...";
+  for(let i=0;i<maxAttempts;i++){
     try{
-      return await attempt();
-    }catch(secondErr){
-      throw secondErr;
+      const text=await callTriviaGemini(prompt);
+      const parsed=parseTriviaResponse(text);
+      if(!parsed.categories||parsed.categories.length!==6){
+        throw new Error("رد غير مكتمل من الـ API (لازم 6 تصنيفات بالظبط).");
+      }
+      return mapTriviaCategories(parsed,categories);
+    }catch(err){
+      lastErr=err;
+      const isRetryable=err.status===503||err.status===429;
+      const isLastAttempt=i===maxAttempts-1;
+      if(isLastAttempt) break;
+
+      const note=document.getElementById("triviaLoadingNote");
+      if(note){
+        note.textContent=isRetryable
+          ? "السيرفر مزنوق شوية، بنجرب تاني كمان لحظات... (محاولة "+(i+2)+"/"+maxAttempts+")"
+          : "حصل خطأ، بنجرب تاني... (محاولة "+(i+2)+"/"+maxAttempts+")";
+      }
+      await waitMs(isRetryable?6000:2000);
     }
   }
+  throw lastErr;
 }
 
 function retryTriviaGeneration(){
