@@ -95,6 +95,13 @@
       <p>خمسة مشتبه بهم. عملية استخباراتية معقدة.</p>
       <span class="tag">DUBAI • 2010</span>
     </button>
+
+    <button class="game-card" onclick="playClickSound();openGame('dahlia')">
+      <div class="number">05</div>
+      <h2>قضية الداهلية السوداء</h2>
+      <p>خمسة مشتبه بهم. جريمة لغز بقيت بلا حل رسمي لحد النهاردة.</p>
+      <span class="tag">LOS ANGELES • 1947</span>
+    </button>
   </div>
 
   <button class="btn ghost" onclick="playClickSound();show('hub')" style="width:100%;margin-top:20px">رجوع</button>
@@ -722,6 +729,291 @@
 <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="width:100%">العودة</button>
 </section>
 
+<section id="dahlia" class="hidden">
+<div class="card hero">
+  <div class="badge">LOS ANGELES • 1947</div>
+  <h1>قضية الداهلية السوداء</h1>
+  <p class="subtitle">خمس شخصيات. ثلاث جولات تحقيق. لغز فضل بلا حل رسمي لحد النهاردة.</p>
+
+  <div class="notice">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px">
+      15 يناير 1947. لوس أنجلوس. سيدة كانت ماشية مع بنتها الصغيرة في حي هادئ، لقت جثة امرأة شابة في قطعة أرض
+      خالية. الجثة مقطوعة نصفين بدقة غريبة، والمشهد بشع لدرجة إن المحققين الأوائل افتكروا إنهم قدام عمل حد
+      عنده خبرة طبية أو جراحية حقيقية.
+    </p>
+    <p style="margin-top:10px">
+      الضحية كانت إليزابيث شورت، بنت 22 سنة جاية من الساحل الشرقي بتحاول تشتغل في هوليوود. الصحافة سمّتها
+      "الداهلية السوداء" على اسم فيلم كان عارض وقتها، ونشرت تفاصيل حياتها الشخصية بشكل مبالغ فيه خلق ضجة إعلامية
+      ضخمة في كل أمريكا.
+    </p>
+    <p style="margin-top:10px">
+      الشرطة حققت مع أكتر من 150 شخص، واستقبلت أكتر من 60 اعتراف مختلف بالجريمة — معظمهم اعترافات كاذبة من ناس
+      بيدوروا على شهرة. محدش اتقبض عليه، ومحدش اتحاكم، والقضية فضلت رسميًا مفتوحة وبلا حل لحد يومنا هذا.
+    </p>
+    <p style="margin-top:10px">
+      والآن، تُعاد القضية من جديد. خمسة من أقوى المشتبه بهم في تاريخ القضية وجدوا أنفسهم داخل دائرة الشك من
+      جديد. كل واحد فيهم عنده سبب يخليه مشتبه به — لكن واحدًا بس هو اللي كان المسؤول عن الجريمة فعلًا.
+    </p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('dahlia')">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('dahlia-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- MABHOUH GM LOCK -->
+<section id="dahlia-gm-lock" class="hidden">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأدلة السرية.</p>
+  <label for="dahliaGmInput">كلمة المرور</label>
+  <input id="dahliaGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('dahlia')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('dahlia')" style="flex:1">رجوع</button>
+  </div>
+  <p id="dahliaGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- MABHOUH SETUP -->
+<section id="dahlia-setup" class="hidden">
+<div class="card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice">
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من الأرقام الظاهرة تحت (حسب عدد اللاعبين اللي حدده الـGM).
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="dahliaName">اسمك</label>
+  <input id="dahliaName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="dahliaSessionCode">كود الجلسة</label>
+  <input id="dahliaSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('dahlia')">
+
+  <p id="dahliaCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر رقم الشخصية</label>
+  <div id="dahliaRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('dahlia')" style="flex:2">
+      تأكيد واكتشاف شخصيتي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('dahlia')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- MABHOUH PLAYER -->
+<section id="dahlia-player" class="hidden">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="dahliaPlayerBadge"></div>
+    <div id="dahliaMafia" class="badge hidden" dir="ltr"
+         style="color:#ff6b6b;border-color:#dc3737;background:rgba(150,20,20,.2);font-weight:900">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="dahliaRoleName" style="margin-top:12px"></h2>
+  <p id="dahliaPublic" class="small"></p>
+</div>
+
+<div class="card secret">
+  <h3>سري جدًا — ملف شخصيتك</h3>
+  <p id="dahliaSecret" style="margin-top:10px"></p>
+  <hr>
+  <h3>نقطة قوتك</h3>
+  <p id="dahliaStrength" class="small"></p>
+  <h3 style="margin-top:15px">نقطة ضعفك</h3>
+  <p id="dahliaWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="dahliaNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('dahlia')"></textarea>
+  <div id="dahliaSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="dahliaVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="dahliaVoteStatus">جاري التحميل...</p>
+  <div id="dahliaVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="dahliaStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('dahlia')">تحديث</button>
+  </div>
+  <div id="dahliaStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>أنتم 5 لاعبين + Game Master.</li>
+    <li>اللعبة 3 جولات تحقيق.</li>
+    <li>في كل جولة يقدم الـGM دليلًا ودليلًا ماديًا.</li>
+    <li>قد تصل ملاحظة سرية لشخص واحد.</li>
+    <li>بعد النقاش يتم التصويت.</li>
+    <li>الذي يحصل على أغلب الأصوات يخرج من التصويت التالي.</li>
+    <li>في الجولة الثالثة الجميع يقدم اتهامه النهائي.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('dahlia')" style="width:100%">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- MABHOUH GM -->
+<section id="dahlia-gm" class="hidden">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+    نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+  </p>
+
+  <label for="dahliaPlayerCountInput" id="dahliaPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="dahliaPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">المافيوسو مضمون دايمًا إنه موزّع على شخصية من ضمن العدد ده.</p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateGameCode('dahlia')">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="dahliaCurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="dahliaVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل لكل الألعاب مع بعض.
+  </p>
+  <label for="liveDbUrlInputDahlia" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputDahlia" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputDahlia')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusDahlia" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="dahliaRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="dahliaVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('dahlia')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="dahliaVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="dahliaEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('dahlia')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>نتيجة الشخصيات حسب الكود</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('dahlia')">تحديث الأسماء</button>
+  </div>
+  <div id="dahliaGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الحل الكامل</h2>
+
+  <div class="notice">
+    <b>القصة كاملة (تقدر تحكيها بصوتك):</b>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، Dr. George Hodel هو المسؤول عن جريمة قتل إليزابيث شورت. مهارته الطبية الدقيقة
+      هي اللي خلته يقدر ينفّذ التقطيع بالدقة الغريبة اللي شافها المحققون الأوائل، ومكانته الاجتماعية والطبية
+      هي اللي حمته من الشبهة المباشرة لسنين طويلة.
+    </p>
+    <p style="margin-top:10px">
+      الأربعة الآخرين كل واحد فيهم قريب من القضية بطريقة مختلفة تمامًا من غير ما يكون شريك فعلي: Bayley
+      كان قريب جغرافيًا وعائليًا من غير أي دليل مباشر، Hansen كانت علاقته بالضحية شخصية بحتة، Dillon
+      عرف تفاصيل تشريحية من شغله القديم بس مش من ارتكاب الجريمة، وManley كان آخر واحد شافها حية واتبرّأ
+      رسميًا بعد كذا اختبار كشف كذب.
+    </p>
+    <p style="margin-top:10px">
+      الدليل الأقوى اللي بيوجّه اللعبة نحو Hodel هو ملف رسمي اتكشف بعد أكتر من 50 سنة من الجريمة، سنة 2003،
+      في أرشيف النيابة العامة بلوس أنجلوس، وفيه تسجيل تنصت بوليسي على بيته (في تحقيق منفصل تمامًا عن قضية
+      تانية) سُجّل فيه كلام غامض جدًا منه عن قضية الداهلية السوداء نفسها.
+    </p>
+  </div>
+
+  <p style="margin-top:10px"><b>الـMafioso:</b> Dr. George Hodel — المسؤول عن الجريمة في سيناريو اللعبة.</p>
+  <p class="small" style="margin-top:15px">
+    مهم جدًا: هذا الحل خاص بسيناريو اللعبة فقط. القضية الحقيقية فضلت رسميًا <b>بلا حل ومغلقة بدون حكم قضائي
+    لحد يومنا هذا</b>. Dr. George Hodel هو الأقوى بين عدة نظريات منافسة (منها نظرية Dr. Walter Bayley
+    اللي بيتبناها باحثون تانيين)، ومحدش من الأسماء دي اتحاكم عليه أو أُدين رسميًا في أي وقت.
+  </p>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="dahliaRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد.</li>
+    <li>أعط الكود لكل اللاعبين.</li>
+    <li>كل لاعب يختار رقمًا.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
+    <li>سلّم الملاحظات الخاصة لصاحبها فقط.</li>
+    <li>اترك وقتًا للنقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
+    <li>في الجولة الثالثة اقرأ الحل النهائي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('dahlia')" style="width:100%">العودة</button>
+</section>
+
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
 </div>
 
@@ -731,6 +1023,7 @@
 <script src="js/voting.js"></script>
 <script src="js/ripper-data.js"></script>
 <script src="js/mabhouh-data.js"></script>
+<script src="js/dahlia-data.js"></script>
 <script src="js/football.js"></script>
 <script src="js/init.js"></script>
 </body>
