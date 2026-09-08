@@ -181,7 +181,7 @@
   </div>
 
   <div class="grid">
-    <button class="btn primary" onclick="playClickSound();ripperPlayer()">أنا لاعب</button>
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('ripper')">أنا لاعب</button>
     <button class="btn secondary" onclick="playClickSound();show('ripper-gm-lock')">أنا الـ GM</button>
   </div>
   <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
@@ -197,7 +197,7 @@
   <label for="ripperGmInput">كلمة المرور</label>
   <input id="ripperGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
   <div style="display:flex;gap:10px;margin-top:20px">
-    <button class="btn primary" onclick="playClickSound();verifyRipperGM()" style="flex:2">دخول</button>
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('ripper')" style="flex:2">دخول</button>
     <button class="btn ghost" onclick="playClickSound();show('ripper')" style="flex:1">رجوع</button>
   </div>
   <p id="ripperGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
@@ -220,10 +220,10 @@
   <br><br>
 
   <label for="sessionCode">كود الجلسة</label>
-  <input id="sessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
-         placeholder="مثال: 4821" oninput="checkRipperCode()">
+  <input id="ripperSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('ripper')">
 
-  <p id="codeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+  <p id="ripperCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
 
   <label>اختر رقم الشخصية</label>
   <div id="ripperRoles" class="role-grid"></div>
@@ -231,7 +231,7 @@
   <br>
 
   <div style="display:flex;gap:10px">
-    <button class="btn primary" onclick="playClickSound();confirmRipperRole()" style="flex:2">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('ripper')" style="flex:2">
       تأكيد واكتشاف شخصيتي
     </button>
     <button class="btn ghost" onclick="playClickSound();show('ripper')" style="flex:1">رجوع</button>
@@ -266,7 +266,7 @@
 <div class="card">
   <h3>مفكرة المحقق</h3>
   <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
-  <textarea id="ripperNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveRipperNotes()"></textarea>
+  <textarea id="ripperNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('ripper')"></textarea>
   <div id="ripperSave" class="small" style="text-align:left;color:var(--gold3)"></div>
 </div>
 
@@ -297,7 +297,7 @@
   </ul>
 </div>
 
-<button class="btn secondary" onclick="playClickSound();resetRipper()" style="width:100%">
+<button class="btn secondary" onclick="playClickSound();resetGame('ripper')" style="width:100%">
   مسح الشخصية من هذا الجهاز
 </button>
 </section>
@@ -322,15 +322,15 @@
   </p>
 
   <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
-    <button class="btn primary" onclick="playClickSound();generateRipperCode()">توليد كود جديد</button>
+    <button class="btn primary" onclick="playClickSound();generateGameCode('ripper')">توليد كود جديد</button>
     <strong style="color:var(--gold3)">
-      الكود: <span id="currentRipperCode" dir="ltr">غير محدد</span>
+      الكود: <span id="ripperCurrentCode" dir="ltr">غير محدد</span>
     </strong>
   </div>
 
   <div class="notice" style="margin-top:15px">
     كلمة التحقق:
-    <b id="verifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <b id="ripperVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
     <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
   </div>
 </div>
@@ -373,7 +373,7 @@
 <div class="card">
   <div class="topline">
     <h2>نتيجة الشخصيات حسب الكود</h2>
-    <button class="btn ghost" onclick="playClickSound();buildRipperGM()">تحديث الأسماء</button>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('ripper')">تحديث الأسماء</button>
   </div>
   <div id="ripperGMroles"></div>
 </div>
@@ -461,7 +461,7 @@
   </div>
 
   <div class="grid">
-    <button class="btn primary" onclick="playClickSound();mabhouhPlayer()">أنا لاعب</button>
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('mabhouh')">أنا لاعب</button>
     <button class="btn secondary" onclick="playClickSound();show('mabhouh-gm-lock')">أنا الـ GM</button>
   </div>
   <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
@@ -477,7 +477,7 @@
   <label for="mabhouhGmInput">كلمة المرور</label>
   <input id="mabhouhGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
   <div style="display:flex;gap:10px;margin-top:20px">
-    <button class="btn primary" onclick="playClickSound();verifyMabhouhGM()" style="flex:2">دخول</button>
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('mabhouh')" style="flex:2">دخول</button>
     <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="flex:1">رجوع</button>
   </div>
   <p id="mabhouhGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
@@ -501,7 +501,7 @@
 
   <label for="mabhouhSessionCode">كود الجلسة</label>
   <input id="mabhouhSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
-         placeholder="مثال: 4821" oninput="checkMabhouhCode()">
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('mabhouh')">
 
   <p id="mabhouhCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
 
@@ -511,7 +511,7 @@
   <br>
 
   <div style="display:flex;gap:10px">
-    <button class="btn primary" onclick="playClickSound();confirmMabhouhRole()" style="flex:2">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('mabhouh')" style="flex:2">
       تأكيد واكتشاف شخصيتي
     </button>
     <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="flex:1">رجوع</button>
@@ -546,7 +546,7 @@
 <div class="card">
   <h3>مفكرة المحقق</h3>
   <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
-  <textarea id="mabhouhNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveMabhouhNotes()"></textarea>
+  <textarea id="mabhouhNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('mabhouh')"></textarea>
   <div id="mabhouhSave" class="small" style="text-align:left;color:var(--gold3)"></div>
 </div>
 
@@ -577,7 +577,7 @@
   </ul>
 </div>
 
-<button class="btn secondary" onclick="playClickSound();resetMabhouh()" style="width:100%">
+<button class="btn secondary" onclick="playClickSound();resetGame('mabhouh')" style="width:100%">
   مسح الشخصية من هذا الجهاز
 </button>
 </section>
@@ -602,9 +602,9 @@
   </p>
 
   <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
-    <button class="btn primary" onclick="playClickSound();generateMabhouhCode()">توليد كود جديد</button>
+    <button class="btn primary" onclick="playClickSound();generateGameCode('mabhouh')">توليد كود جديد</button>
     <strong style="color:var(--gold3)">
-      الكود: <span id="currentMabhouhCode" dir="ltr">غير محدد</span>
+      الكود: <span id="mabhouhCurrentCode" dir="ltr">غير محدد</span>
     </strong>
   </div>
 
@@ -653,7 +653,7 @@
 <div class="card">
   <div class="topline">
     <h2>نتيجة الشخصيات حسب الكود</h2>
-    <button class="btn ghost" onclick="playClickSound();buildMabhouhGM()">تحديث الأسماء</button>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('mabhouh')">تحديث الأسماء</button>
   </div>
   <div id="mabhouhGMroles"></div>
 </div>
@@ -718,12 +718,11 @@
 </div>
 
 <script src="js/core.js"></script>
+<script src="js/games-engine.js"></script>
 <script src="js/live-status.js"></script>
 <script src="js/voting.js"></script>
 <script src="js/ripper-data.js"></script>
-<script src="js/ripper.js"></script>
 <script src="js/mabhouh-data.js"></script>
-<script src="js/mabhouh.js"></script>
 <script src="js/football.js"></script>
 <script src="js/init.js"></script>
 </body>
