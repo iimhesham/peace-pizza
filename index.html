@@ -210,7 +210,7 @@
   <h2>اختيار الشخصية</h2>
 
   <div class="notice">
-    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من <b>1 إلى 5</b>.
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من الأرقام الظاهرة تحت (حسب عدد اللاعبين اللي حدده الـGM).
     <b>متوريهاش لحد.</b>
   </div>
 
@@ -219,7 +219,7 @@
 
   <br><br>
 
-  <label for="sessionCode">كود الجلسة</label>
+  <label for="ripperSessionCode">كود الجلسة</label>
   <input id="ripperSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
          placeholder="مثال: 4821" oninput="checkGameSessionCode('ripper')">
 
@@ -320,6 +320,10 @@
     أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
     نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
   </p>
+
+  <label for="ripperPlayerCountInput" id="ripperPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="ripperPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">القاتل مضمون دايمًا إنه موزّع على شخصية من ضمن العدد ده.</p>
 
   <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
     <button class="btn primary" onclick="playClickSound();generateGameCode('ripper')">توليد كود جديد</button>
@@ -490,7 +494,7 @@
   <h2>اختيار الشخصية</h2>
 
   <div class="notice">
-    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من <b>1 إلى 5</b>.
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من الأرقام الظاهرة تحت (حسب عدد اللاعبين اللي حدده الـGM).
     <b>متوريهاش لحد.</b>
   </div>
 
@@ -600,6 +604,10 @@
     أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
     نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
   </p>
+
+  <label for="mabhouhPlayerCountInput" id="mabhouhPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="mabhouhPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">المافيوسو مضمون دايمًا إنه موزّع على شخصية من ضمن العدد ده.</p>
 
   <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
     <button class="btn primary" onclick="playClickSound();generateGameCode('mabhouh')">توليد كود جديد</button>
