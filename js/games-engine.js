@@ -18,6 +18,8 @@ function registerGame(id,config){
     password:config.password,
     verifyPrefix:config.verifyPrefix,
     gmCode:localStorage.getItem(`${id}GmCode`)||"",
+    playerCount:Number(localStorage.getItem(`${id}PlayerCount`))||config.roles.length,
+    activeCount:null,
     selected:null
   };
 }
@@ -34,30 +36,51 @@ function el(game,suffix){
    ROLE DISTRIBUTION
 --------------------------------------------------------- */
 
-function getGameRoles(game,code){
-  const roles=GAMES[game].roles;
+function getGameRoles(game,code,count){
+  const allRoles=GAMES[game].roles;
+  const n=count||allRoles.length;
 
   if(!code){
-    return roles.map(r=>({...r,displayN:r.id}));
+    return allRoles.slice(0,n).map(r=>({...r,displayN:r.id}));
   }
 
-  return seededShuffle(
-    roles,
-    `${game.toUpperCase()}-${code}`
-  ).map((r,i)=>({...r,displayN:i+1}));
+  // الشخصيات اللي لازم تكون في اللعبة دايمًا (القاتل/الشريك) بتتفصل
+  // عن الباقي، عشان لو عدد اللاعبين أقل من العدد الكامل، القاتل
+  // يفضل مضمون إنه موزّع على حد فعلي مش على شخصية محدش هيلعبها.
+  const essential=allRoles.filter(r=>r.killer||r.accomplice);
+  const others=allRoles.filter(r=>!r.killer&&!r.accomplice);
+
+  const shuffledOthers=seededShuffle(
+    others,
+    `${game.toUpperCase()}-${code}-OTHERS`
+  );
+
+  const fillCount=Math.max(0,n-essential.length);
+  const chosen=essential.concat(shuffledOthers.slice(0,fillCount));
+
+  const finalOrder=seededShuffle(
+    chosen,
+    `${game.toUpperCase()}-${code}-ORDER`
+  );
+
+  return finalOrder.map((r,i)=>({...r,displayN:i+1}));
 }
 
-function verifyGameCode(game,code){
+function essentialRoleCount(game){
+  return GAMES[game].roles.filter(r=>r.killer||r.accomplice).length;
+}
+
+function verifyGameCode(game,code,count){
   if(!code)return "---";
 
-  const roles=getGameRoles(game,code);
+  const roles=getGameRoles(game,code,count);
   const order=roles
     .slice()
     .sort((a,b)=>a.displayN-b.displayN)
     .map(r=>r.id)
     .join("");
 
-  const h=hashCode(order+"#"+code);
+  const h=hashCode(order+"#"+code+"#"+(count||GAMES[game].roles.length));
 
   return `${GAMES[game].verifyPrefix}-${10+(h%90)}`;
 }
@@ -72,7 +95,7 @@ function openGamePlayer(game){
   if(saved){
     try{
       const p=JSON.parse(saved);
-      const roles=getGameRoles(game,p.sessionCode);
+      const roles=getGameRoles(game,p.sessionCode,p.count);
       const r=roles.find(x=>x.id===p.roleId);
 
       if(r){
@@ -86,21 +109,21 @@ function openGamePlayer(game){
   show(`${game}-setup`);
 }
 
-function buildGameRoleButtons(game){
+function buildGameRoleButtons(game,count){
   const box=el(game,"Roles");
   if(!box)return;
   box.textContent="";
 
-  const roles=GAMES[game].roles;
+  const n=count||GAMES[game].roles.length;
 
-  for(let n=1;n<=roles.length;n++){
+  for(let i=1;i<=n;i++){
     const b=document.createElement("button");
     b.className="role-btn";
     b.type="button";
-    b.dataset.role=n;
+    b.dataset.role=i;
 
     const strong=document.createElement("strong");
-    strong.textContent=`شخصية ${n}`;
+    strong.textContent=`شخصية ${i}`;
 
     const small=document.createElement("small");
     small.textContent="اضغط للاختيار";
@@ -109,12 +132,12 @@ function buildGameRoleButtons(game){
 
     b.addEventListener("click",()=>{
       playClickSound();
-      GAMES[game].selected=n;
+      GAMES[game].selected=i;
 
       box.querySelectorAll(".role-btn")
         .forEach(x=>x.classList.toggle(
           "selected",
-          Number(x.dataset.role)===n
+          Number(x.dataset.role)===i
         ));
     });
 
@@ -122,7 +145,7 @@ function buildGameRoleButtons(game){
   }
 }
 
-function checkGameSessionCode(game){
+async function checkGameSessionCode(game){
   const value=el(game,"SessionCode").value.trim();
   const msg=el(game,"CodeMessage");
 
@@ -138,8 +161,18 @@ function checkGameSessionCode(game){
     return;
   }
 
+  let count=GAMES[game].roles.length;
+
+  if(getLiveDbUrl()){
+    const liveCount=await getGamePlayerCountLive(game,value);
+    if(liveCount)count=liveCount;
+  }
+
+  GAMES[game].activeCount=count;
+  buildGameRoleButtons(game,count);
+
   msg.style.color="var(--gold3)";
-  msg.textContent=`كلمة التحقق: ${verifyGameCode(game,value)}`;
+  msg.textContent=`كلمة التحقق: ${verifyGameCode(game,value,count)}`;
 }
 
 async function confirmGameRole(game){
@@ -169,7 +202,8 @@ async function confirmGameRole(game){
     }
   }
 
-  const roles=getGameRoles(game,code);
+  const count=GAMES[game].activeCount||GAMES[game].roles.length;
+  const roles=getGameRoles(game,code,count);
   const r=roles.find(x=>x.displayN===GAMES[game].selected);
 
   if(!r){
@@ -182,7 +216,8 @@ async function confirmGameRole(game){
     JSON.stringify({
       name,
       roleId:r.id,
-      sessionCode:code
+      sessionCode:code,
+      count
     })
   );
 
@@ -274,6 +309,20 @@ function verifyGameGM(game){
 }
 
 function generateGameCode(game){
+  const input=el(game,"PlayerCountInput");
+  const min=essentialRoleCount(game);
+  const max=GAMES[game].roles.length;
+  let count=input?parseInt(input.value,10):max;
+
+  if(!count||isNaN(count))count=max;
+  if(count<min)count=min;
+  if(count>max)count=max;
+
+  if(input)input.value=count;
+
+  GAMES[game].playerCount=count;
+  localStorage.setItem(`${game}PlayerCount`,count);
+
   GAMES[game].gmCode=makeSessionCode();
 
   localStorage.setItem(
@@ -282,21 +331,51 @@ function generateGameCode(game){
   );
 
   activateSession(game,GAMES[game].gmCode);
+  setGamePlayerCountLive(game,GAMES[game].gmCode,count);
 
   buildGameGM(game);
 
-  toast("تم إنشاء توزيع عشوائي جديد.");
+  toast(`تم إنشاء توزيع عشوائي جديد لـ ${count} لاعبين.`);
 }
 
 async function buildGameGM(game){
   const gmCode=GAMES[game].gmCode;
+  const count=GAMES[game].playerCount||
+    Number(localStorage.getItem(`${game}PlayerCount`))||
+    GAMES[game].roles.length;
+
+  GAMES[game].playerCount=count;
+
+  const countInput=el(game,"PlayerCountInput");
+  if(countInput){
+    const min=essentialRoleCount(game);
+    const max=GAMES[game].roles.length;
+    countInput.min=min;
+    countInput.max=max;
+    countInput.placeholder=max;
+    if(!countInput.value)countInput.value=count;
+  }
+
+  const countLabel=el(game,"PlayerCountLabel");
+  if(countLabel){
+    const min=essentialRoleCount(game);
+    const max=GAMES[game].roles.length;
+    countLabel.textContent=
+      min===max
+        ? `عدد اللاعبين (${max})`
+        : `عدد اللاعبين (من ${min} إلى ${max})`;
+  }
 
   el(game,"CurrentCode").textContent=gmCode||"غير محدد";
 
   el(game,"VerifyCode").textContent=
-    gmCode?verifyGameCode(game,gmCode):"---";
+    gmCode?verifyGameCode(game,gmCode,count):"---";
 
-  const roles=getGameRoles(game,gmCode);
+  const roles=getGameRoles(game,gmCode,count);
+  const benched=GAMES[game].roles.filter(
+    full=>!roles.find(r=>r.id===full.id)
+  );
+
   const roleBox=el(game,"GMroles");
   roleBox.textContent="";
 
@@ -378,6 +457,17 @@ async function buildGameGM(game){
 
     roleBox.appendChild(div);
   });
+
+  if(benched.length){
+    const note=document.createElement("p");
+    note.className="small";
+    note.style.marginTop="10px";
+    note.style.color="var(--muted)";
+    note.textContent=
+      `مش في اللعبة دي (العدد المختار ${count} لاعبين): `+
+      benched.map(b=>b.name).join("، ");
+    roleBox.appendChild(note);
+  }
 
   const roundsBox=el(game,"Rounds");
   roundsBox.textContent="";

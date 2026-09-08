@@ -29,7 +29,7 @@ Object.keys(GAMES).forEach(game=>{
     );
 
     if(saved){
-      const roles=getGameRoles(game,saved.sessionCode);
+      const roles=getGameRoles(game,saved.sessionCode,saved.count);
       const r=roles.find(x=>x.id===saved.roleId);
 
       if(r){

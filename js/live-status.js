@@ -192,6 +192,30 @@ async function cleanupOldSessions(game){
   }catch(e){}
 }
 
+async function setGamePlayerCountLive(game,code,count){
+  const url=getLiveDbUrl();
+  if(!url||!code)return;
+  try{
+    await fetch(`${url}/sessions/${game}/${code}/playerCount.json`,{
+      method:"PUT",
+      body:JSON.stringify(count)
+    });
+  }catch(e){}
+}
+
+async function getGamePlayerCountLive(game,code){
+  const url=getLiveDbUrl();
+  if(!url||!code)return 0;
+  try{
+    const res=await fetch(`${url}/sessions/${game}/${code}/playerCount.json`);
+    if(!res.ok)return 0;
+    const data=await res.json();
+    return Number(data)||0;
+  }catch(e){
+    return 0;
+  }
+}
+
 async function isSessionActive(game,code){
   const url=getLiveDbUrl();
   if(!url||!code)return null;

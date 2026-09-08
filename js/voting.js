@@ -15,7 +15,7 @@ function getSavedPlayerDisplayN(game){
   try{
     const saved=JSON.parse(localStorage.getItem(`${game}Player`)||"null");
     if(!saved)return null;
-    const roles=getGameRoles(game,saved.sessionCode);
+    const roles=getGameRoles(game,saved.sessionCode,saved.count);
     const r=roles.find(x=>x.id===saved.roleId);
     return r?r.displayN:null;
   }catch(e){
