@@ -275,6 +275,14 @@ function resetGame(game){
 
   if(p){
     localStorage.removeItem(`${game}Notes_${p.roleId}`);
+
+    // امسح بيانات اللاعب من المتابعة المباشرة كمان، مش بس من جهازه،
+    // عشان الـGM ميفضلش شايف اسمه في اللعبة وهو أصلًا مسح شخصيته.
+    if(getLiveDbUrl()){
+      const roles=getGameRoles(game,p.sessionCode,p.count);
+      const r=roles.find(x=>x.id===p.roleId);
+      if(r)clearPlayerLive(game,p.sessionCode,r.displayN);
+    }
   }
 
   localStorage.removeItem(`${game}Player`);
@@ -453,6 +461,24 @@ async function buildGameGM(game){
       btnIn.onclick=async()=>{playClickSound();await setPlayerAlive(game,gmCode,r.displayN,true);toast(`${r.name} رجع للعبة`);buildGameGM(game);};
 
       div.append(document.createElement("br"),btnOut,btnIn);
+
+      if(taken){
+        const btnClear=document.createElement("button");
+        btnClear.className="btn ghost";
+        btnClear.style.marginTop="12px";
+        btnClear.style.marginLeft="8px";
+        btnClear.style.color="var(--red)";
+        btnClear.style.borderColor="var(--red)";
+        btnClear.textContent="امسح اللاعب من الشخصية دي";
+        btnClear.onclick=async()=>{
+          playClickSound();
+          await clearPlayerLive(game,gmCode,r.displayN);
+          toast(`اتمسح اللاعب من الشخصية رقم ${r.displayN}، حد تاني يقدر ياخدها.`);
+          buildGameGM(game);
+        };
+
+        div.append(document.createElement("br"),btnClear);
+      }
     }
 
     roleBox.appendChild(div);

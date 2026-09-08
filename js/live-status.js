@@ -216,6 +216,17 @@ async function getGamePlayerCountLive(game,code){
   }
 }
 
+async function clearPlayerLive(game,code,displayN){
+  const url=getLiveDbUrl();
+  if(!url||!code||!displayN)return;
+
+  try{
+    await fetch(`${url}/sessions/${game}/${code}/players/${displayN}.json`,{
+      method:"DELETE"
+    });
+  }catch(e){}
+}
+
 async function isSessionActive(game,code){
   const url=getLiveDbUrl();
   if(!url||!code)return null;
