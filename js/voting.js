@@ -1,11 +1,10 @@
 /* =========================================================
-   GENERIC VOTING (shared by ripper)
+   GENERIC VOTING (shared by every registered mystery game)
 ========================================================= */
 
 function getSavedPlayerCode(game){
-  const key={ripper:"ripperPlayer",mabhouh:"mabhouhPlayer"}[game];
   try{
-    const saved=JSON.parse(localStorage.getItem(key)||"null");
+    const saved=JSON.parse(localStorage.getItem(`${game}Player`)||"null");
     return saved?saved.sessionCode:null;
   }catch(e){
     return null;
@@ -13,13 +12,11 @@ function getSavedPlayerCode(game){
 }
 
 function getSavedPlayerDisplayN(game){
-  const key={ripper:"ripperPlayer",mabhouh:"mabhouhPlayer"}[game];
   try{
-    const saved=JSON.parse(localStorage.getItem(key)||"null");
+    const saved=JSON.parse(localStorage.getItem(`${game}Player`)||"null");
     if(!saved)return null;
-    const roles=GAME_ROLE_GETTERS[game](saved.sessionCode);
-    const idField=(game==="ripper"||game==="mabhouh")?"id":"n";
-    const r=roles.find(x=>x[idField]===saved.roleId);
+    const roles=getGameRoles(game,saved.sessionCode);
+    const r=roles.find(x=>x.id===saved.roleId);
     return r?r.displayN:null;
   }catch(e){
     return null;
@@ -104,10 +101,8 @@ async function fetchVotes(game,code,round){
 }
 
 async function refreshVoteUI(game,codeArg,playersArg){
-  const statusElId={ripper:"ripperVoteStatus",mabhouh:"mabhouhVoteStatus"}[game];
-  const targetsElId={ripper:"ripperVoteTargets",mabhouh:"mabhouhVoteTargets"}[game];
-  const statusEl=document.getElementById(statusElId);
-  const targetsEl=document.getElementById(targetsElId);
+  const statusEl=document.getElementById(`${game}VoteStatus`);
+  const targetsEl=document.getElementById(`${game}VoteTargets`);
   if(!statusEl||!targetsEl)return;
 
   const url=getLiveDbUrl();
@@ -166,11 +161,10 @@ async function refreshVoteUI(game,codeArg,playersArg){
 }
 
 async function buildVoteTally(game){
-  const tallyElId={ripper:"ripperVoteTally",mabhouh:"mabhouhVoteTally"}[game];
-  const tallyEl=document.getElementById(tallyElId);
+  const tallyEl=document.getElementById(`${game}VoteTally`);
   if(!tallyEl)return;
 
-  const gmCode={ripper:ripperGmCode,mabhouh:mabhouhGmCode}[game];
+  const gmCode=GAMES[game]&&GAMES[game].gmCode;
 
   if(!getLiveDbUrl()||!gmCode){
     tallyEl.innerHTML=`<p class="small">فعّل المتابعة المباشرة وولّد كود جلسة الأول.</p>`;
@@ -233,7 +227,7 @@ async function buildVoteTally(game){
 }
 
 async function eliminateTopVoted(game){
-  const gmCode={ripper:ripperGmCode,mabhouh:mabhouhGmCode}[game];
+  const gmCode=GAMES[game]&&GAMES[game].gmCode;
   const round=Number(localStorage.getItem(`${game}CurrentRound`)||0);
 
   if(!getLiveDbUrl()||!gmCode||!round){
@@ -265,26 +259,21 @@ async function eliminateTopVoted(game){
   await setPlayerAlive(game,gmCode,topN,false);
   toast(`الشخصية رقم ${topN} خرجت من اللعبة بصمت.`);
 
-  const buildFn={ripper:buildRipperGM,mabhouh:buildMabhouhGM}[game];
-  buildFn();
+  buildGameGM(game);
   buildVoteTally(game);
 }
 
 function setCurrentRoundGeneric(game,n){
   localStorage.setItem(`${game}CurrentRound`,n);
 
-  const prefix={ripper:"ripperChip",mabhouh:"mabhouhChip"}[game];
-
   document.querySelectorAll(`#${game}-gm .round-chip, #${game}RoundNav .round-chip`)
     .forEach(x=>x.classList.remove("active"));
 
-  const chip=document.getElementById(`${prefix}${n}`);
+  const chip=document.getElementById(`${game}Chip${n}`);
   if(chip)chip.classList.add("active");
 
-  const gmCode={ripper:ripperGmCode,mabhouh:mabhouhGmCode}[game];
+  const gmCode=GAMES[game]&&GAMES[game].gmCode;
   if(gmCode)setCurrentRoundLive(game,gmCode,n);
 
   buildVoteTally(game);
 }
-
-

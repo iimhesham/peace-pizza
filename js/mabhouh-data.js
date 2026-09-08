@@ -75,5 +75,9 @@ deep:"الحل داخل اللعبة: Michael Bodenheimer هو المسؤول ا
 }
 ];
 
-let mabhouhSelected=null;
-let mabhouhGmCode=localStorage.getItem("mabhouhGmCode")||"";
+registerGame("mabhouh",{
+  roles:mabhouhRoles,
+  rounds:mabhouhRounds,
+  password:"هشام",
+  verifyPrefix:"DUBAI10"
+});

@@ -75,7 +75,11 @@ deep:"الحل داخل اللعبة: George Chapman هو الفاعل الوح�
 }
 ];
 
-let ripperSelected=null;
-let ripperGmCode=localStorage.getItem("ripperGmCode")||"";
+registerGame("ripper",{
+  roles:ripperRoles,
+  rounds:ripperRounds,
+  password:"هشام",
+  verifyPrefix:"3AWAEM"
+});
 
 

@@ -1,64 +1,42 @@
 /* =========================================================
    INIT
+   Loops over every registered game (see GAMES in
+   games-engine.js) so a new story never needs an edit here.
 ========================================================= */
 
-const GAME_ROLE_GETTERS={ripper:getRipperRoles,mabhouh:getMabhouhRoles};
+Object.keys(GAMES).forEach(game=>{
+  buildGameRoleButtons(game);
+  buildGameGM(game);
 
-buildRipperRoles();
-buildRipperGM();
-buildMabhouhRoles();
-buildMabhouhGM();
+  const nameInput=document.getElementById(`${game}Name`);
+  if(nameInput){
+    nameInput.addEventListener("keydown",e=>{
+      if(e.key==="Enter")confirmGameRole(game);
+    });
+  }
+
+  const gmInput=document.getElementById(`${game}GmInput`);
+  if(gmInput){
+    gmInput.addEventListener("keydown",e=>{
+      if(e.key==="Enter")verifyGameGM(game);
+    });
+  }
+
+  /* RESTORE SAVED PLAYER */
+  try{
+    const saved=JSON.parse(
+      localStorage.getItem(`${game}Player`)||"null"
+    );
+
+    if(saved){
+      const roles=getGameRoles(game,saved.sessionCode);
+      const r=roles.find(x=>x.id===saved.roleId);
+
+      if(r){
+        renderGamePlayer(game,saved.name,r);
+      }
+    }
+  }catch(e){}
+});
+
 updateLiveDbStatusText();
-
-document.getElementById("ripperName").addEventListener("keydown",e=>{
-  if(e.key==="Enter")confirmRipperRole();
-});
-
-document.getElementById("ripperGmInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter")verifyRipperGM();
-});
-
-document.getElementById("mabhouhName").addEventListener("keydown",e=>{
-  if(e.key==="Enter")confirmMabhouhRole();
-});
-
-document.getElementById("mabhouhGmInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter")verifyMabhouhGM();
-});
-
-
-
-/* RESTORE RIPPER */
-
-try{
-  const ripper=JSON.parse(
-    localStorage.getItem("ripperPlayer")||"null"
-  );
-
-  if(ripper){
-    const roles=getRipperRoles(ripper.sessionCode);
-    const r=roles.find(x=>x.id===ripper.roleId);
-
-    if(r){
-      renderRipperPlayer(ripper.name,r);
-    }
-  }
-}catch(e){}
-
-/* RESTORE MABHOUH */
-
-try{
-  const mabhouh=JSON.parse(
-    localStorage.getItem("mabhouhPlayer")||"null"
-  );
-
-  if(mabhouh){
-    const roles=getMabhouhRoles(mabhouh.sessionCode);
-    const r=roles.find(x=>x.id===mabhouh.roleId);
-
-    if(r){
-      renderMabhouhPlayer(mabhouh.name,r);
-    }
-  }
-}catch(e){}
-

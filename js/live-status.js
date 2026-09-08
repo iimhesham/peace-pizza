@@ -24,8 +24,13 @@ const SESSION_MAX_AGE_MS=7*24*60*60*1000; // 7 أيام
    بين كل عملية تنضيف والتانية على نفس الجهاز. */
 const CLEANUP_THROTTLE_MS=60*60*1000; // ساعة
 
-const LIVE_DB_INPUT_IDS=["liveDbUrlInput","liveDbUrlInputRipper","liveDbUrlInputMabhouh"];
-const LIVE_DB_STATUS_IDS=["liveDbStatus","liveDbStatusRipper","liveDbStatusMabhouh"];
+function liveDbInputIds(){
+  return ["liveDbUrlInput",...Object.keys(GAMES).map(g=>`liveDbUrlInput${cap(g)}`)];
+}
+
+function liveDbStatusIds(){
+  return ["liveDbStatus",...Object.keys(GAMES).map(g=>`liveDbStatus${cap(g)}`)];
+}
 
 function getLiveDbUrl(){
   const stored=(localStorage.getItem("liveDbUrl")||"").trim().replace(/\/+$/,"");
@@ -45,31 +50,30 @@ function saveLiveDbUrl(inputId){
 
   localStorage.setItem("liveDbUrl",value);
 
-  LIVE_DB_INPUT_IDS.forEach(otherId=>{
+  liveDbInputIds().forEach(otherId=>{
     const other=document.getElementById(otherId);
     if(other)other.value=value;
   });
 
-  if(ripperGmCode)activateSession("ripper",ripperGmCode);
-  if(mabhouhGmCode)activateSession("mabhouh",mabhouhGmCode);
+  Object.keys(GAMES).forEach(g=>{
+    if(GAMES[g].gmCode)activateSession(g,GAMES[g].gmCode);
+  });
 
   updateLiveDbStatusText();
-  buildRipperGM();
-  buildMabhouhGM();
+  Object.keys(GAMES).forEach(g=>buildGameGM(g));
   toast("تم تفعيل المتابعة المباشرة.");
 }
 
 function clearLiveDbUrl(){
   localStorage.removeItem("liveDbUrl");
 
-  LIVE_DB_INPUT_IDS.forEach(id=>{
+  liveDbInputIds().forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.value="";
   });
 
   updateLiveDbStatusText();
-  buildRipperGM();
-  buildMabhouhGM();
+  Object.keys(GAMES).forEach(g=>buildGameGM(g));
   toast("تم إلغاء المتابعة المباشرة.");
 }
 
@@ -77,12 +81,12 @@ function updateLiveDbStatusText(){
   const url=getLiveDbUrl();
   const text=url?`مفعّلة — متصلة بقاعدة البيانات.`:`غير مفعّلة حاليًا.`;
 
-  LIVE_DB_STATUS_IDS.forEach(id=>{
+  liveDbStatusIds().forEach(id=>{
     const el=document.getElementById(id);
     if(el)el.textContent=text;
   });
 
-  LIVE_DB_INPUT_IDS.forEach(id=>{
+  liveDbInputIds().forEach(id=>{
     const el=document.getElementById(id);
     if(el && !el.value)el.value=url;
   });
@@ -244,8 +248,7 @@ async function pollLiveStatusOnce(){
 }
 
 async function refreshLiveStatus(game,codeArg,playersArg){
-  const listElId={ripper:"ripperStatusList",mabhouh:"mabhouhStatusList"}[game];
-  const listEl=document.getElementById(listElId);
+  const listEl=document.getElementById(`${game}StatusList`);
   if(!listEl)return;
 
   const url=getLiveDbUrl();
