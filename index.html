@@ -75,10 +75,10 @@
       <span class="tag">MISSOURI • 1909</span>
     </button>
 
-    <button class="game-card" onclick="playClickSound();openGame('ripper')">
-      <div class="number">02</div>
+    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
+      <div class="number">02 <span class="ui-x" aria-hidden="true">×</span></div>
       <h2>ملف قاتل وايت تشابل</h2>
-      <p>خمسة مشتبه بهم. ثلاث جولات تحقيق.</p>
+      <p>اتلعبت. مقفولة.</p>
       <span class="tag">WHITECHAPEL • 1888</span>
     </button>
 
@@ -96,10 +96,10 @@
       <span class="tag">DUBAI • 2010</span>
     </button>
 
-    <button class="game-card" onclick="playClickSound();openGame('dahlia')">
-      <div class="number">05</div>
+    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
+      <div class="number">05 <span class="ui-x" aria-hidden="true">×</span></div>
       <h2>قضية الداهلية السوداء</h2>
-      <p>خمسة مشتبه بهم. جريمة لغز بقيت بلا حل رسمي لحد النهاردة.</p>
+      <p>اتلعبت. مقفولة.</p>
       <span class="tag">LOS ANGELES • 1947</span>
     </button>
   </div>
@@ -1021,9 +1021,7 @@
 <script src="js/games-engine.js"></script>
 <script src="js/live-status.js"></script>
 <script src="js/voting.js"></script>
-<script src="js/ripper-data.js"></script>
 <script src="js/mabhouh-data.js"></script>
-<script src="js/dahlia-data.js"></script>
 <script src="js/football.js"></script>
 <script src="js/init.js"></script>
 </body>
