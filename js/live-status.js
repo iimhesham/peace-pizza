@@ -13,7 +13,7 @@
    - استهلاك أسرع لحد الاستخدام المجاني (Quota) بتاع الخطة المجانية
    - تداخل بيانات جلسات مجموعات مختلفة لو الأكواد اتصادفت
    لازم كل مجموعة تستخدم مشروع Firebase منفصل بتاعها. */
-const DEFAULT_LIVE_DB_URL="https://gamev2-13144-default-rtdb.firebaseio.com";
+const DEFAULT_LIVE_DB_URL="https://finale-63f1b-default-rtdb.firebaseio.com";
 
 /* أي جلسة (لعبة) ما حصلش فيها أي نشاط (لا الـGM فعّلها ولا لاعب أكّد
    شخصيته) لمدة أطول من المدة دي، بتتمسح تلقائيًا من قاعدة البيانات
