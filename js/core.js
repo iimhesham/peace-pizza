@@ -4,6 +4,8 @@
 
 const FOOTBALL_SCREENS=["password","password-game"];
 
+const YOUSEF_SCREENS=["yousef","yousef-gm-lock","yousef-setup","yousef-player","yousef-gm"];
+
 function show(id){
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
   const target=document.getElementById(id);
@@ -14,6 +16,7 @@ function show(id){
     target.classList.add("page-in");
   }
   document.body.classList.toggle("mode-football",FOOTBALL_SCREENS.includes(id));
+  document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id));
   window.scrollTo({top:0,behavior:"smooth"});
 }
 

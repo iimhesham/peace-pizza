@@ -17,6 +17,9 @@ function registerGame(id,config){
     rounds:config.rounds,
     password:config.password,
     verifyPrefix:config.verifyPrefix,
+    randomKiller:!!config.randomKiller,
+    minPlayers:config.minPlayers||null,
+    useRealNames:!!config.useRealNames,
     gmCode:localStorage.getItem(`${id}GmCode`)||"",
     playerCount:Number(localStorage.getItem(`${id}PlayerCount`))||config.roles.length,
     activeCount:null,
@@ -41,7 +44,25 @@ function getGameRoles(game,code,count){
   const n=count||allRoles.length;
 
   if(!code){
-    return allRoles.slice(0,n).map(r=>({...r,displayN:r.id}));
+    return allRoles.slice(0,n).map(r=>({...r,displayN:r.id,killer:false}));
+  }
+
+  // بعض الألعاب (زي المافيوسو العشوائي) معندهاش قاتل ثابت في البيانات.
+  // بدل كده، الكود بيحدد مين من ضمن اللاعبين الفعليين هيبقى المافيوسو
+  // في الجلسة دي بس، بشكل عشوائي وقابل لإعادة الإنتاج على أي جهاز.
+  if(GAMES[game].randomKiller){
+    const shuffled=seededShuffle(
+      allRoles,
+      `${game.toUpperCase()}-${code}-ORDER`
+    );
+
+    const chosen=shuffled.slice(0,n).map((r,i)=>({...r,displayN:i+1,killer:false}));
+
+    const killerSeed=hashCode(`${game.toUpperCase()}-${code}-KILLER-${n}`);
+    const killerIndex=killerSeed%chosen.length;
+    chosen[killerIndex]={...chosen[killerIndex],killer:true};
+
+    return chosen;
   }
 
   // الشخصيات اللي لازم تكون في اللعبة دايمًا (القاتل/الشريك) بتتفصل
@@ -67,6 +88,7 @@ function getGameRoles(game,code,count){
 }
 
 function essentialRoleCount(game){
+  if(GAMES[game].minPlayers)return GAMES[game].minPlayers;
   return GAMES[game].roles.filter(r=>r.killer||r.accomplice).length;
 }
 
@@ -109,12 +131,16 @@ function openGamePlayer(game){
   show(`${game}-setup`);
 }
 
-function buildGameRoleButtons(game,count){
+function buildGameRoleButtons(game,count,code){
   const box=el(game,"Roles");
   if(!box)return;
   box.textContent="";
 
   const n=count||GAMES[game].roles.length;
+
+  const namedRoles=(GAMES[game].useRealNames&&code)
+    ?getGameRoles(game,code,n)
+    :null;
 
   for(let i=1;i<=n;i++){
     const b=document.createElement("button");
@@ -123,7 +149,8 @@ function buildGameRoleButtons(game,count){
     b.dataset.role=i;
 
     const strong=document.createElement("strong");
-    strong.textContent=`شخصية ${i}`;
+    const named=namedRoles&&namedRoles.find(r=>r.displayN===i);
+    strong.textContent=named?named.name:`شخصية ${i}`;
 
     const small=document.createElement("small");
     small.textContent="اضغط للاختيار";
@@ -169,7 +196,7 @@ async function checkGameSessionCode(game){
   }
 
   GAMES[game].activeCount=count;
-  buildGameRoleButtons(game,count);
+  buildGameRoleButtons(game,count,value);
 
   msg.style.color="var(--gold3)";
   msg.textContent=`كلمة التحقق: ${verifyGameCode(game,value,count)}`;
