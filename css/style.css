@@ -255,6 +255,21 @@ li{margin-bottom:8px}
 .mode-card.password:hover{border-color:#ffcf40}
 .mode-card.password .glyph{filter:drop-shadow(0 0 10px rgba(255,183,3,.5))}
 
+.mvp-stamp{
+  position:absolute;top:8px;left:8px;width:84px;height:84px;
+  border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;text-align:center;transform:rotate(-12deg);pointer-events:none;z-index:2;
+  background:#0b0b0b;border:3px double #ffce00;
+  box-shadow:0 0 0 2px #0b0b0b,0 0 0 4px #dd0000,0 4px 10px rgba(0,0,0,.5);
+  opacity:.95;font-family:Georgia,'Times New Roman',serif
+}
+.mvp-stamp .mvp-line{
+  color:#ffce00;font-size:8.5px;font-weight:700;letter-spacing:.5px;line-height:1.15
+}
+.mvp-stamp .mvp-name{
+  color:#fff;font-size:8px;font-weight:700;margin-top:1px
+}
+
 /* =========================================================
    FOOTBALL / PASSWORD — BLUE STADIUM THEME
    Completely isolated from the mystery/emerald identity.
