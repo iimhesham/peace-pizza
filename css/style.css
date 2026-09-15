@@ -26,7 +26,7 @@ body{
   color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.8;
   -webkit-text-size-adjust:100%;text-size-adjust:100%
 }
-button,input,textarea{font-family:'Tajawal',sans-serif}
+button,input,select,textarea{font-family:'Tajawal',sans-serif}
 button{-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:44px}
 a{-webkit-tap-highlight-color:transparent}
 img,svg{max-width:100%}
@@ -114,7 +114,7 @@ h3{font-size:22px}
 }
 .btn:hover{transform:translateY(-1px)}
 .btn:active{transform:scale(.97)}
-.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold3);outline-offset:2px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold3);outline-offset:2px}
 .primary{color:#fff8e9;background:linear-gradient(135deg,#9b7938,#69501f);box-shadow:0 5px 18px rgba(110,82,29,.35)}
 .secondary{color:var(--text);background:#12372c;border:1px solid #285846}
 .secondary:hover{background:#164333}
@@ -135,12 +135,12 @@ h3{font-size:22px}
 .secret h3{color:#84c8b0}
 .danger{color:#df8b7f;font-weight:700}
 label{display:block;margin-bottom:8px;color:var(--gold3);font-size:14px;font-weight:700}
-input,textarea{
+input,select,textarea{
   width:100%;padding:14px 17px;border:1px solid var(--border);border-radius:12px;
   background:#06140f;color:var(--text);font-size:16px
 }
 input::placeholder,textarea::placeholder{color:#657e72}
-input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(138,106,47,.14)}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(138,106,47,.14)}
 textarea{min-height:110px;resize:vertical}
 .role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px}
 .role-btn{
@@ -346,68 +346,70 @@ body.mode-football .page-in{animation:footballIn .10s linear}
 @keyframes footballIn{from{opacity:.98;transform:none}to{opacity:1;transform:none}}
 
 /* =========================================================
-   YOUSEF CASE — مين قتل يوسف عمر؟ (WHITE / NAVY / GOLD THEME)
+   YOUSEF CASE — مين قتل يوسف عمر؟ (NAVY / WHITE / GOLD THEME)
    Colors and fonts adapted from a paper/ink reference document
-   (navy ink + antique gold), rebuilt on a white base instead of
-   the reference's cream paper. Completely isolated from the
-   emerald mystery theme and the blue football theme.
+   (navy ink + antique gold), rebuilt on a navy base with white/cream
+   ink instead of the reference's white paper — swapped so the
+   screen reads dark and easy on the eyes instead of stark white.
+   Completely isolated from the emerald mystery theme and the
+   blue football theme.
 ========================================================= */
 .ys-app{
-  --bg:#ffffff;--card:#ffffff;--card2:#f6f4ec;--border:#dde1e8;
-  --text:#16263d;--muted:#5c6b84;
-  --ink:#16263d;--ink2:#1f3454;
-  --gold:#8a6d1f;--gold2:#a3862f;--gold3:#7c5e17;--red:#8a2f2f;
-  --shadow:0 20px 45px rgba(22,38,61,.12);
+  --bg:#16263d;--card:#1f3454;--card2:#24406b;--border:#3a5580;
+  --text:#f6f4ec;--muted:#b7c0d6;
+  --ink:#f6f4ec;--ink2:#ffffff;
+  --gold:#d7b15a;--gold2:#f0cf78;--gold3:#ffe6a6;--red:#ff8a7f;
+  --shadow:0 20px 45px rgba(0,0,0,.4);
   position:relative;isolation:isolate;min-height:100vh;color:var(--text);
   background:
-    radial-gradient(ellipse 700px 380px at 50% -10%,rgba(163,134,47,.09),transparent 65%),
-    linear-gradient(180deg,#ffffff 0%,#fbf9f2 100%);
+    radial-gradient(ellipse 700px 380px at 50% -10%,rgba(215,177,90,.1),transparent 65%),
+    linear-gradient(180deg,#16263d 0%,#0d1b2e 100%);
 }
 .ys-app h1,.ys-app h2,.ys-app h3,.ys-app .game-title,.ys-app .number{font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif}
-.ys-app,.ys-app button,.ys-app input,.ys-app textarea{font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif}
-.ys-app .badge{border:1px solid rgba(138,109,31,.4);background:rgba(163,134,47,.08);color:var(--gold3)}
-.ys-app .kicker{color:var(--ink2)}
+.ys-app,.ys-app button,.ys-app input,.ys-app select,.ys-app textarea{font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif}
+.ys-app .badge{border:1px solid rgba(240,207,120,.4);background:rgba(215,177,90,.1);color:var(--gold3)}
+.ys-app .kicker{color:var(--gold2)}
 .ys-app .subtitle{color:var(--muted)}
 .ys-app .divider{background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
 .ys-app .card{background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
 .ys-app .card::before{background:linear-gradient(90deg,transparent,var(--gold2),transparent);opacity:.8}
-.ys-app .secret{background:var(--card2);border-color:rgba(22,38,61,.16)}
-.ys-app .secret h3{color:var(--ink2)}
-.ys-app .notice{background:rgba(163,134,47,.06);border-right-color:var(--gold2);color:var(--ink)}
-.ys-app input,.ys-app textarea{background:#fff;border-color:var(--border);color:var(--ink)}
-.ys-app input::placeholder,.ys-app textarea::placeholder{color:#9aa4b5}
+.ys-app .secret{background:var(--card2);border-color:rgba(255,255,255,.1)}
+.ys-app .secret h3{color:var(--gold2)}
+.ys-app .notice{background:rgba(215,177,90,.1);border-right-color:var(--gold2);color:var(--ink)}
+.ys-app input,.ys-app select,.ys-app textarea{background:var(--card2);border-color:var(--border);color:var(--ink)}
+.ys-app input::placeholder,.ys-app textarea::placeholder{color:#8a97b3}
 .ys-app label{color:var(--gold3)}
 .ys-app .ghost{color:var(--muted);border-color:var(--border)}
-.ys-app .ghost:hover{background:rgba(22,38,61,.05)}
-.ys-app .secondary{color:var(--ink);background:#eef0f4;border:1px solid var(--border)}
-.ys-app .secondary:hover{background:#e4e7ee}
-.ys-app .btn.primary{color:#fbf7ea;background:linear-gradient(135deg,var(--ink2),var(--ink));box-shadow:0 8px 20px rgba(22,38,61,.25)}
-.ys-app .btn.primary:hover{background:linear-gradient(135deg,#24406b,#16263d)}
+.ys-app .ghost:hover{background:rgba(255,255,255,.06)}
+.ys-app .secondary{color:var(--ink);background:var(--card2);border:1px solid var(--border)}
+.ys-app .secondary:hover{background:#2c4870}
+.ys-app .btn.primary{color:#16263d;background:linear-gradient(135deg,var(--gold3),var(--gold2));box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.ys-app .btn.primary:hover{background:linear-gradient(135deg,var(--gold2),var(--gold))}
 .ys-app .role-grid{grid-template-columns:repeat(3,1fr)}
-.ys-app .role-btn{background:#fff;border:1px solid var(--border);color:var(--ink)}
-.ys-app .role-btn:hover{background:#f8f6ee;border-color:var(--gold2)}
-.ys-app .role-btn.selected{border-color:var(--gold2);background:rgba(163,134,47,.12);box-shadow:0 0 15px rgba(163,134,47,.15)}
-.ys-app .role-btn strong{color:var(--ink2);font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif;font-size:18px}
-.ys-app .round{background:#fff;border-color:var(--border)}
-.ys-app .round.taken{border-color:var(--gold2);background:rgba(163,134,47,.08)}
+.ys-app .role-btn{background:var(--card);border:1px solid var(--border);color:var(--ink)}
+.ys-app .role-btn:hover{background:#2a4770;border-color:var(--gold2)}
+.ys-app .role-btn.selected{border-color:var(--gold2);background:rgba(215,177,90,.18);box-shadow:0 0 15px rgba(215,177,90,.2)}
+.ys-app .role-btn strong{color:var(--gold2);font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif;font-size:18px}
+.ys-app .round{background:var(--card);border-color:var(--border)}
+.ys-app .round.taken{border-color:var(--gold2);background:rgba(215,177,90,.12)}
 .ys-app .round.out{border-color:var(--red);opacity:.6}
-.ys-app .round strong,.ys-app .round b{color:var(--ink2)}
-.ys-app .taken-badge{background:rgba(163,134,47,.16);color:var(--gold3)}
-.ys-app .out-badge{background:rgba(138,47,47,.14);color:var(--red)}
-.ys-app .evidence{background:#faf6ea;border-color:rgba(163,134,47,.5);color:var(--ink)}
-.ys-app .private-note{background:rgba(138,47,47,.06);border-color:rgba(138,47,47,.4)}
+.ys-app .round strong,.ys-app .round b{color:var(--gold2)}
+.ys-app .taken-badge{background:rgba(215,177,90,.22);color:var(--gold3)}
+.ys-app .out-badge{background:rgba(255,138,127,.16);color:var(--red)}
+.ys-app .evidence{background:rgba(215,177,90,.08);border-color:rgba(215,177,90,.5);color:var(--ink)}
+.ys-app .private-note{background:rgba(255,138,127,.08);border-color:rgba(255,138,127,.4)}
 .ys-app details{border-top-color:var(--border)}
 .ys-app summary::after{color:var(--gold3)}
-.ys-app .round-chip{background:#fff;border-color:var(--border);color:var(--muted)}
-.ys-app .round-chip.active{border-color:var(--gold2);color:var(--gold3);background:rgba(163,134,47,.12)}
-.ys-app .vote-bar-track{background:#eef0f4}
+.ys-app .round-chip{background:var(--card);border-color:var(--border);color:var(--muted)}
+.ys-app .round-chip.active{border-color:var(--gold2);color:var(--gold3);background:rgba(215,177,90,.18)}
+.ys-app .vote-bar-track{background:var(--card2)}
 .ys-app .vote-bar-fill{background:linear-gradient(90deg,var(--gold),var(--gold3))}
-.ys-app .vote-target-btn{background:#fff;border-color:var(--border);color:var(--ink)}
-.ys-app .vote-target-btn.selected{border-color:var(--gold2);background:rgba(163,134,47,.14)}
-body.mode-yousef{background:#ffffff!important;transition:background .2s linear}
+.ys-app .vote-target-btn{background:var(--card);border-color:var(--border);color:var(--ink)}
+.ys-app .vote-target-btn.selected{border-color:var(--gold2);background:rgba(215,177,90,.2)}
+body.mode-yousef{background:#16263d!important;transition:background .2s linear}
 body.mode-yousef .app{background:transparent!important}
 body.mode-yousef .moon,body.mode-yousef .fog{display:none}
-body.mode-yousef #toast{background:#16263d!important;border:1px solid #a3862f!important;color:#f7f3e6!important}
+body.mode-yousef #toast{background:#f6f4ec!important;border:1px solid #a3862f!important;color:#16263d!important}
 body.mode-yousef .page-in{animation:yousefIn .18s ease}
 @keyframes yousefIn{from{opacity:.9;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media(max-width:650px){.mode-grid{grid-template-columns:1fr;gap:12px}.mode-card{padding:26px 16px 20px}.fb-grid{grid-template-columns:repeat(3,1fr);gap:8px;max-width:390px;margin-top:16px}.fb-card-face{border-radius:11px;padding:6px}.fb-card-front span{font-size:14px}.fb-card-back .fb-ball-svg{width:28px;height:28px}.fb-card-back .fb-index{font-size:16px}}
