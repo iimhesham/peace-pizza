@@ -38,13 +38,33 @@ function getLiveDbUrl(){
   return DEFAULT_LIVE_DB_URL.trim().replace(/\/+$/,"");
 }
 
-function saveLiveDbUrl(inputId){
+/* بيختبر إن قاعدة البيانات فعلًا بترد (مش بس إن الرابط شكله صحيح).
+   ده مهم لأن fetch مبيرفضش (reject) لمجرد إن السيرفر رد بـ403/404،
+   فمن غيره ممكن نفتكر إن التفعيل نجح وهو أصلًا مش بيكتب/يقرأ حاجة. */
+async function testLiveDbConnection(url){
+  try{
+    const res=await fetch(`${url}/.json?shallow=true`,{method:"GET"});
+    return res.ok;
+  }catch(e){
+    return false;
+  }
+}
+
+async function saveLiveDbUrl(inputId){
   const id=inputId||"liveDbUrlInput";
   const el=document.getElementById(id);
   const value=el?el.value.trim().replace(/\/+$/,""):"";
 
   if(!value||!/^https:\/\/.+firebasedatabase\.app$|^https:\/\/.+firebaseio\.com$/.test(value)){
     toast("الرابط لازم يكون رابط Firebase Realtime Database صحيح.");
+    return;
+  }
+
+  toast("جاري التأكد من الاتصال بقاعدة البيانات...");
+  const reachable=await testLiveDbConnection(value);
+
+  if(!reachable){
+    toast("الرابط ده مش بيرد. تأكد إن قاعدة البيانات شغالة وإن قواعد القراءة/الكتابة (Rules) فيها سماح عام.");
     return;
   }
 
@@ -61,7 +81,7 @@ function saveLiveDbUrl(inputId){
 
   updateLiveDbStatusText();
   Object.keys(GAMES).forEach(g=>buildGameGM(g));
-  toast("تم تفعيل المتابعة المباشرة.");
+  toast("تم تفعيل المتابعة المباشرة، والاتصال شغال فعليًا.");
 }
 
 function clearLiveDbUrl(){
@@ -77,18 +97,35 @@ function clearLiveDbUrl(){
   toast("تم إلغاء المتابعة المباشرة.");
 }
 
-function updateLiveDbStatusText(){
+async function updateLiveDbStatusText(){
   const url=getLiveDbUrl();
-  const text=url?`مفعّلة — متصلة بقاعدة البيانات.`:`غير مفعّلة حاليًا.`;
-
-  liveDbStatusIds().forEach(id=>{
-    const el=document.getElementById(id);
-    if(el)el.textContent=text;
-  });
 
   liveDbInputIds().forEach(id=>{
     const el=document.getElementById(id);
     if(el && !el.value)el.value=url;
+  });
+
+  if(!url){
+    liveDbStatusIds().forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.textContent="غير مفعّلة حاليًا.";
+    });
+    return;
+  }
+
+  liveDbStatusIds().forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent="جاري التأكد من الاتصال...";
+  });
+
+  const reachable=await testLiveDbConnection(url);
+  const text=reachable
+    ?"مفعّلة — متصلة بقاعدة البيانات فعليًا."
+    :"⚠️ الرابط الحالي مش بيرد. التصويت والمتابعة المباشرة مش هيشتغلوا لحد ما تحط رابط قاعدة بيانات شغالة.";
+
+  liveDbStatusIds().forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=text;
   });
 }
 
@@ -106,15 +143,18 @@ async function pushPlayerStatus(game,code,displayN,name){
 
 async function setPlayerAlive(game,code,displayN,alive){
   const url=getLiveDbUrl();
-  if(!url||!code)return;
+  if(!url||!code)return false;
 
   try{
-    await fetch(`${url}/sessions/${game}/${code}/players/${displayN}.json`,{
+    const res=await fetch(`${url}/sessions/${game}/${code}/players/${displayN}.json`,{
       method:"PATCH",
       body:JSON.stringify({alive})
     });
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    return true;
   }catch(e){
-    toast("تعذر تحديث الحالة، تأكد من الاتصال بالإنترنت.");
+    toast("تعذر تحديث الحالة، قاعدة البيانات مش متاحة دلوقتي.");
+    return false;
   }
 }
 

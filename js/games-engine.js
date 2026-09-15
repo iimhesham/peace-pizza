@@ -432,6 +432,31 @@ async function buildGameGM(game){
     players=await fetchPlayers(game,gmCode);
   }
 
+  // عداد بسيط يوضح كام لاعب دخلوا فعليًا (اختاروا شخصيتهم) من إجمالي
+  // عدد الشخصيات المتاحة في الجلسة الحالية، من غير ما يستنى الـGM
+  // يعد يدويًا من على القائمة تحت.
+  let joinedBox=document.getElementById(`${game}JoinedCount`);
+  if(!joinedBox){
+    joinedBox=document.createElement("p");
+    joinedBox.id=`${game}JoinedCount`;
+    joinedBox.className="small";
+    joinedBox.style.margin="0 0 12px";
+    roleBox.parentNode.insertBefore(joinedBox,roleBox);
+  }
+
+  if(getLiveDbUrl()&&gmCode){
+    const joinedCount=players
+      ?Object.values(players).filter(p=>p&&p.name).length
+      :0;
+    joinedBox.style.color="var(--gold3)";
+    joinedBox.style.fontWeight="700";
+    joinedBox.textContent=`دخلوا فعليًا: ${joinedCount} من ${roles.length}`;
+  }else{
+    joinedBox.style.color="var(--muted)";
+    joinedBox.style.fontWeight="400";
+    joinedBox.textContent="فعّل المتابعة المباشرة عشان تشوف عدد اللاعبين اللي دخلوا فعليًا.";
+  }
+
   roles.forEach(r=>{
     const div=document.createElement("div");
     const pdata=players&&players[r.displayN];

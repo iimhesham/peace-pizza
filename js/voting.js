@@ -76,15 +76,16 @@ async function submitVote(game,targetDisplayN){
   }
 
   try{
-    await fetch(`${url}/sessions/${game}/${code}/votes/${round}/${voterN}.json`,{
+    const res=await fetch(`${url}/sessions/${game}/${code}/votes/${round}/${voterN}.json`,{
       method:"PUT",
       body:JSON.stringify(targetDisplayN)
     });
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
     playClickSound();
     toast("اتسجل صوتك.");
     refreshVoteUI(game);
   }catch(e){
-    toast("تعذر تسجيل الصوت، تأكد من الاتصال.");
+    toast("تعذر تسجيل الصوت، قاعدة البيانات مش متاحة دلوقتي.");
   }
 }
 
@@ -256,7 +257,8 @@ async function eliminateTopVoted(game){
     return;
   }
 
-  await setPlayerAlive(game,gmCode,topN,false);
+  const ok=await setPlayerAlive(game,gmCode,topN,false);
+  if(!ok)return;
   toast(`الشخصية رقم ${topN} خرجت من اللعبة بصمت.`);
 
   buildGameGM(game);
