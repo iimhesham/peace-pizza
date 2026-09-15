@@ -14,6 +14,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@700;800&family=Tajawal:wght@300;400;500;700;900&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
 
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -101,6 +103,13 @@
       <h2>قضية الداهلية السوداء</h2>
       <p>اتلعبت. مقفولة.</p>
       <span class="tag">LOS ANGELES • 1947</span>
+    </button>
+
+    <button class="game-card" onclick="playClickSound();openGame('yousef')">
+      <div class="number">06</div>
+      <h2>مين قتل يوسف عمر؟</h2>
+      <p>شلة 3AWAEM. مافيوسو واحد عشوائي، من غير حل ثابت.</p>
+      <span class="tag">CAIRO • 3AWAEM</span>
     </button>
   </div>
 
@@ -729,7 +738,252 @@
 <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="width:100%">العودة</button>
 </section>
 
+<!-- ========================================================
+     YOUSEF CASE — مين قتل يوسف عمر؟ (شلة 3AWAEM)
+     ثيم أبيض / نيفي / ذهبي، منفصل تمامًا عن ثيم الزمرد والفوتبول.
+======================================================== -->
+<section id="yousef" class="hidden ys-app">
+<div class="card hero">
+  <div class="badge">CAIRO • 3AWAEM</div>
+  <h1>مين قتل يوسف عمر؟</h1>
+  <p class="subtitle">11 اسم حقيقي. مافيوسو واحد بس، بيتحدد عشوائيًا كل جلسة.</p>
+
+  <div class="notice" style="text-align:right">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px" id="yousefIntroText"></p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('yousef')">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('yousef-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- YOUSEF GM LOCK -->
+<section id="yousef-gm-lock" class="hidden ys-app">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي فيها هوية المافيوسو الحقيقية في الجلسة الحالية. متعرضهاش للاعبين.</p>
+  <label for="yousefGmInput">كلمة المرور</label>
+  <input id="yousefGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('yousef')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('yousef')" style="flex:1">رجوع</button>
+  </div>
+  <p id="yousefGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- YOUSEF SETUP -->
+<section id="yousef-setup" class="hidden ys-app">
+<div class="card">
+  <h2>اختيار اسمك</h2>
+
+  <div class="notice">
+    اكتب اسمك (نفس اسمك بين اللاعبين)، وكود الجلسة اللي أعطاه لك الـGM، وبعدين دوس على اسمك من القائمة تحت.
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="yousefName">اسمك</label>
+  <input id="yousefName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="yousefSessionCode">كود الجلسة</label>
+  <input id="yousefSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('yousef')">
+
+  <p id="yousefCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر اسمك من القائمة</label>
+  <div id="yousefRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('yousef')" style="flex:2">
+      تأكيد واكتشاف دوري
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('yousef')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- YOUSEF PLAYER -->
+<section id="yousef-player" class="hidden ys-app">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="yousefPlayerBadge"></div>
+    <div id="yousefMafia" class="badge hidden" dir="ltr"
+         style="color:#8a2f2f;border-color:#c0574a;background:rgba(138,47,47,.1);font-weight:900">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="yousefRoleName" style="margin-top:12px"></h2>
+  <p id="yousefPublic" class="small"></p>
+</div>
+
+<div class="card secret" id="yousefMafiaCard">
+  <h3>سري جدًا — ملف دورك</h3>
+  <p style="margin-top:10px">
+    لو ظهر عندك شارة <b dir="ltr">MAFIOSO</b> فوق: <b>أنت المافيوسو. أنت قتلت يوسف عمر.</b>
+    معندكش قصة دافع معقدة، ومطلوب منك متكشفش عن نفسك خلال اللعبة.
+  </p>
+  <hr>
+  <h3>مكانك المرجعي</h3>
+  <p id="yousefSecret" style="margin-top:10px"></p>
+  <h3 style="margin-top:15px">علاقتك بيوسف وبالشلة</h3>
+  <p id="yousefStrength" class="small"></p>
+  <h3 style="margin-top:15px">ملاحظة إضافية</h3>
+  <p id="yousefWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="yousefNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('yousef')"></textarea>
+  <div id="yousefSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="yousefVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="yousefVoteStatus">جاري التحميل...</p>
+  <div id="yousefVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="yousefStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('yousef')">تحديث</button>
+  </div>
+  <div id="yousefStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>كل شخص بيختار اسمه الحقيقي من القائمة.</li>
+    <li>اللعبة 3 جولات، وكل جولة فيها دليل واحد.</li>
+    <li>مافيوسو واحد بس، بيتحدد عشوائيًا من ضمن اللاعبين الفعليين في الجلسة دي.</li>
+    <li>لو مكنتش المافيوسو، مفيش عندك أي معلومة سرية عن هوية القاتل.</li>
+    <li>بعد كل دليل ونقاش يتم التصويت.</li>
+    <li>في الآخر يكشف الـGM الحل.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('yousef')" style="width:100%">
+  مسح الاسم من هذا الجهاز
+</button>
+</section>
+
+<!-- YOUSEF GM -->
+<section id="yousef-gm" class="hidden ys-app">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها هوية المافيوسو الحقيقية في الجلسة دي. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين. نفس الكود بيحدد نفس المافيوسو على كل الأجهزة، بدون
+    الاعتماد على تخزين جهازك أنت.
+  </p>
+
+  <label for="yousefPlayerCountInput" id="yousefPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="yousefPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">المافيوسو بيتحدد عشوائيًا من ضمن العدد ده بس.</p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateGameCode('yousef')">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="yousefCurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="yousefVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل لكل الألعاب مع بعض.
+  </p>
+  <label for="liveDbUrlInputYousef" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputYousef" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputYousef')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusYousef" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="yousefRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="yousefVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('yousef')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="yousefVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="yousefEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('yousef')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>الأسماء وهوية المافيوسو</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('yousef')">تحديث الأسماء</button>
+  </div>
+  <div id="yousefGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="yousefRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد بعد ما تعرف عدد اللاعبين الفعليين الليلة دي.</li>
+    <li>أعط الكود لكل اللاعبين، وكل واحد يختار اسمه بنفسه من القائمة.</li>
+    <li>اقرأ القصة الافتتاحية بصوتك، وابدأ الجولات.</li>
+    <li>في كل جولة اقرأ الدليل، حدد الجولة الحالية بالأعلى، افتح التصويت.</li>
+    <li>الشاشة دي بتوريك مين المافيوسو في الجلسة دي — سرّها عن اللاعبين.</li>
+    <li>في النهاية اطلب من كل واحد يقول اتهامه، وبعدين اكشف الاسم الحقيقي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('yousef')" style="width:100%">العودة</button>
+</section>
+
 <section id="dahlia" class="hidden">
+
 <div class="card hero">
   <div class="badge">LOS ANGELES • 1947</div>
   <h1>قضية الداهلية السوداء</h1>
@@ -1022,6 +1276,7 @@
 <script src="js/live-status.js"></script>
 <script src="js/voting.js"></script>
 <script src="js/mabhouh-data.js"></script>
+<script src="js/yousef-data.js"></script>
 <script src="js/football.js"></script>
 <script src="js/init.js"></script>
 </body>
