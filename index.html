@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover">
+<meta name="description" content="GAME — منصة ألعاب ليلة واحدة">
+<meta name="theme-color" content="#061611">
+<meta name="robots" content="noindex,nofollow">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>GAME — Play Night</title>
+<link rel="stylesheet" href="css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@700;800&family=Tajawal:wght@300;400;500;700;900&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Aref+Ruqaa+Ink&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="moon"></div>
+<div class="fog"><span></span><span></span><span></span></div>
+<div id="toast" class="toast"></div>
+
+<div class="app">
+
+<!-- LANDING -->
+<section id="landing">
+<div class="card hero">
+  <div class="badge">GAME • PLAY NIGHT</div>
+  <div class="kicker">MYSTERY • STRATEGY • FOOTBALL</div>
+  <div class="game-title">GAME</div>
+  <div class="divider"></div>
+  <p class="subtitle">منصة ألعاب ليلة واحدة. قصص تحقيق، وألعاب كورة. اختار قسمك وابدأ.</p>
+  <button class="btn primary" onclick="playClickSound();show('hub')">دخول</button>
+</div>
+</section>
+
+<!-- HUB — choose stories or password -->
+<section id="hub" class="hidden">
+<div class="card hero">
+  <div class="badge">CHOOSE YOUR SECTION</div>
+  <h1 style="margin-top:12px">تحب تلعب إيه؟</h1>
+  <p class="subtitle">قصص تحقيق ولا لعبة كورة؟ اختار وادخل.</p>
+
+  <div class="mode-grid">
+    <div class="mode-card stories" onclick="playClickSound();show('games')">
+      <div class="mvp-stamp" aria-hidden="true">
+        <span class="mvp-line">★ اللاعب المثالي ★</span>
+        <span class="mvp-name">(دانيال أشرف)</span>
+      </div>
+      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 5.5v15M8 7h8M8 11h8"/></svg></span>
+      <h3>القصص</h3>
+      <p>ألعاب تحقيق وغموض، بأدوار وأدلة.</p>
+    </div>
+    <div class="mode-card password" onclick="playClickSound();show('password')">
+      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="m12 7 2.8 2-1.1 3.4H10.3L9.2 9zM9.2 9 6.4 7.8M14.8 9l2.8-1.2M10.3 12.4 8 14.8M13.7 12.4l2.3 2.4M12 7V4.5M8 14.8l-.7 3M16 14.8l.7 3"/></svg></span>
+      <h3>باسورد</h3>
+      <p>لعبة كلمة السر بأسامي لاعبين الكورة.</p>
+    </div>
+  </div>
+
+  <button class="btn ghost" onclick="playClickSound();show('landing')" style="width:100%;margin-top:20px">رجوع</button>
+</div>
+</section>
+
+<!-- GAME SELECT (STORIES) -->
+<section id="games" class="hidden">
+<div class="card hero">
+  <div class="badge">SELECT YOUR CASE</div>
+  <h1 style="margin-top:12px">اختار القضية</h1>
+  <p class="subtitle">كل لعبة لها شخصياتها وأدلتها ونظامها الخاص.</p>
+
+  <div class="game-grid">
+    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
+      <div class="number">01 <span class="ui-x" aria-hidden="true">×</span></div>
+      <h2>قضية آل سووب</h2>
+      <p>اتلعبت. مقفولة.</p>
+      <span class="tag">MISSOURI • 1909</span>
+    </button>
+
+    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
+      <div class="number">02 <span class="ui-x" aria-hidden="true">×</span></div>
+      <h2>ملف قاتل وايت تشابل</h2>
+      <p>اتلعبت. مقفولة.</p>
+      <span class="tag">WHITECHAPEL • 1888</span>
+    </button>
+
+    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1);border-color:#4a1512" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
+      <div class="number" style="color:#d9564a">03 <span class="ui-x" aria-hidden="true">×</span></div>
+      <h2 style="color:#d9564a">ملف قضية إيلويل</h2>
+      <p>اتلعبت. مقفولة.</p>
+      <span class="tag" style="background:rgba(122,33,24,.15);color:#e77a6f">NEW YORK • 1920</span>
+    </button>
+
+    <button class="game-card" onclick="playClickSound();openGame('mabhouh')">
+      <div class="number">04</div>
+      <h2>ملف محمود المبحوح</h2>
+      <p>خمسة مشتبه بهم. عملية استخباراتية معقدة.</p>
+      <span class="tag">DUBAI • 2010</span>
+    </button>
+
+    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
+      <div class="number">05 <span class="ui-x" aria-hidden="true">×</span></div>
+      <h2>قضية الداهلية السوداء</h2>
+      <p>اتلعبت. مقفولة.</p>
+      <span class="tag">LOS ANGELES • 1947</span>
+    </button>
+
+    <button class="game-card" onclick="playClickSound();openGame('yousef')">
+      <div class="number">06</div>
+      <h2>مين قتل يوسف عمر؟</h2>
+      <p>شلة 3AWAEM. مافيوسو واحد عشوائي، من غير حل ثابت.</p>
+      <span class="tag">CAIRO • 3AWAEM</span>
+    </button>
+  </div>
+
+  <button class="btn ghost" onclick="playClickSound();show('hub')" style="width:100%;margin-top:20px">رجوع</button>
+</div>
+</section>
+
+<!-- ========================================================
+     PASSWORD — football name-picker (كلمة السر)
+======================================================== -->
+<section id="password" class="hidden fb-app">
+<div class="card hero">
+  <span class="fb-whistle" aria-hidden="true">
+    <svg viewBox="0 0 100 100" width="58" height="58" class="fb-ball-svg">
+      <circle cx="50" cy="50" r="45" fill="#f3f5f8" stroke="#c7ced8" stroke-width="3"/>
+      <path d="M50 28l11 8-4 13H43l-4-13z" fill="#111827"/>
+      <path d="M39 36L27 32M61 36l12-4M43 49L34 59M57 49l9 10M50 28v-9" fill="none" stroke="#111827" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M34 59l-7 9M66 59l7 9M50 62v13" fill="none" stroke="#111827" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <div class="badge">PASSWORD</div>
+  <h1 style="margin-top:12px">كلمة السر</h1>
+  <div class="fb-pitch-line"></div>
+  <div class="notice" style="text-align:right">
+    <b>إزاي بتتلعب:</b>
+    <p style="margin-top:10px">
+      عشرة كروت مقلوبة، كل كارت وراه اسم لاعب كورة. دوسوا على أي كارت تختاروه يتقلب ويبين الاسم.
+      اتفقوا مين هيبقى عليه اسم اللاعب، والباقي بيسمع وصف بدون ما يتقال الاسم أو اللقب، وبيحاول يخمن مين هو.
+    </p>
+    <p style="margin-top:10px">
+      مش عاجباكم الأسامي اللي طلعت؟ دوسوا "خلط جديد" وهيتوزع عشرة أسامي تانية.
+    </p>
+  </div>
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();dealPasswordCards();show('password-game')">ابدأ اللعب</button>
+    <button class="btn ghost" onclick="playClickSound();show('hub')">رجوع</button>
+  </div>
+</div>
+</section>
+
+<section id="password-game" class="hidden fb-app">
+<div class="card hero">
+  <div class="topline">
+    <div class="badge">PASSWORD</div>
+    <button class="btn ghost" onclick="playClickSound();show('password')" style="padding:8px 16px">القواعد</button>
+  </div>
+  <h2 style="margin-top:12px">دوسوا على كارت</h2>
+  <p class="subtitle" style="margin:6px 0 0">اضغطوا تاني على نفس الكارت عشان تقفلوه قبل ما تمرروا الموبايل.</p>
+
+  <div id="passwordGrid" class="fb-grid"></div>
+
+  <div class="fb-controls">
+    <button class="btn primary" onclick="playClickSound();dealPasswordCards()" style="flex:2">خلط جديد</button>
+    <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- RIPPER HOME -->
+<section id="ripper" class="hidden">
+<div class="card hero">
+  <div class="badge">WHITECHAPEL • 1888</div>
+  <h1>ملف قاتل وايت تشابل</h1>
+  <p class="subtitle">خمس شخصيات. ثلاث جولات تحقيق.</p>
+
+  <div class="notice">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px">
+      خريف عام 1888. في الطرف الشرقي من لندن، كانت منطقة Whitechapel تعيش أيامًا من الخوف والفوضى.
+      الأزقة ضيقة ومزدحمة، والفقر منتشر، والشرطة عاجزة عن تفسير سلسلة من الجرائم الوحشية التي هزت المدينة.
+    </p>
+    <p style="margin-top:10px">
+      خلال أسابيع قليلة، قُتلت خمس نساء: Mary Ann Nichols — Annie Chapman — Elizabeth Stride — Catherine Eddowes — Mary Jane Kelly.
+      كانت الجرائم مختلفة في تفاصيلها، لكنها حملت نمطًا مخيفًا من العنف جعل المحققين يعتقدون أن قاتلًا واحدًا قد يكون وراءها جميعًا.
+      ولم يمضِ وقت طويل حتى أصبح القاتل معروفًا بالاسم الذي سيظل مرتبطًا بالقضية إلى الأبد: Jack the Ripper.
+    </p>
+    <p style="margin-top:10px">
+      الشرطة فتشت الشوارع، استجوبت السكان، وطاردت عشرات المشتبه بهم. ظهرت شهادات متناقضة، وانتشرت الشائعات، ووصلت رسائل كثيرة تدّعي أنها من القاتل نفسه.
+      لكن شيئًا واحدًا ظل ثابتًا: لم يعرف أحد من هو القاتل.
+    </p>
+    <p style="margin-top:10px">
+      والآن، تُعاد القضية من جديد. خمسة أشخاص وجدوا أنفسهم داخل دائرة الشبهات.
+      كل واحد منهم لديه شيء يخفيه. لكن واحدًا فقط يعرف الحقيقة كاملة.
+    </p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('ripper')">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('ripper-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- RIPPER GM LOCK -->
+<section id="ripper-gm-lock" class="hidden">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأدلة السرية.</p>
+  <label for="ripperGmInput">كلمة المرور</label>
+  <input id="ripperGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('ripper')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('ripper')" style="flex:1">رجوع</button>
+  </div>
+  <p id="ripperGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- RIPPER SETUP -->
+<section id="ripper-setup" class="hidden">
+<div class="card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice">
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من الأرقام الظاهرة تحت (حسب عدد اللاعبين اللي حدده الـGM).
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="ripperName">اسمك</label>
+  <input id="ripperName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="ripperSessionCode">كود الجلسة</label>
+  <input id="ripperSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('ripper')">
+
+  <p id="ripperCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر رقم الشخصية</label>
+  <div id="ripperRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('ripper')" style="flex:2">
+      تأكيد واكتشاف شخصيتي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('ripper')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- RIPPER PLAYER -->
+<section id="ripper-player" class="hidden">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="ripperPlayerBadge"></div>
+    <div id="ripperMafia" class="badge hidden" dir="ltr"
+         style="color:#ff6b6b;border-color:#dc3737;background:rgba(150,20,20,.2);font-weight:900">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="ripperRoleName" style="margin-top:12px"></h2>
+  <p id="ripperPublic" class="small"></p>
+</div>
+
+<div class="card secret">
+  <h3>سري جدًا — ملف شخصيتك</h3>
+  <p id="ripperSecret" style="margin-top:10px"></p>
+  <hr>
+  <h3>نقطة قوتك</h3>
+  <p id="ripperStrength" class="small"></p>
+  <h3 style="margin-top:15px">نقطة ضعفك</h3>
+  <p id="ripperWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="ripperNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('ripper')"></textarea>
+  <div id="ripperSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="ripperVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="ripperVoteStatus">جاري التحميل...</p>
+  <div id="ripperVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="ripperStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('ripper')">تحديث</button>
+  </div>
+  <div id="ripperStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>أنتم 5 لاعبين + Game Master.</li>
+    <li>اللعبة 3 جولات تحقيق.</li>
+    <li>في كل جولة يقدم الـGM دليلًا ودليلًا ماديًا.</li>
+    <li>قد تصل ملاحظة سرية لشخص واحد.</li>
+    <li>بعد النقاش يتم التصويت.</li>
+    <li>الذي يحصل على أغلب الأصوات يخرج من التصويت التالي.</li>
+    <li>في الجولة الثالثة الجميع يقدم اتهامه النهائي.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('ripper')" style="width:100%">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- RIPPER GM -->
+<section id="ripper-gm" class="hidden">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+    نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+  </p>
+
+  <label for="ripperPlayerCountInput" id="ripperPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="ripperPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">القاتل مضمون دايمًا إنه موزّع على شخصية من ضمن العدد ده.</p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateGameCode('ripper')">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="ripperCurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="ripperVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل للعبتين مع بعض.
+  </p>
+  <label for="liveDbUrlInputRipper" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputRipper" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputRipper')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusRipper" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="ripperRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="ripperVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('ripper')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="ripperVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="ripperEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('ripper')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>نتيجة الشخصيات حسب الكود</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('ripper')">تحديث الأسماء</button>
+  </div>
+  <div id="ripperGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الحل الكامل</h2>
+
+  <div class="notice">
+    <b>القصة كاملة (تقدر تحكيها بصوتك):</b>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، George Chapman — الاسم الحقيقي Severin Klosowski — هو العقل والفاعل الوحيد وراء الجرائم.
+      لم يكن شريكًا لأحد، ولم يكن Kosminski شريكه. اللاعبون الأربعة الآخرون أبرياء تمامًا من دور الـMafioso.
+    </p>
+    <p style="margin-top:10px">
+      وجود أسماء ارتبطت تاريخيًا بالقضية زي Kosminski وDruitt وPizer أعطى Chapman حاجة ثمينة: الضوضاء.
+      كل ما ظهر مشتبه جديد، ابتعدت الأنظار عنه، وكل ما انتشرت شائعة، بقى الوصول للحقيقة أصعب.
+      ولأنه كان بيشتغل حلاق، وجود أدوات حادة معاه ما كانش حاجة تلفت النظر.
+    </p>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، كان بيختار ضحيته وقت ما الشوارع تكون أقل زحمة، يقرب منها من غير ما وجوده يبان غريب، يستدرجها لمكان أعزل، ويستخدم شفرة حلاقة حادة.
+      بعدها يغادر بسرعة مستفيدًا من معرفته بشبكة الأزقة والممرات. هدفه ما كانش يسيب توقيع — كان عايز كل جريمة تبان جزء من لغز مستحيل الحل.
+    </p>
+  </div>
+
+  <p style="margin-top:10px"><b>الـMafioso:</b> George Chapman (Severin Klosowski) — Jack the Ripper في سيناريو اللعبة، والمسؤول الوحيد عن الجرائم.</p>
+  <p class="small" style="margin-top:15px">
+    مهم: هذا الحل خاص بالسيناريو فقط. قضية Jack the Ripper الحقيقية لم تُحسم تاريخيًا، ولم تُثبت هوية Chapman باعتباره القاتل.
+  </p>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="ripperRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد.</li>
+    <li>أعط الكود لكل اللاعبين.</li>
+    <li>كل لاعب يختار رقمًا.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
+    <li>سلّم الملاحظات الخاصة لصاحبها فقط.</li>
+    <li>اترك وقتًا للنقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
+    <li>في الجولة الثالثة اقرأ الحل النهائي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('ripper')" style="width:100%">العودة</button>
+</section>
+
+<!-- ========================================================
+     MABHOUH CASE — ملف محمود المبحوح
+======================================================== -->
+<section id="mabhouh" class="hidden">
+<div class="card hero">
+  <div class="badge">DUBAI • 2010</div>
+  <h1>ملف محمود المبحوح</h1>
+  <p class="subtitle">خمس شخصيات. ثلاث جولات تحقيق.</p>
+
+  <div class="notice">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px">
+      19 يناير 2010. دبي. محمود المبحوح، قيادي عسكري بارز في حركة حماس، يصل للمدينة وينزل في فندق البستان روتانا.
+      في اليوم التالي، بيتم العثور عليه ميتًا في غرفته رقم 230.
+    </p>
+    <p style="margin-top:10px">
+      شرطة دبي بتفتح تحقيق ضخم، وبتستخدم مئات الساعات من تسجيلات كاميرات المراقبة في المطار والفندق والشوارع
+      عشان تعيد بناء كل خطوة حصلت قبل وبعد الحادثة. النتيجة كانت مذهلة: مجموعة من الأشخاص دخلوا دبي بشكل منفصل،
+      بجوازات سفر وهويات مختلفة، بعضهم من فرنسا وإيرلندا وبريطانيا وألمانيا، وبعضهم تابع تحركات الضحية من المطار
+      للفندق من غير ما يبان إنهم مع بعض.
+    </p>
+    <p style="margin-top:10px">
+      شرطة دبي أعلنت في البداية عن 11 مشتبهًا بيهم، وبعدين وسّعت القائمة لـ26 شخصًا. الشرطة اتهمت جهاز الموساد
+      الإسرائيلي بالوقوف وراء العملية، لكن إسرائيل ما اعترفتش رسميًا بالمسؤولية، وفضل جزء كبير من القضية متنازع
+      عليه لحد النهاردة.
+    </p>
+    <p style="margin-top:10px">
+      والآن، تُعاد القضية من جديد. خمسة أشخاص من ضمن المشتبه بهم وجدوا أنفسهم داخل دائرة الشك.
+      كل واحد فيهم كان له دور ما في العملية — لكن واحدًا بس هو اللي كان مسؤولًا عن اللحظة الأخيرة.
+    </p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('mabhouh')">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('mabhouh-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- MABHOUH GM LOCK -->
+<section id="mabhouh-gm-lock" class="hidden">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأدلة السرية.</p>
+  <label for="mabhouhGmInput">كلمة المرور</label>
+  <input id="mabhouhGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('mabhouh')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="flex:1">رجوع</button>
+  </div>
+  <p id="mabhouhGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- MABHOUH SETUP -->
+<section id="mabhouh-setup" class="hidden">
+<div class="card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice">
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من الأرقام الظاهرة تحت (حسب عدد اللاعبين اللي حدده الـGM).
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="mabhouhName">اسمك</label>
+  <input id="mabhouhName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="mabhouhSessionCode">كود الجلسة</label>
+  <input id="mabhouhSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('mabhouh')">
+
+  <p id="mabhouhCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر رقم الشخصية</label>
+  <div id="mabhouhRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('mabhouh')" style="flex:2">
+      تأكيد واكتشاف شخصيتي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- MABHOUH PLAYER -->
+<section id="mabhouh-player" class="hidden">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="mabhouhPlayerBadge"></div>
+    <div id="mabhouhMafia" class="badge hidden" dir="ltr"
+         style="color:#ff6b6b;border-color:#dc3737;background:rgba(150,20,20,.2);font-weight:900">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="mabhouhRoleName" style="margin-top:12px"></h2>
+  <p id="mabhouhPublic" class="small"></p>
+</div>
+
+<div class="card secret">
+  <h3>سري جدًا — ملف شخصيتك</h3>
+  <p id="mabhouhSecret" style="margin-top:10px"></p>
+  <hr>
+  <h3>نقطة قوتك</h3>
+  <p id="mabhouhStrength" class="small"></p>
+  <h3 style="margin-top:15px">نقطة ضعفك</h3>
+  <p id="mabhouhWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="mabhouhNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('mabhouh')"></textarea>
+  <div id="mabhouhSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="mabhouhVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="mabhouhVoteStatus">جاري التحميل...</p>
+  <div id="mabhouhVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="mabhouhStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('mabhouh')">تحديث</button>
+  </div>
+  <div id="mabhouhStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>أنتم 5 لاعبين + Game Master.</li>
+    <li>اللعبة 3 جولات تحقيق.</li>
+    <li>في كل جولة يقدم الـGM دليلًا ودليلًا ماديًا.</li>
+    <li>قد تصل ملاحظة سرية لشخص واحد.</li>
+    <li>بعد النقاش يتم التصويت.</li>
+    <li>الذي يحصل على أغلب الأصوات يخرج من التصويت التالي.</li>
+    <li>في الجولة الثالثة الجميع يقدم اتهامه النهائي.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('mabhouh')" style="width:100%">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- MABHOUH GM -->
+<section id="mabhouh-gm" class="hidden">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+    نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+  </p>
+
+  <label for="mabhouhPlayerCountInput" id="mabhouhPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="mabhouhPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">المافيوسو مضمون دايمًا إنه موزّع على شخصية من ضمن العدد ده.</p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateGameCode('mabhouh')">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="mabhouhCurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="mabhouhVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل لكل الألعاب مع بعض.
+  </p>
+  <label for="liveDbUrlInputMabhouh" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputMabhouh" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputMabhouh')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusMabhouh" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="mabhouhRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="mabhouhVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('mabhouh')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="mabhouhVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="mabhouhEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('mabhouh')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>نتيجة الشخصيات حسب الكود</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('mabhouh')">تحديث الأسماء</button>
+  </div>
+  <div id="mabhouhGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الحل الكامل</h2>
+
+  <div class="notice">
+    <b>القصة كاملة (تقدر تحكيها بصوتك):</b>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، Michael Bodenheimer هو العقل والفاعل الوحيد وراء اللحظة الأخيرة من العملية.
+      هويته كانت مبنية على وثيقة سفر حقيقية الشكل، مش هوية مزوّرة واضحة زي هويات باقي الفريق، وده اللي خلاه
+      الأصعب في الاكتشاف من بين كل الأسماء المعلنة.
+    </p>
+    <p style="margin-top:10px">
+      الأربعة الآخرين (Elvinger، Folliard، Daveron، Keely) كل واحد فيهم شاف جزء بسيط بس من الصورة الكاملة:
+      واحد نسّق الحجوزات، واتنين تابعوا تحركات الهدف من بعيد، وواحد أمّن خط الرجوع بعد العملية.
+      محدش فيهم كان يعرف إن Bodenheimer هو اللي هيدخل فعليًا، وده بالظبط اللي خلى كل واحد فيهم قادر يدافع عن
+      نفسه بصدق تام من غير ما يكون بيكذب.
+    </p>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، Bodenheimer وصل دبي متأخر عن باقي الفريق، أكّد رقم غرفة الهدف شخصيًا عند الاستقبال
+      قبل الحادثة بوقت قصير جدًا، واستغل التوقيت اللي يكون فيه الفندق أقل ازدحامًا. الرابط الوحيد اللي ممكن
+      يوصّل له هو تطابق توقيت تأكيد الغرفة مع توقيت دخوله، وده تفصيلة صعب جدًا حد يلاحظها من غير مراجعة دقيقة
+      جدًا للتسجيلات والسجلات مع بعض.
+    </p>
+  </div>
+
+  <p style="margin-top:10px"><b>الـMafioso:</b> Michael Bodenheimer — المسؤول الوحيد عن تنفيذ العملية في سيناريو اللعبة.</p>
+  <p class="small" style="margin-top:15px">
+    مهم: هذا الحل خاص بالسيناريو فقط، وهو تبسيط متعمد لعملية حقيقية كانت أكبر وأعقد بكثير من شخص واحد.
+    قضية محمود المبحوح الحقيقية لم تُحسم قضائيًا، واتهام الموساد بقي اتهامًا معلنًا من شرطة دبي ولم تعترف
+    إسرائيل رسميًا بالمسؤولية عنه.
+  </p>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="mabhouhRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد.</li>
+    <li>أعط الكود لكل اللاعبين.</li>
+    <li>كل لاعب يختار رقمًا.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
+    <li>سلّم الملاحظات الخاصة لصاحبها فقط.</li>
+    <li>اترك وقتًا للنقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
+    <li>في الجولة الثالثة اقرأ الحل النهائي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('mabhouh')" style="width:100%">العودة</button>
+</section>
+
+<!-- ========================================================
+     YOUSEF CASE — مين قتل يوسف عمر؟ (شلة 3AWAEM)
+     ثيم أبيض / نيفي / ذهبي، منفصل تمامًا عن ثيم الزمرد والفوتبول.
+======================================================== -->
+<section id="yousef" class="hidden ys-app">
+<div class="card hero">
+  <div class="badge">CAIRO • 3AWAEM</div>
+  <h1>مين قتل يوسف عمر؟</h1>
+  <p class="subtitle">11 اسم حقيقي. مافيوسو واحد بس، بيتحدد عشوائيًا كل جلسة.</p>
+
+  <div class="notice" style="text-align:right">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px" id="yousefIntroText"></p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('yousef')">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('yousef-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- YOUSEF GM LOCK -->
+<section id="yousef-gm-lock" class="hidden ys-app">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي فيها هوية المافيوسو الحقيقية في الجلسة الحالية. متعرضهاش للاعبين.</p>
+  <label for="yousefGmInput">كلمة المرور</label>
+  <input id="yousefGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('yousef')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('yousef')" style="flex:1">رجوع</button>
+  </div>
+  <p id="yousefGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- YOUSEF SETUP -->
+<section id="yousef-setup" class="hidden ys-app">
+<div class="card">
+  <h2>اختيار اسمك</h2>
+
+  <div class="notice">
+    اكتب اسمك (نفس اسمك بين اللاعبين)، وكود الجلسة اللي أعطاه لك الـGM، وبعدين دوس على اسمك من القائمة تحت.
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="yousefName">اسمك</label>
+  <input id="yousefName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="yousefSessionCode">كود الجلسة</label>
+  <input id="yousefSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('yousef')">
+
+  <p id="yousefCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر اسمك من القائمة</label>
+  <div id="yousefRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('yousef')" style="flex:2">
+      تأكيد واكتشاف دوري
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('yousef')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- YOUSEF PLAYER -->
+<section id="yousef-player" class="hidden ys-app">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="yousefPlayerBadge"></div>
+    <div id="yousefMafia" class="badge hidden" dir="ltr"
+         style="color:#8a2f2f;border-color:#c0574a;background:rgba(138,47,47,.1);font-weight:900">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="yousefRoleName" style="margin-top:12px"></h2>
+  <p id="yousefPublic" class="small"></p>
+</div>
+
+<div class="card secret" id="yousefMafiaCard">
+  <h3>سري جدًا — ملف دورك</h3>
+  <p style="margin-top:10px">
+    لو ظهر عندك شارة <b dir="ltr">MAFIOSO</b> فوق: <b>أنت المافيوسو. أنت قتلت يوسف عمر.</b>
+    معندكش قصة دافع معقدة، ومطلوب منك متكشفش عن نفسك خلال اللعبة.
+  </p>
+  <hr>
+  <h3>مكانك المرجعي</h3>
+  <p id="yousefSecret" style="margin-top:10px"></p>
+  <h3 style="margin-top:15px">علاقتك بيوسف وبالشلة</h3>
+  <p id="yousefStrength" class="small"></p>
+  <h3 style="margin-top:15px">ملاحظة إضافية</h3>
+  <p id="yousefWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="yousefNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('yousef')"></textarea>
+  <div id="yousefSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="yousefVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="yousefVoteStatus">جاري التحميل...</p>
+  <div id="yousefVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="yousefStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('yousef')">تحديث</button>
+  </div>
+  <div id="yousefStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>كل شخص بيختار اسمه الحقيقي من القائمة.</li>
+    <li>اللعبة 3 جولات، وكل جولة فيها دليل واحد.</li>
+    <li>مافيوسو واحد بس، بيتحدد عشوائيًا من ضمن اللاعبين الفعليين في الجلسة دي.</li>
+    <li>لو مكنتش المافيوسو، مفيش عندك أي معلومة سرية عن هوية القاتل.</li>
+    <li>بعد كل دليل ونقاش يتم التصويت.</li>
+    <li>في الآخر يكشف الـGM الحل.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('yousef')" style="width:100%">
+  مسح الاسم من هذا الجهاز
+</button>
+</section>
+
+<!-- YOUSEF GM -->
+<section id="yousef-gm" class="hidden ys-app">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها هوية المافيوسو الحقيقية في الجلسة دي. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين. نفس الكود بيحدد نفس المافيوسو على كل الأجهزة، بدون
+    الاعتماد على تخزين جهازك أنت.
+  </p>
+
+  <label for="yousefPlayerCountInput" id="yousefPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="yousefPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">المافيوسو بيتحدد عشوائيًا من ضمن العدد ده بس.</p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateGameCode('yousef')">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="yousefCurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="yousefVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل لكل الألعاب مع بعض.
+  </p>
+  <label for="liveDbUrlInputYousef" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputYousef" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputYousef')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusYousef" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="yousefRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="yousefVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('yousef')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="yousefVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="yousefEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('yousef')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>الأسماء وهوية المافيوسو</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('yousef')">تحديث الأسماء</button>
+  </div>
+  <div id="yousefGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="yousefRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد بعد ما تعرف عدد اللاعبين الفعليين الليلة دي.</li>
+    <li>أعط الكود لكل اللاعبين، وكل واحد يختار اسمه بنفسه من القائمة.</li>
+    <li>اقرأ القصة الافتتاحية بصوتك، وابدأ الجولات.</li>
+    <li>في كل جولة اقرأ الدليل، حدد الجولة الحالية بالأعلى، افتح التصويت.</li>
+    <li>الشاشة دي بتوريك مين المافيوسو في الجلسة دي — سرّها عن اللاعبين.</li>
+    <li>في النهاية اطلب من كل واحد يقول اتهامه، وبعدين اكشف الاسم الحقيقي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('yousef')" style="width:100%">العودة</button>
+</section>
+
+<section id="dahlia" class="hidden">
+
+<div class="card hero">
+  <div class="badge">LOS ANGELES • 1947</div>
+  <h1>قضية الداهلية السوداء</h1>
+  <p class="subtitle">خمس شخصيات. ثلاث جولات تحقيق. لغز فضل بلا حل رسمي لحد النهاردة.</p>
+
+  <div class="notice">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px">
+      15 يناير 1947. لوس أنجلوس. سيدة كانت ماشية مع بنتها الصغيرة في حي هادئ، لقت جثة امرأة شابة في قطعة أرض
+      خالية. الجثة مقطوعة نصفين بدقة غريبة، والمشهد بشع لدرجة إن المحققين الأوائل افتكروا إنهم قدام عمل حد
+      عنده خبرة طبية أو جراحية حقيقية.
+    </p>
+    <p style="margin-top:10px">
+      الضحية كانت إليزابيث شورت، بنت 22 سنة جاية من الساحل الشرقي بتحاول تشتغل في هوليوود. الصحافة سمّتها
+      "الداهلية السوداء" على اسم فيلم كان عارض وقتها، ونشرت تفاصيل حياتها الشخصية بشكل مبالغ فيه خلق ضجة إعلامية
+      ضخمة في كل أمريكا.
+    </p>
+    <p style="margin-top:10px">
+      الشرطة حققت مع أكتر من 150 شخص، واستقبلت أكتر من 60 اعتراف مختلف بالجريمة — معظمهم اعترافات كاذبة من ناس
+      بيدوروا على شهرة. محدش اتقبض عليه، ومحدش اتحاكم، والقضية فضلت رسميًا مفتوحة وبلا حل لحد يومنا هذا.
+    </p>
+    <p style="margin-top:10px">
+      والآن، تُعاد القضية من جديد. خمسة من أقوى المشتبه بهم في تاريخ القضية وجدوا أنفسهم داخل دائرة الشك من
+      جديد. كل واحد فيهم عنده سبب يخليه مشتبه به — لكن واحدًا بس هو اللي كان المسؤول عن الجريمة فعلًا.
+    </p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('dahlia')">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('dahlia-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- MABHOUH GM LOCK -->
+<section id="dahlia-gm-lock" class="hidden">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي تحتوي على الحل الكامل والأدلة السرية.</p>
+  <label for="dahliaGmInput">كلمة المرور</label>
+  <input id="dahliaGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('dahlia')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('dahlia')" style="flex:1">رجوع</button>
+  </div>
+  <p id="dahliaGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- MABHOUH SETUP -->
+<section id="dahlia-setup" class="hidden">
+<div class="card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice">
+    اكتب اسمك، كود الجلسة الذي أعطاه لك الـGM، ثم اختر رقمًا من الأرقام الظاهرة تحت (حسب عدد اللاعبين اللي حدده الـGM).
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="dahliaName">اسمك</label>
+  <input id="dahliaName" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="dahliaSessionCode">كود الجلسة</label>
+  <input id="dahliaSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('dahlia')">
+
+  <p id="dahliaCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر رقم الشخصية</label>
+  <div id="dahliaRoles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('dahlia')" style="flex:2">
+      تأكيد واكتشاف شخصيتي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('dahlia')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- MABHOUH PLAYER -->
+<section id="dahlia-player" class="hidden">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="dahliaPlayerBadge"></div>
+    <div id="dahliaMafia" class="badge hidden" dir="ltr"
+         style="color:#ff6b6b;border-color:#dc3737;background:rgba(150,20,20,.2);font-weight:900">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="dahliaRoleName" style="margin-top:12px"></h2>
+  <p id="dahliaPublic" class="small"></p>
+</div>
+
+<div class="card secret">
+  <h3>سري جدًا — ملف شخصيتك</h3>
+  <p id="dahliaSecret" style="margin-top:10px"></p>
+  <hr>
+  <h3>نقطة قوتك</h3>
+  <p id="dahliaStrength" class="small"></p>
+  <h3 style="margin-top:15px">نقطة ضعفك</h3>
+  <p id="dahliaWeakness" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="dahliaNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('dahlia')"></textarea>
+  <div id="dahliaSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="dahliaVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="dahliaVoteStatus">جاري التحميل...</p>
+  <div id="dahliaVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="dahliaStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('dahlia')">تحديث</button>
+  </div>
+  <div id="dahliaStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>أنتم 5 لاعبين + Game Master.</li>
+    <li>اللعبة 3 جولات تحقيق.</li>
+    <li>في كل جولة يقدم الـGM دليلًا ودليلًا ماديًا.</li>
+    <li>قد تصل ملاحظة سرية لشخص واحد.</li>
+    <li>بعد النقاش يتم التصويت.</li>
+    <li>الذي يحصل على أغلب الأصوات يخرج من التصويت التالي.</li>
+    <li>في الجولة الثالثة الجميع يقدم اتهامه النهائي.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('dahlia')" style="width:100%">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- MABHOUH GM -->
+<section id="dahlia-gm" class="hidden">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها الحل والأسرار كاملة. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+    نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+  </p>
+
+  <label for="dahliaPlayerCountInput" id="dahliaPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="dahliaPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">المافيوسو مضمون دايمًا إنه موزّع على شخصية من ضمن العدد ده.</p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateGameCode('dahlia')">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="dahliaCurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="dahliaVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل لكل الألعاب مع بعض.
+  </p>
+  <label for="liveDbUrlInputDahlia" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputDahlia" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputDahlia')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusDahlia" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="dahliaRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="dahliaVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('dahlia')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="dahliaVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="dahliaEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('dahlia')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>نتيجة الشخصيات حسب الكود</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('dahlia')">تحديث الأسماء</button>
+  </div>
+  <div id="dahliaGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الحل الكامل</h2>
+
+  <div class="notice">
+    <b>القصة كاملة (تقدر تحكيها بصوتك):</b>
+    <p style="margin-top:10px">
+      في سيناريو اللعبة، Dr. George Hodel هو المسؤول عن جريمة قتل إليزابيث شورت. مهارته الطبية الدقيقة
+      هي اللي خلته يقدر ينفّذ التقطيع بالدقة الغريبة اللي شافها المحققون الأوائل، ومكانته الاجتماعية والطبية
+      هي اللي حمته من الشبهة المباشرة لسنين طويلة.
+    </p>
+    <p style="margin-top:10px">
+      الأربعة الآخرين كل واحد فيهم قريب من القضية بطريقة مختلفة تمامًا من غير ما يكون شريك فعلي: Bayley
+      كان قريب جغرافيًا وعائليًا من غير أي دليل مباشر، Hansen كانت علاقته بالضحية شخصية بحتة، Dillon
+      عرف تفاصيل تشريحية من شغله القديم بس مش من ارتكاب الجريمة، وManley كان آخر واحد شافها حية واتبرّأ
+      رسميًا بعد كذا اختبار كشف كذب.
+    </p>
+    <p style="margin-top:10px">
+      الدليل الأقوى اللي بيوجّه اللعبة نحو Hodel هو ملف رسمي اتكشف بعد أكتر من 50 سنة من الجريمة، سنة 2003،
+      في أرشيف النيابة العامة بلوس أنجلوس، وفيه تسجيل تنصت بوليسي على بيته (في تحقيق منفصل تمامًا عن قضية
+      تانية) سُجّل فيه كلام غامض جدًا منه عن قضية الداهلية السوداء نفسها.
+    </p>
+  </div>
+
+  <p style="margin-top:10px"><b>الـMafioso:</b> Dr. George Hodel — المسؤول عن الجريمة في سيناريو اللعبة.</p>
+  <p class="small" style="margin-top:15px">
+    مهم جدًا: هذا الحل خاص بسيناريو اللعبة فقط. القضية الحقيقية فضلت رسميًا <b>بلا حل ومغلقة بدون حكم قضائي
+    لحد يومنا هذا</b>. Dr. George Hodel هو الأقوى بين عدة نظريات منافسة (منها نظرية Dr. Walter Bayley
+    اللي بيتبناها باحثون تانيين)، ومحدش من الأسماء دي اتحاكم عليه أو أُدين رسميًا في أي وقت.
+  </p>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="dahliaRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد.</li>
+    <li>أعط الكود لكل اللاعبين.</li>
+    <li>كل لاعب يختار رقمًا.</li>
+    <li>اقرأ دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل فتح التصويت.</li>
+    <li>سلّم الملاحظات الخاصة لصاحبها فقط.</li>
+    <li>اترك وقتًا للنقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
+    <li>في الجولة الثالثة اقرأ الحل النهائي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('dahlia')" style="width:100%">العودة</button>
+</section>
+
+<div class="footer">GAME • INVESTIGATION NIGHT</div>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/games-engine.js"></script>
+<script src="js/live-status.js"></script>
+<script src="js/voting.js"></script>
+<script src="js/mabhouh-data.js"></script>
+<script src="js/yousef-data.js"></script>
+<script src="js/football.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>
