@@ -147,6 +147,7 @@ registerGame("yousef",{
   verifyPrefix:"YOUSEF10",
   randomKiller:true,
   minPlayers:3,
+  accompliceMinPlayers:6,
   useRealNames:true
 });
 

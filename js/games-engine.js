@@ -19,6 +19,7 @@ function registerGame(id,config){
     verifyPrefix:config.verifyPrefix,
     randomKiller:!!config.randomKiller,
     minPlayers:config.minPlayers||null,
+    accompliceMinPlayers:config.accompliceMinPlayers||null,
     useRealNames:!!config.useRealNames,
     gmCode:localStorage.getItem(`${id}GmCode`)||"",
     playerCount:Number(localStorage.getItem(`${id}PlayerCount`))||config.roles.length,
@@ -56,11 +57,23 @@ function getGameRoles(game,code,count){
       `${game.toUpperCase()}-${code}-ORDER`
     );
 
-    const chosen=shuffled.slice(0,n).map((r,i)=>({...r,displayN:i+1,killer:false}));
+    const chosen=shuffled.slice(0,n).map((r,i)=>({...r,displayN:i+1,killer:false,accomplice:false}));
 
     const killerSeed=hashCode(`${game.toUpperCase()}-${code}-KILLER-${n}`);
     const killerIndex=killerSeed%chosen.length;
     chosen[killerIndex]={...chosen[killerIndex],killer:true};
+
+    // الشريك بيظهر بس لو عدد اللاعبين وصل الحد الأدنى المحدد للعبة
+    // (accompliceMinPlayers)، وبيتحدد عشوائيًا بشكل مختلف عن القاتل.
+    const accompliceMin=GAMES[game].accompliceMinPlayers;
+    if(accompliceMin&&chosen.length>=accompliceMin&&chosen.length>1){
+      const accompliceSeed=hashCode(`${game.toUpperCase()}-${code}-ACCOMPLICE-${n}`);
+      let accompliceIndex=accompliceSeed%chosen.length;
+      if(accompliceIndex===killerIndex){
+        accompliceIndex=(accompliceIndex+1)%chosen.length;
+      }
+      chosen[accompliceIndex]={...chosen[accompliceIndex],accomplice:true};
+    }
 
     return chosen;
   }
