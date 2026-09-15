@@ -246,8 +246,30 @@ li{margin-bottom:8px}
 .mode-card:hover{transform:translateY(-4px)}
 .mode-card .glyph{font-size:38px;display:block;margin-bottom:10px}
 .mode-card h3{margin:0 0 6px}
+.mode-card.stories h3{
+  font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif;
+  font-size:24px;color:#e9d9a8;letter-spacing:.5px
+}
 .mode-card p{color:var(--muted);font-size:12.5px;margin:0}
-.mode-card.stories{background:linear-gradient(160deg,#0c241c,#06140f);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.mode-card.stories{
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),
+    radial-gradient(ellipse 220px 140px at 85% 100%,rgba(0,0,0,.35),transparent 70%),
+    linear-gradient(160deg,#132d22,#081b14 55%,#050f0b);
+  box-shadow:0 12px 30px rgba(0,0,0,.35),inset 0 0 0 1px rgba(212,182,117,.05);
+}
+.mode-card.stories::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(115deg,transparent 40%,rgba(255,255,255,.035) 50%,transparent 60%),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 2px,transparent 2px 46px);
+  mix-blend-mode:overlay;
+}
+.mode-card.stories::after{
+  content:"";position:absolute;top:0;right:22px;width:26px;height:38px;
+  background:linear-gradient(180deg,#d4b675,#a3862f);
+  border-radius:0 0 4px 4px;box-shadow:0 3px 6px rgba(0,0,0,.4);opacity:.85
+}
 .mode-card.stories:hover{border-color:var(--gold2)}
 .mode-card.password{
   background:linear-gradient(160deg,#0d2447,#060c1c);border-color:#264a86;box-shadow:0 12px 30px rgba(0,0,0,.4)
@@ -341,7 +363,7 @@ body.mode-football .page-in{animation:footballIn .10s linear}
     radial-gradient(ellipse 700px 380px at 50% -10%,rgba(163,134,47,.09),transparent 65%),
     linear-gradient(180deg,#ffffff 0%,#fbf9f2 100%);
 }
-.ys-app h1,.ys-app h2,.ys-app h3,.ys-app .game-title,.ys-app .number{font-family:'Aref Ruqaa','Amiri',serif}
+.ys-app h1,.ys-app h2,.ys-app h3,.ys-app .game-title,.ys-app .number{font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif}
 .ys-app,.ys-app button,.ys-app input,.ys-app textarea{font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif}
 .ys-app .badge{border:1px solid rgba(138,109,31,.4);background:rgba(163,134,47,.08);color:var(--gold3)}
 .ys-app .kicker{color:var(--ink2)}
@@ -365,7 +387,7 @@ body.mode-football .page-in{animation:footballIn .10s linear}
 .ys-app .role-btn{background:#fff;border:1px solid var(--border);color:var(--ink)}
 .ys-app .role-btn:hover{background:#f8f6ee;border-color:var(--gold2)}
 .ys-app .role-btn.selected{border-color:var(--gold2);background:rgba(163,134,47,.12);box-shadow:0 0 15px rgba(163,134,47,.15)}
-.ys-app .role-btn strong{color:var(--ink2);font-family:'Aref Ruqaa','Amiri',serif;font-size:17px}
+.ys-app .role-btn strong{color:var(--ink2);font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif;font-size:18px}
 .ys-app .round{background:#fff;border-color:var(--border)}
 .ys-app .round.taken{border-color:var(--gold2);background:rgba(163,134,47,.08)}
 .ys-app .round.out{border-color:var(--red);opacity:.6}
