@@ -367,7 +367,37 @@ body.mode-football .page-in{animation:footballIn .10s linear}
 }
 .ys-app h1,.ys-app h2,.ys-app h3,.ys-app .game-title,.ys-app .number{font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif}
 .ys-app,.ys-app button,.ys-app input,.ys-app select,.ys-app textarea{font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif}
-.ys-app .badge{border:1px solid rgba(240,207,120,.4);background:rgba(215,177,90,.1);color:var(--gold3)}
+.ys-app .topline{gap:18px}
+.ys-app .badge{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:clamp(64px,18vw,86px);height:clamp(64px,18vw,86px);
+  padding:6px;border-radius:50%;flex-shrink:0;
+  font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif;
+  font-size:clamp(11px,3vw,13px);font-weight:900;line-height:1.25;
+  letter-spacing:0;text-align:center;color:#2c1c06;
+  background:
+    radial-gradient(circle at 33% 28%,rgba(255,255,255,.4),transparent 42%),
+    radial-gradient(circle at 65% 78%,rgba(0,0,0,.4),transparent 55%),
+    radial-gradient(circle,#dcb469 0%,#ad8130 45%,#7a5720 76%,#4f3710 100%);
+  border:3px double rgba(255,232,172,.55);
+  box-shadow:
+    inset 0 2px 3px rgba(255,255,255,.45),
+    inset 0 -7px 11px rgba(0,0,0,.5),
+    0 7px 16px rgba(0,0,0,.5);
+}
+.ys-app .badge::after{
+  content:"";position:absolute;inset:6px;border-radius:50%;
+  border:1px dashed rgba(44,28,6,.4);pointer-events:none
+}
+.ys-app #yousefMafia{
+  color:#fbe9e4;font-family:'Amiri',serif;font-weight:900;
+  background:
+    radial-gradient(circle at 33% 28%,rgba(255,255,255,.3),transparent 42%),
+    radial-gradient(circle at 65% 78%,rgba(0,0,0,.45),transparent 55%),
+    radial-gradient(circle,#c76b5e 0%,#8a2f2f 45%,#5c1c1c 78%,#341010 100%);
+  border-color:rgba(255,199,190,.5);
+}
+.ys-app #yousefMafia::after{border-color:rgba(255,220,214,.35)}
 .ys-app .kicker{color:var(--gold2)}
 .ys-app .subtitle{color:var(--muted)}
 .ys-app .divider{background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
