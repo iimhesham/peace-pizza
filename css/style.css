@@ -278,18 +278,31 @@ li{margin-bottom:8px}
 .mode-card.password .glyph{filter:drop-shadow(0 0 10px rgba(255,183,3,.5))}
 
 .mvp-stamp{
-  position:absolute;top:8px;left:8px;width:84px;height:84px;
+  position:absolute;top:8px;left:8px;width:88px;height:88px;
   border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:2px;text-align:center;transform:rotate(-12deg);pointer-events:none;z-index:2;
-  background:#0b0b0b;border:3px double #ffce00;
-  box-shadow:0 0 0 2px #0b0b0b,0 0 0 4px #dd0000,0 4px 10px rgba(0,0,0,.5);
-  opacity:.95;font-family:Georgia,'Times New Roman',serif
+  gap:2px;text-align:center;transform:rotate(-10deg);pointer-events:none;z-index:2;
+  padding:6px;font-family:Georgia,'Times New Roman',serif;
+  background:
+    radial-gradient(circle at 32% 26%,rgba(255,255,255,.28),transparent 42%),
+    radial-gradient(circle at 68% 80%,rgba(0,0,0,.5),transparent 55%),
+    radial-gradient(circle,#a8362a 0%,#7c1f1a 45%,#4a1210 78%,#2a0908 100%);
+  border:3px double rgba(255,206,0,.65);
+  box-shadow:
+    inset 0 2px 3px rgba(255,255,255,.3),
+    inset 0 -7px 12px rgba(0,0,0,.55),
+    0 6px 14px rgba(0,0,0,.55)
+}
+.mvp-stamp::after{
+  content:"";position:absolute;inset:6px;border-radius:50%;
+  border:1px dashed rgba(255,206,0,.35);pointer-events:none
 }
 .mvp-stamp .mvp-line{
-  color:#ffce00;font-size:8.5px;font-weight:700;letter-spacing:.5px;line-height:1.15
+  color:#ffce00;font-size:8.5px;font-weight:700;letter-spacing:.4px;line-height:1.15;
+  text-shadow:0 1px 1px rgba(0,0,0,.6)
 }
 .mvp-stamp .mvp-name{
-  color:#fff;font-size:8px;font-weight:700;margin-top:1px
+  color:#fff2d9;font-size:7.5px;font-weight:700;margin-top:1px;
+  text-shadow:0 1px 1px rgba(0,0,0,.6)
 }
 
 /* =========================================================
