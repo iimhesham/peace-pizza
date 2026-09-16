@@ -149,6 +149,10 @@ function buildGameRoleButtons(game,count,code){
   if(!box)return;
   box.textContent="";
 
+  // في الألعاب اللي بتستخدم الأسماء الحقيقية (زي يوسف عمر)، اسم اللاعب
+  // نفسه هو الشخصية — مفيش داعي لخانة تانية لاختيار رقم الشخصية.
+  if(GAMES[game].useRealNames)return;
+
   const n=count||GAMES[game].roles.length;
 
   const namedRoles=(GAMES[game].useRealNames&&code)
@@ -229,7 +233,7 @@ async function confirmGameRole(game){
     return;
   }
 
-  if(!GAMES[game].selected){
+  if(!GAMES[game].useRealNames&&!GAMES[game].selected){
     toast("اختر رقم الشخصية.");
     return;
   }
@@ -244,10 +248,19 @@ async function confirmGameRole(game){
 
   const count=GAMES[game].activeCount||GAMES[game].roles.length;
   const roles=getGameRoles(game,code,count);
-  const r=roles.find(x=>x.displayN===GAMES[game].selected);
+
+  // في ألعاب الأسماء الحقيقية، الاسم المختار من القائمة هو نفسه الشخصية —
+  // مفيش رقم شخصية منفصل يتقارن بيه.
+  const r=GAMES[game].useRealNames
+    ?roles.find(x=>x.name===name)
+    :roles.find(x=>x.displayN===GAMES[game].selected);
 
   if(!r){
-    toast("حصل خطأ في توزيع الشخصية.");
+    toast(
+      GAMES[game].useRealNames
+        ?"الاسم ده مش من ضمن اللاعبين في الجلسة دي بالعدد الحالي."
+        :"حصل خطأ في توزيع الشخصية."
+    );
     return;
   }
 
