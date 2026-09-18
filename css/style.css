@@ -351,6 +351,18 @@ li{margin-bottom:8px}
 .fb-app .btn.primary{background:linear-gradient(135deg,#245ed1,#173b8c);border-color:#4c86ff;color:#fff;box-shadow:0 8px 24px rgba(35,94,210,.28)}
 .fb-app .btn.primary:hover{background:linear-gradient(135deg,#3475ef,#1d4da9);transform:translateY(-1px)}
 .fb-ball-svg{width:52px;height:52px;display:block}.fb-card-back .fb-ball-svg{width:34px;height:34px;opacity:.78}
+
+.story-scorebar{display:flex;gap:12px;max-width:460px;margin:18px auto 0}
+.story-score-box{flex:1;background:linear-gradient(155deg,#122d62,#061126);border:1px solid #31589d;border-radius:12px;padding:12px 10px;text-align:center;display:flex;flex-direction:column;gap:4px}
+.story-team-name{font-size:13px;color:#a9c7ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.story-team-score{font-family:'Teko',sans-serif;font-size:34px;color:#fff;line-height:1}
+.story-clues{max-width:520px;margin:18px auto 0;display:flex;flex-direction:column;gap:10px}
+.story-clue{background:linear-gradient(135deg,rgba(24,61,125,.24),rgba(5,12,28,.55));border-right:4px solid #397dff;border-radius:10px;padding:12px 14px;text-align:right}
+.story-clue-tag{font-family:'Teko',sans-serif;font-size:16px;color:#6fa5ff;letter-spacing:.5px;margin-left:8px}
+.story-clue-pts{font-size:11px;color:#8aa5d6}
+.story-clue p{margin:6px 0 0;color:#dce6fa;font-size:14.5px;line-height:1.6}
+.story-guess-row{display:flex;gap:10px;max-width:520px;margin:16px auto 0}
+#storyAnswerBox{max-width:520px;margin:14px auto 0}
 body.mode-football{background:#02050d !important;color:#eef4ff;transition:background .12s linear}
 body.mode-football .app{background:#02050d !important}
 body.mode-football .moon,body.mode-football .fog{display:none}
