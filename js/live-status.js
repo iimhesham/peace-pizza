@@ -141,6 +141,18 @@ async function pushPlayerStatus(game,code,displayN,name){
   }catch(e){}
 }
 
+async function pushRealNamePlayer(game,code,id,name,device){
+  const url=getLiveDbUrl();
+  if(!url||!code)return;
+
+  try{
+    await fetch(`${url}/sessions/${game}/${code}/players/${id}.json`,{
+      method:"PUT",
+      body:JSON.stringify({name,alive:true,ts:Date.now(),device})
+    });
+  }catch(e){}
+}
+
 async function setPlayerAlive(game,code,displayN,alive){
   const url=getLiveDbUrl();
   if(!url||!code)return false;

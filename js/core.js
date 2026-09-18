@@ -91,4 +91,16 @@ function makeSessionCode(){
   return String(Math.floor(1000+Math.random()*9000));
 }
 
+// معرّف عشوائي ثابت لكل جهاز/متصفح (مش لكل شخص)، بيتحفظ مرة واحدة على
+// الجهاز. بيستخدم بس عشان نفرّق بين "نفس الشخص فاتح نفس الصفحة تاني"
+// و"شخص تاني بيحاول ياخد نفس الاسم من جهاز مختلف".
+function getDeviceId(){
+  let id=localStorage.getItem("peaceDeviceId");
+  if(!id){
+    id=`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem("peaceDeviceId",id);
+  }
+  return id;
+}
+
 

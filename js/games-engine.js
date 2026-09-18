@@ -355,17 +355,21 @@ async function confirmRealNameRole(game,name,code){
   }
 
   if(getLiveDbUrl()){
+    const myDevice=getDeviceId();
     const players=await fetchPlayers(game,code)||{};
-    const takenByAnotherId=Object.entries(players).some(
-      ([id,p])=>Number(id)!==full.id&&p&&p.name===name
-    );
+    const existing=players[full.id];
 
-    if(takenByAnotherId){
+    // الاسم مرتبط بـid ثابت دايمًا (نفس الاسم = نفس الـid)، فمينفعش نتأكد
+    // من التكرار بمقارنة id مختلف زي الأول. بدل كده بنشوف: لو الشخصية دي
+    // فيها بيانات جهاز تاني (device مختلف)، يبقى حد تاني قبله اخد نفس
+    // الاسم من جهاز مختلف — نفس الجهاز (أو دخول جديد لسه ملوش بيانات)
+    // مسموح له.
+    if(existing&&existing.device&&existing.device!==myDevice){
       toast("الاسم ده داخل بالفعل من جهاز تاني في نفس الجلسة.");
       return;
     }
 
-    await pushPlayerStatus(game,code,full.id,name);
+    await pushRealNamePlayer(game,code,full.id,name,myDevice);
   }
 
   localStorage.setItem(
