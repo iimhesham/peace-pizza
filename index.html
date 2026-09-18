@@ -60,6 +60,11 @@
       <h3>باسورد</h3>
       <p>لعبة كلمة السر بأسامي لاعبين الكورة.</p>
     </div>
+    <div class="mode-card password" onclick="playClickSound();show('story')">
+      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 2 8.5 12 14l10-5.5z"/><path d="M6 11v5.2C6 17.7 8.7 19 12 19s6-1.3 6-2.8V11"/></svg></span>
+      <h3>قصة</h3>
+      <p>أدلة عن لاعب كورة، من الأصعب للأسهل. خمّنوا مين هو.</p>
+    </div>
   </div>
 
   <button class="btn ghost" onclick="playClickSound();show('landing')" style="width:100%;margin-top:20px">رجوع</button>
@@ -168,6 +173,102 @@
   <div class="fb-controls">
     <button class="btn primary" onclick="playClickSound();dealPasswordCards()" style="flex:2">خلط جديد</button>
     <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- ========================================================
+     STORY — player-story guessing game (قصة)
+======================================================== -->
+<section id="story" class="hidden fb-app">
+<div class="card hero">
+  <span class="fb-whistle" aria-hidden="true">
+    <svg viewBox="0 0 100 100" width="58" height="58" class="fb-ball-svg">
+      <circle cx="50" cy="50" r="45" fill="#f3f5f8" stroke="#c7ced8" stroke-width="3"/>
+      <path d="M50 28l11 8-4 13H43l-4-13z" fill="#111827"/>
+      <path d="M39 36L27 32M61 36l12-4M43 49L34 59M57 49l9 10M50 28v-9" fill="none" stroke="#111827" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M34 59l-7 9M66 59l7 9M50 62v13" fill="none" stroke="#111827" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <div class="badge">STORY</div>
+  <h1 style="margin-top:12px">قصة</h1>
+  <div class="fb-pitch-line"></div>
+  <div class="notice" style="text-align:right">
+    <b>إزاي بتتلعب:</b>
+    <p style="margin-top:10px">
+      كل جولة قصة عن لاعب كورة، عبارة عن أدلة بترتيب من الأصعب للأسهل. الأول اللي يعرف يقول الاسم يكسب نقط حسب رقم الدليل اللي وصلنا له.
+    </p>
+    <p style="margin-top:10px">
+      <b>دليل 1 = 3 نقط</b> · <b>دليل 2 = 2 نقطة</b> · <b>دليل 3 = نقطة واحدة</b>.
+      كل فريق أو لاعب متاح له محاولتين (2 guesses) بس في كل جولة.
+    </p>
+    <p style="margin-top:10px">
+      دوسوا "غلط ❌" لو حد خمّن غلط عشان يظهر الدليل اللي بعده، أو "صح ✅" وحددوا مين جاوب واخدوا النقط.
+      "لاعب جديد" ينقلكم لقصة تانية في أي وقت.
+    </p>
+  </div>
+
+  <div class="grid" style="grid-template-columns:1fr;max-width:420px">
+    <label style="text-align:right;color:var(--muted);font-size:13px">اسم الفريق الأول</label>
+    <input id="storyTeamAInput" type="text" maxlength="24" placeholder="الفريق الأول" oninput="storyUpdateTeamName('a',this.value)">
+    <label style="text-align:right;color:var(--muted);font-size:13px;margin-top:6px">اسم الفريق التاني</label>
+    <input id="storyTeamBInput" type="text" maxlength="24" placeholder="الفريق الثاني" oninput="storyUpdateTeamName('b',this.value)">
+  </div>
+
+  <div class="grid" style="max-width:420px">
+    <button class="btn ghost" onclick="playClickSound();storySetHardMode(false)" style="flex:1">وضع عادي (3 أدلة)</button>
+    <button class="btn ghost" onclick="playClickSound();storySetHardMode(true)" style="flex:1">وضع صعب (4 أدلة)</button>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();storyStartGame()">ابدأ اللعب</button>
+    <button class="btn ghost" onclick="playClickSound();show('hub')">رجوع</button>
+  </div>
+</div>
+</section>
+
+<section id="story-game" class="hidden fb-app">
+<div class="card hero">
+  <div class="topline">
+    <div class="badge">STORY</div>
+    <button class="btn ghost" onclick="playClickSound();show('story')" style="padding:8px 16px">القواعد</button>
+  </div>
+  <h2 style="margin-top:12px">مين هو اللاعب؟</h2>
+
+  <div class="story-scorebar">
+    <div class="story-score-box">
+      <span id="storyNameA" class="story-team-name">الفريق الأول</span>
+      <span id="storyScoreA" class="story-team-score">0</span>
+    </div>
+    <div class="story-score-box">
+      <span id="storyNameB" class="story-team-name">الفريق الثاني</span>
+      <span id="storyScoreB" class="story-team-score">0</span>
+    </div>
+  </div>
+
+  <div id="storyClues" class="story-clues"></div>
+
+  <p class="subtitle" style="margin:10px 0 0">
+    محاولات متبقية: <b id="storyGuessesLeft">2</b> · النقط لو جاوبوا دلوقتي: <b id="storyPointsNow">3</b>
+  </p>
+
+  <div id="storyAnswerBox" class="notice hidden" style="text-align:center">
+    الإجابة: <b id="storyAnswerName" dir="ltr"></b>
+  </div>
+
+  <div class="story-guess-row">
+    <button class="btn primary story-correct-btn" onclick="storyCorrectGuess('a')" style="flex:1">صح ✅ للفريق الأول</button>
+    <button class="btn primary story-correct-btn" onclick="storyCorrectGuess('b')" style="flex:1">صح ✅ للفريق التاني</button>
+  </div>
+
+  <div class="fb-controls">
+    <button id="storyWrongBtn" class="btn ghost" onclick="storyWrongGuess()" style="flex:1">غلط ❌</button>
+    <button class="btn ghost" onclick="playClickSound();storyNextRound()" style="flex:1">لاعب جديد 🔀</button>
+  </div>
+
+  <div class="fb-controls">
+    <button class="btn ghost" onclick="playClickSound();storyResetScores()" style="flex:1">تصفير النقط</button>
+    <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع للرئيسية</button>
   </div>
 </div>
 </section>
@@ -1292,6 +1393,8 @@
 <script src="js/mabhouh-data.js"></script>
 <script src="js/yousef-data.js"></script>
 <script src="js/football.js"></script>
+<script src="js/story-data.js"></script>
+<script src="js/story.js"></script>
 <script src="js/init.js"></script>
 </body>
 </html>
