@@ -195,13 +195,7 @@ function renderStoryRound(){
   const answerBox=document.getElementById("storyAnswerBox");
   const nameSpan=document.getElementById("storyAnswerName");
   if(answerBox&&nameSpan){
-    if(storyRoundOver){
-      nameSpan.textContent=storyCurrent.name;
-      answerBox.classList.remove("hidden");
-    }else{
-      answerBox.classList.add("hidden");
-      nameSpan.textContent="";
-    }
+    nameSpan.textContent=storyCurrent.name;
   }
 
   const ptsNow=document.getElementById("storyPointsNow");
