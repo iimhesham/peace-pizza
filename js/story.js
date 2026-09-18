@@ -104,9 +104,15 @@ function storyWrongGuess(){
 function storySkipRound(){
   if(storyRoundOver)return;
   playClickSound();
-  storyRoundOver=true;
+  const maxClues=Math.min(storyClueCount,storyCurrent.clues.length);
+  if(storyRevealed<maxClues){
+    storyRevealed++;
+    toast("الدليل الجاي");
+  }else{
+    storyRoundOver=true;
+    toast("محدش عارف؟ اتفرجوا على الإجابة");
+  }
   renderStoryRound();
-  toast("محدش عارف؟ اتفرجوا على الإجابة");
 }
 
 function storyCorrectGuess(team){
