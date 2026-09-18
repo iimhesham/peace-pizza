@@ -101,6 +101,14 @@ function storyWrongGuess(){
   renderStoryRound();
 }
 
+function storySkipRound(){
+  if(storyRoundOver)return;
+  playClickSound();
+  storyRoundOver=true;
+  renderStoryRound();
+  toast("محدش عارف؟ اتفرجوا على الإجابة");
+}
+
 function storyCorrectGuess(team){
   if(storyRoundOver)return;
   playRevealSound();
@@ -174,6 +182,9 @@ function renderStoryRound(){
 
   const correctBtns=document.querySelectorAll(".story-correct-btn");
   correctBtns.forEach(b=>b.disabled=storyRoundOver);
+
+  const skipBtn=document.getElementById("storySkipBtn");
+  if(skipBtn)skipBtn.disabled=storyRoundOver;
 
   const answerBox=document.getElementById("storyAnswerBox");
   const nameSpan=document.getElementById("storyAnswerName");
