@@ -2,7 +2,7 @@
    GENERAL
 ========================================================= */
 
-const FOOTBALL_SCREENS=["password","password-game"];
+const FOOTBALL_SCREENS=["password","password-game","story","story-game"];
 
 const YOUSEF_SCREENS=["yousef","yousef-gm-lock","yousef-setup","yousef-player","yousef-gm"];
 
