@@ -100,6 +100,61 @@ function getGameRoles(game,code,count){
   return finalOrder.map((r,i)=>({...r,displayN:i+1}));
 }
 
+// في ألعاب الأسماء الحقيقية، الـGM لازم يشوف كل الـ11 شخصية دايمًا (مش
+// مجموعة فرعية بتتحدد بالكود)، والمافيوسو بيتحدد بس من ضمن اللي دخلوا
+// فعليًا (بالاسم) وبعد ما عددهم يوصل للعدد المطلوب — بنفس الحسابات
+// المستخدمة في revealOrWaitRealName عشان الـGM يشوف نفس النتيجة بالظبط.
+function getDisplayRolesForGM(game,gmCode,count,players){
+  if(!GAMES[game].useRealNames){
+    const roles=getGameRoles(game,gmCode,count);
+    const benched=GAMES[game].roles.filter(
+      full=>!roles.find(r=>r.id===full.id)
+    );
+    return{roles,benched};
+  }
+
+  const joinedIds=players
+    ?Object.entries(players)
+      .filter(([id,p])=>p&&p.name)
+      .map(([id])=>Number(id))
+      .sort((a,b)=>a-b)
+    :[];
+
+  const killerAssign=computeRealNameAssignment(game,gmCode,joinedIds,count);
+
+  const roles=GAMES[game].roles.map(r=>({
+    ...r,
+    displayN:r.id,
+    killer:r.id===killerAssign.killerId,
+    accomplice:r.id===killerAssign.accompliceId
+  }));
+
+  return{roles,benched:[]};
+}
+
+// بيحسب مين المافيوسو (والشريك لو ينطبق) من ضمن اللاعبين اللي دخلوا
+// فعليًا بس (joinedIds)، وبس لما عددهم يوصل للعدد المطلوب (target).
+// دالة pure عشان كل الأجهزة (اللاعب والـGM) توصل لنفس النتيجة بالظبط.
+function computeRealNameAssignment(game,code,joinedIds,target){
+  if(!joinedIds.length||joinedIds.length<target){
+    return{killerId:null,accompliceId:null};
+  }
+
+  const key=joinedIds.join(",");
+  const killerIndex=hashCode(`${game.toUpperCase()}-${code}-KILLER-${key}`)%joinedIds.length;
+  const killerId=joinedIds[killerIndex];
+
+  let accompliceId=null;
+  const accompliceMin=GAMES[game].accompliceMinPlayers;
+  if(accompliceMin&&joinedIds.length>=accompliceMin&&joinedIds.length>1){
+    let accompliceIndex=hashCode(`${game.toUpperCase()}-${code}-ACCOMPLICE-${key}`)%joinedIds.length;
+    if(accompliceIndex===killerIndex)accompliceIndex=(accompliceIndex+1)%joinedIds.length;
+    accompliceId=joinedIds[accompliceIndex];
+  }
+
+  return{killerId,accompliceId};
+}
+
 function essentialRoleCount(game){
   if(GAMES[game].minPlayers)return GAMES[game].minPlayers;
   return GAMES[game].roles.filter(r=>r.killer||r.accomplice).length;
@@ -130,6 +185,13 @@ function openGamePlayer(game){
   if(saved){
     try{
       const p=JSON.parse(saved);
+
+      if(GAMES[game].useRealNames){
+        show(`${game}-player`);
+        revealOrWaitRealName(game,p.sessionCode,p.name);
+        return;
+      }
+
       const roles=getGameRoles(game,p.sessionCode,p.count);
       const r=roles.find(x=>x.id===p.roleId);
 
@@ -246,21 +308,17 @@ async function confirmGameRole(game){
     }
   }
 
+  if(GAMES[game].useRealNames){
+    await confirmRealNameRole(game,name,code);
+    return;
+  }
+
   const count=GAMES[game].activeCount||GAMES[game].roles.length;
   const roles=getGameRoles(game,code,count);
-
-  // في ألعاب الأسماء الحقيقية، الاسم المختار من القائمة هو نفسه الشخصية —
-  // مفيش رقم شخصية منفصل يتقارن بيه.
-  const r=GAMES[game].useRealNames
-    ?roles.find(x=>x.name===name)
-    :roles.find(x=>x.displayN===GAMES[game].selected);
+  const r=roles.find(x=>x.displayN===GAMES[game].selected);
 
   if(!r){
-    toast(
-      GAMES[game].useRealNames
-        ?"الاسم ده مش من ضمن اللاعبين في الجلسة دي بالعدد الحالي."
-        :"حصل خطأ في توزيع الشخصية."
-    );
+    toast("حصل خطأ في توزيع الشخصية.");
     return;
   }
 
@@ -279,6 +337,130 @@ async function confirmGameRole(game){
   show(`${game}-player`);
 }
 
+/* ---------------------------------------------------------
+   REAL-NAME GAMES (زي يوسف عمر): كل اللاعبين يدخلوا بأسمائهم
+   الحقيقية الفعلية، والمافيوسو بيتحدد بعد ما الكل يدخل، من ضمن
+   اللي دخلوا فعليًا بس (مش من ترشيح عشوائي مسبق ممكن يطلع ناس
+   مش قاعدة على القهوة أصلًا).
+--------------------------------------------------------- */
+
+const REAL_NAME_WAIT_TIMERS={};
+
+async function confirmRealNameRole(game,name,code){
+  const full=GAMES[game].roles.find(x=>x.name===name);
+
+  if(!full){
+    toast("الاسم ده مش من شخصيات القصة دي.");
+    return;
+  }
+
+  if(getLiveDbUrl()){
+    const players=await fetchPlayers(game,code)||{};
+    const takenByAnotherId=Object.entries(players).some(
+      ([id,p])=>Number(id)!==full.id&&p&&p.name===name
+    );
+
+    if(takenByAnotherId){
+      toast("الاسم ده داخل بالفعل من جهاز تاني في نفس الجلسة.");
+      return;
+    }
+
+    await pushPlayerStatus(game,code,full.id,name);
+  }
+
+  localStorage.setItem(
+    `${game}Player`,
+    JSON.stringify({name,roleId:full.id,sessionCode:code})
+  );
+
+  show(`${game}-player`);
+  await revealOrWaitRealName(game,code,name);
+}
+
+async function revealOrWaitRealName(game,code,name){
+  const full=GAMES[game].roles.find(x=>x.name===name);
+  if(!full)return;
+
+  if(!getLiveDbUrl()){
+    // من غير متابعة مباشرة مفيش طريقة نعرف مين فعلًا قاعد على القهوة،
+    // فبنكشف فورًا بين الـ11 كلهم (أدق حل متاح من غير قاعدة بيانات).
+    const allIds=GAMES[game].roles.map(r=>r.id);
+    const assign=computeRealNameAssignment(game,code,allIds,allIds.length);
+    const r={
+      ...full,
+      displayN:full.id,
+      killer:full.id===assign.killerId,
+      accomplice:full.id===assign.accompliceId
+    };
+    renderGamePlayer(game,name,r);
+    return;
+  }
+
+  const target=(await getGamePlayerCountLive(game,code))
+    ||GAMES[game].playerCount
+    ||essentialRoleCount(game);
+
+  const players=await fetchPlayers(game,code)||{};
+  const joinedIds=Object.entries(players)
+    .filter(([id,p])=>p&&p.name)
+    .map(([id])=>Number(id))
+    .sort((a,b)=>a-b);
+
+  if(joinedIds.length<target){
+    renderRealNameWaiting(game,name,joinedIds.length,target);
+    startRealNameWaitPolling(game,code,name,target);
+    return;
+  }
+
+  clearInterval(REAL_NAME_WAIT_TIMERS[game]);
+
+  const assign=computeRealNameAssignment(game,code,joinedIds,target);
+  const r={
+    ...full,
+    displayN:full.id,
+    killer:full.id===assign.killerId,
+    accomplice:full.id===assign.accompliceId
+  };
+
+  renderGamePlayer(game,name,r);
+}
+
+function renderRealNameWaiting(game,name,joined,target){
+  el(game,"PlayerBadge").textContent=`اللاعب: ${name}`;
+  el(game,"RoleName").textContent="في انتظار باقي اللاعبين...";
+  el(game,"Public").textContent=
+    `دخلوا فعليًا ${joined} من ${target}. هيتحدد المافيوسو تلقائيًا لما الكل يدخل، ومش هيتغيّر بعد كده.`;
+
+  el(game,"Mafia").classList.add("hidden");
+
+  const mafiaCard=el(game,"MafiaCard");
+  if(mafiaCard)mafiaCard.classList.add("hidden");
+
+  [`${game}VoteCard`,`${game}StatusCard`].forEach(id=>{
+    const box=document.getElementById(id);
+    if(box)box.classList.add("hidden");
+  });
+}
+
+function startRealNameWaitPolling(game,code,name,target){
+  clearInterval(REAL_NAME_WAIT_TIMERS[game]);
+
+  REAL_NAME_WAIT_TIMERS[game]=setInterval(async()=>{
+    if(document.hidden)return;
+
+    const players=await fetchPlayers(game,code)||{};
+    const joinedIds=Object.entries(players)
+      .filter(([id,p])=>p&&p.name)
+      .map(([id])=>Number(id));
+
+    if(joinedIds.length>=target){
+      await revealOrWaitRealName(game,code,name);
+    }else{
+      renderRealNameWaiting(game,name,joinedIds.length,target);
+    }
+  },4000);
+}
+
 function renderGamePlayer(game,name,r){
   el(game,"PlayerBadge").textContent=
     `اللاعب: ${name} • الشخصية رقم ${r.displayN}`;
@@ -294,6 +476,14 @@ function renderGamePlayer(game,name,r){
   const mafia=r.killer||r.accomplice;
 
   el(game,"Mafia").classList.toggle("hidden",!mafia);
+
+  const mafiaCard=el(game,"MafiaCard");
+  if(mafiaCard)mafiaCard.classList.remove("hidden");
+
+  [`${game}VoteCard`,`${game}StatusCard`].forEach(id=>{
+    const box=document.getElementById(id);
+    if(box)box.classList.remove("hidden");
+  });
 
   el(game,"Notes").value=
     localStorage.getItem(`${game}Notes_${r.id}`)||"";
@@ -332,13 +522,20 @@ function resetGame(game){
     // امسح بيانات اللاعب من المتابعة المباشرة كمان، مش بس من جهازه،
     // عشان الـGM ميفضلش شايف اسمه في اللعبة وهو أصلًا مسح شخصيته.
     if(getLiveDbUrl()){
-      const roles=getGameRoles(game,p.sessionCode,p.count);
-      const r=roles.find(x=>x.id===p.roleId);
-      if(r)clearPlayerLive(game,p.sessionCode,r.displayN);
+      if(GAMES[game].useRealNames){
+        // في ألعاب الأسماء الحقيقية، مفتاح المتابعة المباشرة هو الـid
+        // الأصلي بتاع الاسم نفسه (مفيش displayN منفصل).
+        clearPlayerLive(game,p.sessionCode,p.roleId);
+      }else{
+        const roles=getGameRoles(game,p.sessionCode,p.count);
+        const r=roles.find(x=>x.id===p.roleId);
+        if(r)clearPlayerLive(game,p.sessionCode,r.displayN);
+      }
     }
   }
 
   localStorage.removeItem(`${game}Player`);
+  clearInterval(REAL_NAME_WAIT_TIMERS[game]);
 
   GAMES[game].selected=null;
 
@@ -421,21 +618,18 @@ async function buildGameGM(game){
   if(countLabel){
     const min=essentialRoleCount(game);
     const max=GAMES[game].roles.length;
-    countLabel.textContent=
-      min===max
-        ? `عدد اللاعبين (${max})`
-        : `عدد اللاعبين (من ${min} إلى ${max})`;
+    const base=min===max
+      ? `عدد اللاعبين (${max})`
+      : `عدد اللاعبين (من ${min} إلى ${max})`;
+    countLabel.textContent=GAMES[game].useRealNames
+      ?`${base} — دول عدد اللي فعلًا هيدخلوا الليلة دي، مش المفروض يبقوا كلهم من الـ11.`
+      :base;
   }
 
   el(game,"CurrentCode").textContent=gmCode||"غير محدد";
 
   el(game,"VerifyCode").textContent=
     gmCode?verifyGameCode(game,gmCode,count):"---";
-
-  const roles=getGameRoles(game,gmCode,count);
-  const benched=GAMES[game].roles.filter(
-    full=>!roles.find(r=>r.id===full.id)
-  );
 
   const roleBox=el(game,"GMroles");
   roleBox.textContent="";
@@ -444,6 +638,8 @@ async function buildGameGM(game){
   if(getLiveDbUrl()&&gmCode){
     players=await fetchPlayers(game,gmCode);
   }
+
+  const {roles,benched}=getDisplayRolesForGM(game,gmCode,count,players);
 
   // عداد بسيط يوضح كام لاعب دخلوا فعليًا (اختاروا شخصيتهم) من إجمالي
   // عدد الشخصيات المتاحة في الجلسة الحالية، من غير ما يستنى الـGM
@@ -463,7 +659,9 @@ async function buildGameGM(game){
       :0;
     joinedBox.style.color="var(--gold3)";
     joinedBox.style.fontWeight="700";
-    joinedBox.textContent=`دخلوا فعليًا: ${joinedCount} من ${roles.length}`;
+    joinedBox.textContent=GAMES[game].useRealNames&&joinedCount<count
+      ?`دخلوا فعليًا: ${joinedCount} من ${count} — المافيوسو هيتحدد تلقائيًا لما الكل يدخل.`
+      :`دخلوا فعليًا: ${joinedCount} من ${roles.length}`;
   }else{
     joinedBox.style.color="var(--muted)";
     joinedBox.style.fontWeight="400";

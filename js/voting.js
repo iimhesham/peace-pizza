@@ -15,6 +15,11 @@ function getSavedPlayerDisplayN(game){
   try{
     const saved=JSON.parse(localStorage.getItem(`${game}Player`)||"null");
     if(!saved)return null;
+
+    // في ألعاب الأسماء الحقيقية، الـid الأصلي بتاع الاسم هو نفسه الـdisplayN
+    // المستخدم في قاعدة البيانات المباشرة (مفيش توزيع عشوائي بيغيّره).
+    if(GAMES[game]&&GAMES[game].useRealNames)return saved.roleId;
+
     const roles=getGameRoles(game,saved.sessionCode,saved.count);
     const r=roles.find(x=>x.id===saved.roleId);
     return r?r.displayN:null;
