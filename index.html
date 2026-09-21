@@ -104,8 +104,34 @@
     <p class="hm-sub">تحب تلعب إيه؟</p>
   </header>
 
+  <div class="hm-fan" aria-hidden="true">
+    <svg class="hm-spark" viewBox="0 0 24 24" width="22" height="22"><path d="M12 2l2.2 7.3L22 12l-7.8 2.7L12 22l-2.2-7.3L2 12l7.8-2.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    <div class="hm-fc hm-fc-l"><i></i><svg viewBox="0 0 26 26" width="54" height="54"><g stroke="#0c1411" stroke-width=".6" stroke-linejoin="round"><rect x="5" y="2" width="16" height="4.2" rx=".9" fill="#d9727e"/><rect x="4" y="6.6" width="17" height="4.2" rx=".9" fill="#3f7fa0"/><rect x="3" y="11.2" width="19" height="4.2" rx=".9" fill="#7fb8cf"/><rect x="4" y="15.8" width="17" height="4.2" rx=".9" fill="#c79a6b"/><rect x="3" y="20.4" width="19" height="4.2" rx=".9" fill="#efd7a3"/></g><g stroke="#e9b44c" stroke-width=".9"><path d="M7.5 2.3v3.6M9 2.3v3.6M7 6.9v3.6M8.5 6.9v3.6"/></g></svg><b>STORIES</b><small>CASE FILES</small></div>
+    <div class="hm-fc hm-fc-r"><i></i><svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><circle cx="12" cy="12" r="10.4"/><polygon points="12.00,2.40 13.53,9.90 21.13,9.03 14.47,12.80 17.64,19.77 12.00,14.60 6.36,19.77 9.53,12.80 2.87,9.03 10.47,9.90" fill="currentColor" stroke-width=".8"/><polygon points="15.17,7.63 14.48,5.51 16.29,4.19 18.10,5.51 17.41,7.63" stroke-width="1"/><polygon points="17.14,13.67 18.94,12.36 20.75,13.67 20.06,15.79 17.83,15.79" stroke-width="1"/><polygon points="12.00,17.40 13.81,18.71 13.12,20.84 10.88,20.84 10.19,18.71" stroke-width="1"/><polygon points="6.86,13.67 6.17,15.79 3.94,15.79 3.25,13.67 5.06,12.36" stroke-width="1"/><polygon points="8.83,7.63 6.59,7.63 5.90,5.51 7.71,4.19 9.52,5.51" stroke-width="1"/></svg><b>PASSWORD</b><small>PLAYER NAME</small></div>
+    <div class="hm-fc hm-fc-c"><i></i><svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 0 1 14 0"/><path d="M8 13a4 4 0 0 1 8 0" opacity=".8"/><path d="M12 13v2.5c0 2-.7 3.5-2 4.5"/><path d="M8 17.5c0 1-.3 2-.9 2.8"/><path d="M16 15.5c0 2.2-.6 3.8-1.6 5"/><path d="M3 9.5A9.5 9.5 0 0 1 12 2.5a9.5 9.5 0 0 1 9 7" opacity=".6"/></svg><b>WHO AM I?</b><small>TRUST NO ONE</small></div>
+    <span class="hm-chip hm-chip-a"><em></em>مين هيتقفش الليلة؟</span>
+    <span class="hm-chip hm-chip-b">✦ الموبايل واحد... والسر كتير.</span>
+  </div>
+
+  <div class="hm-stats" aria-label="إحصائيات سريعة">
+    <div><b id="hmStatGames" dir="ltr">3</b><span>ألعاب جاهزة</span></div>
+    <div><b id="hmStatCases" dir="ltr">2</b><span>قصة تحقيق</span></div>
+    <div><b id="hmStatNames" dir="ltr">1,024+</b><span>اسم في تحدّي الكورة</span></div>
+  </div>
+
+  <div class="hm-tabs" role="tablist" aria-label="نوع اللعبة">
+    <button type="button" role="tab" class="is-on" data-f="all" aria-selected="true">كل الألعاب</button>
+    <button type="button" role="tab" data-f="case" aria-selected="false">تحقيق</button>
+    <button type="button" role="tab" data-f="ball" aria-selected="false">كورة</button>
+  </div>
+
+  <label class="hm-search">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="hmSearch" type="search" inputmode="search" autocomplete="off" placeholder="دوّر على لعبة...">
+  </label>
+
   <h2 class="hm-group">تحقيق</h2>
-  <button class="hm-row" onclick="playClickSound();show('games')">
+  <button class="hm-row" data-cat="case" data-k="قصص تحقيق جريمة غموض مافيا يوسف فواز وايت تشابل مبحوح" onclick="playClickSound();show('games')">
     <span class="hm-ico hm-ico-books" aria-hidden="true"><svg viewBox="0 0 26 26" width="30" height="30"><g stroke="#0c1411" stroke-width=".6" stroke-linejoin="round"><rect x="5" y="2" width="16" height="4.2" rx=".9" fill="#d9727e"/><rect x="4" y="6.6" width="17" height="4.2" rx=".9" fill="#3f7fa0"/><rect x="3" y="11.2" width="19" height="4.2" rx=".9" fill="#7fb8cf"/><rect x="4" y="15.8" width="17" height="4.2" rx=".9" fill="#c79a6b"/><rect x="3" y="20.4" width="19" height="4.2" rx=".9" fill="#efd7a3"/></g><g stroke="#e9b44c" stroke-width=".9"><path d="M7.5 2.3v3.6M9 2.3v3.6M7 6.9v3.6M8.5 6.9v3.6"/></g></svg></span>
     <span class="hm-txt">
       <b>القصص</b>
@@ -116,7 +142,7 @@
   </button>
 
   <h2 class="hm-group">كورة</h2>
-  <button class="hm-row is-football" onclick="playClickSound();show('password')">
+  <button class="hm-row is-football" data-cat="ball" data-k="باسورد كلمة السر اسامي لاعبين كورة كروت" onclick="playClickSound();show('password')">
     <span class="hm-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><circle cx="12" cy="12" r="10.4"/><polygon points="12.00,2.40 13.53,9.90 21.13,9.03 14.47,12.80 17.64,19.77 12.00,14.60 6.36,19.77 9.53,12.80 2.87,9.03 10.47,9.90" fill="currentColor" stroke-width=".8"/><polygon points="15.17,7.63 14.48,5.51 16.29,4.19 18.10,5.51 17.41,7.63" stroke-width="1"/><polygon points="17.14,13.67 18.94,12.36 20.75,13.67 20.06,15.79 17.83,15.79" stroke-width="1"/><polygon points="12.00,17.40 13.81,18.71 13.12,20.84 10.88,20.84 10.19,18.71" stroke-width="1"/><polygon points="6.86,13.67 6.17,15.79 3.94,15.79 3.25,13.67 5.06,12.36" stroke-width="1"/><polygon points="8.83,7.63 6.59,7.63 5.90,5.51 7.71,4.19 9.52,5.51" stroke-width="1"/></svg></span>
     <span class="hm-txt">
       <b>باسورد</b>
@@ -124,7 +150,7 @@
     </span>
     <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
   </button>
-  <button class="hm-row is-story" onclick="playClickSound();show('story')">
+  <button class="hm-row is-story" data-cat="ball" data-k="قصة لاعب انا مين تخمين ادلة كورة" onclick="playClickSound();show('story')">
     <span class="hm-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 0 1 14 0"/><path d="M8 13a4 4 0 0 1 8 0" opacity=".8"/><path d="M12 13v2.5c0 2-.7 3.5-2 4.5"/><path d="M8 17.5c0 1-.3 2-.9 2.8"/><path d="M16 15.5c0 2.2-.6 3.8-1.6 5"/><path d="M3 9.5A9.5 9.5 0 0 1 12 2.5a9.5 9.5 0 0 1 9 7" opacity=".6"/></svg></span>
     <span class="hm-txt">
       <b>قصة لاعب - أنا مين</b>
@@ -132,6 +158,7 @@
     </span>
     <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
   </button>
+  <p id="hmEmpty" class="hm-empty hidden">مفيش لعبة بالاسم ده.</p>
 </section>
 
 <!-- GAME SELECT (STORIES) -->
@@ -266,6 +293,9 @@
     <p style="margin-top:10px">
       مش عاجباكم الأسامي اللي طلعت؟ دوسوا "خلط جديد" وهيتوزع عشرة أسامي تانية.
     </p>
+    <p style="margin-top:10px">
+      تقدروا تغيروا "مستوى الكروت" (للمبتدئين، متوسط، للخبراء)، وزر "اقفل كل الكروت" بيقلب كل الكروت مرة واحدة قبل ما الموبايل يتنقل.
+    </p>
   </div>
   <div class="grid">
     <button class="btn primary" onclick="playClickSound();dealPasswordCards();show('password-game')">ابدأ اللعب</button>
@@ -282,6 +312,21 @@
   </div>
   <h2 style="margin-top:12px">دوسوا على كارت</h2>
   <p class="subtitle" style="margin:6px 0 0">اضغطوا تاني على نفس الكارت عشان تقفلوه قبل ما تمرروا الموبايل.</p>
+
+  <div class="fb-opts">
+    <div>
+      <label for="passwordLevel">مستوى الكروت</label>
+      <select id="passwordLevel" onchange="setPasswordLevel(this.value)">
+        <option value="easy">للمبتدئين</option>
+        <option value="mid" selected>متوسط</option>
+        <option value="pro">للخبراء</option>
+      </select>
+    </div>
+    <div>
+      <label>حافظ على السر</label>
+      <button type="button" class="btn ghost" onclick="playClickSound();lockAllPasswordCards()">اقفل كل الكروت</button>
+    </div>
+  </div>
 
   <div id="passwordGrid" class="fb-grid"></div>
 
@@ -1217,7 +1262,7 @@
 <div class="card hero">
   <div class="badge">ASWAN • CAIRO</div>
   <h1>مين قتل فواز؟</h1>
-  <p class="subtitle">7 أسماء حقيقية. مافيوسو واحد بس، بيتحدد عشوائيًا كل جلسة.</p>
+  <p class="subtitle">10 أسماء حقيقية. مافيوسو واحد بس، بيتحدد عشوائيًا كل جلسة.</p>
 
   <div class="notice" style="text-align:right">
     <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
@@ -1268,6 +1313,9 @@
     <option value="بودا">بودا</option>
     <option value="مينا">مينا</option>
     <option value="مرزوق">مرزوق</option>
+    <option value="دانيال">دانيال</option>
+    <option value="روماني">روماني</option>
+    <option value="أدهم">أدهم</option>
   </select>
 
   <br><br>
@@ -1764,6 +1812,7 @@
 <script src="js/football.js"></script>
 <script src="js/story-data.js"></script>
 <script src="js/story.js"></script>
+<script src="js/hub.js"></script>
 <script src="js/init.js"></script>
 </body>
 </html>
