@@ -21,6 +21,7 @@ function registerGame(id,config){
     minPlayers:config.minPlayers||null,
     accompliceMinPlayers:config.accompliceMinPlayers||null,
     useRealNames:!!config.useRealNames,
+    witnessNote:config.witnessNote||null,
     gmCode:localStorage.getItem(`${id}GmCode`)||"",
     playerCount:Number(localStorage.getItem(`${id}PlayerCount`))||config.roles.length,
     activeCount:null,
@@ -126,7 +127,8 @@ function getDisplayRolesForGM(game,gmCode,count,players){
     ...r,
     displayN:r.id,
     killer:r.id===killerAssign.killerId,
-    accomplice:r.id===killerAssign.accompliceId
+    accomplice:r.id===killerAssign.accompliceId,
+    witness:r.id===killerAssign.witnessId
   }));
 
   return{roles,benched:[]};
@@ -137,7 +139,7 @@ function getDisplayRolesForGM(game,gmCode,count,players){
 // دالة pure عشان كل الأجهزة (اللاعب والـGM) توصل لنفس النتيجة بالظبط.
 function computeRealNameAssignment(game,code,joinedIds,target){
   if(!joinedIds.length||joinedIds.length<target){
-    return{killerId:null,accompliceId:null};
+    return{killerId:null,accompliceId:null,witnessId:null};
   }
 
   const key=joinedIds.join(",");
@@ -152,7 +154,17 @@ function computeRealNameAssignment(game,code,joinedIds,target){
     accompliceId=joinedIds[accompliceIndex];
   }
 
-  return{killerId,accompliceId};
+  // اللاعب صاحب الملاحظة السرية (لو اللعبة فيها witnessNote): بيتحدد
+  // عشوائيًا من ضمن اللاعبين *غير* المافيوسو بس، ونفس الحساب على كل الأجهزة.
+  let witnessId=null;
+  if(GAMES[game].witnessNote){
+    const pool=joinedIds.filter(id=>id!==killerId&&id!==accompliceId);
+    if(pool.length){
+      witnessId=pool[hashCode(`${game.toUpperCase()}-${code}-WITNESS-${key}`)%pool.length];
+    }
+  }
+
+  return{killerId,accompliceId,witnessId};
 }
 
 function essentialRoleCount(game){
@@ -394,7 +406,8 @@ async function revealOrWaitRealName(game,code,name){
       ...full,
       displayN:full.id,
       killer:full.id===assign.killerId,
-      accomplice:full.id===assign.accompliceId
+      accomplice:full.id===assign.accompliceId,
+      witness:full.id===assign.witnessId
     };
     renderGamePlayer(game,name,r);
     return;
@@ -423,7 +436,8 @@ async function revealOrWaitRealName(game,code,name){
     ...full,
     displayN:full.id,
     killer:full.id===assign.killerId,
-    accomplice:full.id===assign.accompliceId
+    accomplice:full.id===assign.accompliceId,
+    witness:full.id===assign.witnessId
   };
 
   renderGamePlayer(game,name,r);
@@ -439,6 +453,9 @@ function renderRealNameWaiting(game,name,joined,target){
 
   const mafiaCard=el(game,"MafiaCard");
   if(mafiaCard)mafiaCard.classList.add("hidden");
+
+  const witnessCardW=el(game,"WitnessCard");
+  if(witnessCardW)witnessCardW.classList.add("hidden");
 
   [`${game}VoteCard`,`${game}StatusCard`].forEach(id=>{
     const box=document.getElementById(id);
@@ -483,6 +500,15 @@ function renderGamePlayer(game,name,r){
 
   const mafiaCard=el(game,"MafiaCard");
   if(mafiaCard)mafiaCard.classList.remove("hidden");
+
+  // الملاحظة السرية (لو اللعبة فيها): بتظهر للاعب صاحبها بس، ومش بتظهر أبدًا للمافيوسو.
+  const witnessCard=el(game,"WitnessCard");
+  if(witnessCard){
+    const showNote=!!(r.witness&&!mafia&&GAMES[game].witnessNote);
+    witnessCard.classList.toggle("hidden",!showNote);
+    const wText=el(game,"WitnessText");
+    if(wText)wText.textContent=showNote?GAMES[game].witnessNote:"";
+  }
 
   [`${game}VoteCard`,`${game}StatusCard`].forEach(id=>{
     const box=document.getElementById(id);
@@ -626,7 +652,7 @@ async function buildGameGM(game){
       ? `عدد اللاعبين (${max})`
       : `عدد اللاعبين (من ${min} إلى ${max})`;
     countLabel.textContent=GAMES[game].useRealNames
-      ?`${base} — دول عدد اللي فعلًا هيدخلوا الليلة دي، مش المفروض يبقوا كلهم من الـ11.`
+      ?`${base} — دول عدد اللي فعلًا هيدخلوا الليلة دي، مش المفروض يبقوا كلهم من الـ${max}.`
       :base;
   }
 
@@ -685,6 +711,8 @@ async function buildGameGM(game){
       status="الفاعل المباشر — المافيوسو";
     }else if(r.accomplice){
       status="الشريك المُسهّل — Mafioso الثاني";
+    }else if(r.witness){
+      status="صاحب الملاحظة السرية — مش القاتل";
     }
 
     const title=document.createElement("b");
@@ -814,6 +842,21 @@ async function buildGameGM(game){
           document.createTextNode(round.private)
         );
 
+        d.appendChild(note);
+      }
+    }
+
+    if(round.privateWitness){
+      const w=roles.find(r=>r.witness);
+
+      if(w){
+        const note=document.createElement("div");
+        note.className="private-note";
+
+        const nb=document.createElement("b");
+        nb.textContent=`ملاحظة خاصة — اللاعب ${w.name} فقط (صاحب الملاحظة السرية): `;
+
+        note.append(nb,document.createTextNode(round.private));
         d.appendChild(note);
       }
     }

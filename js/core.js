@@ -6,6 +6,8 @@ const FOOTBALL_SCREENS=["password","password-game","story","story-game"];
 
 const YOUSEF_SCREENS=["yousef","yousef-gm-lock","yousef-setup","yousef-player","yousef-gm"];
 
+const TRAIN_SCREENS=["train","train-gm-lock","train-setup","train-player","train-gm"];
+
 const HOME_SCREENS=["hub","games"];
 const STORY_SCREENS=["story","story-game"];  // «أنا مين» has its own colours
 const START_SCREEN="hub";
@@ -63,7 +65,7 @@ function show(id,opts){
   document.body.classList.toggle("mode-home",HOME_SCREENS.includes(id));
   document.body.classList.toggle("mode-football",FOOTBALL_SCREENS.includes(id));
   document.body.classList.toggle("mode-story",STORY_SCREENS.includes(id));
-  document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id));
+  document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id)||TRAIN_SCREENS.includes(id));
   window.scrollTo({top:0,behavior:"smooth"});
 }
 

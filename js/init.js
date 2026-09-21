@@ -28,7 +28,9 @@ Object.keys(GAMES).forEach(game=>{
       localStorage.getItem(`${game}Player`)||"null"
     );
 
-    if(saved){
+    // ألعاب الأسماء الحقيقية بتتكشف من openGamePlayer بعد ما الكل يدخل،
+    // فمنعمللهاش عرض مسبق هنا (كان ممكن يظهر دور غلط لحظيًا).
+    if(saved&&!GAMES[game].useRealNames){
       const roles=getGameRoles(game,saved.sessionCode,saved.count);
       const r=roles.find(x=>x.id===saved.roleId);
 
