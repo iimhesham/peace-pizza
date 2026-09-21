@@ -203,7 +203,7 @@
   </div>
 
   <div class="grid">
-    <button class="btn primary" onclick="playClickSound();storyStartGame()">ابدأ اللعب</button>
+    <button id="storyStartBtn" class="btn primary" onclick="playClickSound();storyStartGame()">ابدأ اللعب</button>
     <button class="btn ghost" onclick="playClickSound();show('hub')">رجوع</button>
   </div>
 </div>
@@ -253,7 +253,7 @@
   </div>
 
   <div class="fb-controls">
-    <button class="btn ghost" onclick="playClickSound();storyResetScores()" style="flex:1">تصفير النقط</button>
+    <button id="storyResetBtn" class="btn ghost" onclick="playClickSound();storyResetScores()" style="flex:1">تصفير النقط</button>
     <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع للرئيسية</button>
   </div>
 </div>
