@@ -1042,17 +1042,51 @@ function shuffledCopy(arr){
   return a;
 }
 
+function getPasswordLevel(){
+  const v=localStorage.getItem("passwordLevel");
+  return v==="easy"||v==="pro"?v:"mid";
+}
+
+function setPasswordLevel(v){
+  localStorage.setItem("passwordLevel",v);
+  dealPasswordCards();
+}
+
 function dealPasswordCards(){
-  // Keep the full database, but make most rounds noticeably easier.
-  // The first 250 names are the familiar/core pool; 2 cards may come from the full database for variety.
+  // The first 250 names are the familiar/core pool; the rest is the harder tail.
+  //   easy (للمبتدئين): all 10 from the core pool
+  //   mid  (متوسط):     8 core + 2 from the full database (the original mix)
+  //   pro  (للخبراء):   all 10 from the harder tail
+  const level=getPasswordLevel();
   const easyPool=FOOTBALL_PLAYERS.slice(0,250);
   const hardPool=FOOTBALL_PLAYERS.slice(250);
-  const easy=shuffledCopy(easyPool).slice(0,8);
-  const harder=shuffledCopy(hardPool).slice(0,2);
-  passwordDeal=shuffledCopy(easy.concat(harder));
+  let picked;
+
+  if(level==="easy"){
+    picked=shuffledCopy(easyPool).slice(0,10);
+  }else if(level==="pro"){
+    picked=shuffledCopy(hardPool).slice(0,10);
+  }else{
+    picked=shuffledCopy(easyPool).slice(0,8).concat(shuffledCopy(hardPool).slice(0,2));
+  }
+
+  const sel=document.getElementById("passwordLevel");
+  if(sel)sel.value=level;
+
+  passwordDeal=shuffledCopy(picked);
   passwordFlipped=new Array(passwordDeal.length).fill(false);
   renderPasswordGrid();
   toast("اتوزعوا عشرة أسامي جديدة");
+}
+
+function lockAllPasswordCards(){
+  if(!passwordFlipped.some(Boolean)){
+    toast("كل الكروت مقفولة بالفعل");
+    return;
+  }
+  passwordFlipped=passwordFlipped.map(()=>false);
+  renderPasswordGrid();
+  toast("اتقفلت كل الكروت");
 }
 
 function togglePasswordCard(i){
