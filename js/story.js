@@ -8,36 +8,80 @@
 const STORY_POINTS=[3,2,1]; // points if solved while clue 1 / 2 / 3 is the latest shown
 const STORY_MAX_GUESSES=2;
 
+const STORY_STORAGE_KEY="storyState";
+const STORY_RESET_CONFIRM_MS=3000;
+
 let storyDeck=[];      // shuffled indices into STORY_PLAYERS, not-yet-played
 let storyCurrent=null; // current player object
+let storyCurrentIdx=-1;// index of storyCurrent in STORY_PLAYERS (for saving)
 let storyClueCount=3;  // 3 (عادي) or 4 (صعب)
 let storyRevealed=1;   // how many clues are currently shown
 let storyGuessesUsed=0;
 let storyRoundOver=false;
 let storyScores={a:0,b:0};
 let storyTeamNames={a:"الفريق الأول",b:"الفريق الثاني"};
+let storyResetArmed=false;
+let storyResetTimer=null;
 
+/* Saved on every change: scores, team names, mode, the remaining deck and
+   the round in progress. Restored once when the page loads, so a refresh or
+   leaving the screen never loses points or the current round. */
 function storyLoadState(){
   try{
-    const saved=JSON.parse(localStorage.getItem("storyState")||"null");
-    if(saved){
-      if(typeof saved.scoreA==="number")storyScores.a=saved.scoreA;
-      if(typeof saved.scoreB==="number")storyScores.b=saved.scoreB;
-      if(saved.teamA)storyTeamNames.a=saved.teamA;
-      if(saved.teamB)storyTeamNames.b=saved.teamB;
+    const saved=JSON.parse(localStorage.getItem(STORY_STORAGE_KEY)||"null");
+    if(!saved)return;
+
+    if(typeof saved.scoreA==="number")storyScores.a=saved.scoreA;
+    if(typeof saved.scoreB==="number")storyScores.b=saved.scoreB;
+    if(saved.teamA)storyTeamNames.a=saved.teamA;
+    if(saved.teamB)storyTeamNames.b=saved.teamB;
+    if(saved.clueCount===3||saved.clueCount===4)storyClueCount=saved.clueCount;
+
+    /* deck / round are only trusted if the player list hasn't changed */
+    const total=STORY_PLAYERS.length;
+    if(saved.total!==total)return;
+    const valid=i=>Number.isInteger(i)&&i>=0&&i<total;
+
+    if(Array.isArray(saved.deck))storyDeck=saved.deck.filter(valid);
+
+    if(valid(saved.current)){
+      storyCurrentIdx=saved.current;
+      storyCurrent=STORY_PLAYERS[saved.current];
+      const maxClues=Math.min(storyClueCount,storyCurrent.clues.length);
+      storyRevealed=Math.min(Math.max(parseInt(saved.revealed,10)||1,1),maxClues);
+      storyGuessesUsed=Math.min(Math.max(parseInt(saved.guessesUsed,10)||0,0),STORY_MAX_GUESSES);
+      storyRoundOver=saved.roundOver===true;
     }
   }catch(e){}
 }
 
 function storySaveState(){
   try{
-    localStorage.setItem("storyState",JSON.stringify({
+    localStorage.setItem(STORY_STORAGE_KEY,JSON.stringify({
       scoreA:storyScores.a,
       scoreB:storyScores.b,
       teamA:storyTeamNames.a,
-      teamB:storyTeamNames.b
+      teamB:storyTeamNames.b,
+      clueCount:storyClueCount,
+      total:STORY_PLAYERS.length,
+      deck:storyDeck,
+      current:storyCurrentIdx,
+      revealed:storyRevealed,
+      guessesUsed:storyGuessesUsed,
+      roundOver:storyRoundOver
     }));
   }catch(e){}
+  storyRefreshStartBtn();
+}
+
+/* "ابدأ اللعب" becomes "كمّل اللعب" when there is a saved game */
+function storyRefreshStartBtn(){
+  const btn=document.getElementById("storyStartBtn");
+  if(!btn)return;
+  const hasGame=storyCurrent!==null||storyScores.a>0||storyScores.b>0;
+  btn.textContent=hasGame
+    ?`كمّل اللعب (${storyScores.a} : ${storyScores.b})`
+    :"ابدأ اللعب";
 }
 
 function storyRefillDeck(){
@@ -46,27 +90,39 @@ function storyRefillDeck(){
 }
 
 function storyStartGame(){
-  storyLoadState();
   document.getElementById("storyTeamAInput").value=storyTeamNames.a;
   document.getElementById("storyTeamBInput").value=storyTeamNames.b;
-  storyRefillDeck();
-  storyNextRound(true);
+
+  if(storyCurrent){
+    renderStoryRound();          // resume the round exactly where it was
+  }else{
+    if(storyDeck.length===0)storyRefillDeck();
+    storyNextRound(true);
+  }
+
   renderStoryScores();
   show("story-game");
 }
 
 function storySetHardMode(on){
   storyClueCount=on?4:3;
+  if(storyCurrent){
+    const maxClues=Math.min(storyClueCount,storyCurrent.clues.length);
+    if(storyRevealed>maxClues)storyRevealed=maxClues;
+  }
+  storySaveState();
   toast(on?"الوضع الصعب: 4 أدلة":"الوضع العادي: 3 أدلة");
 }
 
 function storyNextRound(silent){
   if(storyDeck.length===0)storyRefillDeck();
   const idx=storyDeck.pop();
+  storyCurrentIdx=idx;
   storyCurrent=STORY_PLAYERS[idx];
   storyRevealed=1;
   storyGuessesUsed=0;
   storyRoundOver=false;
+  storySaveState();
   renderStoryRound();
   if(!silent)toast("لاعب جديد");
 }
@@ -80,6 +136,7 @@ function storyRevealNext(){
   if(storyRevealed<Math.min(storyClueCount,storyCurrent.clues.length)){
     storyRevealed++;
   }
+  storySaveState();
   renderStoryRound();
 }
 
@@ -98,6 +155,7 @@ function storyWrongGuess(){
   if(storyGuessesUsed>=STORY_MAX_GUESSES){
     storyRoundOver=true;
   }
+  storySaveState();
   renderStoryRound();
 }
 
@@ -112,6 +170,7 @@ function storySkipRound(){
     storyRoundOver=true;
     toast("محدش عارف؟ اتفرجوا على الإجابة");
   }
+  storySaveState();
   renderStoryRound();
 }
 
@@ -127,11 +186,32 @@ function storyCorrectGuess(team){
   toast(`+${pts} لـ${storyTeamNames[team]}`);
 }
 
+/* Two taps within a few seconds: protects the points from an accidental tap */
 function storyResetScores(){
+  const btn=document.getElementById("storyResetBtn");
+
+  if(!storyResetArmed){
+    storyResetArmed=true;
+    if(btn)btn.textContent="اضغط تاني للتأكيد";
+    toast("اضغط تاني لتصفير النقط");
+    clearTimeout(storyResetTimer);
+    storyResetTimer=setTimeout(storyDisarmReset,STORY_RESET_CONFIRM_MS);
+    return;
+  }
+
+  storyDisarmReset();
   storyScores={a:0,b:0};
-  storySaveState();
+  storyRefillDeck();
+  storyNextRound(true);
   renderStoryScores();
-  toast("النقط اتصفرت");
+  toast("لعبة جديدة، النقط اتصفرت");
+}
+
+function storyDisarmReset(){
+  clearTimeout(storyResetTimer);
+  storyResetArmed=false;
+  const btn=document.getElementById("storyResetBtn");
+  if(btn)btn.textContent="تصفير النقط";
 }
 
 function storyUpdateTeamName(team,value){
@@ -201,3 +281,7 @@ function renderStoryRound(){
   const ptsNow=document.getElementById("storyPointsNow");
   if(ptsNow)ptsNow.textContent=storyCurrentPoints();
 }
+
+/* restore the saved game once, when the page loads */
+storyLoadState();
+storyRefreshStartBtn();
