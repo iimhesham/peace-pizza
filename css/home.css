@@ -133,3 +133,14 @@ button.hm-case{border-color:#4a4127}
 .cs-emblem{display:block;width:150px;height:auto;margin:18px auto 6px}
 .hm-bar + .cs-emblem + .hm-sub{text-align:center}
 .hm-ico-books{background:#0c1411}
+
+/* hub header: centered badge + Anton title */
+.hm-head-c{display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 2px 6px}
+.hm-badge{width:min(58vw,230px);height:auto;filter:drop-shadow(0 6px 0 rgba(0,0,0,.5))}
+.hm-head-c .hm-brand{
+  font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;
+  font-size:clamp(64px,22vw,110px);letter-spacing:.14em;padding-inline-start:.14em;
+  margin:14px 0 0;line-height:1;text-align:center;text-transform:uppercase;
+  color:var(--h-text);text-shadow:4px 4px 0 var(--h-green);
+}
+.hm-head-c .hm-sub{margin:12px 0 0;font-size:17px;text-align:center}
