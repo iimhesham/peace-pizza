@@ -1,0 +1,172 @@
+/* =========================================================
+   APP — inner screens (player, GM, football, story)
+   Loaded after style.css and home.css. Restyles every screen
+   that is not the start screen so the whole site shares one
+   look: flat panels, thin borders, one accent per area.
+     - detective / GM / player screens  -> gold accent
+     - football screens (.fb-app)       -> green accent
+   Nothing here touches layout logic or JS. To go back to the
+   old look, remove the <link> to this file from index.html.
+========================================================= */
+
+/* ---------- tokens (feed the old var(--card) etc.) ---------- */
+:root{
+  --bg:#0b1210;--card:#111b17;--card2:#17231e;--border:#243530;
+  --text:#e9efeb;--muted:#8d9d95;
+  --gold:#a88a4e;--gold2:#c9aa68;--gold3:#d4b675;
+  --red:#e07a6e;--shadow:none;
+}
+.app{
+  --a-accent:#d4b675;
+  --a-accent-soft:rgba(212,182,117,.12);
+  --a-accent-line:rgba(212,182,117,.38);
+}
+.app .fb-app,.app .ys-app{
+  --bg:#0b1210;--card:#111b17;--card2:#17231e;--border:#243530;
+  --text:#e9efeb;--muted:#8d9d95;--ink:#e9efeb;--ink2:#ffffff;
+  --red:#e07a6e;--shadow:none;
+}
+.app .fb-app{
+  --gold:#3f9d7e;--gold2:#57c7a0;--gold3:#8fe0c3;
+  --a-accent:#57c7a0;
+  --a-accent-soft:rgba(87,199,160,.12);
+  --a-accent-line:rgba(87,199,160,.4);
+}
+.app .ys-app{--gold:#a88a4e;--gold2:#c9aa68;--gold3:#d4b675}
+
+/* ---------- page background: one flat base for every mode ---------- */
+body,body.mode-home,body.mode-football,body.mode-yousef{background:#0b1210!important;color:#e9efeb}
+body .app,body.mode-football .app,body.mode-yousef .app{background:none!important}
+.moon,.fog{display:none!important}
+body #toast,body.mode-football #toast,body.mode-yousef #toast{
+  background:#17231e!important;border:1px solid #38514a!important;color:#e9efeb!important;
+  border-radius:12px;box-shadow:none!important;
+  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+}
+
+/* ---------- sections ---------- */
+.app .fb-app,.app .ys-app{background:none;min-height:0;overflow:visible;isolation:auto;color:var(--text)}
+.app .fb-app::before,.app .fb-app::after{display:none}
+.app section:not(.home),
+.app section:not(.home) button,.app section:not(.home) input,.app section:not(.home) select,.app section:not(.home) textarea{font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif}
+.app section:not(.home){line-height:1.65}
+
+/* ---------- headings ---------- */
+.app section:not(.home) h1,.app section:not(.home) h2,.app section:not(.home) h3{font-family:inherit;font-weight:700;letter-spacing:0;line-height:1.35}
+.app section:not(.home) h1{font-size:26px}
+.app section:not(.home) h2{font-size:21px}
+.app section:not(.home) h3{font-size:17px}
+
+/* ---------- cards ---------- */
+.app section:not(.home) .card{background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:none;padding:18px;margin:10px 0}
+.app section:not(.home) .card::before{display:none}
+.app section:not(.home) .card.hero{padding:20px 18px}
+.app section:not(.home) .hero{text-align:start}
+.app section:not(.home) .gm-col .card{margin:0 0 10px}
+.app section:not(.home) .card.secret{background:var(--card2);border-color:var(--a-accent-line)}
+.app section:not(.home) .secret h3{color:var(--a-accent)}
+.app section:not(.home) .card[style*="margin:40px auto"]{margin:16px auto!important}
+.app section:not(.home) .subtitle{max-width:none;margin:8px 0 18px;font-size:14.5px;color:var(--muted)}
+.app section:not(.home) .grid{max-width:none;margin:16px 0 0;gap:10px}
+.app section:not(.home) .divider{display:none}
+
+/* ---------- buttons ---------- */
+.app section:not(.home) .btn{
+  border:0;border-radius:12px;min-height:48px;padding:12px 18px;
+  font-family:inherit;font-size:15px;font-weight:600;box-shadow:none;
+  transition:background .12s,border-color .12s,transform .08s;
+}
+.app section:not(.home) .btn:hover{transform:none}
+.app section:not(.home) .btn:active{transform:scale(.98)}
+.app section:not(.home) .btn:disabled{opacity:.4;cursor:not-allowed}
+.app section:not(.home) .btn.primary,.app section:not(.home) .btn.primary:hover{background:var(--a-accent);color:#0b1210;border:0}
+.app section:not(.home) .btn.secondary,.app section:not(.home) .btn.secondary:hover{background:var(--card2);color:var(--text);border:1px solid #38514a}
+.app section:not(.home) .btn.ghost,.app section:not(.home) .btn.ghost:hover{background:transparent;color:var(--text);border:1px solid var(--border)}
+.app section:not(.home) .btn.ghost:active,.app section:not(.home) .btn.secondary:active{background:var(--card2)}
+.app section:not(.home) .btn:focus-visible{outline:2px solid var(--a-accent);outline-offset:2px}
+
+/* ---------- badge (was a seal / glowing pill) ---------- */
+.app section:not(.home) .badge{
+  display:inline-block;width:auto;height:auto;padding:2px 12px;
+  border:0;border-radius:999px;background:var(--a-accent-soft);color:var(--a-accent);
+  font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.02em;line-height:1.8;
+  text-shadow:none;box-shadow:none;
+}
+.app section:not(.home) .badge::after{display:none}
+.app section:not(.home) #yousefMafia{background:rgba(224,122,110,.16);color:#f0968a;border:0;font-family:inherit;font-weight:700}
+.app section:not(.home) .topline{gap:10px}
+
+/* ---------- notice / text ---------- */
+.app section:not(.home) .notice{
+  background:var(--card2);border:1px solid var(--border);border-right:3px solid var(--a-accent);
+  border-radius:12px;color:var(--text);box-shadow:none;padding:14px;font-size:14px;line-height:1.7;
+}
+.app section:not(.home) .danger{color:var(--red)}
+.app section:not(.home) hr{border-top-color:var(--border)}
+.app section:not(.home) details{border-top-color:var(--border)}
+.app section:not(.home) summary::after{color:var(--a-accent)}
+
+/* ---------- form fields ---------- */
+.app section:not(.home) label{color:var(--muted);font-size:14px;font-weight:600}
+.app section:not(.home) input,.app section:not(.home) select,.app section:not(.home) textarea{
+  background:#0c1411;border:1px solid var(--border);border-radius:12px;color:var(--text);
+  font-family:inherit;font-size:16px;padding:12px 14px;
+}
+.app section:not(.home) input::placeholder,.app section:not(.home) textarea::placeholder{color:#62736b}
+.app section:not(.home) input:focus,.app section:not(.home) select:focus,.app section:not(.home) textarea:focus{border-color:var(--a-accent);box-shadow:none}
+
+/* ---------- role picker ---------- */
+.app section:not(.home) .role-btn,.app section:not(.home) .role-btn:hover{background:#0c1411;border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:inherit;box-shadow:none;transform:none}
+.app section:not(.home) .role-btn.selected{background:var(--a-accent-soft);border-color:var(--a-accent);box-shadow:none;transform:none}
+.app section:not(.home) .role-btn strong{color:var(--a-accent);font-family:inherit;font-weight:700}
+.app section:not(.home) .role-btn small{color:var(--muted)}
+
+/* ---------- voting ---------- */
+.app section:not(.home) .vote-target-btn{background:#0c1411;border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:inherit;min-height:44px}
+.app section:not(.home) .vote-target-btn.selected{background:var(--a-accent-soft);border-color:var(--a-accent)}
+.app section:not(.home) .vote-bar-track{background:#0c1411}
+.app section:not(.home) .vote-bar-fill{background:var(--a-accent)}
+.app section:not(.home) .vote-count{color:var(--a-accent)}
+.app section:not(.home) .vote-row{border-bottom-color:var(--border)}
+.app section:not(.home) .vote-row.leading .vname{color:var(--red)}
+.app section:not(.home) .vote-row.leading .vote-bar-fill{background:var(--red)}
+
+/* ---------- GM panel: rounds, evidence, notes ---------- */
+.app section:not(.home) .round{background:var(--card2);border:1px solid var(--border);border-radius:12px}
+.app section:not(.home) .round.taken{background:var(--a-accent-soft);border-color:var(--a-accent-line)}
+.app section:not(.home) .round.out{background:var(--card2);border-color:rgba(224,122,110,.5);opacity:.6}
+.app section:not(.home) .round strong,.app section:not(.home) .round b{color:var(--a-accent)}
+.app section:not(.home) .taken-badge{background:var(--a-accent-soft);color:var(--a-accent)}
+.app section:not(.home) .out-badge{background:rgba(224,122,110,.16);color:var(--red)}
+.app section:not(.home) .evidence{background:var(--a-accent-soft);border:1px solid var(--a-accent-line);border-radius:12px;color:var(--text)}
+.app section:not(.home) .private-note{background:rgba(224,122,110,.08);border:1px dashed rgba(224,122,110,.45);border-radius:12px;color:var(--text)}
+.app section:not(.home) .round-chip{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:inherit}
+.app section:not(.home) .round-chip.active{background:var(--a-accent-soft);border-color:var(--a-accent);color:var(--a-accent)}
+
+/* ---------- football: password cards ---------- */
+.app section:not(.home) .fb-whistle{filter:none;text-align:start;margin-bottom:8px}
+.app section:not(.home) .fb-pitch-line{width:100%;height:1px;margin:14px 0;background:var(--border);box-shadow:none}
+.app section:not(.home) .fb-card-face{border-radius:12px}
+.app section:not(.home) .fb-card-back{background:var(--card2);border:1px solid var(--border);box-shadow:none;color:var(--muted)}
+.app section:not(.home) .fb-card-back .fb-index{font-family:inherit;font-weight:600;color:var(--muted)}
+.app section:not(.home) .fb-card-front{background:#10251e;border:1px solid var(--a-accent);box-shadow:none}
+.app section:not(.home) .fb-card-front span{font-family:inherit;font-weight:600;font-size:15px;color:var(--text)}
+
+/* ---------- football: story (أنا مين) ---------- */
+.app section:not(.home) .story-score-box{background:var(--card2);border:1px solid var(--border);border-radius:12px}
+.app section:not(.home) .story-team-name{color:var(--muted)}
+.app section:not(.home) .story-team-score{font-family:inherit;font-weight:700;font-size:30px;color:var(--text)}
+.app section:not(.home) .story-clue{background:var(--card2);border:1px solid var(--border);border-right:3px solid var(--a-accent);border-radius:12px}
+.app section:not(.home) .story-clue-tag{font-family:inherit;font-weight:700;font-size:13px;letter-spacing:0;color:var(--a-accent)}
+.app section:not(.home) .story-clue-pts{color:var(--muted)}
+.app section:not(.home) .story-clue p{color:var(--text)}
+.app section:not(.home) .story-gm-answer{background:transparent;border:1px dashed #38514a;color:var(--muted)}
+.app section:not(.home) .story-gm-answer b{color:var(--text)}
+
+/* ---------- motion: one quick fade for every screen ---------- */
+.app section.page-in:not(.home){animation:appIn .16s ease-out}
+@keyframes appIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .app section.page-in:not(.home){animation:none}
+  .app section:not(.home) .btn,.app section:not(.home) .role-btn{transition:none}
+}
