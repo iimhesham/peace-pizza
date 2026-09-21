@@ -234,3 +234,79 @@ body.mode-story #toast{
 /* moderator answer strip */
 .app #story-game .story-gm-answer{background:transparent;border-color:var(--s-line);color:var(--s-muted)}
 .app #story-game .story-gm-answer b{color:var(--s-ink)}
+
+/* =========================================================
+   مين قتل يوسف عمر؟  —  Deco #D8E0A4 + Teal Blue #1A485F + black
+   The five yousef screens only (they carry the .ys-app class).
+   Page = teal, cards = deeper teal, deco is the accent, black is
+   the ink on every deco surface (buttons, badges, the intro card).
+========================================================= */
+body.mode-yousef{background:#1a485f!important}
+body.mode-yousef #toast{
+  background:#d8e0a4!important;border:1px solid #1a485f!important;color:#0a0a0a!important;
+}
+
+.app section.ys-app.ys-app{
+  --y-deco:#d8e0a4;
+  --y-teal:#1a485f;
+  --y-teal-deep:#143a4d;
+  --y-teal-dark:#0f2f3f;
+  --y-ink:#f2f5dc;
+  --y-line:rgba(216,224,164,.28);
+  --y-black:#0a0a0a;
+
+  --card:var(--y-teal-deep);
+  --card2:var(--y-teal-dark);
+  --border:var(--y-line);
+  --text:var(--y-ink);
+  --muted:#a9c0bc;
+  --ink:var(--y-ink);
+  --ink2:#ffffff;
+  --red:#ff9f8a;
+  --gold:#a9b46e;--gold2:#c5cf8c;--gold3:#d8e0a4;
+  --a-accent:var(--y-deco);
+  --a-accent-soft:rgba(216,224,164,.14);
+  --a-accent-line:rgba(216,224,164,.45);
+  color:var(--y-ink);
+}
+
+/* headings: chunky like the poster */
+.app section.ys-app.ys-app h1,.app section.ys-app.ys-app h2{font-family:'Tajawal','IBM Plex Sans Arabic',sans-serif;font-weight:900}
+.app section.ys-app.ys-app h1{font-size:32px;line-height:1.2;color:var(--y-deco)}
+.app section.ys-app.ys-app h2{font-size:22px;color:var(--y-ink)}
+.app section.ys-app.ys-app h3{color:var(--y-ink)}
+
+/* buttons */
+.app section.ys-app.ys-app .btn.primary,.app section.ys-app.ys-app .btn.primary:hover{background:var(--y-deco);color:var(--y-black)}
+.app section.ys-app.ys-app .btn.secondary,.app section.ys-app.ys-app .btn.secondary:hover{border-color:rgba(216,224,164,.45)}
+.app section.ys-app.ys-app .btn:focus-visible{outline-color:var(--y-deco)}
+
+/* badges: deco with black lettering (mafia badge keeps its own colour) */
+.app section.ys-app.ys-app .badge{background:var(--y-deco);color:var(--y-black)}
+
+/* fields */
+.app section.ys-app.ys-app input,.app section.ys-app.ys-app select,.app section.ys-app.ys-app textarea{background:var(--y-teal-dark);border-color:var(--y-line);color:var(--y-ink)}
+.app section.ys-app.ys-app input::placeholder,.app section.ys-app.ys-app textarea::placeholder{color:#7f9ea3}
+.app section.ys-app.ys-app select option{background:var(--y-teal-dark);color:var(--y-ink)}
+
+/* role picker + voting */
+.app section.ys-app.ys-app .role-btn,.app section.ys-app.ys-app .role-btn:hover{background:var(--y-teal-dark);border-color:var(--y-line);color:var(--y-ink)}
+.app section.ys-app.ys-app .role-btn.selected{background:var(--a-accent-soft);border-color:var(--y-deco)}
+.app section.ys-app.ys-app .vote-target-btn{background:var(--y-teal-dark);border-color:var(--y-line);color:var(--y-ink)}
+.app section.ys-app.ys-app .vote-target-btn.selected{background:var(--a-accent-soft);border-color:var(--y-deco)}
+.app section.ys-app.ys-app .vote-bar-track{background:var(--y-teal-dark)}
+
+/* the intro card: deco surface, black ink, teal accents (left half of the palette card) */
+.app section.ys-app.ys-app .card.hero{position:relative;background:var(--y-deco);border-color:var(--y-deco);color:var(--y-black)}
+.app section.ys-app.ys-app .card.hero::after{
+  content:"";position:absolute;top:18px;left:18px;width:34px;height:34px;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%231A485F' d='M50 0 56 40 86 14 60 44 100 50 60 56 86 86 56 60 50 100 44 60 14 86 40 56 0 50 40 44 14 14 44 40Z'/></svg>") no-repeat center/contain;
+}
+.app section.ys-app.ys-app .card.hero h1{color:var(--y-black);font-size:36px}
+.app section.ys-app.ys-app .card.hero .subtitle{color:var(--y-teal);font-weight:500}
+.app section.ys-app.ys-app .card.hero .badge{background:var(--y-teal);color:var(--y-deco)}
+.app section.ys-app.ys-app .card.hero .notice{background:rgba(26,72,95,.1);border:1px solid rgba(26,72,95,.28);border-right:3px solid var(--y-teal);color:var(--y-black)}
+.app section.ys-app.ys-app .card.hero .btn.primary,.app section.ys-app.ys-app .card.hero .btn.primary:hover{background:var(--y-teal);color:var(--y-deco)}
+.app section.ys-app.ys-app .card.hero .btn.secondary,.app section.ys-app.ys-app .card.hero .btn.secondary:hover{background:var(--y-black);color:var(--y-deco);border-color:var(--y-black)}
+.app section.ys-app.ys-app .card.hero .btn.ghost,.app section.ys-app.ys-app .card.hero .btn.ghost:hover{background:transparent;color:var(--y-black);border:1px solid var(--y-black)}
+.app section.ys-app.ys-app .card.hero .btn:focus-visible{outline-color:var(--y-black)}
