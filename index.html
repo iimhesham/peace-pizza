@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>GAME — Play Night</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/home.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@700;800&family=Tajawal:wght@300;400;500;700;900&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
 
@@ -18,7 +19,7 @@
 
 </head>
 
-<body>
+<body class="mode-home">
 
 <div class="moon"></div>
 <div class="fog"><span></span><span></span><span></span></div>
@@ -26,104 +27,85 @@
 
 <div class="app">
 
-<!-- LANDING -->
-<section id="landing">
-<div class="card hero">
-  <div class="badge">GAME • PLAY NIGHT</div>
-  <div class="kicker">MYSTERY • STRATEGY • FOOTBALL</div>
-  <div class="game-title">GAME</div>
-  <div class="divider"></div>
-  <p class="subtitle">منصة ألعاب ليلة واحدة. قصص تحقيق، وألعاب كورة. اختار قسمك وابدأ.</p>
-  <button class="btn primary" onclick="playClickSound();show('hub')">دخول</button>
-</div>
-</section>
+<!-- HUB — start screen -->
+<section id="hub" class="home">
+  <header class="hm-head">
+    <h1 class="hm-brand" dir="ltr">GAME</h1>
+    <p class="hm-sub">تحب تلعب إيه؟</p>
+  </header>
 
-<!-- HUB — choose stories or password -->
-<section id="hub" class="hidden">
-<div class="card hero">
-  <div class="badge">CHOOSE YOUR SECTION</div>
-  <h1 style="margin-top:12px">تحب تلعب إيه؟</h1>
-  <p class="subtitle">قصص تحقيق ولا لعبة كورة؟ اختار وادخل.</p>
+  <h2 class="hm-group">تحقيق</h2>
+  <button class="hm-row" onclick="playClickSound();show('games')">
+    <span class="hm-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 5.5v15M8 7h8M8 11h8"/></svg></span>
+    <span class="hm-txt">
+      <b>القصص</b>
+      <small>ألعاب تحقيق وغموض، بأدوار وأدلة.</small>
+      <span class="hm-mvp">★ اللاعب المثالي: دانيال أشرف</span>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
 
-  <div class="mode-grid">
-    <div class="mode-card stories" onclick="playClickSound();show('games')">
-      <div class="mvp-stamp" aria-hidden="true">
-        <span class="mvp-line">★ اللاعب المثالي ★</span>
-        <span class="mvp-name">(دانيال أشرف)</span>
-      </div>
-      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 5.5v15M8 7h8M8 11h8"/></svg></span>
-      <h3>القصص</h3>
-      <p>ألعاب تحقيق وغموض، بأدوار وأدلة.</p>
-    </div>
-    <div class="mode-card password" onclick="playClickSound();show('password')">
-      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="m12 7 2.8 2-1.1 3.4H10.3L9.2 9zM9.2 9 6.4 7.8M14.8 9l2.8-1.2M10.3 12.4 8 14.8M13.7 12.4l2.3 2.4M12 7V4.5M8 14.8l-.7 3M16 14.8l.7 3"/></svg></span>
-      <h3>باسورد</h3>
-      <p>لعبة كلمة السر بأسامي لاعبين الكورة.</p>
-    </div>
-    <div class="mode-card password" onclick="playClickSound();show('story')">
-      <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 2 8.5 12 14l10-5.5z"/><path d="M6 11v5.2C6 17.7 8.7 19 12 19s6-1.3 6-2.8V11"/></svg></span>
-      <h3>قصة</h3>
-      <p>أدلة عن لاعب كورة، من الأصعب للأسهل. خمّنوا مين هو.</p>
-    </div>
-  </div>
-
-  <button class="btn ghost" onclick="playClickSound();show('landing')" style="width:100%;margin-top:20px">رجوع</button>
-</div>
+  <h2 class="hm-group">كورة</h2>
+  <button class="hm-row is-football" onclick="playClickSound();show('password')">
+    <span class="hm-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m12 7 2.8 2-1.1 3.4H10.3L9.2 9zM9.2 9 6.4 7.8M14.8 9l2.8-1.2M10.3 12.4 8 14.8M13.7 12.4l2.3 2.4M12 7V4.5M8 14.8l-.7 3M16 14.8l.7 3"/></svg></span>
+    <span class="hm-txt">
+      <b>باسورد</b>
+      <small>لعبة كلمة السر بأسامي لاعبين الكورة.</small>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <button class="hm-row is-football" onclick="playClickSound();show('story')">
+    <span class="hm-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 8.5 12 14l10-5.5z"/><path d="M6 11v5.2C6 17.7 8.7 19 12 19s6-1.3 6-2.8V11"/></svg></span>
+    <span class="hm-txt">
+      <b>قصة</b>
+      <small>أدلة عن لاعب كورة، من الأصعب للأسهل. خمّنوا مين هو.</small>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
 </section>
 
 <!-- GAME SELECT (STORIES) -->
-<section id="games" class="hidden">
-<div class="card hero">
-  <div class="badge">SELECT YOUR CASE</div>
-  <h1 style="margin-top:12px">اختار القضية</h1>
-  <p class="subtitle">كل لعبة لها شخصياتها وأدلتها ونظامها الخاص.</p>
-
-  <div class="game-grid">
-    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
-      <div class="number">01 <span class="ui-x" aria-hidden="true">×</span></div>
-      <h2>قضية آل سووب</h2>
-      <p>اتلعبت. مقفولة.</p>
-      <span class="tag">MISSOURI • 1909</span>
+<section id="games" class="home hidden">
+  <header class="hm-bar">
+    <button class="hm-back" onclick="playClickSound();show('hub')" aria-label="رجوع">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
     </button>
+    <h1>القضايا</h1>
+  </header>
+  <p class="hm-sub">كل قضية ليها شخصياتها وأدلتها ونظامها.</p>
 
-    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
-      <div class="number">02 <span class="ui-x" aria-hidden="true">×</span></div>
-      <h2>ملف قاتل وايت تشابل</h2>
-      <p>اتلعبت. مقفولة.</p>
-      <span class="tag">WHITECHAPEL • 1888</span>
-    </button>
+  <h2 class="hm-group">متاحة</h2>
+  <button class="hm-row hm-case" onclick="playClickSound();openGame('yousef')">
+    <span class="hm-no">06</span>
+    <span class="hm-txt">
+      <b>مين قتل يوسف عمر؟</b>
+      <small>شلة 3AWAEM. مافيوسو واحد عشوائي، من غير حل ثابت.</small>
+      <em>CAIRO • 3AWAEM</em>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
 
-    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1);border-color:#4a1512" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
-      <div class="number" style="color:#d9564a">03 <span class="ui-x" aria-hidden="true">×</span></div>
-      <h2 style="color:#d9564a">ملف قضية إيلويل</h2>
-      <p>اتلعبت. مقفولة.</p>
-      <span class="tag" style="background:rgba(122,33,24,.15);color:#e77a6f">NEW YORK • 1920</span>
-    </button>
-
-    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
-      <div class="number">04 <span class="ui-x" aria-hidden="true">×</span></div>
-      <h2>ملف محمود المبحوح</h2>
-      <p>اتلعبت. مقفولة.</p>
-      <span class="tag">DUBAI • 2010</span>
-    </button>
-
-    <button class="game-card" disabled style="opacity:.45;cursor:not-allowed;filter:grayscale(1)" onclick="playClickSound();toast('القضية دي اتلعبت وقفلت');">
-      <div class="number">05 <span class="ui-x" aria-hidden="true">×</span></div>
-      <h2>قضية الداهلية السوداء</h2>
-      <p>اتلعبت. مقفولة.</p>
-      <span class="tag">LOS ANGELES • 1947</span>
-    </button>
-
-    <button class="game-card" onclick="playClickSound();openGame('yousef')">
-      <div class="number">06</div>
-      <h2>مين قتل يوسف عمر؟</h2>
-      <p>شلة 3AWAEM. مافيوسو واحد عشوائي، من غير حل ثابت.</p>
-      <span class="tag">CAIRO • 3AWAEM</span>
-    </button>
+  <h2 class="hm-group">اتلعبت</h2>
+  <div class="hm-row hm-case is-closed" aria-disabled="true">
+    <span class="hm-no">01</span>
+    <span class="hm-txt"><b>قضية آل سووب</b><em>MISSOURI • 1909</em></span>
   </div>
-
-  <button class="btn ghost" onclick="playClickSound();show('hub')" style="width:100%;margin-top:20px">رجوع</button>
-</div>
+  <div class="hm-row hm-case is-closed" aria-disabled="true">
+    <span class="hm-no">02</span>
+    <span class="hm-txt"><b>ملف قاتل وايت تشابل</b><em>WHITECHAPEL • 1888</em></span>
+  </div>
+  <div class="hm-row hm-case is-closed" aria-disabled="true">
+    <span class="hm-no">03</span>
+    <span class="hm-txt"><b>ملف قضية إيلويل</b><em>NEW YORK • 1920</em></span>
+  </div>
+  <div class="hm-row hm-case is-closed" aria-disabled="true">
+    <span class="hm-no">04</span>
+    <span class="hm-txt"><b>ملف محمود المبحوح</b><em>DUBAI • 2010</em></span>
+  </div>
+  <div class="hm-row hm-case is-closed" aria-disabled="true">
+    <span class="hm-no">05</span>
+    <span class="hm-txt"><b>قضية الداهلية السوداء</b><em>LOS ANGELES • 1947</em></span>
+  </div>
 </section>
 
 <!-- ========================================================
