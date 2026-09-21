@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/app.css">
 
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@700;800&family=Tajawal:wght@300;400;500;700;900&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
 
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Aref+Ruqaa+Ink&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,7 +32,62 @@
 
 <!-- HUB — start screen -->
 <section id="hub" class="home">
-  <header class="hm-head">
+  <header class="hm-head hm-head-c">
+    <svg class="hm-badge" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GAME badge">
+    <defs>
+      <pattern id="gbDots" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <circle cx="2.5" cy="2.5" r="1.5" fill="#0e1311"/>
+      </pattern>
+      <pattern id="gbYdots" width="6" height="6" patternUnits="userSpaceOnUse">
+        <circle cx="3" cy="3" r="1.6" fill="#c98f1c"/>
+      </pattern>
+    </defs>
+    <circle cx="130" cy="130" r="124" fill="#eef1ee"/>
+    <circle cx="130" cy="130" r="114" fill="#101613"/>
+    <circle cx="130" cy="130" r="104" fill="none" stroke="#2fd6a0" stroke-width="2" stroke-dasharray="3 6"/>
+    <g stroke="#1f2a25" stroke-width="1">
+      <path d="M40 60H220M30 95H230M25 130H235M30 165H230M40 200H220M70 25V235M105 15V245M130 10V250M155 15V245M190 25V235"/>
+    </g>
+    <!-- headphones -->
+    <path d="M62 128 C62 58 198 58 198 128" fill="none" stroke="#2fd6a0" stroke-width="14" stroke-linecap="round"/>
+    <path d="M62 128 C62 58 198 58 198 128" fill="none" stroke="url(#gbDots)" stroke-width="14" stroke-linecap="round" opacity=".5"/>
+    <rect x="48" y="112" width="26" height="56" rx="12" fill="#2fd6a0"/>
+    <rect x="186" y="112" width="26" height="56" rx="12" fill="#2fd6a0"/>
+    <rect x="48" y="112" width="26" height="56" rx="12" fill="url(#gbDots)" opacity=".5"/>
+    <rect x="186" y="112" width="26" height="56" rx="12" fill="url(#gbDots)" opacity=".5"/>
+    <!-- brain -->
+    <ellipse cx="111" cy="128" rx="44" ry="42" fill="#eef1ee"/>
+    <ellipse cx="149" cy="128" rx="44" ry="42" fill="#eef1ee"/>
+    <ellipse cx="111" cy="128" rx="44" ry="42" fill="url(#gbDots)" opacity=".55"/>
+    <ellipse cx="149" cy="128" rx="44" ry="42" fill="url(#gbDots)" opacity=".55"/>
+    <g fill="none" stroke="#101613" stroke-width="3" stroke-linecap="round">
+      <path d="M130 88 V170"/>
+      <path d="M92 108 q14 -8 24 6 M90 134 q16 -10 26 6 M100 154 q10 -6 20 2"/>
+      <path d="M168 108 q-14 -8 -24 6 M170 134 q-16 -10 -26 6 M160 154 q-10 -6 -20 2"/>
+    </g>
+    <!-- dice -->
+    <g transform="translate(150 150) rotate(-8)">
+      <polygon points="0,10 40,0 78,14 40,26" fill="#ffffff"/>
+      <polygon points="0,10 40,26 40,72 0,56" fill="#d5dbd7"/>
+      <polygon points="40,26 78,14 78,58 40,72" fill="#8d9892"/>
+      <polygon points="0,10 40,26 40,72 0,56" fill="url(#gbDots)" opacity=".7"/>
+      <polygon points="40,26 78,14 78,58 40,72" fill="url(#gbDots)" opacity=".7"/>
+      <g fill="#b3202a">
+        <ellipse cx="40" cy="13" rx="5" ry="2.6"/><ellipse cx="22" cy="10" rx="4.5" ry="2.4"/><ellipse cx="58" cy="10" rx="4.5" ry="2.4"/>
+      </g>
+      <g fill="#0e1311">
+        <ellipse cx="14" cy="36" rx="3.5" ry="5"/><ellipse cx="28" cy="52" rx="3.5" ry="5"/>
+        <ellipse cx="52" cy="40" rx="3.5" ry="5"/><ellipse cx="66" cy="36" rx="3.5" ry="5"/><ellipse cx="60" cy="52" rx="3.5" ry="5"/>
+      </g>
+    </g>
+    <!-- THINKING tag -->
+    <g transform="translate(22 40) rotate(-10)">
+      <rect x="4" y="5" width="116" height="34" rx="9" fill="#000"/>
+      <rect width="116" height="34" rx="9" fill="#f2c14e" stroke="#000" stroke-width="3"/>
+      <rect width="116" height="34" rx="9" fill="url(#gbYdots)" opacity=".6"/>
+      <text x="58" y="23" text-anchor="middle" font-family="'Comic Sans MS','Comic Neue',cursive,sans-serif" font-weight="700" font-size="17" fill="#000">THINKING...</text>
+    </g>
+  </svg>
     <h1 class="hm-brand" dir="ltr">GAME</h1>
     <p class="hm-sub">تحب تلعب إيه؟</p>
   </header>
