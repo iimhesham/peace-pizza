@@ -415,7 +415,7 @@ body.mode-football .page-in{animation:footballIn .10s linear}
   content:"";position:absolute;inset:6px;border-radius:50%;
   border:1px dashed rgba(44,28,6,.4);pointer-events:none
 }
-.ys-app #yousefMafia{
+.ys-app #yousefMafia,.ys-app #trainMafia{
   color:#fbe9e4;font-family:'Amiri',serif;font-weight:900;
   background:
     radial-gradient(circle at 33% 28%,rgba(255,255,255,.3),transparent 42%),
@@ -423,7 +423,7 @@ body.mode-football .page-in{animation:footballIn .10s linear}
     radial-gradient(circle,#c76b5e 0%,#8a2f2f 45%,#5c1c1c 78%,#341010 100%);
   border-color:rgba(255,199,190,.5);
 }
-.ys-app #yousefMafia::after{border-color:rgba(255,220,214,.35)}
+.ys-app #yousefMafia::after,.ys-app #trainMafia::after{border-color:rgba(255,220,214,.35)}
 .ys-app .kicker{color:var(--gold2)}
 .ys-app .subtitle{color:var(--muted)}
 .ys-app .divider{background:linear-gradient(90deg,transparent,var(--gold2),transparent)}

@@ -93,7 +93,7 @@ body #toast,body.mode-football #toast,body.mode-yousef #toast{
   text-shadow:none;box-shadow:none;
 }
 .app section:not(.home) .badge::after{display:none}
-.app section:not(.home) #yousefMafia{background:rgba(224,122,110,.16);color:#f0968a;border:0;font-family:inherit;font-weight:700}
+.app section:not(.home) #yousefMafia,.app section:not(.home) #trainMafia{background:rgba(224,122,110,.16);color:#f0968a;border:0;font-family:inherit;font-weight:700}
 .app section:not(.home) .topline{gap:10px}
 
 /* ---------- notice / text ---------- */
