@@ -196,6 +196,16 @@
     <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
   </button>
 
+  <button class="hm-row hm-case" onclick="playClickSound();openGame('train')">
+    <span class="hm-no">07</span>
+    <span class="hm-txt">
+      <b>مين قتل فواز؟</b>
+      <small>قطر النوم أسوان — القاهرة. مافيوسو واحد عشوائي، من غير حل ثابت.</small>
+      <em>ASWAN • CAIRO</em>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+
   <h2 class="hm-group">اتلعبت</h2>
   <div class="hm-row hm-case is-closed" aria-disabled="true">
     <span class="hm-no">01</span>
@@ -1199,6 +1209,262 @@
 <button class="btn ghost" onclick="playClickSound();show('yousef')" style="width:100%">العودة</button>
 </section>
 
+<!-- ========================================================
+     TRAIN CASE — مين قتل فواز؟ (قطر أسوان ← القاهرة)
+     نفس ثيم يوسف عمر (Deco + Teal).
+======================================================== -->
+<section id="train" class="hidden ys-app">
+<div class="card hero">
+  <div class="badge">ASWAN • CAIRO</div>
+  <h1>مين قتل فواز؟</h1>
+  <p class="subtitle">7 أسماء حقيقية. مافيوسو واحد بس، بيتحدد عشوائيًا كل جلسة.</p>
+
+  <div class="notice" style="text-align:right">
+    <b>القصة الافتتاحية (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px" id="trainIntroText"></p>
+  </div>
+
+  <div class="grid">
+    <button class="btn primary" onclick="playClickSound();openGamePlayer('train')">أنا لاعب</button>
+    <button class="btn secondary" onclick="playClickSound();show('train-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- TRAIN GM LOCK -->
+<section id="train-gm-lock" class="hidden ys-app">
+<div class="card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي فيها هوية المافيوسو الحقيقية في الجلسة الحالية. متعرضهاش للاعبين.</p>
+  <label for="trainGmInput">كلمة المرور</label>
+  <input id="trainGmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn primary" onclick="playClickSound();verifyGameGM('train')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('train')" style="flex:1">رجوع</button>
+  </div>
+  <p id="trainGmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- TRAIN SETUP -->
+<section id="train-setup" class="hidden ys-app">
+<div class="card">
+  <h2>اختيار اسمك</h2>
+
+  <div class="notice">
+    اختار اسمك من القائمة (نفس اسمك بين اللاعبين)، وكود الجلسة اللي أعطاه لك الـGM.
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="trainName">اسمك</label>
+  <select id="trainName">
+    <option value="" disabled selected>اختار اسمك...</option>
+    <option value="بشير">بشير</option>
+    <option value="طلبة">طلبة</option>
+    <option value="حازم">حازم</option>
+    <option value="سامح">سامح</option>
+    <option value="بودا">بودا</option>
+    <option value="مينا">مينا</option>
+    <option value="مرزوق">مرزوق</option>
+  </select>
+
+  <br><br>
+
+  <label for="trainSessionCode">كود الجلسة</label>
+  <input id="trainSessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 4821" oninput="checkGameSessionCode('train')">
+
+  <p id="trainCodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+  <div id="trainRoles" class="role-grid hidden"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn primary" onclick="playClickSound();confirmGameRole('train')" style="flex:2">
+      تأكيد واكتشاف دوري
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('train')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- TRAIN PLAYER -->
+<section id="train-player" class="hidden ys-app">
+<div class="card">
+  <div class="topline">
+    <div class="badge" id="trainPlayerBadge"></div>
+    <div id="trainMafia" class="badge hidden" dir="ltr">
+      MAFIOSO
+    </div>
+  </div>
+  <h2 id="trainRoleName" style="margin-top:12px"></h2>
+  <p id="trainPublic" class="small"></p>
+</div>
+
+<div class="card secret" id="trainMafiaCard">
+  <h3>سري جدًا — ملف دورك</h3>
+  <p style="margin-top:10px">
+    لو ظهر عندك شارة <b dir="ltr">MAFIOSO</b> فوق: <b>أنت المافيوسو. أنت قتلت فواز.</b>
+    دافعك هو اللي اتحكى عنه في أسوان، ومطلوب منك متكشفش عن نفسك خلال اللعبة.
+  </p>
+  <hr>
+  <h3>مكانك المرجعي</h3>
+  <p id="trainSecret" style="margin-top:10px"></p>
+  <h3 style="margin-top:15px">علاقتك بالشلة</h3>
+  <p id="trainStrength" class="small"></p>
+  <h3 style="margin-top:15px">ملاحظة إضافية</h3>
+  <p id="trainWeakness" class="small"></p>
+</div>
+
+<div class="card secret hidden" id="trainWitnessCard">
+  <h3>ملاحظة سرية إضافية</h3>
+  <p id="trainWitnessText" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="trainNotes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('train')"></textarea>
+  <div id="trainSave" class="small" style="text-align:left;color:var(--gold3)"></div>
+</div>
+
+<div class="card" id="trainVoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="trainVoteStatus">جاري التحميل...</p>
+  <div id="trainVoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card" id="trainStatusCard">
+  <div class="topline">
+    <h2>مين لسه في اللعبة</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('train')">تحديث</button>
+  </div>
+  <div id="trainStatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card">
+  <h2>قواعد اللعبة</h2>
+  <ul style="margin-top:10px">
+    <li>كل شخص بيختار اسمه الحقيقي من القائمة.</li>
+    <li>اللعبة 3 جولات، وكل جولة فيها دليل واحد.</li>
+    <li>مافيوسو واحد بس، بيتحدد عشوائيًا من ضمن اللاعبين الفعليين في الجلسة دي.</li>
+    <li>ملف كل واحد سري ومختلف، وممكن يكون في ملف حد معلومة مش عند الباقي.</li>
+    <li>فواز مش من الشلة، فمش هتلاقوا اسمه بين اللاعبين.</li>
+    <li>بعد كل دليل ونقاش يتم التصويت.</li>
+    <li>في الآخر يكشف الـGM الحل.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('train')" style="width:100%">
+  مسح الاسم من هذا الجهاز
+</button>
+</section>
+
+<!-- TRAIN GM -->
+<section id="train-gm" class="hidden ys-app">
+
+<div class="card">
+  <div class="badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير اللعبة</h2>
+  <div class="notice">الشاشة دي فيها هوية المافيوسو الحقيقية في الجلسة دي. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين. نفس الكود بيحدد نفس المافيوسو على كل الأجهزة، بدون
+    الاعتماد على تخزين جهازك أنت.
+  </p>
+
+  <label for="trainPlayerCountInput" id="trainPlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="trainPlayerCountInput" type="number" step="1" style="max-width:120px">
+  <p class="small" style="margin-top:6px">المافيوسو بيتحدد عشوائيًا من ضمن العدد ده بس.</p>
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn primary" onclick="playClickSound();generateGameCode('train')">توليد كود جديد</button>
+    <strong style="color:var(--gold3)">
+      الكود: <span id="trainCurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="trainVerifyCode" dir="ltr" style="color:var(--gold3);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المتابعة المباشرة (اختياري)</h2>
+  <p class="small" style="margin-top:10px">
+    عشان كل واحد يشوف مين لسه في اللعبة من على موبايله، الصق رابط قاعدة بيانات Firebase هنا مرة واحدة.
+    نفس الإعداد بيشتغل لكل الألعاب مع بعض.
+  </p>
+  <label for="liveDbUrlInputTrain" style="margin-top:12px">رابط قاعدة البيانات</label>
+  <input id="liveDbUrlInputTrain" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" autocomplete="off">
+  <div style="display:flex;gap:10px;margin-top:12px">
+    <button class="btn primary" onclick="playClickSound();saveLiveDbUrl('liveDbUrlInputTrain')" style="flex:2">حفظ</button>
+    <button class="btn ghost" onclick="playClickSound();clearLiveDbUrl()" style="flex:1">إلغاء التفعيل</button>
+  </div>
+  <p id="liveDbStatusTrain" class="small" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div id="trainRoundNav" class="round-nav"></div>
+</div>
+
+<div class="card" id="trainVoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('train')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="trainVoteTally" style="margin-top:10px"></div>
+  <button class="btn primary" id="trainEliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('train')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card">
+  <div class="topline">
+    <h2>الأسماء وهوية المافيوسو</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('train')">تحديث الأسماء</button>
+  </div>
+  <div id="trainGMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+  <h2>الأدلة الثلاثة</h2>
+  <div id="trainRounds"></div>
+</div>
+
+<div class="card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد بعد ما تعرف عدد اللاعبين الفعليين الليلة دي.</li>
+    <li>أعط الكود لكل اللاعبين، وكل واحد يختار اسمه بنفسه من القائمة.</li>
+    <li>اقرأ القصة الافتتاحية بصوتك (فيها ملحوظة اختيارية عن إخراج حد زيادة)، وابدأ الجولات.</li>
+    <li>في كل جولة اقرأ الدليل، حدد الجولة الحالية بالأعلى، افتح التصويت.</li>
+    <li>الشاشة دي بتوريك مين المافيوسو ومين صاحب الملاحظة السرية (المتوتر في البار) في الجلسة دي — سرّها عن اللاعبين.</li>
+    <li>في النهاية اطلب من كل واحد يقول اتهامه، وبعدين اكشف الاسم الحقيقي.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('train')" style="width:100%">العودة</button>
+</section>
+
 <section id="dahlia" class="hidden">
 
 <div class="card hero">
@@ -1494,6 +1760,7 @@
 <script src="js/voting.js"></script>
 <script src="js/mabhouh-data.js"></script>
 <script src="js/yousef-data.js"></script>
+<script src="js/train-data.js"></script>
 <script src="js/football.js"></script>
 <script src="js/story-data.js"></script>
 <script src="js/story.js"></script>

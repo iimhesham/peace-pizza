@@ -57,6 +57,21 @@ An investigation game built around:
 -   Voting after each round
 -   Final accusation in round 3
 
+### 07 --- مين قتل فواز؟
+
+**قطر النوم أسوان ← القاهرة**
+
+Real-names investigation game (same mechanic as «مين قتل يوسف عمر؟»):
+
+-   7 real names (بشير، طلبة، حازم، سامح، بودا، مينا، مرزوق), up to 7 players
+-   1 random mafioso, chosen once every player has joined
+-   1 different random player gets a secret note (the nervous person at the
+    bar, who is **not** the killer) --- see `witnessNote` in
+    `js/train-data.js` and `computeRealNameAssignment` in
+    `js/games-engine.js`
+-   3 evidence rounds: the bar, the unforced door, Fawaz's ticket
+-   Uses the same Deco + Teal theme as the Yousef story (`ys-app`)
+
 ### ⚽ Password --- Football Edition
 
 A fast party game using **10 hidden football-player cards**.
