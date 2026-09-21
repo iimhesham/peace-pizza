@@ -184,7 +184,7 @@ button.hm-case{border-color:#4a4127}
 .hm-group.hidden,.hm-row.hidden,.hm-empty.hidden{display:none}
 
 /* ---------- hub: fanned cards ---------- */
-.hm-fan{position:relative;height:214px;max-width:340px;margin:14px auto 0}
+.hm-fan{position:relative;height:200px;max-width:340px;margin:14px auto 0}
 .hm-fc{
   position:absolute;top:24px;left:50%;width:118px;height:164px;margin-left:-59px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
@@ -210,15 +210,6 @@ button.hm-case{border-color:#4a4127}
 }
 .hm-fc-c b{color:#fdf2f1}
 .hm-spark{position:absolute;top:2px;left:18%;color:#57c7a0;opacity:.85}
-.hm-chip{
-  position:absolute;z-index:3;padding:7px 12px;
-  background:rgba(17,27,23,.94);border:1px solid var(--h-line-hi);border-radius:12px;
-  font-size:12.5px;line-height:1.4;color:var(--h-text);white-space:nowrap;
-  box-shadow:0 6px 16px rgba(0,0,0,.4);
-}
-.hm-chip-a{top:6px;right:0;transform:rotate(2deg)}
-.hm-chip-a em{display:inline-block;width:7px;height:7px;margin-inline-end:8px;border-radius:50%;background:var(--h-green);vertical-align:middle}
-.hm-chip-b{bottom:4px;left:0;transform:rotate(-2deg)}
 @media (max-width:360px){
   .hm-fc{width:104px;height:148px;margin-left:-52px}
   .hm-fc-l{transform:translateX(-76px) rotate(-11deg)}
