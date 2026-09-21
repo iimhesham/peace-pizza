@@ -1,0 +1,127 @@
+/* =========================================================
+   HOME — start screen (hub) and story list (games)
+   Loaded after style.css. Everything is scoped to .home /
+   body.mode-home so the game screens are untouched.
+========================================================= */
+
+body.mode-home{background:#0b1210}
+body.mode-home .moon,
+body.mode-home .fog{display:none}
+
+.home{
+  --h-panel:#111b17;
+  --h-panel-hi:#17231e;
+  --h-line:#243530;
+  --h-line-hi:#38514a;
+  --h-text:#e9efeb;
+  --h-muted:#8d9d95;
+  --h-faint:#6c7c74;
+  --h-gold:#d4b675;
+  --h-green:#57c7a0;
+
+  max-width:520px;
+  margin:0 auto;
+  padding:4px 4px 28px;
+  color:var(--h-text);
+  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  line-height:1.6;
+}
+.home h1,.home h2{font-family:inherit}
+
+/* ---------- headers ---------- */
+.hm-head{padding:18px 2px 4px}
+.hm-brand{
+  font-size:56px;font-weight:700;line-height:1;
+  letter-spacing:.12em;text-align:right;
+}
+.hm-sub{margin:8px 2px 0;color:var(--h-muted);font-size:15px}
+
+.hm-bar{display:flex;align-items:center;gap:10px;padding:6px 0 0}
+.hm-bar h1{font-size:24px;font-weight:700;line-height:1.3}
+.hm-back{
+  flex:none;width:44px;height:44px;min-height:44px;
+  display:grid;place-items:center;
+  background:var(--h-panel);color:var(--h-text);
+  border:1px solid var(--h-line);border-radius:12px;cursor:pointer;
+  transition:background .12s,border-color .12s;
+}
+.hm-back:active{background:var(--h-panel-hi);border-color:var(--h-line-hi)}
+.hm-bar + .hm-sub{margin-top:10px}
+
+/* ---------- group labels ---------- */
+.hm-group{
+  margin:26px 2px 10px;
+  font-size:14px;font-weight:600;line-height:1.2;
+  color:var(--h-muted);
+}
+
+/* ---------- rows ---------- */
+.hm-row{
+  display:flex;align-items:center;gap:14px;
+  width:100%;min-height:76px;
+  margin:0 0 10px;padding:14px;
+  background:var(--h-panel);
+  border:1px solid var(--h-line);border-radius:14px;
+  color:inherit;font:inherit;text-align:start;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .12s,border-color .12s;
+}
+button.hm-row:active{background:var(--h-panel-hi);border-color:var(--h-line-hi)}
+.hm-row:focus-visible,
+.hm-back:focus-visible{outline:2px solid var(--h-gold);outline-offset:2px}
+
+.hm-ico{
+  flex:none;width:46px;height:46px;
+  display:grid;place-items:center;
+  background:#0c1411;border:1px solid var(--h-line);border-radius:12px;
+  color:var(--h-gold);
+}
+.hm-row.is-football .hm-ico{color:var(--h-green)}
+
+.hm-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.hm-txt b{font-size:17px;font-weight:600;line-height:1.4}
+.hm-txt small{font-size:13.5px;line-height:1.5;color:var(--h-muted)}
+.hm-txt em{
+  margin-top:2px;font-style:normal;font-size:11.5px;
+  letter-spacing:.04em;color:var(--h-faint);
+  direction:ltr;text-align:right;
+}
+.hm-chev{flex:none;color:var(--h-faint)}
+
+.hm-mvp{
+  align-self:flex-start;margin-top:6px;padding:1px 10px;
+  border-radius:999px;
+  background:rgba(212,182,117,.12);color:var(--h-gold);
+  font-size:12.5px;font-weight:600;line-height:1.7;
+}
+
+/* ---------- case list ---------- */
+.hm-no{
+  flex:none;width:46px;text-align:center;
+  font-size:16px;font-weight:600;color:var(--h-muted);
+  font-variant-numeric:tabular-nums;direction:ltr;
+}
+button.hm-case .hm-no{color:var(--h-gold)}
+button.hm-case{border-color:#4a4127}
+
+.hm-row.is-closed{
+  min-height:64px;padding-top:10px;padding-bottom:10px;
+  background:transparent;cursor:default;opacity:.55;
+}
+.hm-row.is-closed .hm-txt b{font-size:15.5px;font-weight:500}
+
+/* ---------- motion ---------- */
+.home.page-in{animation:hmIn .16s ease-out}
+@keyframes hmIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .home.page-in{animation:none}
+  .hm-row,.hm-back{transition:none}
+}
+
+@media (max-width:360px){
+  .hm-brand{font-size:46px}
+  .hm-row{gap:12px;padding:12px}
+  .hm-ico,.hm-no{width:42px}
+  .hm-ico{height:42px}
+}
