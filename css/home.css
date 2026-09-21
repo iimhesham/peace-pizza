@@ -126,3 +126,8 @@ button.hm-case{border-color:#4a4127}
   .hm-ico,.hm-no{width:42px}
   .hm-ico{height:42px}
 }
+
+/* seal on the stories list */
+.cs-emblem{display:block;width:150px;height:auto;margin:18px auto 6px}
+.hm-bar + .cs-emblem + .hm-sub{text-align:center}
+.hm-ico-books{background:#0c1411}
