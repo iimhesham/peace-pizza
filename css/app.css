@@ -381,3 +381,5 @@ body.mode-password #toast{
 
 /* the 1930 shield on the game's front door */
 .pw-emblem{display:block;width:150px;height:auto;margin:0 auto 14px}
+
+.st-title{display:block;width:100%;max-width:320px;height:auto;margin:0 auto 14px;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
