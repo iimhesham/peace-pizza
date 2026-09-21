@@ -6,7 +6,51 @@ const FOOTBALL_SCREENS=["password","password-game","story","story-game"];
 
 const YOUSEF_SCREENS=["yousef","yousef-gm-lock","yousef-setup","yousef-player","yousef-gm"];
 
-function show(id){
+const HOME_SCREENS=["hub","games"];
+const START_SCREEN="hub";
+
+/* ---------------------------------------------------------
+   NAVIGATION + PHONE BACK
+   Every screen change is a real history entry, so the phone's
+   back button / edge swipe goes to the previous screen instead
+   of leaving the site. navStack mirrors the browser history.
+--------------------------------------------------------- */
+
+let navStack=[START_SCREEN];
+
+try{history.scrollRestoration="manual"}catch(e){}
+history.replaceState({s:START_SCREEN},"");
+
+function show(id,opts){
+  opts=opts||{};
+  if(id==="landing")id=START_SCREEN;
+
+  if(!opts.fromHistory){
+    const cur=navStack[navStack.length-1];
+
+    if(id!==cur){
+      const seen=navStack.lastIndexOf(id);
+
+      if(seen!==-1){
+        /* going back to a screen we already came from (e.g. an in-app
+           "رجوع" button): rewind history so back stays consistent.
+           popstate below does the actual rendering. */
+        history.go(seen-(navStack.length-1));
+        return;
+      }
+
+      if(/-(setup|gm-lock)$/.test(cur)&&/-(player|gm)$/.test(id)){
+        /* setup / GM-lock screens shouldn't be a back stop once the
+           player or GM is in */
+        history.replaceState({s:id},"");
+        navStack[navStack.length-1]=id;
+      }else{
+        history.pushState({s:id},"");
+        navStack.push(id);
+      }
+    }
+  }
+
   document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
   const target=document.getElementById(id);
   if(target){
@@ -15,10 +59,18 @@ function show(id){
     void target.offsetWidth;
     target.classList.add("page-in");
   }
+  document.body.classList.toggle("mode-home",HOME_SCREENS.includes(id));
   document.body.classList.toggle("mode-football",FOOTBALL_SCREENS.includes(id));
   document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id));
   window.scrollTo({top:0,behavior:"smooth"});
 }
+
+window.addEventListener("popstate",e=>{
+  const id=(e.state&&e.state.s)||START_SCREEN;
+  const idx=navStack.lastIndexOf(id);
+  navStack=idx!==-1?navStack.slice(0,idx+1):[id];
+  show(id,{fromHistory:true});
+});
 
 let toastTimer;
 
