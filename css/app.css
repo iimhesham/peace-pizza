@@ -170,3 +170,67 @@ body #toast,body.mode-football #toast,body.mode-yousef #toast{
   .app section.page-in:not(.home){animation:none}
   .app section:not(.home) .btn,.app section:not(.home) .role-btn{transition:none}
 }
+
+/* =========================================================
+   قصة لاعب - أنا مين  —  Cherry Red #750608 + Cosmos Marble #74A5BE
+   Only the two story screens (#story, #story-game). Ids beat the
+   generic rules above, so nothing else changes.
+========================================================= */
+body.mode-story{background:#750608!important}
+body.mode-story #toast{
+  background:#74a5be!important;border:1px solid #d3e4ec!important;color:#4a0305!important;
+}
+
+.app #story,.app #story-game{
+  --s-cherry:#750608;
+  --s-cherry-deep:#5a0406;
+  --s-cherry-dark:#3f0304;
+  --s-marble:#74a5be;
+  --s-ink:#fdf2f1;
+  --s-muted:#e2b4b6;
+  --s-line:rgba(116,165,190,.45);
+
+  --card:var(--s-cherry-deep);
+  --card2:var(--s-cherry-dark);
+  --border:var(--s-line);
+  --text:var(--s-ink);
+  --muted:var(--s-muted);
+  --a-accent:var(--s-marble);
+  --a-accent-soft:rgba(116,165,190,.16);
+  --a-accent-line:rgba(116,165,190,.5);
+  color:var(--s-ink);
+}
+
+.app #story h1,.app #story h2,.app #story h3,
+.app #story-game h1,.app #story-game h2,.app #story-game h3{color:var(--s-ink)}
+.app #story .badge,.app #story-game .badge{background:var(--s-marble);color:var(--s-cherry-deep)}
+.app #story .fb-pitch-line,.app #story-game .fb-pitch-line{background:var(--s-line)}
+.app #story .notice,.app #story-game .notice{color:var(--s-ink)}
+
+/* buttons: marble with cherry text (the bottom half of the palette card) */
+.app #story .btn.primary,.app #story .btn.primary:hover,
+.app #story-game .btn.primary,.app #story-game .btn.primary:hover{background:var(--s-marble);color:var(--s-cherry-deep)}
+.app #story .btn.secondary,.app #story .btn.secondary:hover,
+.app #story-game .btn.secondary,.app #story-game .btn.secondary:hover{background:var(--s-cherry-dark);color:var(--s-ink);border:1px solid var(--s-line)}
+.app #story .btn.ghost,.app #story .btn.ghost:hover,
+.app #story-game .btn.ghost,.app #story-game .btn.ghost:hover{border-color:var(--s-line);color:var(--s-ink)}
+.app #story .btn:focus-visible,.app #story-game .btn:focus-visible{outline-color:var(--s-marble)}
+
+/* team names */
+.app #story input,.app #story-game input{background:var(--s-cherry-dark);border-color:var(--s-line);color:var(--s-ink)}
+.app #story input::placeholder,.app #story-game input::placeholder{color:#b98587}
+
+/* scoreboard */
+.app #story-game .story-score-box{background:var(--s-cherry-dark);border-color:var(--s-line)}
+.app #story-game .story-team-name{color:var(--s-muted)}
+.app #story-game .story-team-score{color:var(--s-marble)}
+
+/* clue cards: marble surface, cherry ink */
+.app #story-game .story-clue{background:var(--s-marble);border:0;border-right:4px solid var(--s-cherry);color:var(--s-cherry-deep)}
+.app #story-game .story-clue-tag{color:var(--s-cherry)}
+.app #story-game .story-clue-pts{color:rgba(90,4,6,.75)}
+.app #story-game .story-clue p{color:#3f0304}
+
+/* moderator answer strip */
+.app #story-game .story-gm-answer{background:transparent;border-color:var(--s-line);color:var(--s-muted)}
+.app #story-game .story-gm-answer b{color:var(--s-ink)}

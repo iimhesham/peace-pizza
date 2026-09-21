@@ -78,6 +78,7 @@ button.hm-row:active{background:var(--h-panel-hi);border-color:var(--h-line-hi)}
   color:var(--h-gold);
 }
 .hm-row.is-football .hm-ico{color:var(--h-green)}
+.hm-row.is-story .hm-ico{background:#750608;border-color:rgba(116,165,190,.45);color:#74a5be}
 
 .hm-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .hm-txt b{font-size:17px;font-weight:600;line-height:1.4}
