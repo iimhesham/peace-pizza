@@ -310,3 +310,74 @@ body.mode-yousef #toast{
 .app section.ys-app.ys-app .card.hero .btn.secondary,.app section.ys-app.ys-app .card.hero .btn.secondary:hover{background:var(--y-black);color:var(--y-deco);border-color:var(--y-black)}
 .app section.ys-app.ys-app .card.hero .btn.ghost,.app section.ys-app.ys-app .card.hero .btn.ghost:hover{background:transparent;color:var(--y-black);border:1px solid var(--y-black)}
 .app section.ys-app.ys-app .card.hero .btn:focus-visible{outline-color:var(--y-black)}
+
+/* =========================================================
+   باسورد  —  Crows palette: Navy #0F1432 · Red #FF001E · Gold #FFAA00
+   Only #password and #password-game. Navy page, gold hairlines,
+   gold tiles with navy numbers; a revealed tile flips to red.
+========================================================= */
+body.mode-password{background:#0f1432!important}
+body.mode-password #toast{
+  background:#ffaa00!important;border:1px solid #0f1432!important;color:#0f1432!important;
+}
+
+.app #password,.app #password-game{
+  --pw-navy:#0f1432;
+  --pw-navy-card:#151b46;
+  --pw-navy-dark:#0a0e26;
+  --pw-red:#ff001e;
+  --pw-gold:#ffaa00;
+  --pw-ink:#f6f1e4;
+  --pw-muted:#a9b0d4;
+  --pw-line:rgba(255,170,0,.38);
+
+  --card:var(--pw-navy-card);
+  --card2:var(--pw-navy-dark);
+  --border:var(--pw-line);
+  --text:var(--pw-ink);
+  --muted:var(--pw-muted);
+  --a-accent:var(--pw-gold);
+  --a-accent-soft:rgba(255,170,0,.14);
+  --a-accent-line:rgba(255,170,0,.5);
+  color:var(--pw-ink);
+}
+
+.app #password h1,.app #password-game h1{color:var(--pw-gold)}
+.app #password h2,.app #password h3,.app #password-game h2,.app #password-game h3{color:var(--pw-ink)}
+.app #password .subtitle,.app #password-game .subtitle{color:var(--pw-muted)}
+.app #password .fb-pitch-line{background:var(--pw-line)}
+
+/* centre the intro card like a title plate */
+.app #password .card.hero{text-align:center}
+.app #password .card.hero .notice{text-align:right}
+
+/* label: two brand squares + text (red, gold) */
+.app #password .badge,.app #password-game .badge{
+  background:transparent;color:var(--pw-gold);padding:0;border-radius:0;
+  font-weight:700;letter-spacing:.08em;
+}
+.app #password .badge::before,.app #password-game .badge::before{
+  content:"";display:inline-block;width:9px;height:9px;background:var(--pw-red);
+  box-shadow:-13px 0 0 var(--pw-gold);margin-inline-end:24px;vertical-align:baseline;
+}
+
+/* notice: red edge */
+.app #password .notice,.app #password-game .notice{background:var(--pw-navy-dark);border-right:3px solid var(--pw-red);color:var(--pw-ink)}
+
+/* buttons */
+.app #password .btn.primary,.app #password .btn.primary:hover,
+.app #password-game .btn.primary,.app #password-game .btn.primary:hover{background:var(--pw-gold);color:var(--pw-navy)}
+.app #password .btn.ghost,.app #password .btn.ghost:hover,
+.app #password-game .btn.ghost,.app #password-game .btn.ghost:hover{border-color:var(--pw-line);color:var(--pw-ink)}
+.app #password .btn:focus-visible,.app #password-game .btn:focus-visible{outline-color:var(--pw-gold)}
+
+/* the ten tiles: gold back, red face (Crows Gold / Crows Red blocks) */
+.app #password-game .card.hero{border-color:var(--pw-line)}
+.app #password-game .fb-card-back{background:var(--pw-gold);border:0;color:var(--pw-navy)}
+.app #password-game .fb-card-back .fb-index{color:var(--pw-navy);font-weight:700}
+.app #password-game .fb-card-back .fb-ball-svg{opacity:.95}
+.app #password-game .fb-card-front{background:var(--pw-red);border:0}
+.app #password-game .fb-card-front span{color:var(--pw-navy);font-weight:700;font-size:17px}
+
+/* the 1930 shield on the game's front door */
+.pw-emblem{display:block;width:150px;height:auto;margin:0 auto 14px}
