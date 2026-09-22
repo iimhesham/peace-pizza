@@ -42,3 +42,29 @@ Object.keys(GAMES).forEach(game=>{
 });
 
 updateLiveDbStatusText();
+
+/* =========================================================
+   VIEW MODE TOGGLE (desktop / mobile)
+   Only relevant on wide screens (see @media in app.css).
+   Remembers the user's choice in localStorage.
+========================================================= */
+(function initViewModeToggle(){
+  const KEY="viewMode"; // "mobile" | "desktop"
+  const btn=document.getElementById("viewModeToggle");
+  if(!btn)return;
+
+  function apply(mode){
+    document.body.classList.toggle("force-mobile-view",mode==="mobile");
+    btn.setAttribute("aria-pressed",mode==="mobile"?"true":"false");
+  }
+
+  let saved=null;
+  try{saved=localStorage.getItem(KEY);}catch(e){}
+  apply(saved==="mobile"?"mobile":"desktop");
+
+  btn.addEventListener("click",()=>{
+    const nowMobile=!document.body.classList.contains("force-mobile-view");
+    apply(nowMobile?"mobile":"desktop");
+    try{localStorage.setItem(KEY,nowMobile?"mobile":"desktop");}catch(e){}
+  });
+})();
