@@ -494,6 +494,9 @@ function renderGamePlayer(game,name,r){
   el(game,"Strength").textContent=r.strength;
   el(game,"Weakness").textContent=r.weakness;
 
+  const grudgeEl=el(game,"Grudge");
+  if(grudgeEl)grudgeEl.textContent=r.grudge||"";
+
   const mafia=r.killer||r.accomplice;
 
   el(game,"Mafia").classList.toggle("hidden",!mafia);
