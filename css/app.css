@@ -46,26 +46,30 @@ body #toast,body.mode-football #toast,body.mode-yousef #toast{
 
 /* ---------- desktop / mobile view toggle ---------- */
 .view-mode-toggle{
+  all:unset; /* kill native button styling (was showing as a white OS control) */
+  box-sizing:border-box;
   display:none; /* only shown on wide screens via media query below */
-  position:fixed; top:14px; inset-inline-end:14px; z-index:5000;
-  align-items:center; gap:7px;
-  background:#111b17; color:#e9efeb;
-  border:1px solid #38514a; border-radius:999px;
-  padding:8px 14px 8px 12px;
-  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
-  font-size:13px; font-weight:600; cursor:pointer;
-  box-shadow:0 6px 18px rgba(0,0,0,.35);
-  transition:background .15s ease,border-color .15s ease,transform .1s ease;
+  align-items:center; justify-content:center;
+  position:fixed; top:16px; inset-inline-start:16px; z-index:5000;
+  width:40px; height:40px; border-radius:50%;
+  background:#111b17!important; color:#8fe0c3!important;
+  border:1px solid #2b3f38!important;
+  cursor:pointer;
+  box-shadow:0 6px 16px rgba(0,0,0,.45);
+  opacity:.72;
+  transition:opacity .15s ease,border-color .15s ease,transform .1s ease,background .15s ease;
 }
-.view-mode-toggle:hover{background:#17231e;border-color:#57c7a0}
-.view-mode-toggle:active{transform:scale(.96)}
-.view-mode-toggle .vmt-icon{flex:0 0 auto}
+.view-mode-toggle *{color:inherit!important;font:inherit!important}
+.view-mode-toggle:hover{opacity:1;border-color:#57c7a0!important;background:#17231e!important}
+.view-mode-toggle:active{transform:scale(.92)}
+.view-mode-toggle .vmt-icon{flex:0 0 auto;display:block;pointer-events:none}
 .view-mode-toggle .vmt-icon-mobile{display:none}
 body.force-mobile-view .view-mode-toggle .vmt-icon-desktop{display:none}
-body.force-mobile-view .view-mode-toggle .vmt-icon-mobile{display:inline-flex}
-body.force-mobile-view .view-mode-toggle .vmt-label::after{content:"Mobile"}
-.view-mode-toggle .vmt-label::after{content:"Desktop"}
-.view-mode-toggle .vmt-label{font-size:0}
+body.force-mobile-view .view-mode-toggle .vmt-icon-mobile{display:block}
+.view-mode-toggle .vmt-label{
+  position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0 0 0 0); white-space:nowrap;
+}
 
 @media (min-width:901px){
   .view-mode-toggle{display:inline-flex}
@@ -92,11 +96,11 @@ body.force-mobile-view .view-mode-toggle .vmt-label::after{content:"Mobile"}
     padding-top:6px;
   }
   body.force-mobile-view .view-mode-toggle{
-    position:fixed; inset-inline-end:calc(50% - 215px - 60px);
+    position:fixed; inset-inline-start:calc(50% - 215px - 56px);
   }
 }
 @media (min-width:901px) and (max-width:1180px){
-  body.force-mobile-view .view-mode-toggle{inset-inline-end:14px; top:auto; bottom:14px}
+  body.force-mobile-view .view-mode-toggle{inset-inline-start:16px; top:16px}
 }
 
 /* ---------- sections ---------- */
