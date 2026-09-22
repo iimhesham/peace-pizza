@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/ui-mode.css">
+<script src="js/ui-mode.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 
@@ -39,6 +41,12 @@
 <div class="moon"></div>
 <div class="fog"><span></span><span></span><span></span></div>
 <div id="toast" class="toast"></div>
+
+<div id="uiModeSwitch" class="ui-mode-switch" role="group" aria-label="اختيار شكل التطبيق">
+  <span id="uiModeCurrent" class="ui-mode-label">موبايل</span>
+  <button type="button" class="ui-mode-btn" data-ui-mode="mobile" aria-pressed="false">موبايل</button>
+  <button type="button" class="ui-mode-btn" data-ui-mode="desktop" aria-pressed="false">ديسكتوب</button>
+</div>
 
 <div class="app">
 
