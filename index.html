@@ -13,7 +13,6 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/app.css">
-<link rel="stylesheet" href="css/ui-mode.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 
@@ -40,21 +39,6 @@
 <div class="moon"></div>
 <div class="fog"><span></span><span></span><span></span></div>
 <div id="toast" class="toast"></div>
-
-<!-- View mode: keeps the same Peace Pizza identity while letting the player
-     choose between the compact phone layout and the spacious desktop layout. -->
-<div class="view-mode" id="viewMode" role="group" aria-label="اختيار شكل العرض">
-  <span class="view-mode-label">العرض</span>
-  <button type="button" class="view-mode-btn" data-view-mode="mobile" aria-pressed="false">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"></rect><path d="M10 5h4M11 18.5h2"></path></svg>
-    <span>موبايل</span>
-  </button>
-  <span class="view-mode-divider" aria-hidden="true"></span>
-  <button type="button" class="view-mode-btn" data-view-mode="desktop" aria-pressed="false">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="1.8"></rect><path d="M8 21h8M12 17v4"></path></svg>
-    <span>ديسكتوب</span>
-  </button>
-</div>
 
 <div class="app">
 
@@ -1830,53 +1814,5 @@
 <script src="js/story.js"></script>
 <script src="js/hub.js"></script>
 <script src="js/init.js"></script>
-<script>
-/* =========================================================
-   PEACE PIZZA — UI VIEW MODE (embedded)
-   No external ui-mode.js file is required.
-========================================================= */
-(function(){
-  const KEY="peacePizzaViewMode";
-  const root=document.documentElement;
-
-  function getStored(){
-    try{return localStorage.getItem(KEY)}catch(e){return null}
-  }
-
-  function updateButtons(mode){
-    document.querySelectorAll("[data-view-mode]").forEach(function(btn){
-      const active=btn.dataset.viewMode===mode;
-      btn.classList.toggle("is-active",active);
-      btn.setAttribute("aria-pressed",active?"true":"false");
-    });
-  }
-
-  function setMode(mode,save){
-    mode=mode==="desktop"?"desktop":"mobile";
-    root.classList.toggle("view-mobile",mode==="mobile");
-    root.classList.toggle("view-desktop",mode==="desktop");
-    document.body.classList.toggle("view-mobile",mode==="mobile");
-    document.body.classList.toggle("view-desktop",mode==="desktop");
-    updateButtons(mode);
-    if(save){
-      try{localStorage.setItem(KEY,mode)}catch(e){}
-    }
-  }
-
-  const saved=getStored();
-  const initial=saved || (window.matchMedia("(min-width:721px)").matches?"desktop":"mobile");
-  setMode(initial,false);
-
-  document.addEventListener("click",function(event){
-    const btn=event.target.closest("[data-view-mode]");
-    if(!btn) return;
-    const mode=btn.dataset.viewMode;
-    if((mode==="desktop" && document.body.classList.contains("view-desktop")) ||
-       (mode==="mobile" && document.body.classList.contains("view-mobile"))) return;
-    setMode(mode,true);
-    if(typeof playClickSound==="function") playClickSound();
-  });
-})();
-</script>
 </body>
 </html>
