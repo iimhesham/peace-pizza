@@ -44,6 +44,61 @@ body #toast,body.mode-football #toast,body.mode-yousef #toast{
   font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
 }
 
+/* ---------- desktop / mobile view toggle ---------- */
+.view-mode-toggle{
+  display:none; /* only shown on wide screens via media query below */
+  position:fixed; top:14px; inset-inline-end:14px; z-index:5000;
+  align-items:center; gap:7px;
+  background:#111b17; color:#e9efeb;
+  border:1px solid #38514a; border-radius:999px;
+  padding:8px 14px 8px 12px;
+  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  font-size:13px; font-weight:600; cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  transition:background .15s ease,border-color .15s ease,transform .1s ease;
+}
+.view-mode-toggle:hover{background:#17231e;border-color:#57c7a0}
+.view-mode-toggle:active{transform:scale(.96)}
+.view-mode-toggle .vmt-icon{flex:0 0 auto}
+.view-mode-toggle .vmt-icon-mobile{display:none}
+body.force-mobile-view .view-mode-toggle .vmt-icon-desktop{display:none}
+body.force-mobile-view .view-mode-toggle .vmt-icon-mobile{display:inline-flex}
+body.force-mobile-view .view-mode-toggle .vmt-label::after{content:"Mobile"}
+.view-mode-toggle .vmt-label::after{content:"Desktop"}
+.view-mode-toggle .vmt-label{font-size:0}
+
+@media (min-width:901px){
+  .view-mode-toggle{display:inline-flex}
+
+  /* Default desktop look: keep the app centered like a wide card,
+     a bit roomier than the plain mobile layout. */
+  body:not(.force-mobile-view) .app{max-width:1040px}
+  body:not(.force-mobile-view) .grid,
+  body:not(.force-mobile-view) .mode-grid{max-width:760px}
+  body:not(.force-mobile-view) .fb-grid{max-width:720px}
+
+  /* Forced mobile view: shrink everything back into a phone-shaped
+     column, centered on the page, so it looks/behaves like the phone. */
+  body.force-mobile-view{
+    display:flex; justify-content:center;
+    background:#05100c!important;
+  }
+  body.force-mobile-view .app{
+    max-width:430px; width:430px;
+    min-height:100vh;
+    background:#0b1210;
+    border-inline:1px solid #243530;
+    box-shadow:0 0 0 1px #05100c,0 30px 70px rgba(0,0,0,.55);
+    padding-top:6px;
+  }
+  body.force-mobile-view .view-mode-toggle{
+    position:fixed; inset-inline-end:calc(50% - 215px - 60px);
+  }
+}
+@media (min-width:901px) and (max-width:1180px){
+  body.force-mobile-view .view-mode-toggle{inset-inline-end:14px; top:auto; bottom:14px}
+}
+
 /* ---------- sections ---------- */
 .app .fb-app,.app .ys-app{background:none;min-height:0;overflow:visible;isolation:auto;color:var(--text)}
 .app .fb-app::before,.app .fb-app::after{display:none}
