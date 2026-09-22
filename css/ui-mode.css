@@ -1,267 +1,149 @@
 /* =========================================================
-   UI MODE
-   Manual Desktop / Mobile layout switch.
-   The chosen mode is saved in localStorage, while the first
-   visit follows the current viewport automatically.
+   PEACE PIZZA — RESPONSIVE VIEW MODES
+   The switch changes layout density, not the game's identity.
 ========================================================= */
 
 :root{
-  --ui-content-max:520px;
-  --ui-gutter:10px;
+  --view-max:950px;
+  --view-home-max:520px;
 }
 
-/* ---------- mode switch ---------- */
-.ui-mode-switch{
+html.view-desktop{
+  --view-max:1180px;
+  --view-home-max:1180px;
+}
+
+html.view-mobile{
+  --view-max:950px;
+  --view-home-max:520px;
+}
+
+/* ---------- professional mode switch ---------- */
+.view-mode{
   position:fixed;
-  top:calc(10px + env(safe-area-inset-top));
-  inset-inline-start:calc(10px + env(safe-area-inset-left));
-  z-index:10001;
-  display:inline-flex;
+  top:calc(12px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10000;
+  display:flex;
   align-items:center;
   gap:3px;
-  padding:3px;
-  border:1px solid rgba(56,81,74,.9);
+  padding:4px;
+  background:rgba(12,20,17,.92);
+  border:1px solid rgba(87,199,160,.22);
   border-radius:999px;
-  background:rgba(10,18,15,.94);
-  box-shadow:0 8px 20px rgba(0,0,0,.28);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+  box-shadow:0 10px 30px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.035);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
   direction:rtl;
 }
-
-.ui-mode-label{
-  padding:0 7px;
-  color:#8d9d95;
-  font:600 11px/32px 'IBM Plex Sans Arabic','Tajawal',sans-serif;
+.view-mode-label{
+  padding:0 7px 0 4px;
+  color:#6f8178;
+  font:600 11px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;
   white-space:nowrap;
 }
-
-.ui-mode-btn{
-  min-width:72px;
-  min-height:32px;
-  padding:6px 10px;
-  border:0;
+.view-mode-btn{
+  appearance:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-height:34px;
+  padding:0 11px;
+  border:1px solid transparent;
   border-radius:999px;
   background:transparent;
-  color:#9db2a8;
+  color:#879990;
+  font:600 12px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;
   cursor:pointer;
-  font:700 11px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;
-  transition:background .12s,color .12s,transform .08s;
+  transition:background .18s ease,color .18s ease,border-color .18s ease,transform .12s ease;
 }
-
-.ui-mode-btn:hover{background:#17231e;color:#e9efeb}
-.ui-mode-btn:active{transform:scale(.97)}
-.ui-mode-btn.is-active{
-  background:#57c7a0;
+.view-mode-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.view-mode-btn:hover{color:#dbe7e1;background:rgba(255,255,255,.035)}
+.view-mode-btn:active{transform:scale(.97)}
+.view-mode-btn.is-active{
   color:#07130f;
+  background:#57c7a0;
+  border-color:#75d8b7;
+  box-shadow:0 3px 12px rgba(87,199,160,.2);
 }
-.ui-mode-btn:focus-visible{
-  outline:2px solid #d4b675;
-  outline-offset:2px;
-}
+.view-mode-btn:focus-visible{outline:2px solid #d4b675;outline-offset:2px}
+.view-mode-divider{width:1px;height:18px;background:rgba(255,255,255,.08)}
 
-/* Keep the switch out of the way of tight phone layouts. */
-html[data-ui-mode="mobile"] .ui-mode-switch{
-  top:auto;
-  bottom:calc(10px + env(safe-area-inset-bottom));
-}
+/* Keep the control from sitting on top of the first card/title. */
+body.view-mobile .app,
+body.view-desktop .app{padding-top:58px}
 
-/* ---------- MOBILE MODE ----------
-   Explicitly recreates the compact phone layout even on a laptop.
---------------------------------------------------------- */
-html[data-ui-mode="mobile"] body{
-  padding:calc(10px + env(safe-area-inset-top))
-          calc(8px + env(safe-area-inset-right))
-          calc(10px + env(safe-area-inset-bottom))
-          calc(8px + env(safe-area-inset-left));
-  line-height:1.55;
-}
+/* ---------- global desktop shell ---------- */
+html.view-desktop .app{max-width:var(--view-max)}
+html.view-desktop .home{max-width:var(--view-home-max);padding-inline:0}
+html.view-desktop .hm-head-c{padding-top:8px}
 
-html[data-ui-mode="mobile"] .app{
-  width:100%;
-  max-width:520px;
+/* Home becomes a real desktop landing page instead of a stretched phone. */
+html.view-desktop .home{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(360px,.85fr);
+  grid-template-areas:
+    "head head"
+    "fan stats"
+    "tabs search"
+    "games games";
+  column-gap:34px;
+  align-items:start;
 }
+html.view-desktop .hm-head-c{grid-area:head}
+html.view-desktop .hm-fan{grid-area:fan;width:100%;max-width:440px;height:280px;margin:24px auto 0;transform:scale(1.08);transform-origin:top center}
+html.view-desktop .hm-stats{grid-area:stats;margin:36px 0 0}
+html.view-desktop .hm-tabs{grid-area:tabs;margin-top:12px}
+html.view-desktop .hm-search{grid-area:search;margin-top:12px}
+html.view-desktop .hm-group{grid-area:games;margin-top:30px}
+html.view-desktop .home > .hm-row,
+html.view-desktop .home > .hm-empty{grid-column:1 / -1}
+html.view-desktop .home > .hm-row{min-height:88px;padding:16px 18px;border-radius:16px}
+html.view-desktop .hm-txt b{font-size:18px}
+html.view-desktop .hm-txt small{font-size:14px}
+html.view-desktop .hm-ico,.html.view-desktop .hm-no{width:52px}
+html.view-desktop .hm-ico{height:52px;border-radius:14px}
+html.view-desktop .hm-stats b{font-size:34px}
+html.view-desktop .hm-tabs button{min-height:44px}
+html.view-desktop .hm-search input{height:54px}
 
-html[data-ui-mode="mobile"] .home{
-  width:100%;
-  max-width:520px;
-}
+/* ---------- inner screens ---------- */
+html.view-desktop .app section:not(.home){max-width:1120px;margin-inline:auto}
+html.view-desktop .app section:not(.home) .card{padding:24px;border-radius:16px}
+html.view-desktop .app section:not(.home) .card.hero{padding:28px 30px}
+html.view-desktop .app section:not(.home) .grid{gap:14px}
+html.view-desktop .gm-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+html.view-desktop .game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+html.view-desktop .role-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 
-html[data-ui-mode="mobile"] .gm-grid{
-  grid-template-columns:1fr;
-  gap:10px;
-}
-
-html[data-ui-mode="mobile"] .game-grid,
-html[data-ui-mode="mobile"] .grid{
-  grid-template-columns:1fr;
-  gap:10px;
-}
-
-html[data-ui-mode="mobile"] .role-grid{
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
-}
-
-html[data-ui-mode="mobile"] .vote-target-grid{
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
-}
-
-html[data-ui-mode="mobile"] .card{
-  padding:14px;
-  margin:8px 0;
-}
-
-html[data-ui-mode="mobile"] .hero{
-  padding:26px 12px;
-}
-
-html[data-ui-mode="mobile"] .btn{
-  width:100%;
-  padding:11px 14px;
-  font-size:14px;
-  min-height:40px;
-}
-
-html[data-ui-mode="mobile"] .topline{
-  flex-direction:column;
-  align-items:flex-start;
-  gap:6px;
+/* Desktop mode still respects a narrow viewport; it never creates a
+   horizontal scroll on phones/small windows. */
+@media(max-width:720px){
+  html.view-desktop .app{max-width:950px}
+  html.view-desktop .home{display:block;max-width:520px;padding-inline:4px}
+  html.view-desktop .hm-fan{height:200px;max-width:340px;margin:14px auto 0;transform:none}
+  html.view-desktop .hm-stats{margin-top:18px}
+  html.view-desktop .hm-tabs{margin-top:16px}
+  html.view-desktop .hm-search{margin-top:10px}
+  html.view-desktop .hm-group{margin-top:26px}
+  html.view-desktop .home > .hm-row{min-height:76px;padding:14px}
+  html.view-desktop .hm-txt b{font-size:17px}
+  html.view-desktop .hm-txt small{font-size:13.5px}
+  html.view-desktop .hm-ico,html.view-desktop .hm-no{width:46px}
+  html.view-desktop .hm-ico{height:46px}
+  html.view-desktop .hm-stats b{font-size:28px}
 }
 
-html[data-ui-mode="mobile"] h1{font-size:24px}
-html[data-ui-mode="mobile"] h2{font-size:19px}
-html[data-ui-mode="mobile"] h3{font-size:16px}
-html[data-ui-mode="mobile"] .game-title{letter-spacing:3px}
-html[data-ui-mode="mobile"] .subtitle{font-size:14px;margin:8px auto 16px}
-html[data-ui-mode="mobile"] .kicker{margin-top:8px}
-html[data-ui-mode="mobile"] .divider{margin:10px auto}
-html[data-ui-mode="mobile"] .badge{padding:4px 11px;font-size:10px}
-html[data-ui-mode="mobile"] .role-btn{padding:10px 4px;min-height:44px}
-html[data-ui-mode="mobile"] .role-btn strong{font-size:13px}
-html[data-ui-mode="mobile"] .role-btn small{font-size:10px}
-html[data-ui-mode="mobile"] .notice{padding:10px;font-size:13px;margin:8px 0}
-html[data-ui-mode="mobile"] .round{padding:12px;margin:8px 0}
-html[data-ui-mode="mobile"] .evidence,
-html[data-ui-mode="mobile"] .private-note{padding:10px 12px;font-size:13px;margin-top:8px}
-html[data-ui-mode="mobile"] textarea{min-height:80px}
-html[data-ui-mode="mobile"] input,
-html[data-ui-mode="mobile"] textarea{font-size:16px;padding:11px 13px}
-html[data-ui-mode="mobile"] label{margin-bottom:6px}
-html[data-ui-mode="mobile"] .game-card{padding:18px 14px}
-html[data-ui-mode="mobile"] .game-card .number{font-size:32px}
-html[data-ui-mode="mobile"] .game-card p{font-size:13px}
-html[data-ui-mode="mobile"] details{padding:10px 0}
-html[data-ui-mode="mobile"] ul,
-html[data-ui-mode="mobile"] ol{padding-right:18px}
-html[data-ui-mode="mobile"] li{margin-bottom:5px}
-html[data-ui-mode="mobile"] .footer{padding:16px 0}
-html[data-ui-mode="mobile"] .small{font-size:12px}
-
-/* ---------- DESKTOP MODE ----------
-   Wider canvas + more useful multi-column layouts on laptops.
---------------------------------------------------------- */
-html[data-ui-mode="desktop"]{
-  --ui-content-max:1220px;
-  --ui-gutter:24px;
+@media(max-width:430px){
+  .view-mode{top:calc(8px + env(safe-area-inset-top));padding:3px}
+  .view-mode-label{display:none}
+  .view-mode-btn{min-height:32px;padding:0 10px;font-size:11px}
+  .view-mode-btn svg{width:15px;height:15px}
+  body.view-mobile .app,body.view-desktop .app{padding-top:50px}
 }
 
-html[data-ui-mode="desktop"] body{
-  padding:calc(24px + env(safe-area-inset-top))
-          calc(24px + env(safe-area-inset-right))
-          calc(24px + env(safe-area-inset-bottom))
-          calc(24px + env(safe-area-inset-left));
-}
-
-html[data-ui-mode="desktop"] .app{
-  width:100%;
-  max-width:1220px;
-}
-
-html[data-ui-mode="desktop"] .home{
-  width:100%;
-  max-width:1080px;
-  padding-inline:8px;
-}
-
-html[data-ui-mode="desktop"] .hm-fan{
-  max-width:560px;
-}
-
-html[data-ui-mode="desktop"] .hm-row{
-  min-height:84px;
-  padding:16px 18px;
-}
-
-html[data-ui-mode="desktop"] .hm-txt b{font-size:18px}
-html[data-ui-mode="desktop"] .hm-txt small{font-size:14px}
-
-html[data-ui-mode="desktop"] .game-grid{
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:18px;
-}
-
-html[data-ui-mode="desktop"] .grid{
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  max-width:1000px;
-  gap:16px;
-}
-
-html[data-ui-mode="desktop"] .role-grid{
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-}
-
-html[data-ui-mode="desktop"] .vote-target-grid{
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-}
-
-html[data-ui-mode="desktop"] .card{
-  padding:24px;
-  margin:14px 0;
-}
-
-html[data-ui-mode="desktop"] .card.hero{
-  padding:28px 24px;
-}
-
-html[data-ui-mode="desktop"] .btn{
-  min-height:46px;
-  padding:12px 20px;
-}
-
-html[data-ui-mode="desktop"] .topline{
-  gap:14px;
-}
-
-html[data-ui-mode="desktop"] .app section:not(.home) h1{font-size:30px}
-html[data-ui-mode="desktop"] .app section:not(.home) h2{font-size:23px}
-html[data-ui-mode="desktop"] .app section:not(.home) h3{font-size:19px}
-html[data-ui-mode="desktop"] .app section:not(.home) .subtitle{font-size:15.5px}
-html[data-ui-mode="desktop"] .app section:not(.home) .notice{font-size:15px}
-
-/* Prevent a desktop selection from becoming unusable on narrow screens. */
-@media(max-width:700px){
-  html[data-ui-mode="desktop"] body{
-    padding:calc(12px + env(safe-area-inset-top))
-            calc(10px + env(safe-area-inset-right))
-            calc(12px + env(safe-area-inset-bottom))
-            calc(10px + env(safe-area-inset-left));
-  }
-
-  html[data-ui-mode="desktop"] .app{max-width:760px}
-  html[data-ui-mode="desktop"] .home{max-width:760px}
-  html[data-ui-mode="desktop"] .grid,
-  html[data-ui-mode="desktop"] .game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  html[data-ui-mode="desktop"] .role-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  html[data-ui-mode="desktop"] .vote-target-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-
-@media(max-width:420px){
-  html[data-ui-mode="desktop"] .ui-mode-switch{
-    transform:scale(.92);
-    transform-origin:top start;
-  }
+@media(prefers-reduced-motion:reduce){
+  .view-mode-btn{transition:none}
 }
