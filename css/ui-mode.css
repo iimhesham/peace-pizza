@@ -1,0 +1,267 @@
+/* =========================================================
+   UI MODE
+   Manual Desktop / Mobile layout switch.
+   The chosen mode is saved in localStorage, while the first
+   visit follows the current viewport automatically.
+========================================================= */
+
+:root{
+  --ui-content-max:520px;
+  --ui-gutter:10px;
+}
+
+/* ---------- mode switch ---------- */
+.ui-mode-switch{
+  position:fixed;
+  top:calc(10px + env(safe-area-inset-top));
+  inset-inline-start:calc(10px + env(safe-area-inset-left));
+  z-index:10001;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  padding:3px;
+  border:1px solid rgba(56,81,74,.9);
+  border-radius:999px;
+  background:rgba(10,18,15,.94);
+  box-shadow:0 8px 20px rgba(0,0,0,.28);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  direction:rtl;
+}
+
+.ui-mode-label{
+  padding:0 7px;
+  color:#8d9d95;
+  font:600 11px/32px 'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  white-space:nowrap;
+}
+
+.ui-mode-btn{
+  min-width:72px;
+  min-height:32px;
+  padding:6px 10px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:#9db2a8;
+  cursor:pointer;
+  font:700 11px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  transition:background .12s,color .12s,transform .08s;
+}
+
+.ui-mode-btn:hover{background:#17231e;color:#e9efeb}
+.ui-mode-btn:active{transform:scale(.97)}
+.ui-mode-btn.is-active{
+  background:#57c7a0;
+  color:#07130f;
+}
+.ui-mode-btn:focus-visible{
+  outline:2px solid #d4b675;
+  outline-offset:2px;
+}
+
+/* Keep the switch out of the way of tight phone layouts. */
+html[data-ui-mode="mobile"] .ui-mode-switch{
+  top:auto;
+  bottom:calc(10px + env(safe-area-inset-bottom));
+}
+
+/* ---------- MOBILE MODE ----------
+   Explicitly recreates the compact phone layout even on a laptop.
+--------------------------------------------------------- */
+html[data-ui-mode="mobile"] body{
+  padding:calc(10px + env(safe-area-inset-top))
+          calc(8px + env(safe-area-inset-right))
+          calc(10px + env(safe-area-inset-bottom))
+          calc(8px + env(safe-area-inset-left));
+  line-height:1.55;
+}
+
+html[data-ui-mode="mobile"] .app{
+  width:100%;
+  max-width:520px;
+}
+
+html[data-ui-mode="mobile"] .home{
+  width:100%;
+  max-width:520px;
+}
+
+html[data-ui-mode="mobile"] .gm-grid{
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+html[data-ui-mode="mobile"] .game-grid,
+html[data-ui-mode="mobile"] .grid{
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+html[data-ui-mode="mobile"] .role-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+
+html[data-ui-mode="mobile"] .vote-target-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+
+html[data-ui-mode="mobile"] .card{
+  padding:14px;
+  margin:8px 0;
+}
+
+html[data-ui-mode="mobile"] .hero{
+  padding:26px 12px;
+}
+
+html[data-ui-mode="mobile"] .btn{
+  width:100%;
+  padding:11px 14px;
+  font-size:14px;
+  min-height:40px;
+}
+
+html[data-ui-mode="mobile"] .topline{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+}
+
+html[data-ui-mode="mobile"] h1{font-size:24px}
+html[data-ui-mode="mobile"] h2{font-size:19px}
+html[data-ui-mode="mobile"] h3{font-size:16px}
+html[data-ui-mode="mobile"] .game-title{letter-spacing:3px}
+html[data-ui-mode="mobile"] .subtitle{font-size:14px;margin:8px auto 16px}
+html[data-ui-mode="mobile"] .kicker{margin-top:8px}
+html[data-ui-mode="mobile"] .divider{margin:10px auto}
+html[data-ui-mode="mobile"] .badge{padding:4px 11px;font-size:10px}
+html[data-ui-mode="mobile"] .role-btn{padding:10px 4px;min-height:44px}
+html[data-ui-mode="mobile"] .role-btn strong{font-size:13px}
+html[data-ui-mode="mobile"] .role-btn small{font-size:10px}
+html[data-ui-mode="mobile"] .notice{padding:10px;font-size:13px;margin:8px 0}
+html[data-ui-mode="mobile"] .round{padding:12px;margin:8px 0}
+html[data-ui-mode="mobile"] .evidence,
+html[data-ui-mode="mobile"] .private-note{padding:10px 12px;font-size:13px;margin-top:8px}
+html[data-ui-mode="mobile"] textarea{min-height:80px}
+html[data-ui-mode="mobile"] input,
+html[data-ui-mode="mobile"] textarea{font-size:16px;padding:11px 13px}
+html[data-ui-mode="mobile"] label{margin-bottom:6px}
+html[data-ui-mode="mobile"] .game-card{padding:18px 14px}
+html[data-ui-mode="mobile"] .game-card .number{font-size:32px}
+html[data-ui-mode="mobile"] .game-card p{font-size:13px}
+html[data-ui-mode="mobile"] details{padding:10px 0}
+html[data-ui-mode="mobile"] ul,
+html[data-ui-mode="mobile"] ol{padding-right:18px}
+html[data-ui-mode="mobile"] li{margin-bottom:5px}
+html[data-ui-mode="mobile"] .footer{padding:16px 0}
+html[data-ui-mode="mobile"] .small{font-size:12px}
+
+/* ---------- DESKTOP MODE ----------
+   Wider canvas + more useful multi-column layouts on laptops.
+--------------------------------------------------------- */
+html[data-ui-mode="desktop"]{
+  --ui-content-max:1220px;
+  --ui-gutter:24px;
+}
+
+html[data-ui-mode="desktop"] body{
+  padding:calc(24px + env(safe-area-inset-top))
+          calc(24px + env(safe-area-inset-right))
+          calc(24px + env(safe-area-inset-bottom))
+          calc(24px + env(safe-area-inset-left));
+}
+
+html[data-ui-mode="desktop"] .app{
+  width:100%;
+  max-width:1220px;
+}
+
+html[data-ui-mode="desktop"] .home{
+  width:100%;
+  max-width:1080px;
+  padding-inline:8px;
+}
+
+html[data-ui-mode="desktop"] .hm-fan{
+  max-width:560px;
+}
+
+html[data-ui-mode="desktop"] .hm-row{
+  min-height:84px;
+  padding:16px 18px;
+}
+
+html[data-ui-mode="desktop"] .hm-txt b{font-size:18px}
+html[data-ui-mode="desktop"] .hm-txt small{font-size:14px}
+
+html[data-ui-mode="desktop"] .game-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+
+html[data-ui-mode="desktop"] .grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  max-width:1000px;
+  gap:16px;
+}
+
+html[data-ui-mode="desktop"] .role-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+html[data-ui-mode="desktop"] .vote-target-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+html[data-ui-mode="desktop"] .card{
+  padding:24px;
+  margin:14px 0;
+}
+
+html[data-ui-mode="desktop"] .card.hero{
+  padding:28px 24px;
+}
+
+html[data-ui-mode="desktop"] .btn{
+  min-height:46px;
+  padding:12px 20px;
+}
+
+html[data-ui-mode="desktop"] .topline{
+  gap:14px;
+}
+
+html[data-ui-mode="desktop"] .app section:not(.home) h1{font-size:30px}
+html[data-ui-mode="desktop"] .app section:not(.home) h2{font-size:23px}
+html[data-ui-mode="desktop"] .app section:not(.home) h3{font-size:19px}
+html[data-ui-mode="desktop"] .app section:not(.home) .subtitle{font-size:15.5px}
+html[data-ui-mode="desktop"] .app section:not(.home) .notice{font-size:15px}
+
+/* Prevent a desktop selection from becoming unusable on narrow screens. */
+@media(max-width:700px){
+  html[data-ui-mode="desktop"] body{
+    padding:calc(12px + env(safe-area-inset-top))
+            calc(10px + env(safe-area-inset-right))
+            calc(12px + env(safe-area-inset-bottom))
+            calc(10px + env(safe-area-inset-left));
+  }
+
+  html[data-ui-mode="desktop"] .app{max-width:760px}
+  html[data-ui-mode="desktop"] .home{max-width:760px}
+  html[data-ui-mode="desktop"] .grid,
+  html[data-ui-mode="desktop"] .game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html[data-ui-mode="desktop"] .role-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  html[data-ui-mode="desktop"] .vote-target-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+@media(max-width:420px){
+  html[data-ui-mode="desktop"] .ui-mode-switch{
+    transform:scale(.92);
+    transform-origin:top start;
+  }
+}
