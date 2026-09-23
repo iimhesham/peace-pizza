@@ -226,3 +226,21 @@ button.hm-case{border-color:#4a4127}
 .fb-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 4px;text-align:right;align-items:end}
 .fb-opts label{display:block;margin:0 0 6px;font-size:13px;opacity:.8}
 .fb-opts select,.fb-opts .btn{width:100%;min-height:48px;margin:0}
+
+/* ---------- desktop: bigger hub so it isn't a tiny phone-width
+   island floating in a huge tab. Only applies when the desktop
+   view is active (not when the user forces mobile view). ---------- */
+@media (min-width:901px){
+  body:not(.force-mobile-view) .home{max-width:640px}
+  body:not(.force-mobile-view) .hm-stats b{font-size:24px}
+  body:not(.force-mobile-view) .hm-stats span{font-size:13px}
+  body:not(.force-mobile-view) .hm-fan{max-width:420px;height:250px;margin:22px auto 0}
+  body:not(.force-mobile-view) .hm-fc{width:146px;height:204px;margin-left:-73px;top:30px;gap:8px}
+  body:not(.force-mobile-view) .hm-fc b{font-size:18px}
+  body:not(.force-mobile-view) .hm-fc small{font-size:11px}
+  body:not(.force-mobile-view) .hm-fc svg{width:66px;height:66px}
+  body:not(.force-mobile-view) .hm-fc-l{transform:translateX(-107px) rotate(-11deg)}
+  body:not(.force-mobile-view) .hm-fc-r{transform:translateX(107px) rotate(11deg)}
+  body:not(.force-mobile-view) .hm-fc-l:active{transform:translateX(-107px) rotate(-11deg) scale(.96)}
+  body:not(.force-mobile-view) .hm-fc-r:active{transform:translateX(107px) rotate(11deg) scale(.96)}
+}
