@@ -227,20 +227,76 @@ button.hm-case{border-color:#4a4127}
 .fb-opts label{display:block;margin:0 0 6px;font-size:13px;opacity:.8}
 .fb-opts select,.fb-opts .btn{width:100%;min-height:48px;margin:0}
 
-/* ---------- desktop: bigger hub so it isn't a tiny phone-width
-   island floating in a huge tab. Only applies when the desktop
-   view is active (not when the user forces mobile view). ---------- */
+/* ---------- desktop-only card description line (hidden on
+   mobile/tablet where the fan cards stay tiny) ---------- */
+.hm-fc-desc{display:none}
+
+/* ---------- desktop: sidebar + wide grid hub. Only applies when
+   the desktop view is active (not when the user forces mobile
+   view), and only touches #hub — the fan-of-three start screen.
+   Nothing here changes the mobile markup or its flow: the sidebar
+   elements are simply floated beside the (unmoved) main content,
+   so on phones/force-mobile-view every rule below is inert. ---------- */
 @media (min-width:901px){
   body:not(.force-mobile-view) .home{max-width:640px}
   body:not(.force-mobile-view) .hm-stats b{font-size:24px}
   body:not(.force-mobile-view) .hm-stats span{font-size:13px}
-  body:not(.force-mobile-view) .hm-fan{max-width:420px;height:250px;margin:22px auto 0}
-  body:not(.force-mobile-view) .hm-fc{width:146px;height:204px;margin-left:-73px;top:30px;gap:8px}
-  body:not(.force-mobile-view) .hm-fc b{font-size:18px}
-  body:not(.force-mobile-view) .hm-fc small{font-size:11px}
-  body:not(.force-mobile-view) .hm-fc svg{width:66px;height:66px}
-  body:not(.force-mobile-view) .hm-fc-l{transform:translateX(-107px) rotate(-11deg)}
-  body:not(.force-mobile-view) .hm-fc-r{transform:translateX(107px) rotate(11deg)}
-  body:not(.force-mobile-view) .hm-fc-l:active{transform:translateX(-107px) rotate(-11deg) scale(.96)}
-  body:not(.force-mobile-view) .hm-fc-r:active{transform:translateX(107px) rotate(11deg) scale(.96)}
+
+  body:not(.force-mobile-view) #hub{max-width:1040px}
+  body:not(.force-mobile-view) #hub::after{content:"";display:block;clear:both}
+
+  /* --- sidebar column: logo, tabs, search — floated beside the
+     main column instead of stacking above it --- */
+  body:not(.force-mobile-view) #hub .hm-head-c{
+    float:inline-start;width:250px;margin:0 0 22px;padding:6px 0 0;
+    align-items:flex-start;text-align:start;
+  }
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-badge{width:80px;height:80px}
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-brand{
+    font-size:32px;text-align:start;text-shadow:2px 2px 0 #57c7a0;
+  }
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-sub{text-align:start}
+
+  body:not(.force-mobile-view) #hub .hm-tabs{
+    float:inline-start;clear:inline-start;
+    width:250px;flex-direction:column;margin:0 0 16px;
+  }
+  body:not(.force-mobile-view) #hub .hm-tabs button{min-height:44px}
+
+  body:not(.force-mobile-view) #hub .hm-search{
+    float:inline-start;clear:inline-start;
+    width:250px;margin:0 0 24px;
+  }
+
+  /* --- main column: everything else lines up in the remaining
+     space to the side of the sidebar --- */
+  body:not(.force-mobile-view) #hub .hm-fan,
+  body:not(.force-mobile-view) #hub .hm-stats,
+  body:not(.force-mobile-view) #hub .hm-group,
+  body:not(.force-mobile-view) #hub .hm-row,
+  body:not(.force-mobile-view) #hub .hm-empty{
+    margin-inline-start:290px;
+  }
+
+  /* --- the three game cards: a real side-by-side grid, no more
+     fan/overlap, each card taller with room for a description --- */
+  body:not(.force-mobile-view) #hub .hm-fan{
+    position:static;height:auto;max-width:none;margin:0 0 26px;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  }
+  body:not(.force-mobile-view) #hub .hm-spark{display:none}
+  body:not(.force-mobile-view) #hub .hm-fc{
+    position:static;transform:none!important;margin:0;width:auto;
+    min-height:230px;padding:22px 14px;gap:8px;top:auto;
+  }
+  body:not(.force-mobile-view) #hub .hm-fc:active{filter:brightness(1.12);transform:translateY(-2px)!important}
+  body:not(.force-mobile-view) #hub .hm-fc b{font-size:18px}
+  body:not(.force-mobile-view) #hub .hm-fc small{font-size:11px}
+  body:not(.force-mobile-view) #hub .hm-fc svg{width:58px;height:58px}
+  body:not(.force-mobile-view) #hub .hm-fc-desc{
+    display:block;margin-top:6px;font-size:12.5px;line-height:1.6;
+    opacity:.85;font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+    letter-spacing:0;direction:rtl;
+  }
+  body:not(.force-mobile-view) #hub .hm-fc-desc b{font-size:12.5px;color:inherit}
 }
