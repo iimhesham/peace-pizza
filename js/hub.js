@@ -13,9 +13,15 @@
   const setStat=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
 
   setStat("hmStatGames",hub.querySelectorAll(".hm-row").length);
-  setStat("hmStatCases",document.querySelectorAll("#games button.hm-case").length);
+
+  const casesCount=document.querySelectorAll("#games button.hm-case").length;
+  setStat("hmStatCases",casesCount);
+  setStat("hmFcCases",casesCount);
+
   if(typeof FOOTBALL_PLAYERS!=="undefined"){
-    setStat("hmStatNames",fmt(FOOTBALL_PLAYERS.length)+"+");
+    const namesStr=fmt(FOOTBALL_PLAYERS.length)+"+";
+    setStat("hmStatNames",namesStr);
+    setStat("hmFcNames",namesStr);
   }
 
   /* ---------- filter + search ---------- */
