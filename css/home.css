@@ -190,7 +190,13 @@ button.hm-case{border-color:#4a4127}
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   border-radius:14px;text-align:center;overflow:hidden;
   box-shadow:0 10px 24px rgba(0,0,0,.45);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform .15s ease,box-shadow .15s ease;
 }
+.hm-fc:active{transform-origin:center;filter:brightness(1.12)}
+.hm-fc-l:active{transform:translateX(-86px) rotate(-11deg) scale(.96)}
+.hm-fc-r:active{transform:translateX(86px) rotate(11deg) scale(.96)}
+.hm-fc-c:active{transform:translateY(-8px) rotate(1.5deg) scale(.96)}
 .hm-fc>i{position:absolute;inset:6px;border-radius:10px;border:1px solid currentColor;opacity:.28;pointer-events:none}
 .hm-fc b{font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;font-size:15px;letter-spacing:.14em;line-height:1.2;direction:ltr}
 .hm-fc small{font-size:9px;letter-spacing:.2em;opacity:.65;direction:ltr}
