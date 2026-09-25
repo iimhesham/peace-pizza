@@ -183,10 +183,11 @@ button.hm-case{border-color:#4a4127}
 .hm-empty{margin:26px 2px;text-align:center;color:var(--h-muted);font-size:15px}
 .hm-group.hidden,.hm-row.hidden,.hm-empty.hidden{display:none}
 
-/* ---------- hub: fanned cards ---------- */
-.hm-fan{position:relative;height:200px;max-width:340px;margin:14px auto 0}
+/* ---------- hub: fanned cards (now 4: stories / who-am-i /
+   password / flags) ---------- */
+.hm-fan-4{position:relative;height:200px;max-width:392px;margin:14px auto 0}
 .hm-fc{
-  position:absolute;top:24px;left:50%;width:118px;height:164px;margin-left:-59px;
+  position:absolute;top:24px;left:50%;width:110px;height:164px;margin-left:-55px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   border-radius:14px;text-align:center;overflow:hidden;
   box-shadow:0 10px 24px rgba(0,0,0,.45);
@@ -194,55 +195,45 @@ button.hm-case{border-color:#4a4127}
   transition:transform .15s ease,box-shadow .15s ease;
 }
 .hm-fc:active{transform-origin:center;filter:brightness(1.12)}
-.hm-fc-l:active{transform:translateX(-86px) rotate(-11deg) scale(.96)}
-.hm-fc-r:active{transform:translateX(86px) rotate(11deg) scale(.96)}
-.hm-fc-c:active{transform:translateY(-8px) rotate(1.5deg) scale(.96)}
+.hm-fc-l:active{transform:translateX(-134px) rotate(-14deg) scale(.96)}
+.hm-fc-c:active{transform:translateX(-45px) rotate(-4deg) scale(.96)}
+.hm-fc-r:active{transform:translateX(45px) rotate(4deg) scale(.96)}
+.hm-fc-f:active{transform:translateX(134px) rotate(14deg) scale(.96)}
 .hm-fc>i{position:absolute;inset:6px;border-radius:10px;border:1px solid currentColor;opacity:.28;pointer-events:none}
-.hm-fc b{font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;font-size:15px;letter-spacing:.14em;line-height:1.2;direction:ltr}
-.hm-fc small{font-size:9px;letter-spacing:.2em;opacity:.65;direction:ltr}
+.hm-fc b{font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;font-size:14px;letter-spacing:.1em;line-height:1.2;direction:ltr}
+.hm-fc small{font-size:8.5px;letter-spacing:.16em;opacity:.65;direction:ltr}
 .hm-fc svg{display:block}
 .hm-fc-l{
-  transform:translateX(-86px) rotate(-11deg);z-index:1;
+  transform:translateX(-134px) rotate(-14deg);z-index:1;
   background:linear-gradient(160deg,#3a2f18,#211a0d);border:1px solid rgba(212,182,117,.4);color:#d4b675;
 }
-.hm-fc-r{
-  transform:translateX(86px) rotate(11deg);z-index:1;
-  background:linear-gradient(160deg,#12332a,#0b1f19);border:1px solid rgba(87,199,160,.4);color:#57c7a0;
-}
 .hm-fc-c{
-  transform:translateY(-8px) rotate(1.5deg);z-index:2;
+  transform:translateX(-45px) rotate(-4deg);z-index:2;
   background:linear-gradient(160deg,#750608,#3f0304);border:1px solid rgba(116,165,190,.6);color:#74a5be;
   box-shadow:0 14px 30px rgba(0,0,0,.55);
 }
 .hm-fc-c b{color:#fdf2f1}
-.hm-spark{position:absolute;top:2px;left:18%;color:#57c7a0;opacity:.85}
-@media (max-width:360px){
-  .hm-fc{width:104px;height:148px;margin-left:-52px}
-  .hm-fc-l{transform:translateX(-76px) rotate(-11deg)}
-  .hm-fc-r{transform:translateX(76px) rotate(11deg)}
+.hm-fc-r{
+  transform:translateX(45px) rotate(4deg);z-index:2;
+  background:linear-gradient(160deg,#12332a,#0b1f19);border:1px solid rgba(87,199,160,.4);color:#57c7a0;
 }
-
-/* ---------- hub: flags hero banner (4th game, standalone) ---------- */
-.hm-flagcard{
-  display:flex;align-items:center;gap:14px;
-  margin:16px 0 0;padding:14px 16px;
-  border-radius:16px;text-align:start;cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-  background:linear-gradient(160deg,#123a2f,#0a2019);
-  border:1px solid rgba(124,203,155,.4);color:#7ccb9b;
-  box-shadow:0 10px 24px rgba(0,0,0,.4);
-  transition:transform .12s ease,filter .12s ease;
+.hm-fc-f{
+  transform:translateX(134px) rotate(14deg);z-index:1;
+  background:linear-gradient(160deg,#4a2f22,#28160f);border:1px solid rgba(248,165,125,.45);color:#f8a57d;
 }
-.hm-flagcard:active{transform:scale(.98);filter:brightness(1.14)}
-.hm-flagcard svg{flex:none}
-.hm-flagcard .hm-fc-txt{flex:1;min-width:0}
-.hm-flagcard b{
-  display:block;font-family:'Anton','Impact','Arial Black',sans-serif;
-  font-weight:400;font-size:15px;letter-spacing:.06em;color:#eaf7f0;
+.hm-spark{position:absolute;top:2px;left:10%;color:#57c7a0;opacity:.85}
+@media (max-width:380px){
+  .hm-fan-4{max-width:340px}
+  .hm-fc{width:98px;height:150px;margin-left:-49px}
+  .hm-fc-l{transform:translateX(-118px) rotate(-14deg)}
+  .hm-fc-c{transform:translateX(-40px) rotate(-4deg)}
+  .hm-fc-r{transform:translateX(40px) rotate(4deg)}
+  .hm-fc-f{transform:translateX(118px) rotate(14deg)}
+  .hm-fc-l:active{transform:translateX(-118px) rotate(-14deg) scale(.96)}
+  .hm-fc-c:active{transform:translateX(-40px) rotate(-4deg) scale(.96)}
+  .hm-fc-r:active{transform:translateX(40px) rotate(4deg) scale(.96)}
+  .hm-fc-f:active{transform:translateX(118px) rotate(14deg) scale(.96)}
 }
-.hm-flagcard small{display:block;margin-top:5px;font-size:12.5px;color:#9fc2b3;line-height:1.55}
-.hm-flagcard small b{display:inline;font-family:inherit;font-size:inherit;letter-spacing:0;color:#7ccb9b}
-.hm-flagcard .hm-chev{flex:none;color:#7ccb9b;opacity:.8}
 
 /* ---------- password: level + lock all ---------- */
 .fb-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 4px;text-align:right;align-items:end}
@@ -290,8 +281,7 @@ button.hm-case{border-color:#4a4127}
 
   /* --- everything else (cards, stats, list) becomes the main
      column, indented past the sidebar --- */
-  body:not(.force-mobile-view) #hub .hm-fan,
-  body:not(.force-mobile-view) #hub .hm-flagcard,
+  body:not(.force-mobile-view) #hub .hm-fan-4,
   body:not(.force-mobile-view) #hub .hm-stats,
   body:not(.force-mobile-view) #hub .hm-group,
   body:not(.force-mobile-view) #hub .hm-row,
@@ -299,12 +289,12 @@ button.hm-case{border-color:#4a4127}
     margin-inline-start:282px;
   }
 
-  /* --- the three game cards: a real side-by-side grid, no more
+  /* --- the four game cards: a real side-by-side grid, no more
      fan/overlap, each card taller with room for a description --- */
-  body:not(.force-mobile-view) #hub .hm-fan{
+  body:not(.force-mobile-view) #hub .hm-fan-4{
     position:static;height:auto;max-width:none;
     margin-inline-start:282px;margin-block:0 26px;
-    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
   }
   body:not(.force-mobile-view) #hub .hm-spark{display:none}
   body:not(.force-mobile-view) #hub .hm-fc{
