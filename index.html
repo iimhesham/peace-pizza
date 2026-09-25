@@ -13,8 +13,11 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/flags.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@700;800&family=Tajawal:wght@300;400;500;700;900&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
 
@@ -127,6 +130,7 @@
     <button type="button" role="tab" class="is-on" data-f="all" aria-selected="true">كل الألعاب</button>
     <button type="button" role="tab" data-f="case" aria-selected="false">تحقيق</button>
     <button type="button" role="tab" data-f="ball" aria-selected="false">كورة</button>
+    <button type="button" role="tab" data-f="flag" aria-selected="false">أعلام</button>
   </div>
 
   <label class="hm-search">
@@ -135,7 +139,7 @@
   </label>
 
   <h2 class="hm-group">تحقيق</h2>
-  <button class="hm-row" data-cat="case" data-k="قصص تحقيق جريمة غموض مافيا يوسف فواز وايت تشابل مبحوح" onclick="playClickSound();show('games')">
+  <button class="hm-row is-case" data-cat="case" data-k="قصص تحقيق جريمة غموض مافيا يوسف فواز وايت تشابل مبحوح" onclick="playClickSound();show('games')">
     <span class="hm-ico hm-ico-books" aria-hidden="true"><svg viewBox="0 0 26 26" width="30" height="30"><g stroke="#0c1411" stroke-width=".6" stroke-linejoin="round"><rect x="5" y="2" width="16" height="4.2" rx=".9" fill="#d9727e"/><rect x="4" y="6.6" width="17" height="4.2" rx=".9" fill="#3f7fa0"/><rect x="3" y="11.2" width="19" height="4.2" rx=".9" fill="#7fb8cf"/><rect x="4" y="15.8" width="17" height="4.2" rx=".9" fill="#c79a6b"/><rect x="3" y="20.4" width="19" height="4.2" rx=".9" fill="#efd7a3"/></g><g stroke="#e9b44c" stroke-width=".9"><path d="M7.5 2.3v3.6M9 2.3v3.6M7 6.9v3.6M8.5 6.9v3.6"/></g></svg></span>
     <span class="hm-txt">
       <b>القصص</b>
@@ -159,6 +163,15 @@
     <span class="hm-txt">
       <b>قصة لاعب - أنا مين</b>
       <small>أدلة عن لاعب كورة، من الأصعب للأسهل. خمّنوا مين هو.</small>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <h2 class="hm-group">أعلام</h2>
+  <button class="hm-row is-flags" data-cat="flag" data-k="اعلام دول العالم خمن العلم جيوغرافيا" onclick="playClickSound();show('flags');flagsInit()">
+    <span class="hm-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.6 4 6 4 9.5s-1.4 6.9-4 9.5c-2.6-2.6-4-6-4-9.5s1.4-6.9 4-9.5Z"/></svg></span>
+    <span class="hm-txt">
+      <b>خمّن العلم</b>
+      <small>كل أعلام دول العالم، واحد يطلعها والباقي يخمّنوا.</small>
     </span>
     <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
   </button>
@@ -257,6 +270,64 @@
   <div class="hm-row hm-case is-closed" aria-disabled="true">
     <span class="hm-no">05</span>
     <span class="hm-txt"><b>قضية الداهلية السوداء</b><em>LOS ANGELES • 1947</em></span>
+  </div>
+</section>
+
+<!-- ========================================================
+     FLAGS — guess-the-flag, one phone, reveal button
+======================================================== -->
+<section id="flags" class="fg-app hidden">
+  <div class="fg-noise" aria-hidden="true"></div>
+
+  <header class="fg-bar">
+    <button class="fg-back" onclick="playClickSound();show('hub')" aria-label="رجوع">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <div class="fg-title">
+      <b>GUESS THE FLAG</b>
+      <span>خمّن العلم</span>
+    </div>
+    <div class="fg-score" id="fgScore" dir="ltr" aria-label="النتيجة">0<small>/0</small></div>
+  </header>
+
+  <div class="fg-stage">
+    <div class="fg-progress" id="fgProgress" dir="ltr">1 / 1</div>
+
+    <div class="fg-card">
+      <span class="fg-corner fg-corner-tl" aria-hidden="true"></span>
+      <span class="fg-corner fg-corner-tr" aria-hidden="true"></span>
+      <span class="fg-corner fg-corner-bl" aria-hidden="true"></span>
+      <span class="fg-corner fg-corner-br" aria-hidden="true"></span>
+
+      <div class="fg-flagwrap" id="fgFlag" aria-hidden="true"></div>
+
+      <button class="fg-reveal" id="fgRevealBtn" onclick="flagsReveal()">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        اكشف الاسم
+      </button>
+
+      <div class="fg-answer hidden" id="fgAnswer">
+        <b id="fgCountryName">—</b>
+        <div class="fg-judge">
+          <button class="fg-yes" onclick="flagsJudge(true)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            عرفناها
+          </button>
+          <button class="fg-no" onclick="flagsJudge(false)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            منعرفهاش
+          </button>
+        </div>
+        <button class="fg-skip" id="fgSkipBtn" onclick="flagsNext()">تخطّي بدون تسجيل ▸</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fg-actions">
+    <button class="fg-restart" onclick="flagsRestart()">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 21v-6h6"/></svg>
+      ابدأ من جديد
+    </button>
   </div>
 </section>
 
@@ -1819,6 +1890,8 @@
 <script src="js/story-data.js"></script>
 <script src="js/story.js"></script>
 <script src="js/hub.js"></script>
+<script src="js/flags-data.js"></script>
+<script src="js/flags.js"></script>
 <script src="js/init.js"></script>
 </body>
 </html>
