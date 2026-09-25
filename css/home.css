@@ -234,54 +234,53 @@ button.hm-case{border-color:#4a4127}
 /* ---------- desktop: sidebar + wide grid hub. Only applies when
    the desktop view is active (not when the user forces mobile
    view), and only touches #hub — the fan-of-three start screen.
-   Nothing here changes the mobile markup or its flow: the sidebar
-   elements are simply floated beside the (unmoved) main content,
-   so on phones/force-mobile-view every rule below is inert. ---------- */
+   The sidebar pieces (logo, tabs, search) are pulled out of the
+   flow with position:absolute — not floated, so they don't
+   inherit a float's "can't rise above earlier flow content" rule
+   — and the main content simply gets a left margin to clear them.
+   No DOM change, no wrapper divs, so mobile is untouched. ---------- */
 @media (min-width:901px){
   body:not(.force-mobile-view) .home{max-width:640px}
   body:not(.force-mobile-view) .hm-stats b{font-size:24px}
   body:not(.force-mobile-view) .hm-stats span{font-size:13px}
 
-  body:not(.force-mobile-view) #hub{max-width:1040px}
-  body:not(.force-mobile-view) #hub::after{content:"";display:block;clear:both}
+  body:not(.force-mobile-view) #hub{max-width:1040px;position:relative}
 
-  /* --- sidebar column: logo, tabs, search — floated beside the
-     main column instead of stacking above it --- */
   body:not(.force-mobile-view) #hub .hm-head-c{
-    float:inline-start;width:250px;margin:0 0 22px;padding:6px 0 0;
-    align-items:flex-start;text-align:start;
+    position:absolute;top:0;inset-inline-start:0;width:250px;
+    padding:6px 0 0;align-items:flex-start;text-align:start;
   }
-  body:not(.force-mobile-view) #hub .hm-head-c .hm-badge{width:80px;height:80px}
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-badge{width:76px;height:76px}
   body:not(.force-mobile-view) #hub .hm-head-c .hm-brand{
-    font-size:32px;text-align:start;text-shadow:2px 2px 0 #57c7a0;
+    font-size:30px;text-align:start;text-shadow:2px 2px 0 #57c7a0;
   }
   body:not(.force-mobile-view) #hub .hm-head-c .hm-sub{text-align:start}
 
   body:not(.force-mobile-view) #hub .hm-tabs{
-    float:inline-start;clear:inline-start;
-    width:250px;flex-direction:column;margin:0 0 16px;
+    position:absolute;top:168px;inset-inline-start:0;width:250px;
+    flex-direction:column;margin:0;
   }
   body:not(.force-mobile-view) #hub .hm-tabs button{min-height:44px}
 
   body:not(.force-mobile-view) #hub .hm-search{
-    float:inline-start;clear:inline-start;
-    width:250px;margin:0 0 24px;
+    position:absolute;top:380px;inset-inline-start:0;width:250px;margin:0;
   }
 
-  /* --- main column: everything else lines up in the remaining
-     space to the side of the sidebar --- */
+  /* --- everything else (cards, stats, list) becomes the main
+     column, indented past the sidebar --- */
   body:not(.force-mobile-view) #hub .hm-fan,
   body:not(.force-mobile-view) #hub .hm-stats,
   body:not(.force-mobile-view) #hub .hm-group,
   body:not(.force-mobile-view) #hub .hm-row,
   body:not(.force-mobile-view) #hub .hm-empty{
-    margin-inline-start:290px;
+    margin-inline-start:282px;
   }
 
   /* --- the three game cards: a real side-by-side grid, no more
      fan/overlap, each card taller with room for a description --- */
   body:not(.force-mobile-view) #hub .hm-fan{
-    position:static;height:auto;max-width:none;margin:0 0 26px;
+    position:static;height:auto;max-width:none;
+    margin-inline-start:282px;margin-block:0 26px;
     display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
   }
   body:not(.force-mobile-view) #hub .hm-spark{display:none}
