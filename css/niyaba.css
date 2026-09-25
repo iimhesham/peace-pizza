@@ -1,0 +1,167 @@
+/* =========================================================
+   NIYABA THEME — ملفات النيابة
+   ثيم بني غامق مستقل تمامًا عن ثيم قصص المافيا (اللي أخضر/دهبي).
+   مبني على ألوان Espresso (#54321F) و Milk Punch (#FFF4C7)
+   كأساس، لكن بدرجات بنية غامقة كخلفية بدل الكريمي الفاتح.
+========================================================= */
+
+.niyaba-theme{
+  --ny-espresso:#54321F;
+  --ny-espresso-dark:#2a1810;
+  --ny-espresso-deep:#180d07;
+  --ny-milk:#FFF4C7;
+  --ny-gold:#e2b064;
+  --ny-gold-soft:#c99a5c;
+  --ny-red:#a5432f;
+  --ny-line:rgba(226,176,100,.22);
+
+  font-family:"Almarai","Cairo",sans-serif;
+  color:var(--ny-milk);
+
+  background:
+    radial-gradient(circle at 15% 0%, rgba(226,176,100,.08), transparent 45%),
+    linear-gradient(165deg,var(--ny-espresso-dark) 0%,var(--ny-espresso-deep) 55%,#0d0705 100%);
+  margin:
+    calc(-18px - env(safe-area-inset-top)) calc(-10px - env(safe-area-inset-right))
+    -18px calc(-10px - env(safe-area-inset-left));
+  padding:
+    calc(18px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right))
+    40px calc(10px + env(safe-area-inset-left));
+  min-height:100vh;min-height:100dvh;
+}
+
+.niyaba-theme h1,.niyaba-theme h2,.niyaba-theme h3{
+  font-family:"Cairo",sans-serif;
+  color:#fbe9c8;
+}
+.niyaba-theme .ny-sub-title{
+  display:block;font-size:.62em;color:var(--ny-gold);margin-top:4px;letter-spacing:.5px;
+}
+
+/* ===== cards ===== */
+.niyaba-theme .ny-card,
+.niyaba-theme .card{
+  background:linear-gradient(155deg,rgba(84,50,31,.55),rgba(24,13,7,.9));
+  border:1px solid var(--ny-line);
+  border-right:4px solid var(--ny-gold-soft);
+  box-shadow:0 14px 30px rgba(10,5,2,.4);
+}
+.niyaba-theme .ny-card::before,
+.niyaba-theme .card::before{content:none}
+
+/* ===== hero + stamp ===== */
+.niyaba-theme .ny-hero{position:relative;overflow:hidden}
+.niyaba-theme .ny-stamp{
+  position:absolute;top:16px;left:-40px;
+  background:var(--ny-red);color:#fff3e2;
+  font-family:"Cairo",sans-serif;font-weight:900;font-size:12px;
+  padding:4px 46px;transform:rotate(-35deg);
+  box-shadow:0 2px 8px rgba(0,0,0,.35);opacity:.9;
+}
+.niyaba-theme .ny-badge{
+  background:rgba(226,176,100,.14);
+  border:1px solid var(--ny-gold-soft);
+  color:var(--ny-gold);
+  font-family:"IBM Plex Mono",monospace;
+}
+
+/* ===== notice boxes ===== */
+.niyaba-theme .ny-notice,
+.niyaba-theme .notice{
+  background:rgba(255,244,199,.06);
+  border:1px solid var(--ny-line);
+  color:var(--ny-milk);
+  border-radius:12px;
+}
+.niyaba-theme .ny-notice b{color:var(--ny-gold)}
+
+/* ===== buttons ===== */
+.niyaba-theme .btn{font-family:"Cairo",sans-serif;font-weight:700}
+.niyaba-theme .ny-primary,
+.niyaba-theme .btn.primary{
+  background:linear-gradient(160deg,var(--ny-gold),var(--ny-gold-soft));
+  color:#2a1810;border:none;
+}
+.niyaba-theme .ny-secondary,
+.niyaba-theme .btn.secondary{
+  background:transparent;
+  border:1.5px solid var(--ny-gold-soft);
+  color:var(--ny-gold);
+}
+.niyaba-theme .btn.ghost{
+  background:transparent;border:1px solid rgba(255,244,199,.25);color:var(--ny-milk);
+}
+
+/* ===== role selection grid ===== */
+.niyaba-theme .role-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:10px;
+}
+.niyaba-theme .role-btn{
+  background:rgba(255,244,199,.05);
+  border:1.5px solid var(--ny-line);
+  color:var(--ny-milk);
+  border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;
+}
+.niyaba-theme .role-btn strong{display:block;font-family:"Cairo",sans-serif;font-size:13px}
+.niyaba-theme .role-btn small{opacity:.6;font-size:10.5px}
+.niyaba-theme .role-btn.selected{
+  border-color:var(--ny-gold);background:rgba(226,176,100,.15);
+}
+
+/* ===== secret / culprit ===== */
+.niyaba-theme .ny-secret{border-right-color:var(--ny-red)}
+.niyaba-theme .ny-secret h3{color:#f0b199}
+.niyaba-theme .ny-culprit-badge{
+  color:#ffcdb8;border:1px solid var(--ny-red);
+  background:rgba(165,67,47,.25);font-weight:900;
+}
+
+/* ===== law citation boxes (GM only) ===== */
+.niyaba-theme .law-box{
+  background:rgba(226,176,100,.08);
+  border:1px solid rgba(226,176,100,.3);
+  border-radius:10px;padding:10px 14px;margin:8px 0;font-size:13px;
+}
+.niyaba-theme .law-box b{color:var(--ny-gold);font-family:"Cairo",sans-serif}
+
+/* ===== misc ===== */
+.niyaba-theme input,
+.niyaba-theme textarea{
+  background:rgba(255,244,199,.05);
+  border:1px solid var(--ny-line);
+  color:var(--ny-milk);
+  font-family:"Almarai",sans-serif;
+}
+.niyaba-theme label{color:var(--ny-gold-soft);font-family:"Cairo",sans-serif;font-size:13px}
+.niyaba-theme .small{color:rgba(255,244,199,.75)}
+.niyaba-theme .danger{color:#ff9a86}
+.niyaba-theme hr{border-color:var(--ny-line)}
+
+/* ===== interactive verdict card ===== */
+.niyaba-theme .verdict-why-grid{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;
+}
+.niyaba-theme .vw-chip{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,244,199,.05);
+  border:1.5px solid var(--ny-line);
+  border-radius:100px;padding:7px 12px;
+  font-size:12.5px;cursor:pointer;
+}
+.niyaba-theme .vw-chip input{accent-color:var(--ny-gold);margin:0}
+.niyaba-theme .vw-chip:has(input:checked){
+  border-color:var(--ny-gold);background:rgba(226,176,100,.15);color:var(--ny-gold);
+}
+.niyaba-theme select{
+  width:100%;background:rgba(255,244,199,.05);
+  border:1px solid var(--ny-line);color:var(--ny-milk);
+  border-radius:10px;padding:10px;font-family:"Almarai",sans-serif;
+}
+
+/* hub row icon wrapper (used on the case list, outside .niyaba-theme scope) */
+.ny-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:10px;
+  background:linear-gradient(160deg,#54321F,#2a1810);
+  border:1px solid rgba(226,176,100,.35);
+}
