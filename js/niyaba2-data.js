@@ -144,6 +144,6 @@ loadNiyaba2Verdict();
 registerGame("niyaba2",{
   roles:niyaba2Roles,
   rounds:niyaba2Rounds,
-  password:"1014",
+  password:"3AWAEM",
   verifyPrefix:"NIYABA2"
 });

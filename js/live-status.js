@@ -293,6 +293,114 @@ async function isSessionActive(game,code){
   }
 }
 
+/* =========================================================
+   DEBUG PANEL (للـGM بس) — بيوري بشكل مباشر لو التصويت شغال
+   فعليًا ولا لأ، وبيوري السبب الحقيقي لو مش شغال (مش رسالة عامة).
+========================================================= */
+
+function ensureDebugPanel(game){
+  let box=document.getElementById(`${game}DebugPanel`);
+  if(box)return box;
+
+  const anchor=document.getElementById(`${game}VoteTallyCard`);
+  if(!anchor)return null;
+
+  box=document.createElement("div");
+  box.className="card ny-card";
+  box.id=`${game}DebugPanel`;
+  box.style.marginTop="14px";
+
+  const title=document.createElement("h3");
+  title.textContent="فحص التصويت (تشخيص)";
+
+  const btn=document.createElement("button");
+  btn.className="btn ghost";
+  btn.type="button";
+  btn.style.marginRight="8px";
+  btn.textContent="افحص الآن";
+  btn.onclick=()=>{playClickSound();buildDebugPanel(game);};
+
+  const head=document.createElement("div");
+  head.style.display="flex";
+  head.style.justifyContent="space-between";
+  head.style.alignItems="center";
+  head.append(title,btn);
+
+  const body=document.createElement("div");
+  body.id=`${game}DebugBody`;
+  body.style.marginTop="10px";
+  body.style.fontSize="13px";
+  body.style.lineHeight="1.9";
+
+  box.append(head,body);
+  anchor.insertAdjacentElement("afterend",box);
+  return box;
+}
+
+function debugLine(ok,label,detail){
+  const row=document.createElement("div");
+  const mark=document.createElement("span");
+  mark.textContent=ok===null?"…":(ok?"✅":"❌");
+  mark.style.marginLeft="8px";
+  const text=document.createElement("span");
+  text.textContent=detail?`${label}: ${detail}`:label;
+  row.append(mark,text);
+  return row;
+}
+
+async function buildDebugPanel(game){
+  const box=ensureDebugPanel(game);
+  if(!box)return;
+  const body=document.getElementById(`${game}DebugBody`);
+  body.textContent="";
+  body.appendChild(debugLine(null,"جاري الفحص..."));
+
+  const gmCode=GAMES[game]&&GAMES[game].gmCode;
+  const url=getLiveDbUrl();
+  const rows=[];
+
+  // 1) رابط قاعدة البيانات موجود ومتصل فعليًا (مش بس شكله صحيح)
+  const reachable=url?await testLiveDbConnection(url):false;
+  rows.push(debugLine(!!url&&reachable,"الاتصال بقاعدة البيانات",
+    !url?"مفيش رابط محفوظ":(reachable?url:`${url} — مش بيرد (تأكد من الـRules)`)));
+
+  // 2) فيه كود جلسة (GM ولّد كود)
+  rows.push(debugLine(!!gmCode,"كود الجلسة (GM)",gmCode||"لسه ملهاش كود"));
+
+  // 3) الجولة الحالية محددة (لو صفر، أي صوت هيترفض)
+  const round=(url&&gmCode)?await getCurrentRoundLive(game,gmCode):0;
+  rows.push(debugLine(!!round,"الجولة الحالية",
+    round?`جولة رقم ${round}`:"مش محددة — لازم تدوس على جولة فوق"));
+
+  // 4) فيه لاعبين داخلين فعلاً
+  const players=(url&&gmCode)?await fetchPlayers(game,gmCode):null;
+  const playerCount=players?Object.keys(players).length:0;
+  rows.push(debugLine(playerCount>0,"لاعبين مسجلين",
+    playerCount?`${playerCount} لاعب`:"محدش أكّد شخصيته لسه"));
+
+  // 5) فيه أصوات فعلاً مسجلة للجولة الحالية
+  const votes=(url&&gmCode&&round)?await fetchVotes(game,gmCode,round):null;
+  const voteCount=votes?Object.keys(votes).length:0;
+  rows.push(debugLine(voteCount>0,"أصوات مسجلة للجولة دي",
+    voteCount?`${voteCount} صوت`:"لسه مفيش صوت واحد اتسجل"));
+
+  body.textContent="";
+  rows.forEach(r=>body.appendChild(r));
+
+  const raw=document.createElement("details");
+  raw.style.marginTop="10px";
+  const sum=document.createElement("summary");
+  sum.textContent="بيانات خام (JSON)";
+  raw.appendChild(sum);
+  const pre=document.createElement("pre");
+  pre.style.whiteSpace="pre-wrap";
+  pre.style.fontSize="12px";
+  pre.style.marginTop="8px";
+  pre.textContent=JSON.stringify({round,players,votes},null,2);
+  raw.appendChild(pre);
+  body.appendChild(raw);
+}
+
 let liveStatusTimer=null;
 let liveStatusGame=null;
 let liveStatusCode=null;

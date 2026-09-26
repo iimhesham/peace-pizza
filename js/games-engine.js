@@ -905,4 +905,5 @@ async function buildGameGM(game){
   }
 
   buildVoteTally(game);
+  buildDebugPanel(game);
 }
