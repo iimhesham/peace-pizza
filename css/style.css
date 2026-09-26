@@ -22,7 +22,10 @@ body{
   min-height:100vh;min-height:100dvh;
   padding:calc(18px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
   overflow-x:hidden;
-  background:radial-gradient(circle at 50% 0%,#12372b 0%,var(--bg) 48%,#010604 100%);
+  background:
+    radial-gradient(circle at 50% 0%,rgba(18,55,43,.35) 0%,rgba(1,6,4,.55) 48%,rgba(1,6,4,.85) 100%),
+    url('img/bg-merged.jpg') center top/cover no-repeat;
+  background-color:#010604;
   color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.8;
   -webkit-text-size-adjust:100%;text-size-adjust:100%
 }
