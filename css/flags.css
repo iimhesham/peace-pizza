@@ -96,6 +96,12 @@ body.mode-flags .fog{display:none}
 .fg-flagwrap .fg-emoji{font-size:104px;line-height:1;filter:drop-shadow(0 6px 12px rgba(0,0,0,.22))}
 .fg-flagwrap img{width:112px;height:auto;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.22)}
 
+.fg-hint{
+  width:100%;margin:-4px 0 0;text-align:center;
+  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  font-size:14px;line-height:1.6;color:var(--fg-violet);
+}
+
 .fg-reveal{
   width:100%;min-height:52px;
   display:flex;align-items:center;justify-content:center;gap:8px;
@@ -112,6 +118,11 @@ body.mode-flags .fog{display:none}
   font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
   font-size:22px;font-weight:700;color:var(--fg-text);text-align:center;
 }
+.fg-note{
+  display:block;margin-top:-8px;
+  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  font-size:12.5px;color:var(--fg-muted);text-align:center;
+}
 .fg-judge{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .fg-yes,.fg-no{
   min-height:52px;display:flex;align-items:center;justify-content:center;gap:8px;
@@ -126,6 +137,24 @@ body.mode-flags .fog{display:none}
   background:transparent;border:0;color:var(--fg-muted);
   font:inherit;font-size:12.5px;cursor:pointer;padding:2px;
   -webkit-tap-highlight-color:transparent;
+}
+
+/* ---------- mode switch (current vs historical flags) ---------- */
+.fg-modes{
+  position:relative;z-index:1;margin:14px 0 0;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.fg-mode{
+  min-height:44px;
+  background:var(--fg-panel);border:1px solid var(--fg-line);border-radius:12px;
+  color:var(--fg-muted);font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:background .12s,border-color .12s,color .12s;
+}
+.fg-mode:active{filter:brightness(1.15)}
+.fg-mode-active{
+  background:linear-gradient(135deg,rgba(124,203,155,.18),rgba(248,165,125,.18));
+  border-color:var(--fg-cyan);color:var(--fg-cyan);
 }
 
 /* ---------- bottom actions ---------- */
