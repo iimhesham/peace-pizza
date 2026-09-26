@@ -141,20 +141,23 @@ body.mode-flags .fog{display:none}
 
 /* ---------- mode switch (current vs historical flags) ---------- */
 .fg-modes{
-  position:relative;z-index:1;margin:14px 0 0;
-  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  position:relative;z-index:1;margin:16px 0 0;
+  display:grid;grid-template-columns:1fr 1fr;gap:4px;
+  background:var(--fg-panel);border:1px solid var(--fg-line);
+  border-radius:100px;padding:4px;
 }
 .fg-mode{
-  min-height:44px;
-  background:var(--fg-panel);border:1px solid var(--fg-line);border-radius:12px;
+  min-height:42px;
+  background:transparent;border:1px solid transparent;border-radius:100px;
   color:var(--fg-muted);font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
   font-size:13px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;
-  transition:background .12s,border-color .12s,color .12s;
+  transition:background .15s,border-color .15s,color .15s,box-shadow .15s;
 }
 .fg-mode:active{filter:brightness(1.15)}
 .fg-mode-active{
-  background:linear-gradient(135deg,rgba(124,203,155,.18),rgba(248,165,125,.18));
-  border-color:var(--fg-cyan);color:var(--fg-cyan);
+  background:linear-gradient(135deg,var(--fg-cyan),var(--fg-violet));
+  border-color:transparent;color:#0e2b23;font-weight:800;
+  box-shadow:0 6px 16px rgba(0,0,0,.28);
 }
 
 /* ---------- bottom actions ---------- */
