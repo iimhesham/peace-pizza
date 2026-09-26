@@ -30,7 +30,7 @@ body{
   overflow-x:hidden;
   background:
     radial-gradient(circle at 50% 0%,rgba(18,55,43,.35) 0%,rgba(1,6,4,.55) 48%,rgba(1,6,4,.85) 100%),
-    url('img/bg-merged.jpg') center top/cover no-repeat;
+    url('img/bg-merged.jpg?v=2') center top/cover no-repeat;
   background-color:#010604;
   color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.8;
   -webkit-text-size-adjust:100%;text-size-adjust:100%
@@ -505,7 +505,7 @@ body.mode-yousef .page-in{animation:yousefIn .18s ease}
   padding:24px;text-align:center;
   background:
     radial-gradient(circle at 50% 40%,rgba(18,55,43,.55) 0%,rgba(1,6,4,.92) 60%,#010604 100%),
-    url('img/bg-merged.jpg') center/cover no-repeat;
+    url('img/bg-merged.jpg?v=2') center/cover no-repeat;
   animation:creditsIn .25s ease;
   cursor:pointer;
 }
