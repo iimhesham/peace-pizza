@@ -1,3 +1,9 @@
+@font-face{
+  font-family:'Kasem Display';
+  src:url('../fonts/Kasem-Display.ttf') format('truetype');
+  font-display:swap;
+}
+
 :root{
   --bg:#030b08;
   --card:#0a1d17;
@@ -472,4 +478,44 @@ body.mode-yousef #toast{background:#f6f4ec!important;border:1px solid #a3862f!im
 body.mode-yousef .page-in{animation:yousefIn .18s ease}
 @keyframes yousefIn{from{opacity:.9;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media(max-width:650px){.mode-grid{grid-template-columns:1fr;gap:12px}.mode-card{padding:26px 16px 20px}.fb-grid{grid-template-columns:repeat(3,1fr);gap:8px;max-width:390px;margin-top:16px}.fb-card-face{border-radius:11px;padding:6px}.fb-card-front span{font-size:14px}.fb-card-back .fb-ball-svg{width:28px;height:28px}.fb-card-back .fb-index{font-size:16px}}
+
+/* =========================================================
+   CREDITS EASTER EGG (زرار "⋮" فوق يسار + صفحة سرية)
+========================================================= */
+.credits-toggle{
+  all:unset;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;
+  position:fixed;top:16px;inset-inline-start:16px;z-index:5000;
+  width:40px;height:40px;border-radius:50%;
+  background:#111b17;color:#8fe0c3;
+  border:1px solid #2b3f38;
+  cursor:pointer;font-size:20px;line-height:1;letter-spacing:1px;
+  box-shadow:0 6px 16px rgba(0,0,0,.45);
+  opacity:.6;
+  transition:opacity .15s ease,border-color .15s ease,transform .1s ease,background .15s ease;
+}
+.credits-toggle:hover{opacity:1;border-color:#57c7a0;background:#17231e}
+.credits-toggle:active{transform:scale(.9)}
+
+.credits-overlay{
+  position:fixed;inset:0;z-index:9000;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;text-align:center;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(18,55,43,.55) 0%,rgba(1,6,4,.92) 60%,#010604 100%),
+    url('img/bg-merged.jpg') center/cover no-repeat;
+  animation:creditsIn .25s ease;
+  cursor:pointer;
+}
+.credits-overlay[hidden]{display:none}
+.credits-box{max-width:520px}
+.credits-text{
+  font-family:'Kasem Display','Amiri',serif;
+  font-size:clamp(30px,8vw,52px);
+  line-height:1.6;
+  color:#bfe9d6;
+  text-shadow:0 2px 24px rgba(47,214,160,.35),0 1px 0 rgba(0,0,0,.6);
+  margin:0;
+}
+@keyframes creditsIn{from{opacity:0}to{opacity:1}}
 
