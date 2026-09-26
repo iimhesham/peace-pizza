@@ -67,9 +67,9 @@ function flagsRender(){
   const nameEl=document.getElementById("fgCountryName");
 
   if(fgMode==="historical"){
-    const[imgUrl,hint,answer,note]=item;
+    const[svgMarkup,hint,answer,note]=item;
     if(flagWrap){
-      flagWrap.innerHTML=`<img src="${imgUrl}" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;fg-emoji&quot;>🏳️</span>'">`;
+      flagWrap.innerHTML=`<div class="fg-histflag">${svgMarkup}</div>`;
     }
     if(hintEl){hintEl.textContent=hint;hintEl.classList.remove("hidden");}
     if(nameEl)nameEl.textContent=answer;
