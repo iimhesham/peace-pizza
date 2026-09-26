@@ -325,6 +325,8 @@
 
       <div class="fg-flagwrap" id="fgFlag" aria-hidden="true"></div>
 
+      <p class="fg-hint hidden" id="fgHint"></p>
+
       <button class="fg-reveal" id="fgRevealBtn" onclick="flagsReveal()">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         اكشف الاسم
@@ -332,6 +334,7 @@
 
       <div class="fg-answer hidden" id="fgAnswer">
         <b id="fgCountryName">—</b>
+        <small class="fg-note hidden" id="fgNote"></small>
         <div class="fg-judge">
           <button class="fg-yes" onclick="flagsJudge(true)">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
@@ -345,6 +348,11 @@
         <button class="fg-skip" id="fgSkipBtn" onclick="flagsNext()">تخطّي بدون تسجيل ▸</button>
       </div>
     </div>
+  </div>
+
+  <div class="fg-modes">
+    <button class="fg-mode fg-mode-active" id="fgModeCurrent" onclick="flagsSetMode('current')">🌍 أعلام دلوقتي</button>
+    <button class="fg-mode" id="fgModeHistorical" onclick="flagsSetMode('historical')">🕰️ أعلام قديمة</button>
   </div>
 
   <div class="fg-actions">
@@ -2210,6 +2218,7 @@
 <script src="js/story.js"></script>
 <script src="js/hub.js"></script>
 <script src="js/flags-data.js"></script>
+<script src="js/flags-historical-data.js"></script>
 <script src="js/flags.js"></script>
 <script src="js/niyaba-data.js"></script>
 <script src="js/init.js"></script>
