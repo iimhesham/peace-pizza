@@ -68,3 +68,20 @@ updateLiveDbStatusText();
     try{localStorage.setItem(KEY,nowMobile?"mobile":"desktop");}catch(e){}
   });
 })();
+
+/* =========================================================
+   CREDITS EASTER EGG (top-left "⋮" button)
+========================================================= */
+(function initCreditsOverlay(){
+  const toggle=document.getElementById("creditsToggle");
+  const overlay=document.getElementById("creditsOverlay");
+  if(!toggle||!overlay)return;
+
+  toggle.addEventListener("click",()=>{
+    playClickSound();
+    overlay.hidden=false;
+  });
+  overlay.addEventListener("click",()=>{
+    overlay.hidden=true;
+  });
+})();
