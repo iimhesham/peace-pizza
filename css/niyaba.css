@@ -124,6 +124,12 @@
 }
 .niyaba-theme .law-box b{color:var(--ny-gold);font-family:"Cairo",sans-serif}
 
+.niyaba-theme .law-section{margin:14px 0}
+.niyaba-theme .law-section b{
+  display:block;color:#fbe9c8;font-family:"Cairo",sans-serif;font-size:14px;margin-bottom:6px;
+}
+.niyaba-theme .law-section p{margin:4px 0;font-size:13.5px}
+
 /* ===== misc ===== */
 .niyaba-theme input,
 .niyaba-theme textarea{
