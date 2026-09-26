@@ -253,6 +253,23 @@
     <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
   </button>
 
+  <button class="hm-row hm-case ny-row" onclick="playClickSound();openGame('niyaba2')">
+    <span class="hm-no ny-icon" aria-hidden="true">
+      <svg viewBox="0 0 26 26" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="13" cy="13" r="10" fill="none" stroke="#e9c98a" stroke-width="1.6"/>
+        <circle cx="13" cy="13" r="1.3" fill="#e9c98a"/>
+        <path d="M13 13 13 7" stroke="#e9c98a" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M13 13 17 15.5" stroke="#8a2f2f" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="hm-txt">
+      <b>ملفات النيابة — 002: قبل أن يوقّع</b>
+      <small>لا شاهد، لا كاميرا، ولا دليل واحد يحسم القضية — الحل بيطلع من تركيب القرائن مع بعض بس.</small>
+      <em>CASE FILE • 002/2026</em>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+
   <h2 class="hm-group">متاحة</h2>
   <button class="hm-row hm-case" onclick="playClickSound();openGame('yousef')">
     <span class="hm-no">06</span>
@@ -1113,6 +1130,320 @@
 </div>
 
 <button class="btn ghost" onclick="playClickSound();show('niyaba')" style="width:100%">العودة</button>
+</section>
+
+<!-- ========================================================
+     NIYABA CASE 002 — قبل أن يوقّع
+     نفس آلية القضية 001 بالظبط، ثيم النيابة نفسه
+======================================================== -->
+
+<!-- NIYABA2 HOME -->
+<section id="niyaba2" class="hidden niyaba-theme">
+<div class="card hero ny-hero">
+  <div class="ny-stamp">سري</div>
+  <div class="badge ny-badge">CASE FILE • 002/2026</div>
+  <h1>ملفات النيابة<br><span class="ny-sub-title">قبل أن يوقّع</span></h1>
+  <p class="subtitle">5 شخصيات. 4 جولات. لا شاهد، لا كاميرا، ولا دليل واحد يحسم القضية.</p>
+
+  <div class="notice ny-notice">
+    <b>الواقعة (تُقرأ بصوت الـGM قبل ما اللعبة تبدأ):</b>
+    <p style="margin-top:10px;white-space:pre-line" id="niyaba2StoryText"></p>
+  </div>
+
+  <div class="notice ny-notice" style="margin-top:12px">
+    <b>ملحوظة</b>
+    <p style="margin-top:8px">قضية خيالية بالكامل، مصممة للعبة تحقيق جماعية فقط، وليست مرجعًا قانونيًا. الحل هنا بيتبني من تركيب قرائن مستقلة عن بعضها، مش من دليل واحد حاسم.</p>
+  </div>
+
+  <div class="grid">
+    <button class="btn ny-primary" onclick="playClickSound();openGamePlayer('niyaba2')">أنا لاعب</button>
+    <button class="btn ny-secondary" onclick="playClickSound();show('niyaba2-gm-lock')">أنا الـ GM</button>
+  </div>
+  <button class="btn ghost" onclick="playClickSound();show('games')" style="width:100%;margin-top:15px">اختيار لعبة أخرى</button>
+</div>
+</section>
+
+<!-- NIYABA2 GM LOCK -->
+<section id="niyaba2-gm-lock" class="hidden niyaba-theme">
+<div class="card ny-card" style="max-width:520px;margin:40px auto;text-align:center">
+  <div class="badge ny-badge">GM ONLY</div>
+  <h2 style="margin-top:15px">مدير اللعبة</h2>
+  <p class="small" style="margin:15px 0 25px">الصفحة دي فيها الحل الكامل. متعرضهاش للاعبين.</p>
+  <label for="niyaba2GmInput">كلمة المرور</label>
+  <input id="niyaba2GmInput" type="password" autocomplete="off" placeholder="اكتب كلمة المرور...">
+  <div style="display:flex;gap:10px;margin-top:20px">
+    <button class="btn ny-primary" onclick="playClickSound();verifyGameGM('niyaba2')" style="flex:2">دخول</button>
+    <button class="btn ghost" onclick="playClickSound();show('niyaba2')" style="flex:1">رجوع</button>
+  </div>
+  <p id="niyaba2GmError" class="danger hidden" style="margin-top:15px">كلمة المرور غير صحيحة.</p>
+</div>
+</section>
+
+<!-- NIYABA2 SETUP -->
+<section id="niyaba2-setup" class="hidden niyaba-theme">
+<div class="card ny-card">
+  <h2>اختيار الشخصية</h2>
+
+  <div class="notice ny-notice">
+    اكتب اسمك، كود الجلسة اللي أعطاك إياه الـGM، ثم اختر رقمًا من الأرقام تحت.
+    <b>متوريهاش لحد.</b>
+  </div>
+
+  <label for="niyaba2Name">اسمك</label>
+  <input id="niyaba2Name" maxlength="40" autocomplete="name" placeholder="اكتب اسمك هنا...">
+
+  <br><br>
+
+  <label for="niyaba2SessionCode">كود الجلسة</label>
+  <input id="niyaba2SessionCode" maxlength="4" inputmode="numeric" autocomplete="off"
+         placeholder="مثال: 1957" oninput="checkGameSessionCode('niyaba2')">
+
+  <p id="niyaba2CodeMessage" class="small" style="min-height:22px;margin-top:6px"></p>
+
+  <label>اختر رقم الشخصية</label>
+  <div id="niyaba2Roles" class="role-grid"></div>
+
+  <br>
+
+  <div style="display:flex;gap:10px">
+    <button class="btn ny-primary" onclick="playClickSound();confirmGameRole('niyaba2')" style="flex:2">
+      تأكيد وفتح ملفي
+    </button>
+    <button class="btn ghost" onclick="playClickSound();show('niyaba2')" style="flex:1">رجوع</button>
+  </div>
+</div>
+</section>
+
+<!-- NIYABA2 PLAYER -->
+<section id="niyaba2-player" class="hidden niyaba-theme">
+<div class="card ny-card">
+  <div class="topline">
+    <div class="badge ny-badge" id="niyaba2PlayerBadge"></div>
+    <div id="niyaba2Mafia" class="badge hidden ny-culprit-badge" dir="ltr">الفاعل</div>
+  </div>
+  <h2 id="niyaba2RoleName" style="margin-top:12px"></h2>
+  <p id="niyaba2Public" class="small"></p>
+</div>
+
+<div class="card ny-card secret ny-secret">
+  <h3>سري جدًا — ملف شخصيتك</h3>
+  <p id="niyaba2Secret" style="margin-top:10px"></p>
+  <hr>
+  <h3>نقطة قوتك</h3>
+  <p id="niyaba2Strength" class="small"></p>
+  <h3 style="margin-top:15px">نقطة ضعفك</h3>
+  <p id="niyaba2Weakness" class="small"></p>
+</div>
+
+<div class="card ny-card">
+  <h3>مفكرة المحقق</h3>
+  <p class="small">الملاحظات محفوظة على جهازك فقط.</p>
+  <textarea id="niyaba2Notes" maxlength="3000" placeholder="اكتب استنتاجاتك..." oninput="saveGameNotes('niyaba2')"></textarea>
+  <div id="niyaba2Save" class="small" style="text-align:left;color:var(--ny-gold)"></div>
+</div>
+
+<div class="card ny-card" id="niyaba2VoteCard">
+  <h3>التصويت</h3>
+  <p class="small" style="margin-top:8px" id="niyaba2VoteStatus">جاري التحميل...</p>
+  <div id="niyaba2VoteTargets" class="vote-target-grid"></div>
+</div>
+
+<div class="card ny-card" id="niyaba2StatusCard">
+  <div class="topline">
+    <h2>مين لسه في القضية</h2>
+    <button class="btn ghost" onclick="playClickSound();refreshLiveStatus('niyaba2')">تحديث</button>
+  </div>
+  <div id="niyaba2StatusList" class="small" style="margin-top:12px">جاري التحميل...</div>
+</div>
+
+<div class="card ny-card" id="niyaba2VerdictCard">
+  <h2>قرار القضية النهائي</h2>
+  <p class="small" style="margin-top:6px">يتفتح في الجولة الأخيرة. اكتب رأيك قبل ما الـGM يقرا الحل.</p>
+
+  <label style="margin-top:14px">مين الفاعل في رأيك؟</label>
+  <select id="niyaba2VerdictWho" onchange="saveNiyaba2Verdict()">
+    <option value="">اختر...</option>
+    <option value="عمر السيوفي">عمر السيوفي</option>
+    <option value="مريم السيوفي">مريم السيوفي</option>
+    <option value="حسام جلال">حسام جلال</option>
+    <option value="ليلى مراد">ليلى مراد</option>
+    <option value="طارق بدوي">طارق بدوي</option>
+  </select>
+
+  <label style="margin-top:14px">احكِ الرواية اللي حصلت من وجهة نظرك (استند لأرقام الأدلة)</label>
+  <textarea id="niyaba2VerdictStory" maxlength="1200" placeholder="مثال: الساعة كانت متقدمة، وبعدين..." oninput="saveNiyaba2Verdict()"></textarea>
+
+  <label style="margin-top:14px">إيه أهم عنصر في القضية؟</label>
+  <div id="niyaba2VerdictWhy" class="verdict-why-grid">
+    <label class="vw-chip"><input type="checkbox" value="المصلحة في المستند" onchange="saveNiyaba2Verdict()"> المصلحة في المستند</label>
+    <label class="vw-chip"><input type="checkbox" value="وسيلة الدخول" onchange="saveNiyaba2Verdict()"> وسيلة الدخول</label>
+    <label class="vw-chip"><input type="checkbox" value="التلاعب بالساعة" onchange="saveNiyaba2Verdict()"> التلاعب بالساعة</label>
+    <label class="vw-chip"><input type="checkbox" value="ظهور المستند في حوزته" onchange="saveNiyaba2Verdict()"> ظهور المستند في حوزته</label>
+    <label class="vw-chip"><input type="checkbox" value="تراكم القرائن" onchange="saveNiyaba2Verdict()"> تراكم القرائن</label>
+  </div>
+
+  <div id="niyaba2VerdictSaved" class="small" style="text-align:left;color:var(--ny-gold);margin-top:8px"></div>
+</div>
+
+<div class="card ny-card">
+  <h2>قواعد القضية</h2>
+  <ul style="margin-top:10px">
+    <li>أنتم 5 لاعبين + Game Master.</li>
+    <li>القضية 4 جولات تحقيق.</li>
+    <li>لا يوجد شاهد رأى لحظة الجريمة، ولا كاميرا.</li>
+    <li>مفيش دليل واحد بيحسم القضية — لازم تركّبوا الأدلة مع بعض.</li>
+    <li>بعد النقاش يتم التصويت.</li>
+    <li>في الجولة الأخيرة، كل واحد يقول مين الفاعل وليه.</li>
+  </ul>
+</div>
+
+<button class="btn secondary" onclick="playClickSound();resetGame('niyaba2')" style="width:100%">
+  مسح الشخصية من هذا الجهاز
+</button>
+</section>
+
+<!-- NIYABA2 GM -->
+<section id="niyaba2-gm" class="hidden niyaba-theme">
+
+<div class="card ny-card">
+  <div class="badge ny-badge">GM ONLY</div>
+  <h2 style="margin-top:12px">لوحة مدير القضية</h2>
+  <div class="notice ny-notice">الشاشة دي فيها الحل كامل. متعرضهاش للاعبين.</div>
+</div>
+
+<div class="gm-grid">
+<div class="gm-col">
+
+<div class="card ny-card">
+  <h2>إدارة كود الجلسة</h2>
+  <p class="small" style="margin-top:10px">
+    أنشئ كودًا عشوائيًا جديدًا ثم أعطه لكل اللاعبين.
+    نفس الكود يعطي نفس توزيع الشخصيات على كل الأجهزة.
+  </p>
+
+  <label for="niyaba2PlayerCountInput" id="niyaba2PlayerCountLabel" style="margin-top:12px">عدد اللاعبين</label>
+  <input id="niyaba2PlayerCountInput" type="number" step="1" style="max-width:120px">
+
+  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px">
+    <button class="btn ny-primary" onclick="playClickSound();generateGameCode('niyaba2')">توليد كود جديد</button>
+    <strong style="color:var(--ny-gold)">
+      الكود: <span id="niyaba2CurrentCode" dir="ltr">غير محدد</span>
+    </strong>
+  </div>
+
+  <div class="notice ny-notice" style="margin-top:15px">
+    كلمة التحقق:
+    <b id="niyaba2VerifyCode" dir="ltr" style="color:var(--ny-gold);letter-spacing:2px">---</b>
+    <p class="small" style="margin-top:6px">خلي اللاعبين يقارنوها معاك بعد كتابة الكود.</p>
+  </div>
+</div>
+
+<div class="card ny-card">
+  <h2>الجولة الحالية</h2>
+  <div id="niyaba2RoundNav" class="round-nav"></div>
+</div>
+
+<div class="card ny-card" id="niyaba2VoteTallyCard">
+  <div class="topline">
+    <h2>نتيجة التصويت</h2>
+    <button class="btn ghost" onclick="playClickSound();buildVoteTally('niyaba2')">تحديث</button>
+  </div>
+  <p class="small" style="margin-top:8px">التصويت الخاص بالجولة المختارة أعلاه.</p>
+  <div id="niyaba2VoteTally" style="margin-top:10px"></div>
+  <button class="btn ny-primary" id="niyaba2EliminateBtn" style="margin-top:14px;width:100%" onclick="playClickSound();eliminateTopVoted('niyaba2')">
+    أخرج الأكثر تصويتًا بصمت
+  </button>
+</div>
+
+</div>
+<div class="gm-col">
+
+<div class="card ny-card">
+  <div class="topline">
+    <h2>نتيجة الشخصيات حسب الكود</h2>
+    <button class="btn ghost" onclick="playClickSound();buildGameGM('niyaba2')">تحديث الأسماء</button>
+  </div>
+  <div id="niyaba2GMroles"></div>
+</div>
+
+</div>
+</div>
+
+<div class="card ny-card">
+  <h2>الحل الكامل</h2>
+  <div class="notice ny-notice">
+    <b>الفاعل: طارق بدوي — محامي العائلة.</b>
+    <p style="margin-top:10px">
+      كان طارق عارف إن فريد هيوقّع تاني يوم على تعديل مهم في ملف قانوني قديم، والتعديل ده كان
+      ممكن يفتح مشكلة مهنية ومالية ليه. جه المنزل بحجة مناقشة أوراق قانونية، ودخل المكتب بالمفتاح
+      الاحتياطي من غير ما ده يلفت الانتباه. حصلت مواجهة انتهت بضربة بجسم صلب أدت لوفاة فريد.
+    </p>
+    <p style="margin-top:10px">
+      <b>عن الساعة:</b> كانت الساعة النحاسية متقدمة 17 دقيقة أصلاً عن الوقت الحقيقي. طارق نقلها من
+      الرف للأرض وكسر آليتها عمدًا عشان تبان 10:14 وكأنه وقت الجريمة، بينما الوقت الحقيقي كان حوالي
+      9:57 — وده بيقع جوه نافذة الوفاة (9:45–10:30) وبيتزامن مع الفترة اللي حسام ماكانش موجود فيها
+      حسب إيصال خروجه.
+    </p>
+    <p style="margin-top:10px">
+      <b>عن المستند:</b> المستند الأصلي اتلقى لاحقًا ضمن حزمة أوراق قانونية عامة رجعت للعيلة، من غير
+      ما يبين من الحزمة نفسها مين آخر شخص كان ماسكه. سجل قديم لتسليم واستلام الملفات القانونية هو
+      اللي بيوضح إن الشخص الوحيد اللي كانت ليه صلاحية رسمية ياخد ملف قانوني قديم زي ده برا المكتب
+      لمراجعته هو محامي العائلة الخارجي — طارق — مش أي حد من موظفي الشركة.
+    </p>
+    <p style="margin-top:10px">
+      <b>الفخ (false lead) بتاع ليلى:</b> ليلى فعلاً حجزت الموعد القانوني الرسمي لفريد بنفسها، وكانت
+      الوحيدة اللي عارفة بالتفصيل إمتى وفين المستند هيتاخد للتوقيع — دي حقيقة 100%، ومش أكذوبة
+      مصطنعة. بس معرفتها بالموعد بتفسر إنها كانت في وضع يسمحلها تعرف، مش إنها اللي نقلت المستند
+      فعليًا ولا اللي عبثت بالساعة: هي موظفة داخل الشركة، مش الجهة اللي ليها صلاحية تاخد الملف برا،
+      ومفيش أي دليل حركة أو وصول يربطها بمسرح الجريمة وقت الوفاة.
+    </p>
+    <p style="margin-top:10px">
+      <b>السلسلة اللي بتقفل الدايرة على طارق:</b> صلاحية رسمية وحيدة ياخد الملف برا المكتب ← المستند
+      فعلاً غاب واتلقى بعدين في سياق يتماشى مع كونه هو اللي كان ماسكه ← وسيلة دخول طبيعية للمكتب
+      (المفتاح الاحتياطي) ← الساعة اتلاعب بيها عمدًا لتصنيع توقيت. مفيش شاهد ولا كاميرا محتاجين هنا؛
+      الاستنتاج كله مبني على توافق أدلة مستقلة عن بعضها.
+    </p>
+  </div>
+  <div class="notice ny-notice" style="margin-top:12px;border-color:var(--ny-red)">
+    <b>ملحوظة توازن مهمة:</b>
+    <p style="margin-top:8px">لو اللاعبين اتسرعوا وقالوا "ليلى" بعد أول قطعة بس، مايجيش الحل بسرعة —
+    اسألهم: "طب هي اللي نقلت المستند برا المكتب إزاي؟ وهي اللي عبثت بالساعة ليه؟". خليهم يوصلوا
+    بنفسهم إن معرفة الموعد حاجة، والقدرة على تنفيذ باقي السلسلة حاجة تانية خالص. ولو وصلوا لطارق من
+    القطع اللي بعدها، متأكدش ولا تنفي برضو — سيبهم يقفلوا التركيب بأنفسهم وقت التصويت.</p>
+  </div>
+  <p class="small" style="margin-top:15px">
+    مهم: القضية دي خيالية بالكامل، ومصممة للعبة تحقيق جماعية فقط — مش مرجع قانوني، وبعكس القضية
+    001 مفيش هنا تكييف قانوني، التركيز على تركيب القرائن بس.
+  </p>
+</div>
+
+<div class="card ny-card">
+  <h2>الأربعة الآخرون — مش أبرياء من كل حاجة</h2>
+  <p class="small" style="margin-top:8px">
+    عمر كدب ودخل المكتب فعلاً، مريم هددت فريد فعلاً، حسام كان في المنزل واتخانق معاه فعلاً، وليلى
+    كانت عارفة كل حاجة عن ملفاته فعلاً. دي مش أكاذيب مصطنعة للتمويه — كل واحدة فيهم جزء حقيقي من
+    القضية، لكنها مش بتكمل سلسلة القتل زي أدلة طارق.
+  </p>
+</div>
+
+<div class="card ny-card">
+  <h2>الأدلة الأربعة — مفتاح كامل</h2>
+  <div id="niyaba2Rounds"></div>
+</div>
+
+<div class="card ny-card">
+  <h2>إرشادات الـGM</h2>
+  <ol>
+    <li>أنشئ كود جلسة جديد.</li>
+    <li>أعط الكود لكل اللاعبين.</li>
+    <li>كل لاعب يختار رقمًا ويقرأ ملفه لوحده.</li>
+    <li>اقرأ وثيقة/دليل كل جولة، وحدد الجولة الحالية بالأعلى قبل التصويت.</li>
+    <li>سيب وقتًا للنقاش، افتح التصويت، ثم اضغط "أخرج الأكثر تصويتًا بصمت".</li>
+    <li>في الجولة الأخيرة اقرأ الحل، والتزم بملحوظة التوازن أعلاه.</li>
+  </ol>
+</div>
+
+<button class="btn ghost" onclick="playClickSound();show('niyaba2')" style="width:100%">العودة</button>
 </section>
 
 <!-- ========================================================
@@ -2224,6 +2555,7 @@
 <script src="js/flags-historical-data.js"></script>
 <script src="js/flags.js"></script>
 <script src="js/niyaba-data.js"></script>
+<script src="js/niyaba2-data.js"></script>
 <script src="js/init.js"></script>
 </body>
 </html>
