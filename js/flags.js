@@ -4,9 +4,16 @@
    عرفناها/منعرفهاش to keep a running score. Uses twemoji (loaded
    in <head>) so the flag renders the same on every phone/OS;
    falls back to the raw emoji if twemoji hasn't loaded.
+
+   Two modes, same UI/scoring:
+   - "current"    → FLAGS_DATA:            [code, name]
+   - "historical" → FLAGS_HISTORICAL_DATA: [imageUrl, hint, answer, note]
+     (old flags have no emoji, so these ship an actual image and
+     a spoken hint instead of the name — see flags-historical-data.js)
 ========================================================= */
 
 let fgDeck=[],fgIdx=0,fgRight=0,fgWrong=0,fgRevealed=false,fgStarted=false;
+let fgMode="current";
 
 function flagEmoji(code){
   return code.toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt(0)));
@@ -16,13 +23,36 @@ function flagsInit(){
   if(!fgStarted)flagsRestart();
 }
 
+function flagsDataFor(mode){
+  if(mode==="historical")return typeof FLAGS_HISTORICAL_DATA!=="undefined"?FLAGS_HISTORICAL_DATA:[];
+  return typeof FLAGS_DATA!=="undefined"?FLAGS_DATA:[];
+}
+
+function flagsSetMode(mode){
+  if(mode===fgMode)return;
+  if(!flagsDataFor(mode).length)return;
+  fgMode=mode;
+  if(typeof playClickSound==="function")playClickSound();
+  flagsUpdateModeButtons();
+  flagsRestart();
+}
+
+function flagsUpdateModeButtons(){
+  const cur=document.getElementById("fgModeCurrent");
+  const hist=document.getElementById("fgModeHistorical");
+  if(cur)cur.classList.toggle("fg-mode-active",fgMode==="current");
+  if(hist)hist.classList.toggle("fg-mode-active",fgMode==="historical");
+}
+
 function flagsRestart(){
-  if(typeof FLAGS_DATA==="undefined"||!FLAGS_DATA.length)return;
+  const data=flagsDataFor(fgMode);
+  if(!data.length)return;
   fgStarted=true;
   fgDeck=typeof seededShuffle==="function"
-    ?seededShuffle(FLAGS_DATA,String(Date.now()))
-    :[...FLAGS_DATA].sort(()=>Math.random()-.5);
+    ?seededShuffle(data,String(Date.now()))
+    :[...data].sort(()=>Math.random()-.5);
   fgIdx=0;fgRight=0;fgWrong=0;
+  flagsUpdateModeButtons();
   flagsRender();
 }
 
@@ -32,18 +62,32 @@ function flagsRender(){
   fgRevealed=false;
 
   const flagWrap=document.getElementById("fgFlag");
-  if(flagWrap){
-    flagWrap.innerHTML=`<span class="fg-emoji">${flagEmoji(item[0])}</span>`;
-    if(window.twemoji){
-      try{twemoji.parse(flagWrap,{folder:"svg",ext:".svg"});}catch(e){}
+  const hintEl=document.getElementById("fgHint");
+  const noteEl=document.getElementById("fgNote");
+  const nameEl=document.getElementById("fgCountryName");
+
+  if(fgMode==="historical"){
+    const[imgUrl,hint,answer,note]=item;
+    if(flagWrap){
+      flagWrap.innerHTML=`<img src="${imgUrl}" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;fg-emoji&quot;>🏳️</span>'">`;
     }
+    if(hintEl){hintEl.textContent=hint;hintEl.classList.remove("hidden");}
+    if(nameEl)nameEl.textContent=answer;
+    if(noteEl){noteEl.textContent=note;noteEl.classList.remove("hidden");}
+  }else{
+    if(flagWrap){
+      flagWrap.innerHTML=`<span class="fg-emoji">${flagEmoji(item[0])}</span>`;
+      if(window.twemoji){
+        try{twemoji.parse(flagWrap,{folder:"svg",ext:".svg"});}catch(e){}
+      }
+    }
+    if(hintEl)hintEl.classList.add("hidden");
+    if(nameEl)nameEl.textContent=item[1];
+    if(noteEl)noteEl.classList.add("hidden");
   }
 
   const progress=document.getElementById("fgProgress");
   if(progress)progress.textContent=`${fgIdx+1} / ${fgDeck.length}`;
-
-  const nameEl=document.getElementById("fgCountryName");
-  if(nameEl)nameEl.textContent=item[1];
 
   const answer=document.getElementById("fgAnswer");
   const revealBtn=document.getElementById("fgRevealBtn");
