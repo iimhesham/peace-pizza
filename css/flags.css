@@ -95,6 +95,8 @@ body.mode-flags .fog{display:none}
 }
 .fg-flagwrap .fg-emoji{font-size:104px;line-height:1;filter:drop-shadow(0 6px 12px rgba(0,0,0,.22))}
 .fg-flagwrap img{width:112px;height:auto;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.22)}
+.fg-flagwrap .fg-histflag{width:78%;max-width:230px}
+.fg-flagwrap .fg-histflag svg{width:100%;height:auto;display:block;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.28)}
 
 .fg-hint{
   width:100%;margin:-4px 0 0;text-align:center;
