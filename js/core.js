@@ -68,6 +68,8 @@ function show(id,opts){
   document.body.classList.toggle("mode-story",STORY_SCREENS.includes(id));
   document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id)||TRAIN_SCREENS.includes(id));
   document.body.classList.toggle("mode-flags",FLAGS_SCREENS.includes(id));
+  const creditsBtn=document.getElementById("creditsToggle");
+  if(creditsBtn)creditsBtn.classList.toggle("hidden",id!==START_SCREEN);
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
