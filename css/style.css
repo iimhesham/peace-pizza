@@ -485,12 +485,12 @@ body.mode-yousef .page-in{animation:yousefIn .18s ease}
 .credits-toggle{
   all:unset;box-sizing:border-box;
   display:flex;align-items:center;justify-content:center;
-  position:fixed;top:16px;left:16px;z-index:5000;
-  width:40px;height:40px;
-  color:#8fe0c3;
+  position:fixed;top:14px;left:14px;z-index:5000;
+  width:56px;height:56px;
+  color:var(--gold3,#e8c873);
   cursor:pointer;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));
-  opacity:.85;
+  filter:drop-shadow(2px 2px 0 #000) drop-shadow(0 0 14px rgba(47,214,160,.35));
+  opacity:.92;
   transition:opacity .15s ease,color .15s ease,transform .1s ease;
 }
 .credits-toggle *{color:inherit;pointer-events:none}
