@@ -486,16 +486,15 @@ body.mode-yousef .page-in{animation:yousefIn .18s ease}
   all:unset;box-sizing:border-box;
   display:flex;align-items:center;justify-content:center;
   position:fixed;top:16px;left:16px;z-index:5000;
-  width:40px;height:40px;border-radius:50%;
-  background:#111b17;color:#8fe0c3;
-  border:1px solid #2b3f38;
+  width:40px;height:40px;
+  color:#8fe0c3;
   cursor:pointer;
-  box-shadow:0 6px 16px rgba(0,0,0,.45);
-  opacity:.72;
-  transition:opacity .15s ease,border-color .15s ease,transform .1s ease,background .15s ease;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));
+  opacity:.85;
+  transition:opacity .15s ease,color .15s ease,transform .1s ease;
 }
 .credits-toggle *{color:inherit;pointer-events:none}
-.credits-toggle:hover{opacity:1;border-color:#57c7a0;background:#17231e}
+.credits-toggle:hover{opacity:1;color:#57c7a0}
 .credits-toggle:active{transform:scale(.9)}
 @media(min-width:901px){.credits-toggle{left:64px}}
 
