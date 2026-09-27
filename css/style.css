@@ -485,7 +485,7 @@ body.mode-yousef .page-in{animation:yousefIn .18s ease}
 .credits-toggle{
   all:unset;box-sizing:border-box;
   display:flex;align-items:center;justify-content:center;
-  position:fixed;top:14px;left:14px;z-index:5000;
+  position:absolute;top:14px;left:14px;z-index:5000;
   width:56px;height:56px;
   color:var(--gold3,#e8c873);
   cursor:pointer;
