@@ -77,11 +77,28 @@ updateLiveDbStatusText();
   const overlay=document.getElementById("creditsOverlay");
   if(!toggle||!overlay)return;
 
+  function open(){
+    overlay.classList.remove("closing");
+    overlay.hidden=false;
+    overlay.scrollTop=0;
+    document.body.classList.add("credits-open");
+    toggle.setAttribute("aria-label","رجوع");
+  }
+  function close(){
+    if(overlay.hidden)return;
+    overlay.classList.add("closing");
+    setTimeout(()=>{
+      overlay.hidden=true;
+      overlay.classList.remove("closing");
+      document.body.classList.remove("credits-open");
+      toggle.setAttribute("aria-label","القائمة");
+    },220);
+  }
+  // النجمة نفسها: بتفتح الصفحة، ولما تبقى مفتوحة بترجّع
   toggle.addEventListener("click",()=>{
     playClickSound();
-    overlay.hidden=false;
+    if(overlay.hidden||overlay.classList.contains("closing")){if(overlay.hidden)open();}
+    else close();
   });
-  overlay.addEventListener("click",()=>{
-    overlay.hidden=true;
-  });
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")close();});
 })();
