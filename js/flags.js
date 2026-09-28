@@ -12,7 +12,7 @@
      a spoken hint instead of the name — see flags-historical-data.js)
 ========================================================= */
 
-let fgDeck=[],fgIdx=0,fgRight=0,fgWrong=0,fgRevealed=false,fgStarted=false;
+let fgDeck=[],fgIdx=0,fgRight=0,fgWrong=0,fgRevealed=false,fgStarted=false,fgFinished=false;
 let fgMode="current";
 
 function flagEmoji(code){
@@ -51,7 +51,7 @@ function flagsRestart(){
   fgDeck=typeof seededShuffle==="function"
     ?seededShuffle(data,String(Date.now()))
     :[...data].sort(()=>Math.random()-.5);
-  fgIdx=0;fgRight=0;fgWrong=0;
+  fgIdx=0;fgRight=0;fgWrong=0;fgFinished=false;
   flagsUpdateModeButtons();
   flagsRender();
 }
@@ -60,6 +60,7 @@ function flagsRender(){
   const item=fgDeck[fgIdx];
   if(!item)return;
   fgRevealed=false;
+  fgFinished=false;
 
   const flagWrap=document.getElementById("fgFlag");
   const hintEl=document.getElementById("fgHint");
@@ -98,7 +99,7 @@ function flagsRender(){
 }
 
 function flagsReveal(){
-  if(fgRevealed)return;
+  if(fgRevealed||fgFinished)return;
   fgRevealed=true;
   if(typeof playRevealSound==="function")playRevealSound();
 
@@ -109,17 +110,26 @@ function flagsReveal(){
 }
 
 function flagsJudge(correct){
+  if(fgFinished)return;
   if(correct)fgRight++;else fgWrong++;
   flagsUpdateScore();
   flagsNext();
 }
 
 function flagsNext(){
+  if(fgFinished)return;
   if(typeof playClickSound==="function")playClickSound();
   if(fgIdx<fgDeck.length-1){
     fgIdx++;
     flagsRender();
   }else{
+    fgFinished=true;
+    const revealBtn=document.getElementById("fgRevealBtn");
+    const answer=document.getElementById("fgAnswer");
+    const skipBtn=document.getElementById("fgSkipBtn");
+    if(revealBtn)revealBtn.classList.add("hidden");
+    if(answer)answer.classList.add("hidden");
+    if(skipBtn)skipBtn.classList.add("hidden");
     if(typeof toast==="function"){
       toast(`خلصنا كل الأعلام (${fgDeck.length})! صح: ${fgRight} — غلط: ${fgWrong}`);
     }
