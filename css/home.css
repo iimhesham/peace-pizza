@@ -4,7 +4,7 @@
    body.mode-home so the game screens are untouched.
 ========================================================= */
 
-body.mode-home{background:#0b1210}
+body.mode-home{background-color:#0b1210}
 body.mode-home .moon,
 body.mode-home .fog{display:none}
 

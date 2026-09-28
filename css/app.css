@@ -35,7 +35,7 @@
 .app .ys-app{--gold:#a88a4e;--gold2:#c9aa68;--gold3:#d4b675}
 
 /* ---------- page background: one flat base for every mode ---------- */
-body,body.mode-home,body.mode-football,body.mode-yousef{background:#0b1210!important;color:#e9efeb}
+body,body.mode-home,body.mode-football,body.mode-yousef{background-color:#0b1210!important;color:#e9efeb}
 body .app,body.mode-football .app,body.mode-yousef .app{background:none!important}
 .moon,.fog{display:none!important}
 body #toast,body.mode-football #toast,body.mode-yousef #toast{
