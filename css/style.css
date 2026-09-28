@@ -498,25 +498,60 @@ body.mode-yousef .page-in{animation:yousefIn .18s ease}
 .credits-toggle:active{transform:scale(.9)}
 @media(min-width:901px){.credits-toggle{left:64px}}
 
+/* الصفحة الجانبية: خلفية سادة بالكامل، النجمة نفسها بترجّع */
+html:has(body.credits-open),body.credits-open{overflow:hidden}
+.credits-overlay::-webkit-scrollbar{display:none}
+body.credits-open .credits-toggle{position:fixed;z-index:9500}
 .credits-overlay{
   position:fixed;inset:0;z-index:9000;
-  display:flex;align-items:center;justify-content:center;
-  padding:24px;text-align:center;
-  background:
-    radial-gradient(circle at 50% 45%,rgba(1,6,4,.6) 0%,rgba(1,6,4,.1) 55%,rgba(1,6,4,.2) 100%),
-    url('../img/bg-legends.jpg?v=3') center/cover no-repeat;
-  animation:creditsIn .25s ease;
-  cursor:pointer;
+  background:#050403;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;direction:ltr;
+  animation:creditsSlideIn .28s cubic-bezier(.2,.8,.2,1);
 }
+.credits-overlay.closing{animation:creditsSlideOut .22s ease forwards}
 .credits-overlay[hidden]{display:none}
-.credits-box{max-width:520px}
+.credits-page{
+  min-height:100%;
+  display:grid;grid-template-rows:auto 1fr auto;
+  padding:max(22px,env(safe-area-inset-top)) 24px max(22px,env(safe-area-inset-bottom));
+  text-align:center;
+}
 .credits-text{
   font-family:'Kasem Display','Amiri',serif;
-  font-size:clamp(30px,8vw,52px);
-  line-height:1.6;
-  color:#bfe9d6;
-  text-shadow:0 2px 24px rgba(47,214,160,.35),0 1px 0 rgba(0,0,0,.6);
-  margin:0;
+  font-size:clamp(22px,5.6vw,34px);
+  line-height:1.55;
+  color:#d9b45a;
+  margin:6px 0 0;
 }
-@keyframes creditsIn{from{opacity:0}to{opacity:1}}
+.credits-main{
+  align-self:center;justify-self:center;width:100%;max-width:520px;
+  padding:28px 0;
+}
+.legends-title{
+  margin:0 0 26px;
+  font-family:'Cinzel','Playfair Display',serif;font-weight:900;
+  font-size:clamp(46px,15vw,92px);line-height:1;
+  letter-spacing:.08em;padding-left:.08em;
+  background:linear-gradient(180deg,#fff0b3 0%,#f2c94c 38%,#b8860b 62%,#f5d76e 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.7)) drop-shadow(0 0 18px rgba(230,180,60,.25));
+}
+.legends-names{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.legends-names li{
+  font-family:'Cinzel','Playfair Display',serif;font-weight:700;
+  font-size:clamp(18px,5vw,26px);letter-spacing:.06em;
+  color:#e6c35c;
+  text-shadow:0 1px 0 rgba(0,0,0,.8);
+}
+.credits-foot{padding-top:12px}
+.credits-foot p{
+  margin:3px 0;
+  font-family:'Cormorant Garamond','Playfair Display',serif;font-style:italic;font-weight:500;
+  font-size:14px;letter-spacing:.03em;
+  color:rgba(217,180,90,.42);
+}
+@keyframes creditsSlideIn{from{transform:translateX(100%);opacity:.4}to{transform:none;opacity:1}}
+@keyframes creditsSlideOut{to{transform:translateX(100%);opacity:.4}}
+@media(prefers-reduced-motion:reduce){.credits-overlay,.credits-overlay.closing{animation:none}}
 
