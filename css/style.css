@@ -504,7 +504,8 @@ html:has(body.credits-open),body.credits-open{overflow:hidden}
 body.credits-open .credits-toggle{position:fixed;z-index:9500}
 .credits-overlay{
   position:fixed;inset:0;z-index:9000;
-  background:#2b1710;
+  background:rgba(27,15,9,.62);
+  -webkit-backdrop-filter:blur(22px) saturate(1.1);backdrop-filter:blur(22px) saturate(1.1);
   overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;direction:ltr;
   animation:creditsSlideIn .28s cubic-bezier(.2,.8,.2,1);
 }
@@ -512,22 +513,7 @@ body.credits-open .credits-toggle{position:fixed;z-index:9500}
 .credits-overlay[hidden]{display:none}
 .credits-overlay::before{
   content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(120% 70% at 50% -10%,rgba(217,113,60,.35) 0%,rgba(217,113,60,0) 60%),
-    linear-gradient(180deg,#3e2417 0%,#2b1710 45%,#1c0f09 100%);
-}
-.credits-overlay::after{
-  content:'';position:absolute;left:50%;top:-18%;z-index:0;pointer-events:none;
-  width:min(900px,180vw);aspect-ratio:1/1;transform:translateX(-50%);
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 50% 50%,transparent 36%,#fddca9 37.5%,#fddca9 41%,transparent 42.5%),
-    radial-gradient(circle at 50% 50%,transparent 42.5%,#fea712 44%,#fea712 47.5%,transparent 49%),
-    radial-gradient(circle at 50% 50%,transparent 49%,#e76219 50.5%,#e76219 54%,transparent 55.5%),
-    radial-gradient(circle at 50% 50%,transparent 55.5%,#c21717 57%,#c21717 60.5%,transparent 62%);
-  opacity:.5;
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 92%);
-  mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 92%);
+  background:radial-gradient(120% 70% at 50% -10%,rgba(217,113,60,.28) 0%,rgba(217,113,60,0) 60%);
 }
 .credits-page{
   position:relative;z-index:1;
@@ -549,21 +535,25 @@ body.credits-open .credits-toggle{position:fixed;z-index:9500}
 }
 .legends-title{
   margin:0 0 26px;
-  font-family:'Anton','Cinzel',sans-serif;font-weight:400;
-  font-size:clamp(44px,14vw,86px);line-height:1;
-  letter-spacing:.1em;padding-left:.1em;
+  font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif;font-weight:700;
+  font-size:clamp(36px,11vw,64px);line-height:1.15;
   background:linear-gradient(90deg,#fddca9 0%,#fea712 35%,#e76219 65%,#c21717 100%);
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 3px 0 rgba(0,0,0,.55));
 }
-.legends-names{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.legends-names{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;
+  justify-items:center;
+}
 .legends-names li{
-  font-family:'Teko','Cinzel',sans-serif;font-weight:600;
-  font-size:clamp(19px,5.4vw,28px);letter-spacing:.08em;
+  font-family:'IBM Plex Sans Arabic','Amiri',serif;font-weight:600;
+  font-size:clamp(15px,4vw,19px);letter-spacing:.01em;
   color:#fddca9;
   text-shadow:0 1px 0 rgba(0,0,0,.7);
 }
+.legends-names li:last-child{grid-column:1/-1}
 .credits-foot{padding-top:12px}
 .credits-foot p{
   margin:3px 0;
