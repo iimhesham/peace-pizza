@@ -3,6 +3,23 @@
   src:url('../fonts/Kasem-Display.ttf') format('truetype');
   font-display:swap;
 }
+@font-face{
+  font-family:'GTA Arabic';
+  src:url('../fonts/GTA-Arabic.otf') format('opentype');
+  font-display:swap;
+}
+@font-face{
+  font-family:'Tajarib Bold';
+  src:url('../fonts/Tajarib-Bold.otf') format('opentype');
+  font-weight:700;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Tajarib Medium';
+  src:url('../fonts/Tajarib-Medium.otf') format('opentype');
+  font-weight:500;
+  font-display:swap;
+}
 
 :root{
   --bg:#030b08;
@@ -534,9 +551,9 @@ body.credits-open .credits-toggle{position:fixed;z-index:9500}
   padding:28px 0;
 }
 .legends-title{
-  margin:0 0 26px;
-  font-family:'Aref Ruqaa Ink','Aref Ruqaa','Amiri',serif;font-weight:700;
-  font-size:clamp(36px,11vw,64px);line-height:1.15;
+  margin:0 0 30px;
+  font-family:'GTA Arabic','Aref Ruqaa Ink','Amiri',serif;font-weight:400;
+  font-size:clamp(40px,12.5vw,74px);line-height:1.2;
   background:linear-gradient(90deg,#fddca9 0%,#fea712 35%,#e76219 65%,#c21717 100%);
   -webkit-background-clip:text;background-clip:text;
   color:transparent;-webkit-text-fill-color:transparent;
@@ -544,16 +561,16 @@ body.credits-open .credits-toggle{position:fixed;z-index:9500}
 }
 .legends-names{
   list-style:none;margin:0;padding:0;
-  display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;
+  display:grid;grid-template-columns:1fr 1fr;gap:16px 18px;
   justify-items:center;
 }
 .legends-names li{
-  font-family:'IBM Plex Sans Arabic','Amiri',serif;font-weight:600;
+  font-family:'Tajarib Medium','IBM Plex Sans Arabic',sans-serif;font-weight:500;
   font-size:clamp(15px,4vw,19px);letter-spacing:.01em;
   color:#fddca9;
   text-shadow:0 1px 0 rgba(0,0,0,.7);
 }
-.legends-names li:last-child{grid-column:1/-1}
+.legends-names li:last-child{grid-column:1/-1;font-family:'Tajarib Bold','IBM Plex Sans Arabic',sans-serif}
 .credits-foot{padding-top:12px}
 .credits-foot p{
   margin:3px 0;
