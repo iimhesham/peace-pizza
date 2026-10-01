@@ -1,0 +1,72 @@
+/* =========================================================
+   POLISH — لمسات شكلية للصفحة الرئيسية (حركة + لمعة)
+   بيتحمّل آخر ملف، فبيعدّل من غير ما يلمس الباقي.
+========================================================= */
+
+/* ---------- 3) حركة الدخول ---------- */
+@keyframes plFanIn{
+  /* من غير "to": الكارت بيرجع لمكانه ودورانه الأصلي */
+  from{transform:translateX(0) rotate(0deg) scale(.82);opacity:0}
+}
+@keyframes plRise{
+  from{opacity:0;transform:translateY(14px)}
+}
+
+#hub .hm-fc{animation:plFanIn .6s cubic-bezier(.2,.8,.25,1) backwards}
+#hub .hm-fc-c{animation-delay:.05s}
+#hub .hm-fc-r{animation-delay:.12s}
+#hub .hm-fc-l{animation-delay:.2s}
+#hub .hm-fc-f{animation-delay:.26s}
+
+#hub .hm-stats,
+#hub .hm-tabs,
+#hub .hm-search{animation:plRise .5s ease-out backwards}
+#hub .hm-stats{animation-delay:.3s}
+#hub .hm-tabs{animation-delay:.36s}
+#hub .hm-search{animation-delay:.42s}
+
+/* الصفوف بتطلع واحد ورا التاني */
+#hub button.hm-row{animation:plRise .45s ease-out backwards}
+#hub button.hm-row:nth-of-type(1){animation-delay:.46s}
+#hub button.hm-row:nth-of-type(2){animation-delay:.52s}
+#hub button.hm-row:nth-of-type(3){animation-delay:.58s}
+#hub button.hm-row:nth-of-type(4){animation-delay:.64s}
+#hub button.hm-row:nth-of-type(n+5){animation-delay:.7s}
+
+/* ---------- 4) لمعة اللوجو والنجمة ---------- */
+@keyframes plBadgeGlow{
+  0%,100%{filter:drop-shadow(0 3px 0 rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(87,199,160,.12))}
+  50%{filter:drop-shadow(0 3px 0 rgba(0,0,0,.5)) drop-shadow(0 0 22px rgba(87,199,160,.5))}
+}
+.hm-head-c .hm-badge{animation:plBadgeGlow 4.5s ease-in-out infinite}
+
+@keyframes plStarGlow{
+  0%,100%{filter:drop-shadow(2px 2px 0 #000) drop-shadow(0 0 8px rgba(47,214,160,.25))}
+  50%{filter:drop-shadow(2px 2px 0 #000) drop-shadow(0 0 20px rgba(232,200,115,.65))}
+}
+.credits-toggle{width:68px;height:68px;animation:plStarGlow 3.6s ease-in-out infinite}
+.credits-toggle svg{width:40px;height:40px}
+
+/* ---------- 2) لون لكل لعبة في القايمة (نفس لون كارتها فوق) ---------- */
+#hub .hm-row{position:relative;overflow:hidden}
+#hub .hm-row>*{position:relative;z-index:1}
+#hub .hm-row::before{            /* الخط الرفيع على الجنب */
+  content:"";position:absolute;z-index:1;pointer-events:none;
+  inset-block:0;inset-inline-start:0;width:4px;
+  background:rgb(var(--ac));
+}
+#hub .hm-row::after{             /* إضاءة خفيفة بلون اللعبة */
+  content:"";position:absolute;z-index:0;pointer-events:none;inset:0;
+  background:linear-gradient(to left,rgba(var(--ac),.14),transparent 55%);
+}
+#hub .hm-row.is-case    {--ac:212,182,117}  /* القصص: دهبي */
+#hub .hm-row.is-story   {--ac:190,48,52}    /* أنا مين: أحمر */
+#hub .hm-row.is-football{--ac:87,199,160}   /* باسورد: أخضر */
+#hub .hm-row.is-flags   {--ac:248,165,125}  /* العلم: برتقالي */
+#hub .hm-row:active{border-color:rgba(var(--ac),.6)}
+
+/* لو الجهاز مظبوط على "تقليل الحركة" نقفل كل ده */
+@media (prefers-reduced-motion:reduce){
+  #hub .hm-fc,#hub .hm-stats,#hub .hm-tabs,#hub .hm-search,#hub button.hm-row,
+  .hm-head-c .hm-badge,.credits-toggle{animation:none}
+}
