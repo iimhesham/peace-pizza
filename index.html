@@ -405,7 +405,7 @@
             منعرفهاش
           </button>
         </div>
-        <button class="fg-skip" id="fgSkipBtn" onclick="flagsNext()">تخطّي بدون تسجيل ▸</button>
+        <button class="fg-skip" id="fgSkipBtn" onclick="flagsSkip()">تخطّي بدون تسجيل ▸</button>
       </div>
     </div>
   </div>
@@ -416,10 +416,26 @@
   </div>
 
   <div class="fg-actions">
-    <button class="fg-restart" onclick="flagsRestart()">
+    <button class="fg-restart fg-finish" onclick="flagsFinishNow()">🏁 إنهاء وعرض النتيجة</button>
+    <button class="fg-restart" onclick="flagsRestart()" style="margin-top:10px">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 21v-6h6"/></svg>
       ابدأ من جديد
     </button>
+  </div>
+
+  <div class="fg-result" id="fgResult">
+    <div class="fg-res-card">
+      <div class="fg-res-title">النتيجة النهائية</div>
+      <div class="fg-res-score" id="fgResScore" dir="ltr">0 / 0</div>
+      <div class="fg-res-pct" id="fgResPct" dir="ltr">—</div>
+      <div class="fg-res-msg" id="fgResMsg"></div>
+      <div class="fg-res-meta" id="fgResMeta"></div>
+    </div>
+    <div class="fg-res-missed-title hidden" id="fgResMissedTitle">الأعلام اللي منعرفهاش</div>
+    <div class="fg-res-missed" id="fgResMissed"></div>
+    <button class="fg-restart fg-finish" onclick="flagsRestart()">🔄 جولة جديدة</button>
+    <button class="fg-restart" onclick="flagsResume()" style="margin-top:10px">كمّل اللعب</button>
+    <button class="fg-restart" onclick="playClickSound();show('hub')" style="margin-top:10px">رجوع للرئيسية</button>
   </div>
 </section>
 
@@ -461,7 +477,7 @@
       مش عاجباكم الأسامي اللي طلعت؟ دوسوا "خلط جديد" وهيتوزع عشرة أسامي تانية.
     </p>
     <p style="margin-top:10px">
-      تقدروا تغيروا "مستوى الكروت" (للمبتدئين، متوسط، للخبراء)، وزر "اقفل كل الكروت" بيقلب كل الكروت مرة واحدة قبل ما الموبايل يتنقل.
+      تقدروا تغيروا "مستوى الكروت" (عادي: أسامي مشهورة، صعب: أسامي أقل شهرة). كل خلطة بتجيب الأسامي من بلاد مختلفة، فيها لاعبين ومدربين، ومفيش اسم بيتكرر لحد ما القايمة تخلص. وزر "اقفل كل الكروت" بيقلب كل الكروت مرة واحدة قبل ما الموبايل يتنقل.
     </p>
   </div>
   <div class="grid">
@@ -484,9 +500,8 @@
     <div>
       <label for="passwordLevel">مستوى الكروت</label>
       <select id="passwordLevel" onchange="setPasswordLevel(this.value)">
-        <option value="easy">للمبتدئين</option>
-        <option value="mid" selected>متوسط</option>
-        <option value="pro">للخبراء</option>
+        <option value="easy" selected>عادي</option>
+        <option value="hard">صعب</option>
       </select>
     </div>
     <div>
@@ -566,33 +581,57 @@
     </div>
   </div>
 
+  <div id="storyPlay">
   <div id="storyClues" class="story-clues"></div>
 
   <p class="subtitle" style="margin:10px 0 0">
-    محاولات متبقية: <b id="storyGuessesLeft">2</b> · النقط لو جاوبوا دلوقتي: <b id="storyPointsNow">3</b>
+    محاولات متبقية: <span id="storyLeftNameA">الفريق الأول</span> <b id="storyLeftA">2</b> ·
+    <span id="storyLeftNameB">الفريق الثاني</span> <b id="storyLeftB">2</b><br>
+    النقط لو جاوبوا دلوقتي: <b id="storyPointsNow">3</b>
   </p>
 
   <div id="storyAnswerBox" class="story-gm-answer">
-    الإجابة (للمشرف بس): <b id="storyAnswerName" dir="ltr"></b>
+    <button id="storyAnswerBtn" class="btn ghost" onclick="storyToggleAnswer()" style="width:100%">إظهار الإجابة (للمشرف) 👁️</button>
+    <div id="storyAnswerReveal" class="hidden">الإجابة: <b id="storyAnswerName" dir="ltr"></b></div>
   </div>
 
   <div class="story-guess-row">
-    <button class="btn primary story-correct-btn" onclick="storyCorrectGuess('a')" style="flex:1">صح ✅ للفريق الأول</button>
-    <button class="btn primary story-correct-btn" onclick="storyCorrectGuess('b')" style="flex:1">صح ✅ للفريق التاني</button>
+    <button id="storyCorrectA" class="btn primary" onclick="storyCorrectGuess('a')" style="flex:1">صح ✅ الفريق الأول</button>
+    <button id="storyCorrectB" class="btn primary" onclick="storyCorrectGuess('b')" style="flex:1">صح ✅ الفريق التاني</button>
+  </div>
+
+  <div class="story-guess-row">
+    <button id="storyWrongA" class="btn ghost" onclick="storyWrongGuess('a')" style="flex:1">غلط ❌ الفريق الأول</button>
+    <button id="storyWrongB" class="btn ghost" onclick="storyWrongGuess('b')" style="flex:1">غلط ❌ الفريق التاني</button>
   </div>
 
   <div class="fb-controls">
-    <button id="storyWrongBtn" class="btn ghost" onclick="storyWrongGuess()" style="flex:1">غلط ❌</button>
     <button id="storySkipBtn" class="btn ghost" onclick="storySkipRound()" style="flex:1">محدش عارف ⏭️</button>
+    <button class="btn ghost" onclick="playClickSound();storyNextRound()" style="flex:1">لاعب جديد 🔀</button>
   </div>
 
   <div class="fb-controls">
-    <button class="btn ghost" onclick="playClickSound();storyNextRound()" style="flex:1">لاعب جديد 🔀</button>
+    <button class="btn primary" onclick="storyShowResult()" style="flex:1">إنهاء اللعبة 🏁</button>
   </div>
 
   <div class="fb-controls">
     <button id="storyResetBtn" class="btn ghost" onclick="playClickSound();storyResetScores()" style="flex:1">تصفير النقط</button>
     <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع للرئيسية</button>
+  </div>
+  </div>
+
+  <div id="storyResult" class="hidden">
+    <div id="storyResultBanner" class="story-result-banner"></div>
+    <p id="storyResultMeta" class="subtitle" style="text-align:center;margin:0 0 6px"></p>
+    <div id="storyResultList" class="story-clues"></div>
+
+    <div class="fb-controls">
+      <button class="btn primary" onclick="storyResultNewGame()" style="flex:1">لعبة جديدة 🔄</button>
+      <button class="btn ghost" onclick="storyBackToGame()" style="flex:1">كمّل اللعب</button>
+    </div>
+    <div class="fb-controls">
+      <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع للرئيسية</button>
+    </div>
   </div>
 </div>
 </section>
