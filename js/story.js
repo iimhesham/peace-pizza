@@ -1,7 +1,9 @@
 /* =========================================================
    قصة — player-story guessing game
    Two teams, progressive clues (hardest -> easiest), points
-   per clue reached (3 / 2 / 1), max 2 guesses per round.
+   per clue reached (3 / 2 / 1), max 2 guesses per team per round.
+   The answer is hidden until the moderator taps the reveal button.
+   A results screen summarises the whole game.
    Data lives in STORY_PLAYERS (see story-data.js).
 ========================================================= */
 
@@ -16,7 +18,10 @@ let storyCurrent=null; // current player object
 let storyCurrentIdx=-1;// index of storyCurrent in STORY_PLAYERS (for saving)
 let storyClueCount=3;  // 3 (عادي) or 4 (صعب)
 let storyRevealed=1;   // how many clues are currently shown
-let storyGuessesUsed=0;
+let storyGuesses={a:0,b:0};   // wrong guesses used by each team this round
+let storyHistory=[];          // finished rounds: {name,winner:'a'|'b'|null,pts}
+let storyAnswerShown=false;   // moderator tapped «إظهار الإجابة»
+let storyViewResult=false;    // results view is open (not saved)
 let storyRoundOver=false;
 let storyScores={a:0,b:0};
 let storyTeamNames={a:"الفريق الأول",b:"الفريق الثاني"};
@@ -44,13 +49,25 @@ function storyLoadState(){
 
     if(Array.isArray(saved.deck))storyDeck=saved.deck.filter(valid);
 
+    if(Array.isArray(saved.history)){
+      storyHistory=saved.history
+        .filter(h=>h&&typeof h.name==="string")
+        .map(h=>({name:h.name,winner:h.winner==="a"||h.winner==="b"?h.winner:null,pts:parseInt(h.pts,10)||0}))
+        .slice(-300);
+    }
+
     if(valid(saved.current)){
       storyCurrentIdx=saved.current;
       storyCurrent=STORY_PLAYERS[saved.current];
       const maxClues=Math.min(storyClueCount,storyCurrent.clues.length);
       storyRevealed=Math.min(Math.max(parseInt(saved.revealed,10)||1,1),maxClues);
-      storyGuessesUsed=Math.min(Math.max(parseInt(saved.guessesUsed,10)||0,0),STORY_MAX_GUESSES);
+      const g=saved.guesses||{};
+      storyGuesses={
+        a:Math.min(Math.max(parseInt(g.a,10)||0,0),STORY_MAX_GUESSES),
+        b:Math.min(Math.max(parseInt(g.b,10)||0,0),STORY_MAX_GUESSES)
+      };
       storyRoundOver=saved.roundOver===true;
+      storyAnswerShown=storyRoundOver;
     }
   }catch(e){}
 }
@@ -67,8 +84,9 @@ function storySaveState(){
       deck:storyDeck,
       current:storyCurrentIdx,
       revealed:storyRevealed,
-      guessesUsed:storyGuessesUsed,
-      roundOver:storyRoundOver
+      guesses:storyGuesses,
+      roundOver:storyRoundOver,
+      history:storyHistory
     }));
   }catch(e){}
   storyRefreshStartBtn();
@@ -78,7 +96,7 @@ function storySaveState(){
 function storyRefreshStartBtn(){
   const btn=document.getElementById("storyStartBtn");
   if(!btn)return;
-  const hasGame=storyCurrent!==null||storyScores.a>0||storyScores.b>0;
+  const hasGame=storyCurrent!==null||storyScores.a>0||storyScores.b>0||storyHistory.length>0;
   btn.textContent=hasGame
     ?`كمّل اللعب (${storyScores.a} : ${storyScores.b})`
     :"ابدأ اللعب";
@@ -93,6 +111,7 @@ function storyStartGame(){
   document.getElementById("storyTeamAInput").value=storyTeamNames.a;
   document.getElementById("storyTeamBInput").value=storyTeamNames.b;
 
+  storyViewResult=false;
   if(storyCurrent){
     renderStoryRound();          // resume the round exactly where it was
   }else{
@@ -101,6 +120,7 @@ function storyStartGame(){
   }
 
   renderStoryScores();
+  renderStoryView();
   show("story-game");
 }
 
@@ -120,8 +140,9 @@ function storyNextRound(silent){
   storyCurrentIdx=idx;
   storyCurrent=STORY_PLAYERS[idx];
   storyRevealed=1;
-  storyGuessesUsed=0;
+  storyGuesses={a:0,b:0};
   storyRoundOver=false;
+  storyAnswerShown=false;
   storySaveState();
   renderStoryRound();
   if(!silent)toast("لاعب جديد");
@@ -140,50 +161,135 @@ function storyRevealNext(){
   renderStoryRound();
 }
 
-function storyWrongGuess(){
-  if(storyRoundOver)return;
+/* ends the round once and remembers it for the results screen */
+function storyEndRound(winner,pts){
+  if(storyRoundOver||!storyCurrent)return;
+  storyRoundOver=true;
+  storyAnswerShown=true;
+  storyHistory.push({name:storyCurrent.name,winner:winner,pts:pts||0});
+}
+
+function storyWrongGuess(team){
+  if(storyRoundOver||!storyCurrent)return;
+  if(storyGuesses[team]>=STORY_MAX_GUESSES)return;
   playClickSound();
-  storyGuessesUsed++;
+  storyGuesses[team]++;
   const maxClues=Math.min(storyClueCount,storyCurrent.clues.length);
-  const hasMoreClues=storyRevealed<maxClues;
-  if(storyGuessesUsed>=STORY_MAX_GUESSES && !hasMoreClues){
-    storyRoundOver=true;
-    toast("خلصت المحاولات");
-  }else if(hasMoreClues){
-    storyRevealed++;
-  }
-  if(storyGuessesUsed>=STORY_MAX_GUESSES){
-    storyRoundOver=true;
+  if(storyRevealed<maxClues)storyRevealed++;
+  if(storyGuesses.a>=STORY_MAX_GUESSES&&storyGuesses.b>=STORY_MAX_GUESSES){
+    storyEndRound(null,0);
+    toast("خلصت محاولات الفريقين");
+  }else if(storyGuesses[team]>=STORY_MAX_GUESSES){
+    toast(`${storyTeamNames[team]} خلصت محاولاتهم`);
   }
   storySaveState();
   renderStoryRound();
 }
 
 function storySkipRound(){
-  if(storyRoundOver)return;
+  if(storyRoundOver||!storyCurrent)return;
   playClickSound();
   const maxClues=Math.min(storyClueCount,storyCurrent.clues.length);
   if(storyRevealed<maxClues){
     storyRevealed++;
     toast("الدليل الجاي");
   }else{
-    storyRoundOver=true;
-    toast("محدش عارف؟ اتفرجوا على الإجابة");
+    storyEndRound(null,0);
+    toast("محدش عارف؟ الإجابة ظهرت");
   }
   storySaveState();
   renderStoryRound();
 }
 
 function storyCorrectGuess(team){
-  if(storyRoundOver)return;
+  if(storyRoundOver||!storyCurrent)return;
+  if(storyGuesses[team]>=STORY_MAX_GUESSES)return;
   playRevealSound();
   const pts=storyCurrentPoints();
   storyScores[team]+=pts;
-  storyRoundOver=true;
+  storyEndRound(team,pts);
   storySaveState();
   renderStoryScores();
   renderStoryRound();
   toast(`+${pts} لـ${storyTeamNames[team]}`);
+}
+
+/* moderator-only: the answer stays hidden until this is tapped */
+function storyToggleAnswer(){
+  if(storyRoundOver)return;
+  playClickSound();
+  storyAnswerShown=!storyAnswerShown;
+  renderStoryRound();
+}
+
+/* ---------- results screen ---------- */
+function storyShowResult(){
+  playClickSound();
+  storyViewResult=true;
+  renderStoryResult();
+  renderStoryView();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function storyBackToGame(){
+  playClickSound();
+  storyViewResult=false;
+  renderStoryRound();
+  renderStoryView();
+}
+
+function storyResultNewGame(){
+  playClickSound();
+  storyScores={a:0,b:0};
+  storyHistory=[];
+  storyViewResult=false;
+  storyRefillDeck();
+  storyNextRound(true);
+  renderStoryScores();
+  renderStoryView();
+  toast("لعبة جديدة");
+}
+
+function renderStoryView(){
+  const play=document.getElementById("storyPlay");
+  const res=document.getElementById("storyResult");
+  if(play)play.classList.toggle("hidden",storyViewResult);
+  if(res)res.classList.toggle("hidden",!storyViewResult);
+}
+
+function renderStoryResult(){
+  const banner=document.getElementById("storyResultBanner");
+  const meta=document.getElementById("storyResultMeta");
+  const list=document.getElementById("storyResultList");
+  if(!banner||!meta||!list)return;
+
+  const a=storyScores.a,b=storyScores.b;
+  banner.textContent=a===b
+    ?`تعادل ${a} : ${b} 🤝`
+    :`🏆 ${a>b?storyTeamNames.a:storyTeamNames.b} فاز ${Math.max(a,b)} : ${Math.min(a,b)}`;
+
+  const winsA=storyHistory.filter(h=>h.winner==="a").length;
+  const winsB=storyHistory.filter(h=>h.winner==="b").length;
+  const nobody=storyHistory.length-winsA-winsB;
+  meta.textContent=storyHistory.length===0
+    ?"لسه محدش لعب جولة كاملة"
+    :`${storyHistory.length} جولة · ${storyTeamNames.a}: ${winsA} · ${storyTeamNames.b}: ${winsB} · محدش جاوب: ${nobody}`;
+
+  list.textContent="";
+  storyHistory.forEach((h,i)=>{
+    const row=document.createElement("div");
+    row.className="story-clue";
+    const tag=document.createElement("span");
+    tag.className="story-clue-tag";
+    tag.dir="ltr";
+    tag.textContent=`${i+1}. ${h.name}`;
+    const text=document.createElement("p");
+    text.textContent=h.winner
+      ?`${storyTeamNames[h.winner]} جاوبوا صح (+${h.pts} نقطة)`
+      :"محدش جاوب";
+    row.append(tag,text);
+    list.appendChild(row);
+  });
 }
 
 /* Two taps within a few seconds: protects the points from an accidental tap */
@@ -201,6 +307,7 @@ function storyResetScores(){
 
   storyDisarmReset();
   storyScores={a:0,b:0};
+  storyHistory=[];
   storyRefillDeck();
   storyNextRound(true);
   renderStoryScores();
@@ -230,6 +337,11 @@ function renderStoryScores(){
   if(b)b.textContent=storyScores.b;
   if(an)an.textContent=storyTeamNames.a;
   if(bn)bn.textContent=storyTeamNames.b;
+  const set=(id,t)=>{const el=document.getElementById(id);if(el)el.textContent=t;};
+  set("storyLeftNameA",storyTeamNames.a);
+  set("storyLeftNameB",storyTeamNames.b);
+  set("storyCorrectA",`صح ✅ ${storyTeamNames.a}`);
+  set("storyCorrectB",`صح ✅ ${storyTeamNames.b}`);
 }
 
 function renderStoryRound(){
@@ -254,28 +366,38 @@ function renderStoryRound(){
     wrap.appendChild(row);
   }
 
-  const guessesLeft=document.getElementById("storyGuessesLeft");
-  if(guessesLeft)guessesLeft.textContent=Math.max(0,STORY_MAX_GUESSES-storyGuessesUsed);
+  const maxG=STORY_MAX_GUESSES;
+  const leftA=document.getElementById("storyLeftA");
+  const leftB=document.getElementById("storyLeftB");
+  if(leftA)leftA.textContent=Math.max(0,maxG-storyGuesses.a);
+  if(leftB)leftB.textContent=Math.max(0,maxG-storyGuesses.b);
 
-  const nextBtn=document.getElementById("storyWrongBtn");
-  const canRevealMore=storyRevealed<maxClues;
-  if(nextBtn){
-    nextBtn.disabled=storyRoundOver;
-    nextBtn.textContent=storyGuessesUsed>=STORY_MAX_GUESSES-1 && canRevealMore
-      ? "غلط ❌ (آخر محاولة)"
-      : "غلط ❌";
-  }
-
-  const correctBtns=document.querySelectorAll(".story-correct-btn");
-  correctBtns.forEach(b=>b.disabled=storyRoundOver);
+  ["a","b"].forEach(t=>{
+    const T=t.toUpperCase();
+    const blocked=storyRoundOver||storyGuesses[t]>=maxG;
+    const wrong=document.getElementById("storyWrong"+T);
+    const right=document.getElementById("storyCorrect"+T);
+    if(wrong){
+      wrong.disabled=blocked;
+      wrong.textContent=`غلط ❌ ${storyTeamNames[t]}`;
+    }
+    if(right)right.disabled=blocked;
+  });
 
   const skipBtn=document.getElementById("storySkipBtn");
   if(skipBtn)skipBtn.disabled=storyRoundOver;
 
-  const answerBox=document.getElementById("storyAnswerBox");
+  /* the answer: hidden until the moderator taps the button
+     (shown automatically once the round is over) */
   const nameSpan=document.getElementById("storyAnswerName");
-  if(answerBox&&nameSpan){
-    nameSpan.textContent=storyCurrent.name;
+  if(nameSpan)nameSpan.textContent=storyCurrent.name;
+  const showIt=storyAnswerShown||storyRoundOver;
+  const reveal=document.getElementById("storyAnswerReveal");
+  if(reveal)reveal.classList.toggle("hidden",!showIt);
+  const ansBtn=document.getElementById("storyAnswerBtn");
+  if(ansBtn){
+    ansBtn.classList.toggle("hidden",storyRoundOver);
+    ansBtn.textContent=storyAnswerShown?"إخفاء الإجابة 🙈":"إظهار الإجابة (للمشرف) 👁️";
   }
 
   const ptsNow=document.getElementById("storyPointsNow");
