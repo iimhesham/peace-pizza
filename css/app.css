@@ -290,6 +290,9 @@ body.mode-story #toast{
 .app #story-game .story-clue-pts{color:rgba(90,4,6,.75)}
 .app #story-game .story-clue p{color:#3f0304}
 
+/* results banner */
+.app #story-game .story-result-banner{color:var(--s-marble)}
+
 /* moderator answer strip */
 .app #story-game .story-gm-answer{background:transparent;border-color:var(--s-line);color:var(--s-muted)}
 .app #story-game .story-gm-answer b{color:var(--s-ink)}
