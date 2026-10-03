@@ -47,7 +47,7 @@ function storyLoadState(){
     if(saved.total!==total)return;
     const valid=i=>Number.isInteger(i)&&i>=0&&i<total;
 
-    if(Array.isArray(saved.deck))storyDeck=saved.deck.filter(valid);
+    if(Array.isArray(saved.deck)&&saved.deckV===2)storyDeck=saved.deck.filter(valid);
 
     if(Array.isArray(saved.history)){
       storyHistory=saved.history
@@ -86,7 +86,8 @@ function storySaveState(){
       revealed:storyRevealed,
       guesses:storyGuesses,
       roundOver:storyRoundOver,
-      history:storyHistory
+      history:storyHistory,
+      deckV:2
     }));
   }catch(e){}
   storyRefreshStartBtn();
@@ -104,7 +105,7 @@ function storyRefreshStartBtn(){
 
 function storyRefillDeck(){
   const all=STORY_PLAYERS.map((_,i)=>i);
-  storyDeck=seededShuffle(all,"story-"+Date.now()+"-"+Math.random());
+  storyDeck=weightedDeck(all,i=>STORY_PLAYERS[i].name);
 }
 
 function storyStartGame(){

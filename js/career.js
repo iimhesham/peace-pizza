@@ -119,7 +119,7 @@ function careerLoadState(){
     const total=CAREER_PLAYERS.length;
     if(s.total!==total)return;
     const valid=i=>Number.isInteger(i)&&i>=0&&i<total;
-    if(Array.isArray(s.deck))careerDeck=s.deck.filter(valid);
+    if(Array.isArray(s.deck)&&s.deckV===2)careerDeck=s.deck.filter(valid);
     if(Array.isArray(s.history)){
       careerHistory=s.history
         .filter(h=>h&&typeof h.name==="string")
@@ -156,7 +156,7 @@ function careerSaveState(){
       deck:careerDeck,current:careerCurrentIdx,order:careerOrder,
       stage:careerStage,guesses:careerGuesses,
       roundOver:careerRoundOver,history:careerHistory,
-      risk:careerRisk,riskUsed:careerRiskUsed
+      risk:careerRisk,riskUsed:careerRiskUsed,deckV:2
     }));
   }catch(e){}
   careerRefreshStartBtn();
@@ -175,7 +175,7 @@ function careerShuffleOrder(n){
 }
 
 function careerRefillDeck(){
-  careerDeck=seededShuffle(careerPool(),"career-deck-"+Date.now()+"-"+Math.random());
+  careerDeck=weightedDeck(careerPool(),i=>CAREER_PLAYERS[i].n);
 }
 
 function careerSetHardMode(on){
