@@ -3,7 +3,7 @@
    فريقين، المسيرة بتظهر محطات ناقصة (؟) والمحطات بتتكشف مع كل
    دليل. نفس نظام نقط «قصة لاعب»: دليل 1 = 3 · دليل 2 = 2 · دليل 3 = 1،
    وفي الوضع الصعب دليل رابع بدون نقط. محاولتين لكل فريق.
-   الداتا في CAREER_PLAYERS (career-data.js).
+   الداتا في CAREER_PLAYERS (career-data.js). المحطة الرابعة = 1 معناها إعارة.
 ========================================================= */
 
 const CAREER_POINTS=[3,2,1];
@@ -319,7 +319,15 @@ function careerRenderRound(){
       yrs.className="cr-years";
       yrs.dir="ltr";
       yrs.textContent=careerYears(s);
-      card.append(club,yrs);
+      if(s[3]){
+        const tag=document.createElement("span");
+        tag.className="cr-loan";
+        tag.textContent="إعارة";
+        card.classList.add("is-loan");
+        card.append(club,tag,yrs);
+      }else{
+        card.append(club,yrs);
+      }
     }else{
       const q=document.createElement("span");
       q.className="cr-q";
