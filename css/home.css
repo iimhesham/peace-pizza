@@ -315,8 +315,10 @@ button.hm-case{border-color:#4a4127}
 }
 
 /* الكارت الخامس: TRANSFERS */
-.hm-fc5{display:flex;align-items:center;justify-content:center;gap:10px;width:min(292px,86%);height:52px;margin:-6px auto 14px;padding:0 16px;border-radius:12px;position:relative;cursor:pointer;color:#c6ff33;background:linear-gradient(135deg,#003566,#00203f);border:1px solid rgba(198,255,51,.5);box-shadow:0 0 18px rgba(40,120,230,.35),inset 0 0 14px rgba(198,255,51,.06);-webkit-tap-highlight-color:transparent}
-.hm-fc5::before{content:"";position:absolute;inset:4px;border-radius:8px;border:1px solid currentColor;opacity:.25;pointer-events:none}
-.hm-fc5 b{font-size:20px;letter-spacing:.1em;line-height:1}
-.hm-fc5 small{font-size:8px;letter-spacing:.18em;opacity:.65;color:#8fb0d1}
+.hm-fc5{display:flex;align-items:center;justify-content:center;gap:14px;width:236px;height:78px;margin:-2px auto 18px;padding:0 18px;border-radius:14px;position:relative;cursor:pointer;color:#c6ff33;background:linear-gradient(160deg,#0a3f73,#00203f);border:1px solid rgba(198,255,51,.35);box-shadow:0 8px 18px rgba(0,0,0,.4);-webkit-tap-highlight-color:transparent}
+.hm-fc5>i{position:absolute;inset:6px;border-radius:9px;border:1px solid currentColor;opacity:.28;pointer-events:none}
+.hm-fc5-ic{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid rgba(198,255,51,.5);background:rgba(198,255,51,.08)}
+.hm-fc5-tx{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.hm-fc5 b{font-size:22px;letter-spacing:.08em;line-height:1}
+.hm-fc5 small{font-size:9px;letter-spacing:.22em;color:#8fb0d1}
 .hm-fc5:active{transform:scale(.97);filter:brightness(1.15)}

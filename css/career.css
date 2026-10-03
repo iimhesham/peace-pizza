@@ -141,3 +141,10 @@ body.mode-career{background:#001a33 linear-gradient(rgba(198,255,51,.05) 1px,tra
 .cr-timeline{perspective:900px}
 .cr-stop.is-flip .cr-card{animation:crFlip .5s cubic-bezier(.3,.7,.3,1);transform-origin:center}
 @keyframes crFlip{0%{transform:rotateX(-90deg);opacity:.2}60%{transform:rotateX(12deg);opacity:1}100%{transform:rotateX(0)}}
+
+/* risk */
+.cr-risk-row{display:flex;gap:8px;margin:0 0 8px}
+.cr-risk-row .btn{flex:1;padding:10px 6px;font-size:14px;border-color:var(--cr-accent);color:var(--cr-accent)}
+.cr-risk-row .btn:disabled{opacity:.4;border-color:var(--cr-line);color:var(--cr-muted)}
+.app #career-game .cr-kind.is-risk{background:#c6ff33;color:#00203f;animation:crPulse 1.6s ease-in-out infinite}
+@keyframes crPulse{50%{box-shadow:0 0 18px rgba(198,255,51,.7)}}
