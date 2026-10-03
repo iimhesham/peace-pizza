@@ -41,7 +41,8 @@ Object.keys(GAMES).forEach(game=>{
   }catch(e){}
 });
 
-updateLiveDbStatusText();
+/* فحص اتصال Firebase بيتأجل بعد ما الصفحة تفتح (مش لازم وقت التحميل) */
+setTimeout(updateLiveDbStatusText,2500);
 
 /* =========================================================
    VIEW MODE TOGGLE (desktop / mobile)
