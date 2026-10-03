@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="css/app.css?v=2">
 <link rel="stylesheet" href="css/flags.css">
 <link rel="stylesheet" href="css/niyaba.css">
+<link rel="stylesheet" href="css/career.css">
 <link rel="stylesheet" href="css/polish.css?v=2">
 
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
@@ -210,6 +211,14 @@
     <span class="hm-txt">
       <b>قصة لاعب - أنا مين</b>
       <small>أدلة عن لاعب كورة، من الأصعب للأسهل. خمّنوا مين هو.</small>
+    </span>
+    <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <button class="hm-row is-career" data-cat="ball" data-k="انتقالات مسيرة لاعب مدرب اندية تخمين كورة نيمار" onclick="playClickSound();show('career')">
+    <span class="hm-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="19" r="2"/><path d="M5 7v2.5a2.5 2.5 0 0 0 2.5 2.5H10M14 12h2.5a2.5 2.5 0 0 1 2.5 2.5V17" opacity=".8"/></svg></span>
+    <span class="hm-txt">
+      <b>الانتقالات - مسيرة لاعب</b>
+      <small>محطات ناقصة من مسيرة لاعب أو مدرب، تتكشف واحدة واحدة. خمّنوا مين هو.</small>
     </span>
     <svg class="hm-chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
   </button>
@@ -628,6 +637,129 @@
     <div class="fb-controls">
       <button class="btn primary" onclick="storyResultNewGame()" style="flex:1">لعبة جديدة 🔄</button>
       <button class="btn ghost" onclick="storyBackToGame()" style="flex:1">كمّل اللعب</button>
+    </div>
+    <div class="fb-controls">
+      <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع للرئيسية</button>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="career" class="hidden fb-app">
+<div class="card hero">
+  <svg class="cr-route" viewBox="0 0 120 40" width="120" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="30" r="5" fill="currentColor"/><circle cx="60" cy="10" r="5" fill="currentColor"/><circle cx="110" cy="30" r="5" fill="currentColor"/><path d="M15 27C30 22 40 12 55 11M65 11c15 1 30 11 40 18" stroke-dasharray="4 5"/></svg>
+  <div class="badge">TRANSFERS</div>
+  <h1 style="margin-top:12px">الانتقالات - مسيرة لاعب</h1>
+  <div class="fb-pitch-line"></div>
+  <div class="notice" style="text-align:right">
+    <b>إزاي بتتلعب:</b>
+    <p style="margin-top:10px">
+      كل جولة بتظهر مسيرة لاعب أو مدرب، أندية بالترتيب الزمني، بس أغلب المحطات مخفية (؟). حد يخمّن مين صاحب المسيرة من المحطات الظاهرة.
+    </p>
+    <p style="margin-top:10px">
+      <b>دليل 1 = 3 نقط</b> · <b>دليل 2 = 2 نقطة</b> · <b>دليل 3 = نقطة واحدة</b>.
+      كل فريق له محاولتين بس في كل جولة. كل «غلط ❌» أو «محدش عارف» بيكشف محطات جديدة.
+    </p>
+    <p style="margin-top:10px">
+      المحطات المعروضة هي الأساسية فقط، من غير الإعارات القصيرة. للمدربين المحطات هي الأندية والمنتخبات اللي دربوها.
+    </p>
+  </div>
+
+  <div class="grid" style="grid-template-columns:1fr;max-width:420px">
+    <label style="text-align:right;color:var(--muted);font-size:13px">اسم الفريق الأول</label>
+    <input id="careerTeamAInput" type="text" maxlength="24" placeholder="الفريق الأول" oninput="careerUpdateTeamName('a',this.value)">
+    <label style="text-align:right;color:var(--muted);font-size:13px;margin-top:6px">اسم الفريق التاني</label>
+    <input id="careerTeamBInput" type="text" maxlength="24" placeholder="الفريق الثاني" oninput="careerUpdateTeamName('b',this.value)">
+  </div>
+
+  <span class="cr-label">الأسماء (<b id="careerPoolCount" dir="ltr">0</b> متاح)</span>
+  <div class="cr-chips">
+    <button id="careerFilterAll" class="cr-chip is-on" aria-pressed="true" onclick="playClickSound();careerSetFilter('all')">الكل</button>
+    <button id="careerFilterP" class="cr-chip" aria-pressed="false" onclick="playClickSound();careerSetFilter('p')">لاعبين</button>
+    <button id="careerFilterC" class="cr-chip" aria-pressed="false" onclick="playClickSound();careerSetFilter('c')">مدربين</button>
+  </div>
+
+  <span class="cr-label">المستوى</span>
+  <div class="cr-chips">
+    <button id="careerModeNormal" class="cr-chip is-on" aria-pressed="true" onclick="playClickSound();careerSetHardMode(false)">عادي (3 أدلة)</button>
+    <button id="careerModeHard" class="cr-chip" aria-pressed="false" onclick="playClickSound();careerSetHardMode(true)">صعب (4 أدلة)</button>
+  </div>
+
+  <div class="grid">
+    <button id="careerStartBtn" class="btn primary" onclick="playClickSound();careerStartGame()">ابدأ اللعب</button>
+    <button class="btn ghost" onclick="playClickSound();show('hub')">رجوع</button>
+  </div>
+</div>
+</section>
+
+<section id="career-game" class="hidden fb-app">
+<div class="card hero">
+  <div class="topline">
+    <div class="badge">TRANSFERS</div>
+    <button class="btn ghost" onclick="playClickSound();show('career')" style="padding:8px 16px">القواعد</button>
+  </div>
+  <h2 style="margin-top:12px">مين صاحب المسيرة؟</h2>
+  <span id="careerKind" class="cr-kind"></span>
+
+  <div class="story-scorebar">
+    <div class="story-score-box">
+      <span id="careerNameA" class="story-team-name">الفريق الأول</span>
+      <span id="careerScoreA" class="story-team-score">0</span>
+    </div>
+    <div class="story-score-box">
+      <span id="careerNameB" class="story-team-name">الفريق الثاني</span>
+      <span id="careerScoreB" class="story-team-score">0</span>
+    </div>
+  </div>
+
+  <div id="careerPlay">
+  <div id="careerTimeline" class="cr-timeline"></div>
+  <p id="careerShownInfo" class="cr-info"></p>
+
+  <p class="subtitle" style="margin:10px 0 0;text-align:center">
+    محاولات متبقية: <span id="careerLeftNameA">الفريق الأول</span> <b id="careerLeftA">2</b> ·
+    <span id="careerLeftNameB">الفريق الثاني</span> <b id="careerLeftB">2</b><br>
+    النقط لو جاوبوا دلوقتي: <b id="careerPointsNow">3</b>
+  </p>
+
+  <div class="story-gm-answer">
+    <button id="careerAnswerBtn" class="btn ghost" onclick="careerToggleAnswer()" style="width:100%">إظهار الإجابة (للمشرف) 👁️</button>
+    <div id="careerAnswerReveal" class="hidden" style="margin-top:8px">الإجابة: <b id="careerAnswerName" dir="ltr"></b></div>
+  </div>
+
+  <div class="story-guess-row">
+    <button id="careerCorrectA" class="btn primary" onclick="careerCorrectGuess('a')" style="flex:1">صح ✅ الفريق الأول</button>
+    <button id="careerCorrectB" class="btn primary" onclick="careerCorrectGuess('b')" style="flex:1">صح ✅ الفريق التاني</button>
+  </div>
+
+  <div class="story-guess-row">
+    <button id="careerWrongA" class="btn ghost" onclick="careerWrongGuess('a')" style="flex:1">غلط ❌ الفريق الأول</button>
+    <button id="careerWrongB" class="btn ghost" onclick="careerWrongGuess('b')" style="flex:1">غلط ❌ الفريق التاني</button>
+  </div>
+
+  <div class="fb-controls">
+    <button id="careerSkipBtn" class="btn ghost" onclick="careerSkipRound()" style="flex:1">محدش عارف ⏭️</button>
+    <button class="btn ghost" onclick="playClickSound();careerNextRound()" style="flex:1">مسيرة جديدة 🔀</button>
+  </div>
+
+  <div class="fb-controls">
+    <button class="btn primary" onclick="careerShowResult()" style="flex:1">إنهاء اللعبة 🏁</button>
+  </div>
+
+  <div class="fb-controls">
+    <button id="careerResetBtn" class="btn ghost" onclick="playClickSound();careerResetScores()" style="flex:1">تصفير النقط</button>
+    <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع للرئيسية</button>
+  </div>
+  </div>
+
+  <div id="careerResult" class="hidden">
+    <div id="careerResultBanner" class="story-result-banner"></div>
+    <p id="careerResultMeta" class="subtitle" style="text-align:center;margin:0 0 6px"></p>
+    <div id="careerResultList" class="story-clues"></div>
+
+    <div class="fb-controls">
+      <button class="btn primary" onclick="careerResultNewGame()" style="flex:1">لعبة جديدة 🔄</button>
+      <button class="btn ghost" onclick="careerBackToGame()" style="flex:1">كمّل اللعب</button>
     </div>
     <div class="fb-controls">
       <button class="btn ghost" onclick="playClickSound();show('hub')" style="flex:1">رجوع للرئيسية</button>
@@ -2704,6 +2836,8 @@
 <script src="js/football.js"></script>
 <script src="js/story-data.js"></script>
 <script src="js/story.js"></script>
+<script src="js/career-data.js"></script>
+<script src="js/career.js"></script>
 <script src="js/hub.js"></script>
 <script src="js/flags-data.js"></script>
 <script src="js/flags-historical-data.js"></script>
