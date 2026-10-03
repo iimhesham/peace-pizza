@@ -47,3 +47,34 @@ function weightedDeck(indices,nameOf){
     .sort((a,b)=>a.k-b.k)
     .map(o=>o.i);
 }
+
+/* =========================================================
+   ذاكرة «اللي اتلعب قبل كده» — بتفضل محفوظة بين الألعاب والريسيت
+   لاعب بيتسجل أول ما يظهر، ومش بيرجع تاني غير بعد ما كل اللاعبين
+   يتلعبوا (دورة كاملة)، وبعدها آخر 8 لاعبين بيتأخروا في الدورة الجديدة.
+========================================================= */
+function seenGet(key){
+  try{const a=JSON.parse(localStorage.getItem("seen_"+key));return Array.isArray(a)?a:[];}catch(e){return [];}
+}
+function seenSave(key,a){
+  try{localStorage.setItem("seen_"+key,JSON.stringify(a.slice(-600)));}catch(e){}
+}
+function seenAdd(key,name){
+  const a=seenGet(key).filter(n=>n!==name);a.push(name);seenSave(key,a);
+}
+function seenRemove(key,name){
+  seenSave(key,seenGet(key).filter(n=>n!==name));
+}
+function freshDeck(key,indices,nameOf){
+  const seen=seenGet(key);
+  const inSeen=new Set(seen);
+  const fresh=indices.filter(i=>!inSeen.has(nameOf(i)));
+  if(fresh.length)return weightedDeck(fresh,nameOf);
+  /* دورة جديدة: امسح اللي في البول، وآخر 8 يتأخروا */
+  const recent=new Set(seen.slice(-8));
+  const pool=new Set(indices.map(nameOf));
+  seenSave(key,seen.filter(n=>!pool.has(n)));
+  const late=indices.filter(i=>recent.has(nameOf(i)));
+  const rest=indices.filter(i=>!recent.has(nameOf(i)));
+  return late.concat(weightedDeck(rest,nameOf)); /* اللي في الأول بيتسحب آخر حاجة */
+}

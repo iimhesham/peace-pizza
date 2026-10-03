@@ -105,7 +105,7 @@ function storyRefreshStartBtn(){
 
 function storyRefillDeck(){
   const all=STORY_PLAYERS.map((_,i)=>i);
-  storyDeck=weightedDeck(all,i=>STORY_PLAYERS[i].name);
+  storyDeck=freshDeck("story",all,i=>STORY_PLAYERS[i].name);
 }
 
 function storyStartGame(){
@@ -139,6 +139,7 @@ function storySetHardMode(on){
 function storyNextRound(silent){
   if(storyDeck.length===0)storyRefillDeck();
   const idx=storyDeck.pop();
+  seenAdd("story",STORY_PLAYERS[idx].name);
   storyCurrentIdx=idx;
   storyCurrent=STORY_PLAYERS[idx];
   storyRevealed=1;

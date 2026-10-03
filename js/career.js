@@ -93,6 +93,7 @@ function careerUseRisk(team){
   const idx=pick[Math.floor(Math.random()*pick.length)];
   if(fromDeck)careerDeck.splice(careerDeck.indexOf(idx),1);
   careerDeck.splice(Math.floor(Math.random()*(careerDeck.length+1)),0,careerCurrentIdx); // السؤال القديم يرجع للدك
+  seenRemove("career",CAREER_PLAYERS[careerCurrentIdx].n);seenAdd("career",CAREER_PLAYERS[idx].n);
   careerCurrentIdx=idx;
   careerCurrent=CAREER_PLAYERS[idx];
   careerOrder=careerShuffleOrder(careerCurrent.c.length);
@@ -175,7 +176,7 @@ function careerShuffleOrder(n){
 }
 
 function careerRefillDeck(){
-  careerDeck=weightedDeck(careerPool(),i=>CAREER_PLAYERS[i].n);
+  careerDeck=freshDeck("career",careerPool(),i=>CAREER_PLAYERS[i].n);
 }
 
 function careerSetHardMode(on){
@@ -231,6 +232,7 @@ function careerStartGame(){
 function careerNextRound(silent){
   if(careerDeck.length===0)careerRefillDeck();
   const idx=careerDeck.pop();
+  seenAdd("career",CAREER_PLAYERS[idx].n);
   careerCurrentIdx=idx;
   careerCurrent=CAREER_PLAYERS[idx];
   careerOrder=careerShuffleOrder(careerCurrent.c.length);
