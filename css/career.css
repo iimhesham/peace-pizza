@@ -86,8 +86,13 @@ body.mode-career #toast{
 .cr-stop.is-open .cr-dot{background:var(--cr-accent);border-color:var(--cr-accent);color:#1d1209}
 .cr-stop.is-open .cr-card{background:#261d14;border:1px solid var(--cr-line);border-right:3px solid var(--cr-accent)}
 .cr-stop.is-hidden .cr-card{background:transparent;border:1px dashed rgba(255,138,61,.28);justify-content:center}
-.cr-club{font-size:16px;font-weight:700;color:var(--cr-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cr-club{flex:1;min-width:0;font-size:16px;font-weight:700;color:var(--cr-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cr-years{flex:none;font-size:12.5px;color:var(--cr-muted)}
+.cr-stop.is-open .cr-card.is-loan{border-style:dashed;border-right:3px dashed var(--cr-accent)}
+.cr-loan{
+  flex:none;padding:1px 9px;border-radius:999px;font-size:11.5px;font-weight:700;
+  background:var(--a-accent-soft);color:var(--cr-accent);border:1px solid var(--cr-line);
+}
 .cr-q{font-size:20px;font-weight:700;color:rgba(255,138,61,.5)}
 .cr-stop.is-new .cr-card{animation:crPop .5s ease-out}
 @keyframes crPop{
