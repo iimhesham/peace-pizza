@@ -77,7 +77,7 @@ button.hm-row:active{background:var(--h-panel-hi);border-color:var(--h-line-hi)}
   background:#111110;border:1px solid var(--h-line);border-radius:12px;
   color:var(--h-gold);
 }
-.hm-row.is-football .hm-ico{color:var(--h-green)}
+.hm-row.is-football .hm-ico{color:#ffaa00;background:#0a0e26;border-color:rgba(255,170,0,.45)}
 .hm-row.is-story .hm-ico{background:#750608;border-color:rgba(116,165,190,.45);color:#74a5be}
 .hm-row.is-career .hm-ico{background:#021d38;border-color:rgba(198,255,51,.45);color:#c6ff33}
 
@@ -216,7 +216,7 @@ button.hm-case{border-color:#4a4127}
 .hm-fc-c b{color:#fdf2f1}
 .hm-fc-r{
   transform:translateX(45px) rotate(4deg);z-index:2;
-  background:linear-gradient(160deg,#12332a,#0b1f19);border:1px solid rgba(87,199,160,.4);color:#57c7a0;
+  background:linear-gradient(160deg,#151b46,#0a0e26);border:1px solid rgba(255,170,0,.45);color:#ffaa00;
 }
 .hm-fc-f{
   transform:translateX(134px) rotate(14deg);z-index:1;
@@ -365,7 +365,7 @@ button.hm-case{border-color:#4a4127}
 .hm-fc-c .hm-fc-cap b{font-size:12px}
 
 /* PASSWORD: بطاقة دخول */
-.hm-fc-r::before{content:"";position:absolute;top:9px;left:50%;width:30px;height:7px;margin-left:-15px;border:1.5px solid currentColor;border-radius:4px;background:#06100c;opacity:.55}
+.hm-fc-r::before{content:"";position:absolute;top:9px;left:50%;width:30px;height:7px;margin-left:-15px;border:1.5px solid currentColor;border-radius:4px;background:#0a0e26;opacity:.55}
 .hm-fc-r .hm-fc-art{padding-top:22px}
 .hm-fc-r .hm-fc-art svg{width:46px;height:46px}
 .hm-fc-dots{display:flex;gap:5px;margin-top:9px}

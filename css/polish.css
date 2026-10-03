@@ -79,9 +79,9 @@
 #hub .hm-row.is-story::before{content:"SUSPECT";left:14px;top:12px;font:700 9px/1 'Courier New',Courier,monospace;letter-spacing:.16em;color:#74a5be;opacity:.85}
 
 /* PASSWORD: بطاقة دخول */
-#hub .hm-row.is-football{--ac:87,199,160;--r1:#12332a;--r2:#0a1c16;--i1:#12332a;--i2:#0b1f19;
-  --deco:repeating-linear-gradient(90deg,rgba(87,199,160,.38) 0 1px,transparent 1px 3px,rgba(87,199,160,.38) 3px 5px,transparent 5px 6px) left 16px bottom 11px/54px 7px no-repeat}
-#hub .hm-row.is-football::before{content:"\2022\2022\2022\2022\25CB";left:16px;top:11px;font:400 11px/1 'Anton','Impact',sans-serif;letter-spacing:.35em;color:#57c7a0;opacity:.85;direction:ltr;unicode-bidi:bidi-override}
+#hub .hm-row.is-football{--ac:255,170,0;--r1:#151b46;--r2:#0a0e26;--i1:#151b46;--i2:#0a0e26;
+  --deco:repeating-linear-gradient(90deg,rgba(255,170,0,.38) 0 1px,transparent 1px 3px,rgba(255,170,0,.38) 3px 5px,transparent 5px 6px) left 16px bottom 11px/54px 7px no-repeat}
+#hub .hm-row.is-football::before{content:"\2022\2022\2022\2022\25CB";left:16px;top:11px;font:400 11px/1 'Anton','Impact',sans-serif;letter-spacing:.35em;color:#ffaa00;opacity:.85;direction:ltr;unicode-bidi:bidi-override}
 
 /* TRANSFERS: تذكرة */
 #hub .hm-row.is-career{--ac:212,182,117;--r1:#1d4560;--r2:#0b2233;--i1:#0c2335;--i2:#071722;
@@ -140,7 +140,7 @@
 #hub .hm-group span{display:inline-block;padding:3px 14px 4px;border:1.5px solid currentColor;border-radius:4px;transform:rotate(-2deg);font-size:14px;font-weight:700;line-height:1.3}
 #hub .hm-group::after{content:"";flex:1;border-top:1.5px dashed currentColor;opacity:.28}
 #hub .hm-group.g-case{color:#d4b675}
-#hub .hm-group.g-ball{color:#57c7a0}
+#hub .hm-group.g-ball{color:#ffaa00}
 #hub .hm-group.g-flag{color:#f8a57d}
 
 /* ---------- الفوتر: ذيل تذكرة بباركود (برا الألعاب بس) ---------- */
