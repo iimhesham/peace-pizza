@@ -6,19 +6,15 @@ var e=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){retu
 var U=function(){return window.ppUser;},T=function(m){try{toast(m);}catch(x){}};
 var IC=function(n,o){return'<i class="ol-i" style="--ic:var(--'+(o?'o':'i')+'-'+n+')"></i>';};
 var K=function(t){return'<small class="ol-kick" dir="ltr">'+t+'</small>';};
-var st=document.createElement("style");
-st.textContent='.ol-p{background:#141413;border:1px solid #2a2927;border-radius:12px;padding:12px;margin:8px 0;text-align:right;line-height:1.7}.ol-p h3{margin:0 0 6px;color:#d4b675;font-size:16px}.ol-p small{color:#8d9d95}'+
-'.ol-dead{opacity:.45;text-decoration:line-through}.ol-tag{display:inline-block;background:#a02b2b;color:#fff;border-radius:6px;padding:0 7px;font-size:12px;margin-right:6px}.ol-v{display:flex;justify-content:space-between;align-items:center;gap:8px}.ol-v .ol-b{width:auto;margin:4px 0;padding:8px 14px;font-size:14px}';
-document.head.appendChild(st);
-function shell(h){var o=document.getElementById("olRoot");if(!o){o=document.createElement("div");o.id="olRoot";document.body.appendChild(o);}
-  o.innerHTML='<div class="ol-c"><button class="ol-x" onclick="OL.exit()" aria-label="خروج">'+IC("x")+'</button>'+h+'</div>';}
+
+function shell(h,o){OL.shell(h,o);}
 function on(r,f){var h=r.on("value",f);offs.push(function(){r.off("value",h);});}
 function clear(){offs.forEach(function(f){f();});offs=[];vref=null;code=role=S=R=M=V=null;}
 function rg(){return GAMES[S.st];}
 function ids(){return Object.keys(S.crew||{});}
 function open(){
   db=firebase.database();
-  shell(K("CRIME FILES")+'<h2>'+IC("book")+' اختار القصة</h2>'+Object.keys(GAMES).map(function(k){return'<button class="ol-b" onclick="OLS.create(\''+k+'\')">'+e(NM[k]||k)+'</button>';}).join("")+'<button class="ol-b o" onclick="OL.back()">رجوع</button>');
+  shell('<div class="ol-w">اختار القصة اللي هتحكمها</div>'+Object.keys(GAMES).map(function(k){return'<button class="ol-b" onclick="OLS.create(\''+k+'\')">'+e(NM[k]||k)+'</button>';}).join("")+'<button type="button" class="ol-b o" onclick="OL.up()">رجوع</button>',{t:"قصص الجرايم"});
 }
 function create(k){var u=U();clear();db=firebase.database();code=String(1000+Math.floor(Math.random()*9000));role="host";
   db.ref("rooms/"+code).set({host:u.uid,hostName:u.displayName||"",game:"story",st:k,status:"lobby",created:Date.now()}).then(listen).catch(function(){T("فشل إنشاء الغرفة");clear();});}
@@ -55,27 +51,28 @@ function cast(forVote,me){var c=S.cast||{};return Object.keys(c).map(function(u)
    (forVote&&x.alive&&u!==me?'<button class="ol-b" onclick="OLS.vote(\''+u+'\')">صوّت</button>':'')+'</div></div>';}).join("");}
 function draw(){
   if(!S||!document.getElementById("olRoot"))return;
-  var host=role==="host",me=U().uid,p=S.pub||{},c=S.cast||{};
+  var host=role==="host",me=U().uid,p=S.pub||{},c=S.cast||{},O={room:true,code:code,t:NM[S.st]||S.st,playing:S.status==="play"};
   if(S.status==="lobby"){
-    shell(K("ROOM CODE")+'<h2>'+e(NM[S.st]||S.st)+'</h2><div class="ol-code">'+e(code)+'</div><div class="ol-w">اللاعبين: '+ids().length+'</div>'+ids().map(function(u){return'<div class="ol-t"><b>'+e(S.crew[u].name)+'</b></div>';}).join("")+(host?'<button class="ol-b" onclick="OLS.start()">وزّع الأدوار وابدأ</button>':'<div class="ol-w">مستني الـ GM يوزع الأدوار…</div>'));
+    shell('<div class="ol-ticket" onclick="OL.copy()"><small>كود الغرفة · دوس عشان تنسخه</small><div class="ol-code">'+e(code)+'</div><span>ابعت الكود للاعبين</span></div><div class="ol-sec">اللاعبين ('+ids().length+')</div>'+ids().map(function(u){return'<div class="ol-t"><b>'+(S.crew[u].photo?'<img class="ol-av" referrerpolicy="no-referrer" alt="" src="'+e(S.crew[u].photo)+'">':'<span class="ol-ph"></span>')+e(S.crew[u].name)+'</b></div>';}).join("")+(host?'<button type="button" class="ol-b" onclick="OLS.start()">وزّع الأدوار وابدأ</button>':'<div class="ol-w">مستني الـ GM يوزع الأدوار…</div>'),O);
     return;}
   var rd=rg().rounds[S.round]||{},top='<div class="ol-p"><h3>'+e(p.title)+'</h3>'+e(p.text)+(p.evidence?'<br><small>الدليل</small><br>'+e(p.evidence):'')+'</div>'+(S.last?'<div class="ol-bz">'+e(S.last)+'</div>':'');
   if(host){
     var rows=Object.keys(c).map(function(u){var r=(R||{})[u]||{};return'<div class="ol-t'+(c[u].alive?'':' ol-dead')+'"><b>'+e(c[u].role)+'</b><span style="font-weight:400;color:#8d9d95">'+e(c[u].who)+(r.killer?'<i class="ol-tag">قاتل</i>':r.accomplice?'<i class="ol-tag">شريك</i>':'')+'</span></div>';}).join("");
     var tally="";if(S.vote){var cnt={};Object.keys(V||{}).forEach(function(v){cnt[V[v]]=(cnt[V[v]]||0)+1;});
       tally='<div class="ol-p"><h3>التصويت</h3><small>صوّت '+Object.keys(V||{}).length+' من '+Object.keys(c).filter(function(u){return c[u].alive;}).length+'</small>'+Object.keys(c).filter(function(u){return c[u].alive;}).map(function(u){return'<div class="ol-v"><span>'+e(c[u].role)+' — '+(cnt[u]||0)+'</span><button class="ol-b r" onclick="OLS.elim(\''+u+'\')">اقصِ</button></div>';}).join("")+'</div>';}
-    shell(K(e(NM[S.st]||S.st)+" · GM")+top+'<div class="ol-p"><h3>للـ GM فقط</h3>'+(rd.surface?'<small>سطحي</small><br>'+e(rd.surface)+'<br>':'')+(rd.deep?'<small>أعمق</small><br>'+e(rd.deep):'')+(rd.private?'<br><small>الدليل الخاص اتبعت لصاحب الدور تلقائيًا</small>':'')+'</div>'+rows+tally+
+    shell(top+'<div class="ol-p"><h3>للـ GM فقط</h3>'+(rd.surface?'<small>سطحي</small><br>'+e(rd.surface)+'<br>':'')+(rd.deep?'<small>أعمق</small><br>'+e(rd.deep):'')+(rd.private?'<br><small>الدليل الخاص اتبعت لصاحب الدور تلقائيًا</small>':'')+'</div>'+rows+tally+
       (S.status==="end"?(S.reveal?'<div class="ol-p"><h3>الكشف</h3>'+S.reveal.map(e).join("<br>")+'</div>':'')+'<button class="ol-b" onclick="OLS.reveal()">اكشف القاتل</button><button class="ol-b r" onclick="OLS.close()">اقفل الغرفة</button>':
-      (S.vote?'<button class="ol-b o" onclick="OLS.closeVote()">اقفل التصويت</button>':'<button class="ol-b" onclick="OLS.openVote()">افتح التصويت</button>')+'<button class="ol-b o" onclick="OLS.next()">'+(S.round+1>=rg().rounds.length?'ختام':'الجولة الجاية')+'</button><button class="ol-s" onclick="OLS.reveal()">اكشف القاتل (إنهاء)</button>'));
+      (S.vote?'<button class="ol-b o" onclick="OLS.closeVote()">اقفل التصويت</button>':'<button class="ol-b" onclick="OLS.openVote()">افتح التصويت</button>')+'<button class="ol-b o" onclick="OLS.next()">'+(S.round+1>=rg().rounds.length?'ختام':'الجولة الجاية')+'</button><button class="ol-s" onclick="OLS.reveal()">اكشف القاتل (إنهاء)</button>'),O);
     return;}
   var mine=c[me]||{},alive=mine.alive!==false,mc=M?(M.killer||M.accomplice):false;
   var card=M?'<div class="ol-p"><h3>'+e(mine.role)+(mc?'<i class="ol-tag">إنت المافيوسو</i>':'')+'</h3>'+(peek?'<small>سرك</small><br>'+e(M.secret)+'<br><small>نقطة قوتك</small><br>'+e(M.strength)+'<br><small>نقطة ضعفك</small><br>'+e(M.weakness)+(M.grudge?'<br><small>ضغينة</small><br>'+e(M.grudge):'')+(M.witness&&!mc&&rg().witnessNote?'<br><small>ملاحظة سرية</small><br>'+e(rg().witnessNote):'')+Object.keys(M.priv||{}).map(function(i){return'<br><small>دليل خاص · جولة '+(+i+1)+'</small><br>'+e(M.priv[i]);}).join(""):'<small>دورك مخفي</small>')+'</div><button class="ol-b o" onclick="OLS.peek()">'+(peek?'اخفي دورك':'اكشف دورك')+'</button>':'';
   var vb=S.vote&&alive?(voted()?'<div class="ol-bz">'+IC("check")+' اتسجّل صوتك</div>':'<div class="ol-bz">اختار مين تشك فيه</div>'):"";
-  shell(K(e(NM[S.st]||S.st))+top+(alive?'':'<div class="ol-bz">اتقصيت، تفرّج بس</div>')+card+vb+cast(S.vote&&alive&&!voted(),me)+(S.reveal?'<div class="ol-p"><h3>الكشف</h3>'+S.reveal.map(e).join("<br>")+'</div>':''));
+  shell(top+(alive?'':'<div class="ol-bz">اتقصيت، تفرّج بس</div>')+card+vb+cast(S.vote&&alive&&!voted(),me)+(S.reveal?'<div class="ol-p"><h3>الكشف</h3>'+S.reveal.map(e).join("<br>")+'</div>':''),O);
 }
 var oe=OL.exit,oj=OL.join;
 OL.exit=function(){clear();oe();};
-OL.join=function(){var c=(document.getElementById("olCode").value||"").trim();if(!c)return;db=firebase.database();
-  db.ref("rooms/"+c+"/game").once("value").then(function(s){if(s.val()==="story")join(c);else oj();}).catch(function(){oj();});};
-window.OLS={open:open,create:create,start:start,next:next,openVote:openVote,closeVote:closeVote,elim:elim,reveal:reveal,vote:vote,peek:function(){peek=!peek;draw();},close:function(){var c=code;db.ref("secrets/"+c).remove().then(function(){return db.ref("votes/"+c).remove();}).then(function(){return db.ref("rooms/"+c).remove();});}};
+OL.join=function(){var c=(document.getElementById("olCode").value||"").replace(/\D/g,"");if(c.length!==4){T("اكتب كود الغرفة (4 أرقام)");return;}db=firebase.database();
+  db.ref("rooms/"+c).once("value").then(function(s){var r=s.val();
+    if(r&&r.game==="story"){if(r.host===U().uid){clear();code=c;role="host";listen();}else join(c);}else oj();}).catch(function(){oj();});};
+window.OLS={open:open,create:create,start:start,next:next,openVote:openVote,closeVote:closeVote,elim:elim,reveal:reveal,vote:vote,peek:function(){peek=!peek;draw();},close:function(){if(!confirm("تقفل الغرفة للكل؟"))return;var c=code;db.ref("secrets/"+c).remove().then(function(){return db.ref("votes/"+c).remove();}).then(function(){return db.ref("rooms/"+c).remove();});}};
 })();
