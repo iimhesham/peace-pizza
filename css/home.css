@@ -314,11 +314,14 @@ button.hm-case{border-color:#4a4127}
   body:not(.force-mobile-view) #hub .hm-fc-desc b{font-size:12.5px;color:inherit}
 }
 
-/* الكارت الخامس: TRANSFERS */
-.hm-fc5{display:flex;align-items:center;justify-content:center;gap:14px;width:236px;height:78px;margin:-2px auto 18px;padding:0 18px;border-radius:14px;position:relative;cursor:pointer;color:#c6ff33;background:linear-gradient(160deg,#0a3f73,#00203f);border:1px solid rgba(198,255,51,.35);box-shadow:0 8px 18px rgba(0,0,0,.4);-webkit-tap-highlight-color:transparent}
-.hm-fc5>i{position:absolute;inset:6px;border-radius:9px;border:1px solid currentColor;opacity:.28;pointer-events:none}
-.hm-fc5-ic{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid rgba(198,255,51,.5);background:rgba(198,255,51,.08)}
-.hm-fc5-tx{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
-.hm-fc5 b{font-size:22px;letter-spacing:.08em;line-height:1}
-.hm-fc5 small{font-size:9px;letter-spacing:.22em;color:#8fb0d1}
-.hm-fc5:active{transform:scale(.97);filter:brightness(1.15)}
+/* الكارت الخامس: TRANSFERS — نفس لغة كروت الواجهة (تدرج غامق + إطار داخلي رفيع + Anton) */
+.hm-fc5{display:flex;align-items:center;justify-content:center;gap:12px;width:244px;height:62px;margin:2px auto 16px;padding:0 16px;border-radius:14px;position:relative;overflow:hidden;cursor:pointer;text-align:start;
+  color:#b9d46f;background:linear-gradient(160deg,#143452,#0a1b2d);border:1px solid rgba(185,212,111,.4);box-shadow:0 10px 24px rgba(0,0,0,.45);
+  transition:transform .15s ease,filter .15s ease;-webkit-tap-highlight-color:transparent}
+.hm-fc5>i{position:absolute;inset:5px;border-radius:10px;border:1px solid currentColor;opacity:.28;pointer-events:none}
+.hm-fc5-ic{display:block;flex:none;line-height:0}
+.hm-fc5-tx{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.hm-fc5 b{font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;font-size:16px;letter-spacing:.12em;line-height:1.1;color:#e6f2c4}
+.hm-fc5 small{font-size:8.5px;letter-spacing:.16em;opacity:.65}
+.hm-fc5:active{transform:scale(.97);filter:brightness(1.12)}
+@media (min-width:901px){body:not(.force-mobile-view) #hub .hm-fc5{margin-inline-start:282px}}
