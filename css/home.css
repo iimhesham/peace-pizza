@@ -264,7 +264,7 @@ button.hm-case{border-color:#4a4127}
     position:absolute;top:0;inset-inline-start:0;width:250px;
     padding:6px 0 0;align-items:flex-start;text-align:start;
   }
-  body:not(.force-mobile-view) #hub .hm-head-c .hm-badge{width:76px;height:76px}
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-badge{width:84px;height:auto}
   body:not(.force-mobile-view) #hub .hm-head-c .hm-brand{
     font-size:30px;text-align:start;text-shadow:2px 2px 0 #57c7a0;
   }

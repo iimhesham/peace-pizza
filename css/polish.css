@@ -35,8 +35,8 @@
 
 /* ---------- 4) لمعة اللوجو والنجمة ---------- */
 @keyframes plBadgeGlow{
-  0%,100%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(212,182,117,.12))}
-  50%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 22px rgba(212,182,117,.45))}
+  0%,100%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(16,185,129,.2))}
+  50%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 24px rgba(16,185,129,.55))}
 }
 .hm-head-c .hm-badge{animation:plBadgeGlow 4.5s ease-in-out infinite}
 
@@ -196,7 +196,12 @@ body.mode-home::before{
 }
 
 /* ---------- تخفيف: مفيش حركات filter مكررة، والضباب اتشال ---------- */
-.hm-head-c .hm-badge{animation:none;filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 14px rgba(212,182,117,.3))}
+.hm-head-c .hm-badge{animation:none;filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 16px rgba(16,185,129,.4))}
 .credits-toggle{animation:none}
 .fog{display:none}
 body.mode-home{background-color:#000!important}
+
+/* logo steam */
+.lg-steam{animation:lgSteam 3s ease-in-out infinite}.lg-steam.b{animation-delay:1s}.lg-steam.c{animation-delay:2s}
+@keyframes lgSteam{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:.85;transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.lg-steam{animation:none}}
