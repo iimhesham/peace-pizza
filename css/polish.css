@@ -35,8 +35,8 @@
 
 /* ---------- 4) لمعة اللوجو والنجمة ---------- */
 @keyframes plBadgeGlow{
-  0%,100%{filter:drop-shadow(0 3px 0 rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(87,199,160,.12))}
-  50%{filter:drop-shadow(0 3px 0 rgba(0,0,0,.5)) drop-shadow(0 0 22px rgba(87,199,160,.5))}
+  0%,100%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(212,182,117,.12))}
+  50%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 22px rgba(212,182,117,.45))}
 }
 .hm-head-c .hm-badge{animation:plBadgeGlow 4.5s ease-in-out infinite}
 
@@ -58,7 +58,7 @@
 #hub .hm-row::after{content:"";position:absolute;z-index:1;pointer-events:none;inset:5px;border-radius:10px;border:1px solid rgba(var(--ac),.22)}
 #hub .hm-row:active{border-color:rgba(var(--ac),.75);filter:brightness(1.1)}
 #hub .hm-row .hm-txt b{color:#f1ead8}
-#hub .hm-row .hm-txt small{color:#9aa89f}
+#hub .hm-row .hm-txt small{color:#a09e95}
 #hub .hm-row .hm-chev{color:rgba(var(--ac),.8)}
 #hub .hm-row .hm-ico{
   width:46px;height:60px;border-radius:10px;
@@ -104,7 +104,7 @@
 /* ---------- الستاتس: شريط تذاكر بنقرتين وخط تقطيع ---------- */
 #hub .hm-stats{
   margin-top:22px;border:1px solid rgba(212,182,117,.38);border-radius:14px;
-  background:linear-gradient(160deg,#17261f,#0d1612);
+  background:linear-gradient(160deg,#1a1814,#0e0d0b);
   -webkit-mask:radial-gradient(circle 9px at 33.333% 0,#0000 97%,#000),radial-gradient(circle 9px at 33.333% 100%,#0000 97%,#000),radial-gradient(circle 9px at 66.667% 0,#0000 97%,#000),radial-gradient(circle 9px at 66.667% 100%,#0000 97%,#000);
   -webkit-mask-composite:source-in,source-in,source-in,source-in;
   mask:radial-gradient(circle 9px at 33.333% 0,#0000 97%,#000),radial-gradient(circle 9px at 33.333% 100%,#0000 97%,#000),radial-gradient(circle 9px at 66.667% 0,#0000 97%,#000),radial-gradient(circle 9px at 66.667% 100%,#0000 97%,#000);
@@ -113,7 +113,7 @@
 #hub .hm-stats>div{padding:16px 6px 14px}
 #hub .hm-stats>div+div{border-inline-start:1.5px dashed rgba(212,182,117,.4)}
 #hub .hm-stats b{color:#efe6cf}
-#hub .hm-stats span{color:#a2b0a7}
+#hub .hm-stats span{color:#a8a69c}
 
 /* ---------- التابز: تبويبات فولدر ---------- */
 #hub .hm-tabs{
@@ -132,7 +132,7 @@
 #hub .hm-tabs button:focus-visible{outline-color:#d4b675}
 
 /* ---------- البحث: بطاقة أرشيف ---------- */
-#hub .hm-search{margin-top:14px;background:#0f1914;border:1px dashed rgba(212,182,117,.4);border-radius:10px;color:#d4b675}
+#hub .hm-search{margin-top:14px;background:#111110;border:1px dashed rgba(212,182,117,.4);border-radius:10px;color:#d4b675}
 #hub .hm-search:focus-within{border-style:solid;border-color:#d4b675}
 
 /* ---------- عناوين الأقسام: ختم + خط متقطع ---------- */
@@ -147,7 +147,7 @@
 body.mode-home .footer{
   display:flex;align-items:center;justify-content:center;gap:12px;direction:ltr;
   max-width:520px;margin:8px auto 0;padding:24px 4px 32px;
-  font-family:'Anton','Impact','Arial Black',sans-serif;font-size:11px;letter-spacing:.2em;color:#6c7c74;
+  font-family:'Anton','Impact','Arial Black',sans-serif;font-size:11px;letter-spacing:.2em;color:#77756c;
 }
 body.mode-home .footer::before,
 body.mode-home .footer::after{content:"";flex:none;width:56px;height:12px;opacity:.45;
@@ -168,3 +168,19 @@ body.mode-home .footer::after{content:"";flex:none;width:56px;height:12px;opacit
   #hub .hm-fc-stamp,#hub .hm-fc5-stamp,
   .hm-head-c .hm-badge,.credits-toggle{animation:none}
 }
+
+
+/* ---------- لون الموقع: من الأخضر للأسود (مع الحفاظ على الخلفية المغبشة) ---------- */
+body{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(24,23,20,.32) 0%,rgba(2,2,2,.55) 48%,rgba(2,2,2,.86) 100%),
+    url('../img/bg-black.jpg') center top/cover no-repeat;
+  background-color:#050505;
+}
+body.mode-home{background-color:#080808}
+.home{
+  --h-panel:#141413;--h-panel-hi:#1b1a18;
+  --h-line:#2a2927;--h-line-hi:#41403b;
+  --h-text:#ece8dd;--h-muted:#9a988f;--h-faint:#77756c;
+}
+.hm-spark{color:#d4b675}
