@@ -36,7 +36,7 @@ var CSS=':root{--o-bell:'+SV("<path d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9
 '.ol-st{background:#141413;border:1px solid #2a2927;border-radius:12px;padding:12px;margin:8px 0;text-align:right}.ol-st b{color:#d4b675}'+
 '.ol-hub{display:block;width:calc(100% - 4px);margin:12px 2px;padding:14px;border-radius:14px;border:1px dashed #41403b;background:#141413;color:#d4b675;font:400 20px Anton,Impact,sans-serif;letter-spacing:3px}.ol-hub small{display:block;font:500 12px "IBM Plex Sans Arabic",sans-serif;letter-spacing:0;color:#8d9d95;margin-top:3px}';
 function shell(h){ov.innerHTML='<div class="ol-c"><button class="ol-x" onclick="OL.exit()" aria-label="خروج">'+IC('x')+'</button>'+h+'</div>';}
-function menu(){shell(KICK('ONLINE')+'<h2>'+IC('globe')+' أونلاين</h2><div class="ol-w">اعمل غرفة (إنت الـ Host)</div><div class="ol-g3"><button class="ol-b" onclick="OL.create(\'flags\')">أعلام</button><button class="ol-b" onclick="OL.create(\'story\')">أنا مين</button><button class="ol-b" onclick="OL.create(\'career\')">انتقالات</button></div><div class="ol-or">أو</div><input id="olCode" inputmode="numeric" maxlength="4" placeholder="كود الغرفة" dir="ltr"><button class="ol-b g" onclick="OL.join()">ادخل كفريق</button><button class="ol-b o" onclick="OL.stats()">'+IC('chart',1)+' إحصائياتي وإنجازاتي</button>');}
+function menu(){shell(KICK('ONLINE')+'<h2>'+IC('globe')+' أونلاين</h2><div class="ol-w">اعمل غرفة (إنت الـ Host)</div><div class="ol-g3"><button class="ol-b" onclick="OL.create(\'flags\')">أعلام</button><button class="ol-b" onclick="OL.create(\'story\')">أنا مين</button><button class="ol-b" onclick="OL.create(\'career\')">انتقالات</button></div><div class="ol-or">أو</div><input id="olCode" inputmode="numeric" maxlength="4" placeholder="كود الغرفة" dir="ltr"><button class="ol-b g" onclick="OL.join()">ادخل كفريق</button><button class="ol-b o" onclick="OLS.open()">'+IC('book')+' قصص الجرايم</button><button class="ol-b o" onclick="OL.stats()">'+IC('chart',1)+' إحصائياتي وإنجازاتي</button>');}
 function pl(){var P=S.players||{};return Object.keys(P).map(function(k){return P[k];});}
 function ids(){return pl().map(function(p){return p.uid;});}
 function board(){var sc=S.scores||{};return pl().map(function(p){return'<div class="ol-t"><b>'+(p.photo?'<img class="ol-av" referrerpolicy="no-referrer" alt="" src="'+e(p.photo)+'">':'')+e(p.name)+'</b><span>'+((sc[p.uid]||{}).pts||0)+'</span></div>';}).join("")||'<div class="ol-w">لسه محدش دخل</div>';}
@@ -106,6 +106,7 @@ function open(){
   s.onload=function(){db=firebase.database();go();};s.onerror=function(){T("مقدرتش أحمّل الأونلاين");};document.head.appendChild(s);
 }
 window.OL={open:open,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,exit:exit,back:back,stats:stats,close:function(){db.ref("rooms/"+code).remove();}};
+var ls=document.createElement("script");ls.src="js/online-story.js";document.head.appendChild(ls);
 var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
 var h=document.querySelector("#hub .hm-stats");
 if(h&&h.parentNode){var bt=document.createElement("button");bt.className="ol-hub";bt.innerHTML='ONLINE<small>العب مع صحابك من موبايلات مختلفة · أعلام · أنا مين · انتقالات</small>';
