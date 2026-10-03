@@ -131,6 +131,7 @@ function storySetHardMode(on){
     if(storyRevealed>maxClues)storyRevealed=maxClues;
   }
   storySaveState();
+  storyPaintMode();
   toast(on?"الوضع الصعب: 4 أدلة":"الوضع العادي: 3 أدلة");
 }
 
@@ -265,8 +266,8 @@ function renderStoryResult(){
 
   const a=storyScores.a,b=storyScores.b;
   banner.textContent=a===b
-    ?`تعادل ${a} : ${b} 🤝`
-    :`🏆 ${a>b?storyTeamNames.a:storyTeamNames.b} فاز ${Math.max(a,b)} : ${Math.min(a,b)}`;
+    ?`تعادل ${a} : ${b}`
+    :`${a>b?storyTeamNames.a:storyTeamNames.b} فاز ${Math.max(a,b)} : ${Math.min(a,b)}`;
 
   const winsA=storyHistory.filter(h=>h.winner==="a").length;
   const winsB=storyHistory.filter(h=>h.winner==="b").length;
@@ -340,8 +341,8 @@ function renderStoryScores(){
   const set=(id,t)=>{const el=document.getElementById(id);if(el)el.textContent=t;};
   set("storyLeftNameA",storyTeamNames.a);
   set("storyLeftNameB",storyTeamNames.b);
-  set("storyCorrectA",`صح ✅ ${storyTeamNames.a}`);
-  set("storyCorrectB",`صح ✅ ${storyTeamNames.b}`);
+  set("storyCorrectA",`صح · ${storyTeamNames.a}`);
+  set("storyCorrectB",`صح · ${storyTeamNames.b}`);
 }
 
 function renderStoryRound(){
@@ -379,7 +380,7 @@ function renderStoryRound(){
     const right=document.getElementById("storyCorrect"+T);
     if(wrong){
       wrong.disabled=blocked;
-      wrong.textContent=`غلط ❌ ${storyTeamNames[t]}`;
+      wrong.textContent=`غلط · ${storyTeamNames[t]}`;
     }
     if(right)right.disabled=blocked;
   });
@@ -397,7 +398,7 @@ function renderStoryRound(){
   const ansBtn=document.getElementById("storyAnswerBtn");
   if(ansBtn){
     ansBtn.classList.toggle("hidden",storyRoundOver);
-    ansBtn.textContent=storyAnswerShown?"إخفاء الإجابة 🙈":"إظهار الإجابة (للمشرف) 👁️";
+    ansBtn.textContent=storyAnswerShown?"إخفاء الإجابة":"إظهار الإجابة (للمشرف)";
   }
 
   const ptsNow=document.getElementById("storyPointsNow");
@@ -407,3 +408,13 @@ function renderStoryRound(){
 /* restore the saved game once, when the page loads */
 storyLoadState();
 storyRefreshStartBtn();
+
+
+/* حالة وضع اللعب (عادي/صعب) على كروت الأدلة */
+function storyPaintMode(){
+  const hard=storyClueCount>=4;
+  const a=document.getElementById("storyModeNormal"),b=document.getElementById("storyModeHard");
+  if(a)a.classList.toggle("is-on",!hard);
+  if(b)b.classList.toggle("is-on",hard);
+}
+setTimeout(storyPaintMode,0);

@@ -198,10 +198,12 @@ function flagsRenderResult(){
   set("fgResPct",total?`${pct}%`:"—");
   set("fgResMsg",
     !total?"لسه محدش جاوب على أي علم"
-    :pct>=90?"أسطورة الأعلام 🔥"
-    :pct>=70?"ممتاز 👏"
+    :pct>=90?"أسطورة الأعلام"
+    :pct>=70?"ممتاز"
     :pct>=50?"كويس، فيه مجال للتحسن"
-    :"محتاجين مراجعة 😅");
+    :"محتاجين مراجعة");
+  const rc=document.querySelector("#fgResult .fg-res-card");
+  if(rc){rc.classList.toggle("is-pass",total>0&&pct>=50);rc.classList.toggle("is-fail",total>0&&pct<50);}
   set("fgResMeta",
     `${fgMode==="historical"?"أعلام قديمة":"أعلام دلوقتي"} · اتسجلت ${total} من ${fgDeck.length}`+(fgSkipped?` · اتخطينا ${fgSkipped}`:""));
 

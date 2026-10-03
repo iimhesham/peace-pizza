@@ -99,7 +99,7 @@ function careerUseRisk(team){
   careerPrevShown=0;careerPeek=new Set();careerFlipIdx=-1;
   careerRisk=team;careerRiskUsed[team]=true;
   careerSaveState();careerRenderRound();
-  toast(`🎲 ريسك ${careerTeamNames[team]}: سؤال صعب · ${CAREER_BASE_BEFORE+CAREER_RISK_BONUS} نقط`);
+  toast(`ريسك ${careerTeamNames[team]}: سؤال صعب · ${CAREER_BASE_BEFORE+CAREER_RISK_BONUS} نقط`);
 }
 
 /* ---------- save / load ---------- */
@@ -324,8 +324,8 @@ function careerRenderScores(){
   set("careerNameB",careerTeamNames.b);
   set("careerLeftNameA",careerTeamNames.a);
   set("careerLeftNameB",careerTeamNames.b);
-  set("careerCorrectA",`صح ✅ ${careerTeamNames.a}`);
-  set("careerCorrectB",`صح ✅ ${careerTeamNames.b}`);
+  set("careerCorrectA",`صح · ${careerTeamNames.a}`);
+  set("careerCorrectB",`صح · ${careerTeamNames.b}`);
 }
 
 function careerRenderRound(){
@@ -401,7 +401,7 @@ function careerRenderRound(){
       ?`مدرب · ${n} محطات تدريب`
       :`لاعب ${cur?"حالي":"سابق"} · ${n} محطات`;
     kind.classList.toggle("is-cur",careerCurrent.t!=="c"&&cur);
-    if(careerRisk)kind.textContent+=` · 🎲 ريسك ${careerTeamNames[careerRisk]}`;
+    if(careerRisk)kind.textContent+=` · ريسك ${careerTeamNames[careerRisk]}`;
     kind.classList.toggle("is-risk",!!careerRisk);
   }
 
@@ -420,12 +420,12 @@ function careerRenderRound(){
     const blocked=careerRoundOver||careerGuesses[t]>=maxG;
     const wrong=document.getElementById("careerWrong"+T);
     const right=document.getElementById("careerCorrect"+T);
-    if(wrong){wrong.disabled=blocked;wrong.textContent=`غلط ❌ ${careerTeamNames[t]}`;}
+    if(wrong){wrong.disabled=blocked;wrong.textContent=`غلط · ${careerTeamNames[t]}`;}
     if(right)right.disabled=blocked;
   });
 
   const pk=document.getElementById("careerPeekAllBtn");
-  if(pk){pk.disabled=careerRoundOver;pk.textContent=careerPeek.size?"إخفاء المحطات المفتوحة 🙈":"إظهار كل المسيرة 👁️";}
+  if(pk){pk.disabled=careerRoundOver;pk.textContent=careerPeek.size?"إخفاء المحطات المفتوحة":"إظهار كل المسيرة";}
   const skip=document.getElementById("careerSkipBtn");
   if(skip)skip.disabled=careerRoundOver;
 
@@ -436,7 +436,7 @@ function careerRenderRound(){
   const ansBtn=document.getElementById("careerAnswerBtn");
   if(ansBtn){
     ansBtn.classList.toggle("hidden",careerRoundOver);
-    ansBtn.textContent=careerAnswerShown?"إخفاء الإجابة 🙈":"إظهار الإجابة (للمشرف) 👁️";
+    ansBtn.textContent=careerAnswerShown?"إخفاء الإجابة":"إظهار الإجابة (للمشرف)";
   }
   setTxt("careerPointsNow",careerRisk&&!careerRoundOver
     ?`${careerPointsFor(null)} · ريسك ${careerTeamNames[careerRisk]}: ${careerPointsFor(careerRisk)}`
@@ -445,7 +445,7 @@ function careerRenderRound(){
     const rb=document.getElementById("careerRisk"+t.toUpperCase());
     if(!rb)return;
     rb.disabled=!careerRiskAllowed(t);
-    rb.textContent=careerRiskUsed[t]?`🎲 ${careerTeamNames[t]}: اتستخدم`:`🎲 ريسك ${careerTeamNames[t]}`;
+    rb.textContent=careerRiskUsed[t]?`${careerTeamNames[t]}: اتستخدم`:`ريسك ${careerTeamNames[t]}`;
   });
 }
 
@@ -511,8 +511,8 @@ function careerRenderResult(){
   if(!banner||!meta||!list)return;
   const a=careerScores.a,b=careerScores.b;
   banner.textContent=a===b
-    ?`تعادل ${a} : ${b} 🤝`
-    :`🏆 ${a>b?careerTeamNames.a:careerTeamNames.b} فاز ${Math.max(a,b)} : ${Math.min(a,b)}`;
+    ?`تعادل ${a} : ${b}`
+    :`${a>b?careerTeamNames.a:careerTeamNames.b} فاز ${Math.max(a,b)} : ${Math.min(a,b)}`;
   const winsA=careerHistory.filter(h=>h.winner==="a").length;
   const winsB=careerHistory.filter(h=>h.winner==="b").length;
   const nobody=careerHistory.length-winsA-winsB;
