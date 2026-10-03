@@ -115,10 +115,11 @@
       firebase.initializeApp(cfg);
       auth=firebase.auth();
       auth.onAuthStateChanged(function(u){
-        var was=user;user=u||null;render();
+        var was=user;user=u||null;render();window.ppUser=user;
         if(user){if(!was)say("أهلًا "+((user.displayName||"").split(" ")[0]||"بيك"));pull();}
       });
       auth.getRedirectResult().catch(function(){});
+      loadScript("js/online.js").catch(function(){});
     }).catch(function(){if(chip)chip.style.display="none";});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
