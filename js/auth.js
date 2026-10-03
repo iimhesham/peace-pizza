@@ -33,7 +33,7 @@
     chip.addEventListener("click",function(){
       if(typeof playClickSound==="function")playClickSound();
       if(!auth)return;
-      if(!user){signIn();}else{pop.classList.toggle("hidden");}
+      if(!user){signIn();}else if(window.OL&&OL.account){OL.account();}else{pop.classList.toggle("hidden");}
     });
     document.addEventListener("click",function(e){
       if(!pop.classList.contains("hidden")&&!pop.contains(e.target)&&e.target!==chip&&!chip.contains(e.target))pop.classList.add("hidden");
@@ -70,6 +70,8 @@
       say("فشل تسجيل الدخول");
     });
   }
+
+  window.ppSignOut=function(){if(auth)auth.signOut().then(function(){say("اتسجّل خروج");});};
 
   /* ---------- مزامنة السيرفر ---------- */
   async function token(){return user?await user.getIdToken():null;}

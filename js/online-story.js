@@ -18,7 +18,6 @@ function rg(){return GAMES[S.st];}
 function ids(){return Object.keys(S.crew||{});}
 function open(){
   db=firebase.database();
-  if((U().email||"").toLowerCase()!==GM){shell(K("CRIME FILES")+'<h2>'+IC("book")+' قصص الجرايم</h2><div class="ol-w">الـ GM بيفتح الغرفة، وإنت بتدخل بالكود من القايمة الرئيسية (ادخل كفريق).</div><button class="ol-b o" onclick="OL.back()">رجوع</button>');return;}
   shell(K("CRIME FILES")+'<h2>'+IC("book")+' اختار القصة</h2>'+Object.keys(GAMES).map(function(k){return'<button class="ol-b" onclick="OLS.create(\''+k+'\')">'+e(NM[k]||k)+'</button>';}).join("")+'<button class="ol-b o" onclick="OL.back()">رجوع</button>');
 }
 function create(k){var u=U();clear();db=firebase.database();code=String(1000+Math.floor(Math.random()*9000));role="host";
