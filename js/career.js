@@ -6,7 +6,9 @@
    الداتا في CAREER_PLAYERS (career-data.js). المحطة الرابعة = 1 معناها إعارة.
 ========================================================= */
 
-const CAREER_POINTS=[3,2,1];
+const CAREER_BASE_BEFORE=2;  // جاوبوا قبل ما المسيرة تخلص
+const CAREER_BASE_AFTER=1;   // بعد ما المسيرة تخلص كلها
+const CAREER_RISK_BONUS=1;   // كارت الريسك: +1
 const CAREER_MAX_GUESSES=2;
 const CAREER_STORAGE_KEY="careerState";
 const CAREER_RESET_CONFIRM_MS=3000;
@@ -19,6 +21,8 @@ let careerOrder=[];       // ترتيب كشف المحطات للجولة ال�
 let careerStages=3;       // 3 عادي · 4 صعب
 let careerFilter="all";   // all | p | c
 let careerStage=1;
+let careerRisk=null;                 // الفريق اللي مفعّل الريسك في الجولة دي
+let careerRiskUsed={a:false,b:false}; // مرة واحدة لكل فريق
 let careerPeek=new Set(); // محطات المشرف فتحها بالضغط
 let careerFlipIdx=-1;
 let careerPrevShown=0;    // عدد المحطات اللي كانت ظاهرة قبل آخر دليل (للأنيميشن)
@@ -27,7 +31,7 @@ let careerHistory=[];
 let careerAnswerShown=false;
 let careerViewResult=false;
 let careerRoundOver=false;
-let careerScores={a:0,b:0};
+let careerScores={a:0,b:0};careerRiskUsed={a:false,b:false};
 let careerTeamNames={a:"الفريق الأول",b:"الفريق الثاني"};
 let careerResetArmed=false;
 let careerResetTimer=null;
@@ -41,6 +45,7 @@ function careerPool(){
 
 /* عدد المحطات المكشوفة في كل دليل (دايمًا بيزيد، والأخير بيكشف الكل) */
 function careerStageCount(n,stage){
+  if(stage>=careerStages)return n;   // آخر دليل بيكشف المسيرة كلها
   let prev=1,c=2;
   for(let k=1;k<=stage;k++){
     c=Math.round(n*CAREER_FRACTIONS[k-1]);
@@ -56,8 +61,45 @@ function careerShownCount(){
   return careerStageCount(careerCurrent.c.length,careerStage);
 }
 
-function careerCurrentPoints(){
-  return CAREER_POINTS[careerStage-1]||0;
+function careerAllVisible(){
+  if(!careerCurrent)return false;
+  const n=careerCurrent.c.length;
+  if(careerRoundOver)return true;
+  const vis=new Set([...careerOrder.slice(0,careerShownCount()),...careerPeek]);
+  return vis.size>=n;
+}
+
+function careerPointsFor(team){
+  const base=careerAllVisible()?CAREER_BASE_AFTER:CAREER_BASE_BEFORE;
+  return base+(team&&careerRisk===team?CAREER_RISK_BONUS:0);
+}
+
+function careerCurrentPoints(){return careerPointsFor(null);}
+
+/* ---------- كارت الريسك ---------- */
+function careerRiskAllowed(team){
+  return !!careerCurrent&&!careerRoundOver&&!careerRiskUsed[team]&&careerRisk===null
+    &&careerStage===1&&careerGuesses.a===0&&careerGuesses.b===0&&careerPeek.size===0;
+}
+
+function careerUseRisk(team){
+  if(!careerRiskAllowed(team))return;
+  const isHard=i=>CAREER_PLAYERS[i].h&&i!==careerCurrentIdx;
+  let pick=careerDeck.filter(isHard);
+  let fromDeck=pick.length>0;
+  if(!fromDeck)pick=careerPool().filter(isHard);
+  if(!pick.length){toast("مفيش سؤال صعب متاح دلوقتي");return;}
+  playRevealSound();
+  const idx=pick[Math.floor(Math.random()*pick.length)];
+  if(fromDeck)careerDeck.splice(careerDeck.indexOf(idx),1);
+  careerDeck.splice(Math.floor(Math.random()*(careerDeck.length+1)),0,careerCurrentIdx); // السؤال القديم يرجع للدك
+  careerCurrentIdx=idx;
+  careerCurrent=CAREER_PLAYERS[idx];
+  careerOrder=careerShuffleOrder(careerCurrent.c.length);
+  careerPrevShown=0;careerPeek=new Set();careerFlipIdx=-1;
+  careerRisk=team;careerRiskUsed[team]=true;
+  careerSaveState();careerRenderRound();
+  toast(`🎲 ريسك ${careerTeamNames[team]}: سؤال صعب · ${CAREER_BASE_BEFORE+CAREER_RISK_BONUS} نقط`);
 }
 
 /* ---------- save / load ---------- */
@@ -67,6 +109,7 @@ function careerLoadState(){
     if(!s)return;
     if(typeof s.scoreA==="number")careerScores.a=s.scoreA;
     if(typeof s.scoreB==="number")careerScores.b=s.scoreB;
+    if(s.riskUsed)careerRiskUsed={a:!!s.riskUsed.a,b:!!s.riskUsed.b};
     if(s.teamA)careerTeamNames.a=s.teamA;
     if(s.teamB)careerTeamNames.b=s.teamB;
     if(s.stages===3||s.stages===4)careerStages=s.stages;
@@ -95,6 +138,7 @@ function careerLoadState(){
         a:Math.min(Math.max(parseInt(g.a,10)||0,0),CAREER_MAX_GUESSES),
         b:Math.min(Math.max(parseInt(g.b,10)||0,0),CAREER_MAX_GUESSES)
       };
+      careerRisk=(s.risk==="a"||s.risk==="b")?s.risk:null;
       careerRoundOver=s.roundOver===true;
       careerAnswerShown=careerRoundOver;
       careerPrevShown=careerShownCount();
@@ -111,7 +155,8 @@ function careerSaveState(){
       total:CAREER_PLAYERS.length,
       deck:careerDeck,current:careerCurrentIdx,order:careerOrder,
       stage:careerStage,guesses:careerGuesses,
-      roundOver:careerRoundOver,history:careerHistory
+      roundOver:careerRoundOver,history:careerHistory,
+      risk:careerRisk,riskUsed:careerRiskUsed
     }));
   }catch(e){}
   careerRefreshStartBtn();
@@ -189,7 +234,7 @@ function careerNextRound(silent){
   careerCurrentIdx=idx;
   careerCurrent=CAREER_PLAYERS[idx];
   careerOrder=careerShuffleOrder(careerCurrent.c.length);
-  careerPeek=new Set();careerFlipIdx=-1;
+  careerPeek=new Set();careerFlipIdx=-1;careerRisk=null;
   careerStage=1;
   careerGuesses={a:0,b:0};
   careerRoundOver=false;
@@ -247,7 +292,7 @@ function careerCorrectGuess(team){
   if(careerRoundOver||!careerCurrent)return;
   if(careerGuesses[team]>=CAREER_MAX_GUESSES)return;
   playRevealSound();
-  const pts=careerCurrentPoints();
+  const pts=careerPointsFor(team);
   careerScores[team]+=pts;
   careerPrevShown=careerShownCount();
   careerEndRound(team,pts);
@@ -356,6 +401,8 @@ function careerRenderRound(){
       ?`مدرب · ${n} محطات تدريب`
       :`لاعب ${cur?"حالي":"سابق"} · ${n} محطات`;
     kind.classList.toggle("is-cur",careerCurrent.t!=="c"&&cur);
+    if(careerRisk)kind.textContent+=` · 🎲 ريسك ${careerTeamNames[careerRisk]}`;
+    kind.classList.toggle("is-risk",!!careerRisk);
   }
 
   const hint=document.getElementById("careerShownInfo");
@@ -391,7 +438,15 @@ function careerRenderRound(){
     ansBtn.classList.toggle("hidden",careerRoundOver);
     ansBtn.textContent=careerAnswerShown?"إخفاء الإجابة 🙈":"إظهار الإجابة (للمشرف) 👁️";
   }
-  setTxt("careerPointsNow",careerCurrentPoints());
+  setTxt("careerPointsNow",careerRisk&&!careerRoundOver
+    ?`${careerPointsFor(null)} · ريسك ${careerTeamNames[careerRisk]}: ${careerPointsFor(careerRisk)}`
+    :careerPointsFor(null));
+  ["a","b"].forEach(t=>{
+    const rb=document.getElementById("careerRisk"+t.toUpperCase());
+    if(!rb)return;
+    rb.disabled=!careerRiskAllowed(t);
+    rb.textContent=careerRiskUsed[t]?`🎲 ${careerTeamNames[t]}: اتستخدم`:`🎲 ريسك ${careerTeamNames[t]}`;
+  });
 }
 
 function careerFlipStop(i){
@@ -439,7 +494,7 @@ function careerBackToGame(){
 
 function careerResultNewGame(){
   playClickSound();
-  careerScores={a:0,b:0};
+  careerScores={a:0,b:0};careerRiskUsed={a:false,b:false};
   careerHistory=[];
   careerViewResult=false;
   careerRefillDeck();
@@ -493,7 +548,7 @@ function careerResetScores(){
     return;
   }
   careerDisarmReset();
-  careerScores={a:0,b:0};
+  careerScores={a:0,b:0};careerRiskUsed={a:false,b:false};
   careerHistory=[];
   careerRefillDeck();
   careerNextRound(true);
