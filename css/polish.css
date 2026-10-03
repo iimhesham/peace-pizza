@@ -177,10 +177,26 @@ body{
     url('../img/bg-black.jpg') center top/cover no-repeat;
   background-color:#050505;
 }
-body.mode-home{background-color:#080808}
+
 .home{
   --h-panel:#141413;--h-panel-hi:#1b1a18;
   --h-line:#2a2927;--h-line-hi:#41403b;
   --h-text:#ece8dd;--h-muted:#9a988f;--h-faint:#77756c;
 }
 .hm-spark{color:#d4b675}
+
+
+/* ---------- الرئيسية: أسود قحت + خلفية الشطرنج (طبقة ثابتة واحدة، من غير background-attachment) ---------- */
+body.mode-home{background:#000}
+body.mode-home::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 38%,rgba(0,0,0,0) 0%,rgba(0,0,0,.55) 100%),
+    url('../img/bg-checker.webp') center/cover no-repeat;
+}
+
+/* ---------- تخفيف: مفيش حركات filter مكررة، والضباب اتشال ---------- */
+.hm-head-c .hm-badge{animation:none;filter:drop-shadow(0 4px 0 rgba(0,0,0,.5)) drop-shadow(0 0 14px rgba(212,182,117,.3))}
+.credits-toggle{animation:none}
+.fog{display:none}
+body.mode-home{background-color:#000!important}
