@@ -1,32 +1,32 @@
 /* =========================================================
    الانتقالات — مسيرة لاعب/مدرب
-   Charcoal #15110d · Ember #ff8a3d · Cream #f6ead9
+   Charcoal #001a33 · Ember #c6ff33 · Cream #f2ffd6
    Only #career and #career-game (+ body.mode-career).
    Same flat panels / thin borders as the rest of the site;
    the timeline is the only new component.
 ========================================================= */
-body.mode-career{background:#15110d!important}
+body.mode-career{background:#001a33!important}
 body.mode-career #toast{
-  background:#ff8a3d!important;border:1px solid #15110d!important;color:#1d1209!important;
+  background:#c6ff33!important;border:1px solid #001a33!important;color:#00203f!important;
 }
 
 .app #career,.app #career-game{
-  --cr-bg:#15110d;
-  --cr-card:#1e1812;
-  --cr-card2:#28200f;
-  --cr-accent:#ff8a3d;
-  --cr-ink:#f6ead9;
-  --cr-muted:#b9a58b;
-  --cr-line:rgba(255,138,61,.38);
+  --cr-bg:#001a33;
+  --cr-card:#00284d;
+  --cr-card2:#003566;
+  --cr-accent:#c6ff33;
+  --cr-ink:#f2ffd6;
+  --cr-muted:#8fb0d1;
+  --cr-line:rgba(198,255,51,.38);
 
   --card:var(--cr-card);
-  --card2:#261d14;
+  --card2:#00305a;
   --border:var(--cr-line);
   --text:var(--cr-ink);
   --muted:var(--cr-muted);
   --a-accent:var(--cr-accent);
-  --a-accent-soft:rgba(255,138,61,.14);
-  --a-accent-line:rgba(255,138,61,.5);
+  --a-accent-soft:rgba(198,255,51,.14);
+  --a-accent-line:rgba(198,255,51,.5);
   color:var(--cr-ink);
 }
 
@@ -34,14 +34,14 @@ body.mode-career #toast{
 .app #career-game h1,.app #career-game h2,.app #career-game h3{color:var(--cr-ink)}
 .app #career .subtitle,.app #career-game .subtitle{color:var(--cr-muted)}
 .app #career .fb-pitch-line,.app #career-game .fb-pitch-line{background:var(--cr-line)}
-.app #career .notice,.app #career-game .notice{background:#261d14;color:var(--cr-ink)}
+.app #career .notice,.app #career-game .notice{background:#00305a;color:var(--cr-ink)}
 .app #career .btn.primary,.app #career .btn.primary:hover,
-.app #career-game .btn.primary,.app #career-game .btn.primary:hover{background:var(--cr-accent);color:#1d1209}
+.app #career-game .btn.primary,.app #career-game .btn.primary:hover{background:var(--cr-accent);color:#00203f}
 .app #career .btn.ghost,.app #career .btn.ghost:hover,
 .app #career-game .btn.ghost,.app #career-game .btn.ghost:hover{border-color:var(--cr-line);color:var(--cr-ink)}
 .app #career .btn:focus-visible,.app #career-game .btn:focus-visible{outline-color:var(--cr-accent)}
-.app #career input{background:#100c09;border-color:var(--cr-line);color:var(--cr-ink)}
-.app #career input::placeholder{color:#7d6c58}
+.app #career input{background:#00101f;border-color:var(--cr-line);color:var(--cr-ink)}
+.app #career input::placeholder{color:#5f84a8}
 
 /* title + kind chip */
 .app #career .cr-route{display:block;margin:0 0 6px;color:var(--cr-accent)}
@@ -83,9 +83,9 @@ body.mode-career #toast{
   flex:1;min-width:0;margin-bottom:10px;padding:11px 14px;border-radius:12px;
   display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;
 }
-.cr-stop.is-open .cr-dot{background:var(--cr-accent);border-color:var(--cr-accent);color:#1d1209}
-.cr-stop.is-open .cr-card{background:#261d14;border:1px solid var(--cr-line);border-right:3px solid var(--cr-accent)}
-.cr-stop.is-hidden .cr-card{background:transparent;border:1px dashed rgba(255,138,61,.28);justify-content:center}
+.cr-stop.is-open .cr-dot{background:var(--cr-accent);border-color:var(--cr-accent);color:#00203f}
+.cr-stop.is-open .cr-card{background:#00305a;border:1px solid var(--cr-line);border-right:3px solid var(--cr-accent)}
+.cr-stop.is-hidden .cr-card{background:transparent;border:1px dashed rgba(198,255,51,.28);justify-content:center}
 .cr-club{flex:1;min-width:0;font-size:16px;font-weight:700;color:var(--cr-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cr-years{flex:none;font-size:12.5px;color:var(--cr-muted)}
 .cr-stop.is-open .cr-card.is-loan{border-style:dashed;border-right:3px dashed var(--cr-accent)}
@@ -93,19 +93,44 @@ body.mode-career #toast{
   flex:none;padding:1px 9px;border-radius:999px;font-size:11.5px;font-weight:700;
   background:var(--a-accent-soft);color:var(--cr-accent);border:1px solid var(--cr-line);
 }
-.cr-q{font-size:20px;font-weight:700;color:rgba(255,138,61,.5)}
+.cr-q{font-size:20px;font-weight:700;color:rgba(198,255,51,.5)}
 .cr-stop.is-new .cr-card{animation:crPop .5s ease-out}
 @keyframes crPop{
-  0%{background:rgba(255,138,61,.4);transform:translateX(8px)}
-  100%{background:#261d14;transform:none}
+  0%{background:rgba(198,255,51,.4);transform:translateX(8px)}
+  100%{background:#00305a;transform:none}
 }
 
 /* results list */
 .cr-result-row{
-  background:#261d14;border:1px solid var(--cr-line);border-right:3px solid var(--cr-accent);
+  background:#00305a;border:1px solid var(--cr-line);border-right:3px solid var(--cr-accent);
   border-radius:12px;padding:12px 14px;text-align:right;
 }
 .cr-result-name{font-weight:700;font-size:14px;color:var(--cr-accent)}
 .cr-result-row p{margin:6px 0 0;color:var(--cr-ink);font-size:14.5px}
 
 @media (prefers-reduced-motion:reduce){.cr-stop.is-new .cr-card{animation:none}}
+
+/* ===== tech skin ===== */
+body.mode-career{background:#001a33 linear-gradient(rgba(198,255,51,.05) 1px,transparent 1px) 0 0/100% 28px,linear-gradient(90deg,rgba(198,255,51,.05) 1px,transparent 1px) 0 0/28px 100%!important}
+.app #career h1,.app #career-game h1{letter-spacing:.02em;text-shadow:0 0 18px rgba(198,255,51,.35)}
+.app #career-game .cr-kind{border-radius:2px;border:1px solid var(--cr-line);font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.app #career-game .cr-kind.is-cur{background:var(--cr-accent);color:#00203f;box-shadow:0 0 14px rgba(198,255,51,.45)}
+.cr-card{position:relative;border-radius:4px!important;background:linear-gradient(135deg,rgba(0,53,102,.85),rgba(0,40,77,.9))!important;border:1px solid var(--cr-line)!important}
+.cr-card::before,.cr-card::after{content:"";position:absolute;width:9px;height:9px;border:2px solid var(--cr-accent);pointer-events:none;opacity:.85}
+.cr-card::before{top:-1px;inset-inline-start:-1px;border-width:2px 0 0 2px}
+.cr-card::after{bottom:-1px;inset-inline-end:-1px;border-width:0 2px 2px 0}
+.cr-stop.is-open .cr-card{box-shadow:0 0 16px rgba(198,255,51,.14),inset 0 0 20px rgba(198,255,51,.05)}
+.cr-stop.is-hidden .cr-card{background:repeating-linear-gradient(135deg,rgba(198,255,51,.05) 0 6px,transparent 6px 12px),#001f3d!important;border-style:dashed!important}
+.cr-stop.is-new .cr-card{animation:crScan .9s ease-out}
+@keyframes crScan{0%{box-shadow:0 0 0 rgba(198,255,51,0);filter:brightness(2)}100%{box-shadow:0 0 16px rgba(198,255,51,.14);filter:none}}
+.cr-dot{border-radius:3px!important;font-family:ui-monospace,Menlo,Consolas,monospace;box-shadow:0 0 10px rgba(198,255,51,.3)}
+.cr-rail{background:linear-gradient(var(--cr-accent),rgba(198,255,51,.15))!important;width:2px!important}
+.cr-years,.cr-info,.cr-loan{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.04em}
+.cr-loan{border-radius:2px!important;border:1px solid var(--cr-accent)}
+.app #career .cr-chip.is-on{background:var(--cr-accent)!important;color:#00203f!important;box-shadow:0 0 14px rgba(198,255,51,.4)}
+.app #career .cr-chip{border-radius:3px!important}
+
+/* ===== Transformers font (حط الملف في fonts/Transformers.ttf) ===== */
+@font-face{font-family:"Transformers";src:local("Transformers"),url("../fonts/Transformers.ttf") format("truetype"),url("../fonts/Transformers.otf") format("opentype");font-display:swap}
+.tf-title{font-family:"Transformers",Impact,"Arial Black",sans-serif!important;letter-spacing:.06em;font-weight:400}
+.app #career h1.tf-title{font-size:44px;color:#c6ff33;text-shadow:0 0 18px rgba(198,255,51,.35)}
