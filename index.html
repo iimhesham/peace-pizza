@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover">
 <meta name="description" content="GAME — منصة ألعاب ليلة واحدة">
-<meta name="theme-color" content="#061611">
+<meta name="theme-color" content="#080808">
 <meta name="robots" content="noindex,nofollow">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="css/flags.css">
 <link rel="stylesheet" href="css/niyaba.css">
 <link rel="stylesheet" href="css/career.css">
-<link rel="stylesheet" href="css/polish.css?v=3">
+<link rel="stylesheet" href="css/polish.css?v=4">
 
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
@@ -36,16 +36,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Almarai:wght@400;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* hub header: small centered badge + centered GAME */
+/* hub header: medallion + GAME + subtitle */
 .hm-head.hm-head-c{display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 2px 4px}
-.hm-head-c .hm-badge{width:110px;height:110px;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5))}
+.hm-head-c .hm-badge{width:132px;height:132px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.5))}
 .hm-head-c .hm-brand{
   font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;
-  font-size:52px;letter-spacing:.14em;padding-inline-start:.14em;
-  margin:10px 0 0;line-height:1;text-align:center;width:100%;
-  color:#e9efeb;text-shadow:3px 3px 0 #57c7a0;
+  font-size:54px;letter-spacing:.16em;padding-inline-start:.16em;
+  margin:12px 0 0;line-height:1;text-align:center;width:100%;
+  color:#efe6cf;text-shadow:3px 3px 0 #7a6130;
 }
-.hm-head-c .hm-sub{margin:8px 0 0;font-size:15px;text-align:center;width:100%}
+.hm-head-c .hm-sub{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  margin:12px auto 0;width:100%;max-width:300px;font-size:15px;text-align:center;color:#c9b88a;
+}
+.hm-head-c .hm-sub::before,.hm-head-c .hm-sub::after{content:"";flex:1;border-top:1.5px dashed rgba(212,182,117,.4)}
 </style>
 </head>
 
@@ -106,16 +110,16 @@
       <pattern id="gbDots" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <circle cx="2.5" cy="2.5" r="1.5" fill="#0e1311"/>
       </pattern>
-      <pattern id="gbYdots" width="6" height="6" patternUnits="userSpaceOnUse">
-        <circle cx="3" cy="3" r="1.6" fill="#c98f1c"/>
-      </pattern>
+      <clipPath id="gbClip"><circle cx="130" cy="130" r="104"/></clipPath>
     </defs>
-    <circle cx="130" cy="130" r="124" fill="#eef1ee"/>
-    <circle cx="130" cy="130" r="114" fill="#101613"/>
-    <circle cx="130" cy="130" r="104" fill="none" stroke="#2fd6a0" stroke-width="2" stroke-dasharray="3 6"/>
-    <g stroke="#1f2a25" stroke-width="1">
+    <circle cx="130" cy="130" r="124" fill="#0e0e0d" stroke="#d4b675" stroke-width="4"/>
+    <circle cx="130" cy="130" r="114" fill="none" stroke="#d4b675" stroke-width="1.4"/>
+    <circle cx="130" cy="130" r="104" fill="#0f0f0e"/>
+    <g clip-path="url(#gbClip)" stroke="#232220" stroke-width="1">
       <path d="M40 60H220M30 95H230M25 130H235M30 165H230M40 200H220M70 25V235M105 15V245M130 10V250M155 15V245M190 25V235"/>
     </g>
+    <circle cx="130" cy="130" r="96" fill="none" stroke="#2fd6a0" stroke-width="1.6" stroke-dasharray="3 6" opacity=".8"/>
+    <g transform="translate(130 132) scale(.8) translate(-136 -130)">
     <!-- headphones -->
     <path d="M62 128 C62 58 198 58 198 128" fill="none" stroke="#2fd6a0" stroke-width="14" stroke-linecap="round"/>
     <path d="M62 128 C62 58 198 58 198 128" fill="none" stroke="url(#gbDots)" stroke-width="14" stroke-linecap="round" opacity=".5"/>
@@ -148,12 +152,14 @@
         <ellipse cx="52" cy="40" rx="3.5" ry="5"/><ellipse cx="66" cy="36" rx="3.5" ry="5"/><ellipse cx="60" cy="52" rx="3.5" ry="5"/>
       </g>
     </g>
-    <!-- THINKING tag -->
-    <g transform="translate(22 40) rotate(-10)">
-      <rect x="4" y="5" width="116" height="34" rx="9" fill="#000"/>
-      <rect width="116" height="34" rx="9" fill="#f2c14e" stroke="#000" stroke-width="3"/>
-      <rect width="116" height="34" rx="9" fill="url(#gbYdots)" opacity=".6"/>
-      <text x="58" y="23" text-anchor="middle" font-family="'Comic Sans MS','Comic Neue',cursive,sans-serif" font-weight="700" font-size="17" fill="#000">THINKING...</text>
+    </g>
+    <circle cx="221.2" cy="206.5" r="5.6" fill="#d4b675" stroke="#0e0e0d" stroke-width="2"/><circle cx="180.3" cy="237.9" r="5.6" fill="#be3034" stroke="#0e0e0d" stroke-width="2"/><circle cx="130.0" cy="249.0" r="5.6" fill="#57c7a0" stroke="#0e0e0d" stroke-width="2"/><circle cx="79.7" cy="237.9" r="5.6" fill="#f8a57d" stroke="#0e0e0d" stroke-width="2"/><circle cx="38.8" cy="206.5" r="5.6" fill="#4f9bd9" stroke="#0e0e0d" stroke-width="2"/>
+    <!-- THINKING tag: ورقة دهبي بحدود متقطعة بدل الستيكر الكرتوني -->
+    <g transform="translate(18 44) rotate(-10)">
+      <rect x="3" y="4" width="128" height="30" rx="5" fill="#000" opacity=".55"/>
+      <rect width="128" height="30" rx="5" fill="#d4b675"/>
+      <rect x="3.5" y="3.5" width="121" height="23" rx="3" fill="none" stroke="#1b150a" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <text x="64" y="20" text-anchor="middle" font-family="'Courier New',Courier,monospace" font-weight="700" font-size="13.5" letter-spacing="1.2" fill="#1b150a">THINKING...</text>
     </g>
   </svg>
     <h1 class="hm-brand" dir="ltr">GAME</h1>
@@ -251,7 +257,7 @@
     <h1>القضايا</h1>
   </header>
   <svg class="cs-emblem" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="القصص">
-<circle cx="120" cy="120" r="116" fill="#0f1a15" stroke="#d4b675" stroke-width="4"/>
+<circle cx="120" cy="120" r="116" fill="#0e0e0d" stroke="#d4b675" stroke-width="4"/>
 <circle cx="120" cy="120" r="107" fill="none" stroke="#d4b675" stroke-width="1.6"/>
 <path d="M97 80V54Q97 32 120 22Q143 32 143 54V80" fill="none" stroke="#d4b675" stroke-width="3.2" stroke-linejoin="round"/>
 <path d="M104 80V55Q104 39 120 31Q136 39 136 55V80" fill="none" stroke="#d4b675" stroke-width="1.4"/>
