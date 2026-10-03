@@ -1,0 +1,106 @@
+/* =========================================================
+   الانتقالات — مسيرة لاعب/مدرب
+   Charcoal #15110d · Ember #ff8a3d · Cream #f6ead9
+   Only #career and #career-game (+ body.mode-career).
+   Same flat panels / thin borders as the rest of the site;
+   the timeline is the only new component.
+========================================================= */
+body.mode-career{background:#15110d!important}
+body.mode-career #toast{
+  background:#ff8a3d!important;border:1px solid #15110d!important;color:#1d1209!important;
+}
+
+.app #career,.app #career-game{
+  --cr-bg:#15110d;
+  --cr-card:#1e1812;
+  --cr-card2:#28200f;
+  --cr-accent:#ff8a3d;
+  --cr-ink:#f6ead9;
+  --cr-muted:#b9a58b;
+  --cr-line:rgba(255,138,61,.38);
+
+  --card:var(--cr-card);
+  --card2:#261d14;
+  --border:var(--cr-line);
+  --text:var(--cr-ink);
+  --muted:var(--cr-muted);
+  --a-accent:var(--cr-accent);
+  --a-accent-soft:rgba(255,138,61,.14);
+  --a-accent-line:rgba(255,138,61,.5);
+  color:var(--cr-ink);
+}
+
+.app #career h1,.app #career h2,.app #career h3,
+.app #career-game h1,.app #career-game h2,.app #career-game h3{color:var(--cr-ink)}
+.app #career .subtitle,.app #career-game .subtitle{color:var(--cr-muted)}
+.app #career .fb-pitch-line,.app #career-game .fb-pitch-line{background:var(--cr-line)}
+.app #career .notice,.app #career-game .notice{background:#261d14;color:var(--cr-ink)}
+.app #career .btn.primary,.app #career .btn.primary:hover,
+.app #career-game .btn.primary,.app #career-game .btn.primary:hover{background:var(--cr-accent);color:#1d1209}
+.app #career .btn.ghost,.app #career .btn.ghost:hover,
+.app #career-game .btn.ghost,.app #career-game .btn.ghost:hover{border-color:var(--cr-line);color:var(--cr-ink)}
+.app #career .btn:focus-visible,.app #career-game .btn:focus-visible{outline-color:var(--cr-accent)}
+.app #career input{background:#100c09;border-color:var(--cr-line);color:var(--cr-ink)}
+.app #career input::placeholder{color:#7d6c58}
+
+/* title + kind chip */
+.app #career .cr-route{display:block;margin:0 0 6px;color:var(--cr-accent)}
+.app #career-game .cr-kind{
+  display:inline-block;margin:10px 0 0;padding:2px 12px;border-radius:999px;
+  background:var(--a-accent-soft);color:var(--cr-accent);font-size:13px;font-weight:600;
+}
+
+/* chips (mode + filter) */
+.cr-chips{display:flex;gap:8px;flex-wrap:wrap;max-width:420px;margin:10px 0 0}
+.app #career .cr-chip{
+  flex:1 1 0;min-width:96px;min-height:44px;padding:8px 12px;border-radius:12px;
+  background:transparent;color:var(--cr-muted);border:1px solid var(--cr-line);
+  font-size:14px;font-weight:600;cursor:pointer;
+}
+.app #career .cr-chip.is-on{background:var(--a-accent-soft);color:var(--cr-accent);border-color:var(--cr-accent)}
+.app #career .cr-label{display:block;margin:16px 0 0;font-size:13px;color:var(--cr-muted)}
+
+/* score bar (reuses .story-scorebar layout) */
+.app #career-game .story-score-box{background:var(--card2);border:1px solid var(--cr-line);border-radius:12px}
+.app #career-game .story-team-name{color:var(--cr-muted)}
+.app #career-game .story-team-score{font-family:inherit;font-weight:700;font-size:30px;color:var(--cr-accent)}
+.app #career-game .story-gm-answer{background:transparent;border-color:var(--cr-line);color:var(--cr-muted)}
+.app #career-game .story-gm-answer b{color:var(--cr-ink)}
+.app #career-game .story-result-banner{color:var(--cr-accent)}
+
+/* ---------- timeline ---------- */
+.cr-timeline{max-width:520px;margin:18px auto 0;display:flex;flex-direction:column}
+.cr-info{max-width:520px;margin:14px auto 0;text-align:center;font-size:13px;color:var(--cr-muted)}
+.cr-stop{display:flex;gap:12px;align-items:stretch}
+.cr-node{flex:none;width:28px;display:flex;flex-direction:column;align-items:center}
+.cr-dot{
+  flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-size:12px;font-weight:700;line-height:1;
+  background:var(--cr-bg);border:2px solid var(--cr-line);color:var(--cr-muted);
+}
+.cr-rail{flex:1;width:2px;min-height:14px;margin:3px 0;background:var(--cr-line)}
+.cr-card{
+  flex:1;min-width:0;margin-bottom:10px;padding:11px 14px;border-radius:12px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;
+}
+.cr-stop.is-open .cr-dot{background:var(--cr-accent);border-color:var(--cr-accent);color:#1d1209}
+.cr-stop.is-open .cr-card{background:#261d14;border:1px solid var(--cr-line);border-right:3px solid var(--cr-accent)}
+.cr-stop.is-hidden .cr-card{background:transparent;border:1px dashed rgba(255,138,61,.28);justify-content:center}
+.cr-club{font-size:16px;font-weight:700;color:var(--cr-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cr-years{flex:none;font-size:12.5px;color:var(--cr-muted)}
+.cr-q{font-size:20px;font-weight:700;color:rgba(255,138,61,.5)}
+.cr-stop.is-new .cr-card{animation:crPop .5s ease-out}
+@keyframes crPop{
+  0%{background:rgba(255,138,61,.4);transform:translateX(8px)}
+  100%{background:#261d14;transform:none}
+}
+
+/* results list */
+.cr-result-row{
+  background:#261d14;border:1px solid var(--cr-line);border-right:3px solid var(--cr-accent);
+  border-radius:12px;padding:12px 14px;text-align:right;
+}
+.cr-result-name{font-weight:700;font-size:14px;color:var(--cr-accent)}
+.cr-result-row p{margin:6px 0 0;color:var(--cr-ink);font-size:14.5px}
+
+@media (prefers-reduced-motion:reduce){.cr-stop.is-new .cr-card{animation:none}}
