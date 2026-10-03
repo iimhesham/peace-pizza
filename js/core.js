@@ -68,6 +68,8 @@ function show(id,opts){
   document.body.classList.toggle("mode-football",FOOTBALL_SCREENS.includes(id));
   document.body.classList.toggle("mode-story",STORY_SCREENS.includes(id));
   document.body.classList.toggle("mode-career",CAREER_SCREENS.includes(id));
+  const tc=document.querySelector('meta[name="theme-color"]');
+  if(tc){if(!tc.dataset.def)tc.dataset.def=tc.content;tc.content=CAREER_SCREENS.includes(id)?"#003566":tc.dataset.def;}
   document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id)||TRAIN_SCREENS.includes(id));
   document.body.classList.toggle("mode-flags",FLAGS_SCREENS.includes(id));
   const creditsBtn=document.getElementById("creditsToggle");

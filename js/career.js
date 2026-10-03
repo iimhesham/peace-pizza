@@ -340,9 +340,14 @@ function careerRenderRound(){
 
   /* نوع الاسم: لاعب أو مدرب */
   const kind=document.getElementById("careerKind");
-  if(kind)kind.textContent=careerCurrent.t==="c"
-    ?`مدرب · ${n} محطات تدريب`
-    :`لاعب · ${n} محطات`;
+  if(kind){
+    const last=careerCurrent.c[n-1];
+    const cur=careerCurrent.s?careerCurrent.s==="cur":last[2]===null;
+    kind.textContent=careerCurrent.t==="c"
+      ?`مدرب · ${n} محطات تدريب`
+      :`لاعب ${cur?"حالي":"سابق"} · ${n} محطات`;
+    kind.classList.toggle("is-cur",careerCurrent.t!=="c"&&cur);
+  }
 
   const hint=document.getElementById("careerShownInfo");
   if(hint)hint.textContent=careerRoundOver
