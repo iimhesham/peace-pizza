@@ -335,3 +335,67 @@ button.hm-case{border-color:#4a4127}
 .hm-fc5-stamp{font-family:'Anton','Impact','Arial Black',sans-serif;font-size:14px;line-height:1.15;letter-spacing:.14em;text-align:center;padding:5px 8px 5px 10px;color:#e9c97a;border:1.5px solid #e9c97a;border-radius:4px;transform:rotate(-9deg);opacity:.92;box-shadow:inset 0 0 0 1px rgba(233,201,122,.25)}
 .hm-fc5:active{transform:scale(.97);filter:brightness(1.12)}
 @media (min-width:901px){body:not(.force-mobile-view) #hub .hm-fc5w{margin-inline-start:282px;margin-inline-end:auto}}
+
+
+/* =========================================================
+   الأربع كروت — كل كارت شيء من عالم لعبته
+   STORIES = ملف قضية · WHO AM I = ملف مشتبه فيه
+   PASSWORD = بطاقة دخول · FLAGS = صفحة جواز سفر
+   العنوان في شريط سفلي ومحاذي للجهة الظاهرة من الكارت
+   (الكروت متداخلة فالنص ما بيتقصش)
+========================================================= */
+.hm-fc{direction:ltr;justify-content:flex-start;gap:0}
+.hm-fc-art{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-top:16px}
+.hm-fc-cap{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:7px 12px 12px;text-align:left;position:relative;background:rgba(0,0,0,.24);border-top:1px solid currentColor;border-top-color:color-mix(in srgb,currentColor 25%,transparent)}
+.hm-fc-cap b{font-size:12.5px;white-space:nowrap}
+.hm-fc-cap small{font-size:7.5px;letter-spacing:.1em;white-space:nowrap}
+.hm-fc-tag{position:absolute;top:9px;left:13px;z-index:1;font:700 7.5px/1 'Courier New',Courier,monospace;letter-spacing:.14em;opacity:.8}
+.hm-fc-stamp{position:absolute;font-family:'Anton','Impact','Arial Black',sans-serif;font-size:10px;line-height:1;letter-spacing:.14em;padding:3px 5px 3px 7px;border:1.5px solid currentColor;border-radius:3px;transform:rotate(-12deg);opacity:.92;white-space:nowrap}
+
+/* STORIES: ملف قضية */
+.hm-fc-l::before{content:"";position:absolute;top:0;left:0;width:74px;height:26px;border-radius:0 0 12px 0;background:rgba(212,182,117,.13);border:1px solid rgba(212,182,117,.3);border-width:0 1px 1px 0}
+.hm-fc-l::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 11px,rgba(212,182,117,.07) 11px 12px)}
+.hm-fc-l .hm-fc-stamp{left:8px;bottom:6px;color:#e0707c}
+
+/* WHO AM I: ملف مشتبه فيه */
+.hm-fc-c::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;opacity:.55;background:repeating-linear-gradient(-45deg,#d4b675 0 6px,#2a0709 6px 12px)}
+.hm-fc-c .hm-fc-tag{top:14px;color:#fdf2f1}
+.hm-fc-c .hm-fc-stamp{left:-2px;bottom:3px;z-index:2;color:#fdf2f1;background:rgba(117,6,8,.78);transform:rotate(-10deg);font-size:9px}
+.hm-fc-c .hm-fc-art{padding-top:24px}
+.hm-fc-c .hm-fc-cap b{font-size:12px}
+
+/* PASSWORD: بطاقة دخول */
+.hm-fc-r::before{content:"";position:absolute;top:9px;left:50%;width:30px;height:7px;margin-left:-15px;border:1.5px solid currentColor;border-radius:4px;background:#06100c;opacity:.55}
+.hm-fc-r .hm-fc-art{padding-top:22px}
+.hm-fc-r .hm-fc-art svg{width:46px;height:46px}
+.hm-fc-dots{display:flex;gap:5px;margin-top:9px}
+.hm-fc-dots i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.85}
+.hm-fc-dots i:last-child{background:none;border:1.3px solid currentColor;opacity:.6}
+.hm-fc-r .hm-fc-cap{align-items:center;text-align:center}
+.hm-fc-r .hm-fc-cap::before{content:"";align-self:center;width:58%;height:6px;margin-bottom:3px;opacity:.38;background:repeating-linear-gradient(90deg,currentColor 0 1px,transparent 1px 3px,currentColor 3px 5px,transparent 5px 6px)}
+
+/* FLAGS: صفحة جواز سفر */
+.hm-fc-f>i{border-style:dashed;opacity:.38}
+.hm-fc-f::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 20% 115%,transparent 0 7px,rgba(248,165,125,.08) 7px 8px)}
+.hm-fc-flagmini{position:absolute;top:11px;right:26px;width:21px;height:14px;border-radius:2px;opacity:.9;box-shadow:0 0 0 1px rgba(0,0,0,.35);background:linear-gradient(#c8102e 0 33%,#f4efe4 33% 66%,#15110f 66%)}
+.hm-fc-f .hm-fc-art{padding-top:24px}
+.hm-fc-f .hm-fc-cap{align-items:flex-end;text-align:right}
+.hm-fc-f .hm-fc-cap small{letter-spacing:.07em;font-size:7px}
+
+@media (min-width:901px){
+  body:not(.force-mobile-view) #hub .hm-fc{padding:0}
+  body:not(.force-mobile-view) #hub .hm-fc-cap{align-items:center;text-align:center}
+  body:not(.force-mobile-view) #hub .hm-fc-f .hm-fc-cap,
+  body:not(.force-mobile-view) #hub .hm-fc-l .hm-fc-cap,
+  body:not(.force-mobile-view) #hub .hm-fc-c .hm-fc-cap{align-items:center;text-align:center}
+  body:not(.force-mobile-view) #hub .hm-fc-desc{padding:8px 12px 16px}
+  body:not(.force-mobile-view) #hub .hm-fc-r .hm-fc-art svg{width:56px;height:56px}
+}
+
+@media (max-width:380px){
+  .hm-fc-cap{padding:6px 10px 10px}
+  .hm-fc-cap b{font-size:11px;letter-spacing:.06em}
+  .hm-fc-cap small{font-size:6.5px;letter-spacing:.06em}
+  .hm-fc-f .hm-fc-cap small{font-size:6px;letter-spacing:.04em}
+  .hm-fc-c .hm-fc-cap b{font-size:10.5px}
+}
