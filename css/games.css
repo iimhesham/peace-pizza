@@ -1,0 +1,238 @@
+/* =========================================================
+   داخل الألعاب — نفس لغة الصفحة الرئيسية، ولكل لعبة عالمها
+   باسورد = بطاقة دخول · أنا مين = ملف مشتبه فيه
+   التحويلات = تذكرة عقد · الأعلام = صفحة جواز
+   (القصص/ملفات النيابة مش داخلة هنا)
+   الأيقونات كلها SVG بالـ mask، من غير إيموجي
+========================================================= */
+:root{ --i-check:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");--i-x:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 6 18M6 6l12 12'/></svg>");--i-eye:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z'/><circle cx='12' cy='12' r='3'/></svg>");--i-skip:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M5 5l9 7-9 7zM19 5v14'/></svg>");--i-shuffle:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5'/></svg>");--i-flag:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M5 21V4M5 4h12l-2.5 4L17 12H5'/></svg>");--i-redo:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 1 3 6.7M3 21v-6h6'/></svg>");--i-dice:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='3'/><circle cx='8.5' cy='8.5' r='1.1' fill='black'/><circle cx='15.5' cy='8.5' r='1.1' fill='black'/><circle cx='8.5' cy='15.5' r='1.1' fill='black'/><circle cx='15.5' cy='15.5' r='1.1' fill='black'/><circle cx='12' cy='12' r='1.1' fill='black'/></svg>");--i-play:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M7 4.5v15l12-7.5z'/></svg>");--i-globe:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18'/></svg>");--i-clock:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg>");--i-book:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H4zM20 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z'/></svg>");--i-chev:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");--i-lock:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='11' width='14' height='9' rx='2'/><path d='M8 11V8a4 4 0 0 1 8 0v3'/></svg>"); }
+
+/* ---------- أيقونات (أي عنصر عليه data-ic) ---------- */
+[data-ic="check"]{--ic:var(--i-check)}[data-ic="x"]{--ic:var(--i-x)}[data-ic="eye"]{--ic:var(--i-eye)}
+[data-ic="skip"]{--ic:var(--i-skip)}[data-ic="shuffle"]{--ic:var(--i-shuffle)}[data-ic="flag"]{--ic:var(--i-flag)}
+[data-ic="redo"]{--ic:var(--i-redo)}[data-ic="dice"]{--ic:var(--i-dice)}[data-ic="play"]{--ic:var(--i-play)}
+[data-ic="globe"]{--ic:var(--i-globe)}[data-ic="clock"]{--ic:var(--i-clock)}[data-ic="book"]{--ic:var(--i-book)}
+[data-ic="lock"]{--ic:var(--i-lock)}
+.gk-ico,
+.btn[data-ic]::before,.fg-mode[data-ic]::before,.fg-restart[data-ic]::before{
+  content:"";display:inline-block;flex:none;width:1.15em;height:1.15em;background:currentColor;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;
+}
+.app #password .btn[data-ic],.app #password-game .btn[data-ic],.app #story .btn[data-ic],.app #story-game .btn[data-ic],.app #career .btn[data-ic],.app #career-game .btn[data-ic]{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.fg-mode[data-ic],.fg-restart[data-ic]{gap:8px}
+
+/* ---------- ألوان كل لعبة ---------- */
+.app #password,.app #password-game{--gac:255,170,0;--g1:#1b2263;--g2:#0a0e2a;--gp:255,170,0;--gpt:#0f1432}
+.app #story,.app #story-game{--gac:116,165,190;--g1:#5c0507;--g2:#2b0203;--gp:116,165,190;--gpt:#4a0305}
+.app #career,.app #career-game{--gac:212,182,117;--g1:#1d4560;--g2:#0b2233;--gp:212,182,117;--gpt:#0b2233;
+  --cr-accent:#d4b675;--cr-ink:#efe6cf;--cr-line:rgba(212,182,117,.4);--cr-bg:#08141d;--cr-card:#12354d;--cr-muted:#9cc3d6;
+  --card:#12354d;--card2:#163d58;--border:rgba(212,182,117,.4);--text:#efe6cf;--muted:#9cc3d6;
+  --a-accent:#d4b675;--a-accent-soft:rgba(212,182,117,.14);--a-accent-line:rgba(212,182,117,.5)}
+
+/* ---------- الصفحة: أسود + وهج خفيف بلون اللعبة ---------- */
+body.mode-football{background:radial-gradient(ellipse at 50% -8%,rgba(27,34,99,.7),transparent 62%) #050505!important}
+body.mode-story{background:radial-gradient(ellipse at 50% -8%,rgba(117,6,8,.55),transparent 62%) #050505!important}
+body.mode-career{background:radial-gradient(ellipse at 50% -8%,rgba(29,69,96,.7),transparent 62%) #050505!important}
+body.mode-flags{background:radial-gradient(ellipse at 50% -8%,rgba(122,60,30,.45),transparent 62%) #050505!important}
+body.mode-career #toast{background:#d4b675!important;color:#0b2233!important}
+body.mode-story #toast{background:#74a5be!important;color:#4a0305!important}
+
+/* ---------- الورقة (الكارت الكبير) ---------- */
+.app #password .card.hero,.app #password-game .card.hero,.app #story .card.hero,.app #story-game .card.hero,.app #career .card.hero,.app #career-game .card.hero{
+  position:relative;overflow:hidden;padding:26px 18px 20px;border-radius:16px;
+  background:linear-gradient(160deg,var(--g1),var(--g2));
+  border:1px solid rgba(var(--gac),.46);box-shadow:0 10px 26px rgba(0,0,0,.45);text-align:start;
+}
+.app #password .card.hero::after,.app #password-game .card.hero::after,.app #story .card.hero::after,.app #story-game .card.hero::after,.app #career .card.hero::after,.app #career-game .card.hero::after{content:"";position:absolute;inset:6px;border-radius:11px;border:1px solid rgba(var(--gac),.22);pointer-events:none}
+.app #password .card.hero>*,.app #password-game .card.hero>*,.app #story .card.hero>*,.app #story-game .card.hero>*,.app #career .card.hero>*,.app #career-game .card.hero>*{position:relative;z-index:1}
+
+/* شريط أعلى شاشة اللعب: صف واحد */
+.app #password .topline,.app #password-game .topline,.app #story .topline,.app #story-game .topline,.app #career .topline,.app #career-game .topline{flex-direction:row;align-items:center;flex-wrap:nowrap;gap:10px}
+.app #password .topline .btn,.app #password-game .topline .btn,.app #story .topline .btn,.app #story-game .topline .btn,.app #career .topline .btn,.app #career-game .topline .btn{width:auto;flex:none;min-height:38px;padding:6px 16px;font-size:13px}
+
+/* رأس الصفحة */
+.app #password .gk-head,.app #password-game .gk-head,.app #story .gk-head,.app #story-game .gk-head,.app #career .gk-head,.app #career-game .gk-head{display:flex;align-items:center;gap:14px}
+.app #password .gk-head-t,.app #password-game .gk-head-t,.app #story .gk-head-t,.app #story-game .gk-head-t,.app #career .gk-head-t,.app #career-game .gk-head-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.app #password .gk-head h1,.app #password-game .gk-head h1,.app #story .gk-head h1,.app #story-game .gk-head h1,.app #career .gk-head h1,.app #career-game .gk-head h1{margin:0}
+.app #password .gk-kicker,.app #password-game .gk-kicker,.app #story .gk-kicker,.app #story-game .gk-kicker,.app #career .gk-kicker,.app #career-game .gk-kicker{font:700 10px/1 'Courier New',Courier,monospace;letter-spacing:.22em;color:rgb(var(--gac));opacity:.85;direction:ltr;text-align:right}
+.app #password .gk-sub,.app #password-game .gk-sub,.app #story .gk-sub,.app #story-game .gk-sub,.app #career .gk-sub,.app #career-game .gk-sub{font-size:13px;color:var(--muted)}
+
+/* ختم الاسم (badge) */
+.app #password .badge,.app #password-game .badge,.app #story .badge,.app #story-game .badge,.app #career .badge,.app #career-game .badge{
+  display:inline-block;padding:3px 10px 2px;border:1.5px solid rgb(var(--gac));border-radius:3px;
+  background:transparent;color:rgb(var(--gac));
+  font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;font-size:11px;letter-spacing:.18em;line-height:1.3;
+  transform:rotate(-2deg);
+}
+
+/* طريقة اللعب: مطوية */
+.app #password .gk-rules,.app #password-game .gk-rules,.app #story .gk-rules,.app #story-game .gk-rules,.app #career .gk-rules,.app #career-game .gk-rules{margin:14px 0 0;border:1px dashed rgba(var(--gac),.5);border-radius:12px;background:rgba(0,0,0,.22)}
+.app #password .gk-rules summary,.app #password-game .gk-rules summary,.app #story .gk-rules summary,.app #story-game .gk-rules summary,.app #career .gk-rules summary,.app #career-game .gk-rules summary{list-style:none;display:flex;align-items:center;gap:10px;min-height:46px;padding:0 14px;font-size:14.5px;font-weight:700;color:rgb(var(--gac));cursor:pointer}
+.app #password .gk-rules summary::-webkit-details-marker,.app #password-game .gk-rules summary::-webkit-details-marker,.app #story .gk-rules summary::-webkit-details-marker,.app #story-game .gk-rules summary::-webkit-details-marker,.app #career .gk-rules summary::-webkit-details-marker,.app #career-game .gk-rules summary::-webkit-details-marker{display:none}
+.app #password .gk-rules summary::after,.app #password-game .gk-rules summary::after,.app #story .gk-rules summary::after,.app #story-game .gk-rules summary::after,.app #career .gk-rules summary::after,.app #career-game .gk-rules summary::after,.app #password .gk-rules[open] summary::after,.app #password-game .gk-rules[open] summary::after,.app #story .gk-rules[open] summary::after,.app #story-game .gk-rules[open] summary::after,.app #career .gk-rules[open] summary::after,.app #career-game .gk-rules[open] summary::after{
+  content:"";margin-inline-start:auto;width:16px;height:16px;background:currentColor;color:inherit;font-size:0;
+  -webkit-mask:var(--i-chev) center/contain no-repeat;mask:var(--i-chev) center/contain no-repeat;transition:transform .18s}
+.app #password .gk-rules[open] summary::after,.app #password-game .gk-rules[open] summary::after,.app #story .gk-rules[open] summary::after,.app #story-game .gk-rules[open] summary::after,.app #career .gk-rules[open] summary::after,.app #career-game .gk-rules[open] summary::after{transform:rotate(180deg)}
+.app #password .gk-rules .notice,.app #password-game .gk-rules .notice,.app #story .gk-rules .notice,.app #story-game .gk-rules .notice,.app #career .gk-rules .notice,.app #career-game .gk-rules .notice{margin:0;border:0;border-top:1px dashed rgba(var(--gac),.35);border-radius:0 0 12px 12px;background:transparent;font-size:13.5px;line-height:1.75}
+
+/* حقول */
+.app #password input,.app #password-game input,.app #story input,.app #story-game input,.app #career input,.app #career-game input,.app #password select,.app #password-game select,.app #story select,.app #story-game select,.app #career select,.app #career-game select{background:rgba(0,0,0,.32);border:1px dashed rgba(var(--gac),.5);border-radius:10px;color:var(--text)}
+.app #password input:focus,.app #password-game input:focus,.app #story input:focus,.app #story-game input:focus,.app #career input:focus,.app #career-game input:focus,.app #password select:focus,.app #password-game select:focus,.app #story select:focus,.app #story-game select:focus,.app #career select:focus,.app #career-game select:focus{border-style:solid;border-color:rgb(var(--gac));box-shadow:none}
+.app #password label,.app #password-game label,.app #story label,.app #story-game label,.app #career label,.app #career-game label{font-size:12.5px;font-weight:600;letter-spacing:.03em}
+
+/* أزرار */
+.app #password .btn,.app #password-game .btn,.app #story .btn,.app #story-game .btn,.app #career .btn,.app #career-game .btn{border-radius:12px;font-weight:700;min-height:50px}
+.app #password .btn.primary,.app #password-game .btn.primary,.app #story .btn.primary,.app #story-game .btn.primary,.app #career .btn.primary,.app #career-game .btn.primary,.app #password .btn.primary:hover,.app #password-game .btn.primary:hover,.app #story .btn.primary:hover,.app #story-game .btn.primary:hover,.app #career .btn.primary:hover,.app #career-game .btn.primary:hover{background:rgb(var(--gp));color:var(--gpt);box-shadow:0 3px 0 rgba(0,0,0,.45)}
+.app #password .btn.primary:active,.app #password-game .btn.primary:active,.app #story .btn.primary:active,.app #story-game .btn.primary:active,.app #career .btn.primary:active,.app #career-game .btn.primary:active{transform:translateY(2px);box-shadow:none}
+.app #password .btn.ghost,.app #password-game .btn.ghost,.app #story .btn.ghost,.app #story-game .btn.ghost,.app #career .btn.ghost,.app #career-game .btn.ghost,.app #password .btn.ghost:hover,.app #password-game .btn.ghost:hover,.app #story .btn.ghost:hover,.app #story-game .btn.ghost:hover,.app #career .btn.ghost:hover,.app #career-game .btn.ghost:hover,.app #password .btn.secondary,.app #password-game .btn.secondary,.app #story .btn.secondary,.app #story-game .btn.secondary,.app #career .btn.secondary,.app #career-game .btn.secondary{background:rgba(0,0,0,.2);color:var(--text);border:1px solid rgba(var(--gac),.42)}
+.app #password .btn:focus-visible,.app #password-game .btn:focus-visible,.app #story .btn:focus-visible,.app #story-game .btn:focus-visible,.app #career .btn:focus-visible,.app #career-game .btn:focus-visible{outline-color:rgb(var(--gac))}
+
+/* لوحة النقط (مشتركة بين أنا مين والتحويلات) */
+.app #story .story-score-box,.app #story-game .story-score-box,.app #career .story-score-box,.app #career-game .story-score-box{background:rgba(0,0,0,.3);border:1px dashed rgba(var(--gac),.5);border-radius:10px}
+.app #story .story-team-score,.app #story-game .story-team-score,.app #career .story-team-score,.app #career-game .story-team-score{font-family:'Anton','Impact',sans-serif;font-weight:400;font-size:32px;letter-spacing:.04em;color:rgb(var(--gac))}
+.app #story .story-gm-answer,.app #story-game .story-gm-answer,.app #career .story-gm-answer,.app #career-game .story-gm-answer{border:1px dashed rgba(var(--gac),.5);background:rgba(0,0,0,.2);border-radius:10px}
+.app #story .story-result-banner,.app #story-game .story-result-banner,.app #career .story-result-banner,.app #career-game .story-result-banner{
+  margin:18px auto 8px;padding:10px 18px;width:max-content;max-width:100%;color:rgb(var(--gac));
+  border:2px solid rgb(var(--gac));border-radius:6px;transform:rotate(-2deg);font-size:21px;
+  animation:plStamp .4s cubic-bezier(.3,1.5,.5,1) backwards;
+}
+.app #story .story-guess-row .btn,.app #story-game .story-guess-row .btn,.app #career .story-guess-row .btn,.app #career-game .story-guess-row .btn{min-height:50px;font-size:14px}
+.app #story .story-guess-row .btn.ghost[data-ic="x"],.app #story-game .story-guess-row .btn.ghost[data-ic="x"],.app #career .story-guess-row .btn.ghost[data-ic="x"],.app #career-game .story-guess-row .btn.ghost[data-ic="x"]{border-color:rgba(255,155,159,.55);color:#ffb3b6}
+
+/* =========================================================
+   باسورد — بطاقة دخول
+========================================================= */
+.app #password .card.hero,.app #password-game .card.hero{padding-top:34px;text-align:start}
+.app #password .card.hero::before,.app #password-game .card.hero::before{content:"";display:block;position:absolute;top:11px;right:auto;bottom:auto;left:50%;width:34px;height:8px;margin-left:-17px;border:1.5px solid rgba(255,170,0,.6);border-radius:5px;background:#06081a;z-index:2}
+.app #password .pw-emblem,.app #password-game .pw-emblem{width:76px;height:auto;flex:none;filter:drop-shadow(0 4px 0 rgba(0,0,0,.4))}
+.app #password h1,.app #password-game h1{color:#ffaa00;font-size:28px}
+.app #password .fb-pitch-line,.app #password-game .fb-pitch-line{height:9px;margin:16px 0;opacity:.5;background:repeating-linear-gradient(90deg,#ffaa00 0 1px,transparent 1px 3px,#ffaa00 3px 5px,transparent 5px 6px)}
+.app #password-game .topline .badge{margin:0}
+.app #password-game h2{font-size:20px;margin-top:14px}
+.app #password-game .subtitle{margin:6px 0 0}
+.app #password-game .fb-opts{margin-top:14px}
+.app #password-game .fb-grid{gap:10px;margin-top:16px}
+.app #password-game .fb-card-back{
+  background:linear-gradient(160deg,#1e2872,#0a0e2c);border:1px solid rgba(255,170,0,.55);
+  box-shadow:inset 0 0 0 4px #0a0e2c,inset 0 0 0 5px rgba(255,170,0,.28);color:#ffaa00;
+}
+.app #password-game .fb-card-back::before{content:"";position:absolute;top:8px;left:50%;width:22px;height:5px;margin-left:-11px;border:1.2px solid rgba(255,170,0,.65);border-radius:3px;background:#06081a}
+.app #password-game .fb-card-back::after{content:"";position:absolute;bottom:9px;left:18%;right:18%;height:5px;opacity:.42;background:repeating-linear-gradient(90deg,#ffaa00 0 1px,transparent 1px 3px,#ffaa00 3px 5px,transparent 5px 6px)}
+.app #password-game .fb-card-back .fb-ball{display:none}
+.app #password-game .fb-card-back .fb-index{font-family:'Anton','Impact',sans-serif;font-weight:400;font-size:32px;color:#ffaa00;letter-spacing:.04em}
+.app #password-game .fb-card-front{background:linear-gradient(160deg,#ffbd3a,#e58a00);border:2px solid #0f1432;box-shadow:none}
+.app #password-game .fb-card-front::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:#ff001e;border-radius:11px 11px 0 0}
+.app #password-game .fb-card-front span{color:#0f1432;font-weight:800;font-size:15px;font-family:'Tajawal','IBM Plex Sans Arabic',sans-serif}
+
+/* =========================================================
+   أنا مين — ملف مشتبه فيه
+========================================================= */
+.app #story .card.hero,.app #story-game .card.hero{padding-top:30px}
+.app #story .card.hero::before,.app #story-game .card.hero::before{content:"";display:block;position:absolute;top:0;left:0;right:0;height:7px;z-index:2;opacity:.6;
+  background:repeating-linear-gradient(-45deg,#d4b675 0 6px,#2a0709 6px 12px)}
+.app #story .st-title,.app #story-game .st-title{display:block;width:min(100%,250px);height:auto;margin:0 auto 4px}
+.app #story h1,.app #story-game h1{font-size:23px;margin-top:10px}
+.app #story .fb-pitch-line,.app #story-game .fb-pitch-line{height:6px;margin:14px 0;opacity:.55;background:repeating-linear-gradient(-45deg,#d4b675 0 6px,#2a0709 6px 12px)}
+.app #story .badge,.app #story-game .badge{display:block;width:max-content;margin-inline:auto}
+.app #story-game .topline .badge{margin:0}
+.app #story .gk-modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 0}
+.app #story .gk-mode{
+  position:relative;display:flex;flex-direction:column;align-items:center;gap:0;padding:12px 8px 10px;
+  background:rgba(0,0,0,.25);border:1px dashed rgba(116,165,190,.55);border-radius:12px;color:#fdf2f1;cursor:pointer;
+  font-family:inherit;transition:background .12s,border-color .12s;
+}
+.app #story .gk-mode b{font-family:'Anton','Impact',sans-serif;font-weight:400;font-size:34px;line-height:1.05;color:#74a5be}
+.app #story .gk-mode span{font-size:13px;font-weight:700}
+.app #story .gk-mode small{margin-top:4px;font-size:11.5px;color:#e2b4b6}
+.app #story .gk-mode.is-on{background:rgba(116,165,190,.18);border:1.5px solid #74a5be}
+.app #story .gk-mode.is-on::after{content:"";position:absolute;top:8px;inset-inline-end:8px;width:15px;height:15px;background:#74a5be;
+  -webkit-mask:var(--i-check) center/contain no-repeat;mask:var(--i-check) center/contain no-repeat}
+.app #story-game .story-clue{position:relative;border-radius:6px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.app #story-game .story-clue::after{content:"";position:absolute;top:-6px;inset-inline-end:16px;width:34px;height:12px;background:rgba(212,182,117,.8);transform:rotate(-4deg)}
+
+/* =========================================================
+   التحويلات — تذكرة عقد
+========================================================= */
+body.mode-career{background-image:radial-gradient(ellipse at 50% -8%,rgba(29,69,96,.7),transparent 62%)!important}
+.app #career .card.hero,.app #career-game .card.hero{background:linear-gradient(160deg,#1d4560,#0b2233)}
+.app #career .card.hero::before,.app #career-game .card.hero::before{content:"";display:block;position:absolute;inset:0;pointer-events:none;opacity:.07;
+  background:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 7px)}
+.app #career .cr-route{display:block;margin:0 0 10px;color:#d4b675;width:96px;height:auto}
+.app #career .badge{display:block;width:max-content}
+.app #career h1.tf-title{font-size:34px;letter-spacing:.08em;color:#efe6cf;text-shadow:3px 3px 0 rgba(122,97,48,.9);margin-top:10px}
+.app #career-game h2{font-size:20px;margin-top:14px}
+.app #career .fb-pitch-line,.app #career-game .fb-pitch-line{height:0;width:auto;margin:20px -18px;background:none;border-top:1.5px dashed rgba(212,182,117,.55);overflow:visible;position:relative}
+.app #career .fb-pitch-line::before,.app #career-game .fb-pitch-line::before,.app #career .fb-pitch-line::after,.app #career-game .fb-pitch-line::after{content:"";position:absolute;top:-9px;width:16px;height:16px;border-radius:50%;background:#050505}
+.app #career .fb-pitch-line::before,.app #career-game .fb-pitch-line::before{left:-9px}
+.app #career .fb-pitch-line::after,.app #career-game .fb-pitch-line::after{right:-9px}
+.app #career .cr-label{letter-spacing:.04em}
+.app #career .cr-chip{border-radius:10px!important;border:1px dashed rgba(212,182,117,.5);background:rgba(0,0,0,.22);color:#9cc3d6}
+.app #career .cr-chip.is-on{background:rgba(212,182,117,.16)!important;color:#efe6cf!important;border:1.5px solid #d4b675;box-shadow:none!important}
+.app #career-game .cr-kind{font-family:'Courier New',Courier,monospace;border:1.5px solid rgba(212,182,117,.6);border-radius:3px;background:transparent;color:#d4b675;clip-path:none;box-shadow:none}
+.app #career-game .cr-kind.is-cur{background:#d4b675;color:#0b2233;box-shadow:none}
+/* خط المسيرة: تذاكر */
+.cr-card{border-radius:10px!important;background:linear-gradient(160deg,rgba(29,69,96,.95),rgba(11,34,51,.95))!important;border:1px solid rgba(212,182,117,.38)!important;box-shadow:none!important}
+.cr-card::before,.cr-card::after{content:"";position:absolute;top:50%;width:12px;height:12px;border:0!important;border-radius:50%;background:#050505;opacity:1;transform:translateY(-50%)}
+.cr-card::before{inset-inline-start:-7px;top:50%}
+.cr-card::after{inset-inline-end:-7px;bottom:auto}
+.cr-stop.is-open .cr-card{border-inline-start:1px solid rgba(212,182,117,.38)!important;box-shadow:none!important}
+.cr-stop.is-hidden .cr-card{background:repeating-linear-gradient(135deg,rgba(212,182,117,.05) 0 6px,transparent 6px 12px),#0a1c2a!important;border:1px dashed rgba(212,182,117,.4)!important}
+.cr-q{color:rgba(212,182,117,.6)}
+.cr-dot{border-radius:50%!important;box-shadow:none;background:#08141d;border-color:rgba(212,182,117,.5);color:#9cc3d6}
+.cr-stop.is-open .cr-dot{background:#d4b675;border-color:#d4b675;color:#0b2233}
+.cr-rail{background:repeating-linear-gradient(#d4b675 0 5px,transparent 5px 10px)!important;opacity:.55}
+.cr-loan{border-radius:3px!important;border:1px solid #d4b675}
+.cr-stop.is-new .cr-card{animation:none}
+.cr-result-row{background:#163d58;border-radius:10px}
+
+/* =========================================================
+   الأعلام — صفحة جواز
+========================================================= */
+.fg-app{
+  --fg-panel:#2a1a12;--fg-panel-hi:#38241a;--fg-line:rgba(248,165,125,.36);--fg-line-hi:rgba(248,165,125,.7);
+  --fg-text:#f4ead6;--fg-muted:#c9b8a3;--fg-cyan:#f8a57d;--fg-violet:#f8a57d;--fg-yes:#7ccb9b;--fg-no:#e0707c;
+  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+}
+.fg-noise{background-image:repeating-radial-gradient(circle at 50% 0,transparent 0 12px,rgba(248,165,125,.06) 12px 13px);background-size:auto}
+.fg-title b{font-family:'Anton','Impact',sans-serif;font-weight:400;font-size:19px;letter-spacing:.16em;color:#f4ead6;text-shadow:none}
+.fg-title span{color:#f8a57d;font-size:12px}
+.fg-back{background:var(--fg-panel);border:1px solid var(--fg-line);color:#f8a57d}
+.fg-score{font-family:'Anton','Impact',sans-serif;font-weight:400;font-size:17px;border:1.5px solid #f8a57d;border-radius:8px;color:#f8a57d;background:transparent;letter-spacing:.06em}
+.fg-score small{font-family:inherit;color:#c9b8a3}
+.fg-progress{font-family:'Courier New',Courier,monospace;letter-spacing:.2em;color:#c9b8a3}
+.fg-card{
+  background:linear-gradient(160deg,#3a251a,#1f110b);border:1px solid rgba(248,165,125,.45);
+  box-shadow:0 10px 26px rgba(0,0,0,.45);
+}
+.fg-card::before{content:"";position:absolute;inset:6px;border-radius:13px;border:1px dashed rgba(248,165,125,.3);pointer-events:none}
+.fg-card::after{content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;background:repeating-radial-gradient(circle at 18% 120%,transparent 0 9px,rgba(248,165,125,.06) 9px 10px)}
+.fg-card>*:not(.fg-corner){position:relative;z-index:1}
+.fg-corner{border-color:#f8a57d;opacity:.8}
+.fg-flagwrap{position:relative;overflow:hidden;border-radius:10px;border:1px solid rgba(0,0,0,.35);background:#f4ead6}
+.fg-flagwrap::after{content:"ENTRY";position:absolute;top:10px;inset-inline-start:10px;padding:2px 8px 1px;border:1.5px solid rgba(140,60,30,.4);border-radius:3px;color:rgba(140,60,30,.4);
+  font-family:'Anton','Impact',sans-serif;font-size:11px;letter-spacing:.2em;transform:rotate(-8deg);pointer-events:none}
+.fg-reveal{background:#f8a57d;color:#1f110b;border:0;box-shadow:0 3px 0 rgba(0,0,0,.45);font-family:inherit;font-weight:800}
+.fg-reveal:active{transform:translateY(2px);box-shadow:none;filter:none}
+.fg-answer#fgAnswer b{font-weight:800}
+.fg-yes,.fg-no{background:rgba(0,0,0,.25);font-family:inherit}
+.fg-yes{border-color:#7ccb9b;color:#7ccb9b}
+.fg-no{border-color:#e0707c;color:#ffb3b6}
+.fg-skip{font-family:inherit}
+.fg-modes{background:none;border:0;border-bottom:1.5px solid rgba(248,165,125,.38);border-radius:0;padding:0 4px;gap:6px;align-items:end}
+.fg-mode{min-height:40px;border:1px solid rgba(248,165,125,.2);border-bottom:0;border-radius:11px 11px 0 0;background:rgba(255,255,255,.03);color:#c9b8a3;display:flex;align-items:center;justify-content:center}
+.fg-mode-active{min-height:44px;margin-bottom:-1.5px;background:linear-gradient(#3a251a,#2a1a12);border-color:rgba(248,165,125,.65);color:#f8a57d;box-shadow:0 2px 0 #2a1a12;font-weight:800}
+.fg-restart{background:rgba(0,0,0,.25);border:1px solid rgba(248,165,125,.4);color:#e7d6c0;font-family:inherit}
+.fg-finish{border-color:#f8a57d;color:#f8a57d}
+.fg-res-card{position:relative;background:linear-gradient(160deg,#3a251a,#1f110b);border:1px solid rgba(248,165,125,.45);overflow:hidden}
+.fg-res-card.is-pass::after,.fg-res-card.is-fail::after{
+  position:absolute;top:14px;inset-inline-start:12px;padding:3px 9px 2px;border:2px solid;border-radius:4px;transform:rotate(-9deg);
+  font-family:'Anton','Impact',sans-serif;font-size:14px;letter-spacing:.18em;animation:plStamp .4s cubic-bezier(.3,1.5,.5,1) backwards;
+}
+.fg-res-card.is-pass::after{content:"ARRIVED";color:#7ccb9b}
+.fg-res-card.is-fail::after{content:"DENIED";color:#e0707c}
+.fg-res-score{font-family:'Anton','Impact',sans-serif;font-weight:400}
+.fg-res-row{background:rgba(0,0,0,.25);border-color:rgba(248,165,125,.3)}
+
+@media (prefers-reduced-motion:reduce){
+.app #story .story-result-banner,.app #story-game .story-result-banner,.app #career .story-result-banner,.app #career-game .story-result-banner,.fg-res-card::after{animation:none!important}
+}
