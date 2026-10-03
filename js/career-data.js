@@ -1,0 +1,88 @@
+/* =========================================================
+   آخر تحديث: 2 أكتوبر 2026 (موسم 2026-27، بعد سوق الصيف)
+   الانتقالات — مسيرة لاعب/مدرب (career-data.js)
+   n: الاسم · t: "p" لاعب / "c" مدرب
+   c: المحطات بالترتيب الزمني [النادي, من, إلى]  (إلى = null يعني لسه مستمر)
+   المحطات الأساسية بس (من غير الإعارات القصيرة).
+   للمدربين المحطات = الأندية/المنتخبات اللي دربها.
+   لإضافة اسم: انسخ سطر وعدّل. اللعبة بتقرأ الملف ده تلقائي.
+========================================================= */
+const CAREER_PLAYERS=[
+/* ---------- لاعبين ---------- */
+{n:"Neymar",t:"p",c:[["Santos",2009,2013],["Barcelona",2013,2017],["Paris Saint-Germain",2017,2023],["Al Hilal",2023,2025],["Santos",2025,null]]},
+{n:"Lionel Messi",t:"p",c:[["Barcelona",2004,2021],["Paris Saint-Germain",2021,2023],["Inter Miami",2023,null]]},
+{n:"Cristiano Ronaldo",t:"p",c:[["Sporting CP",2002,2003],["Manchester United",2003,2009],["Real Madrid",2009,2018],["Juventus",2018,2021],["Manchester United",2021,2022],["Al Nassr",2023,null]]},
+{n:"Zlatan Ibrahimović",t:"p",c:[["Malmö FF",1999,2001],["Ajax",2001,2004],["Juventus",2004,2006],["Inter",2006,2009],["Barcelona",2009,2010],["AC Milan",2010,2012],["Paris Saint-Germain",2012,2016],["Manchester United",2016,2018],["LA Galaxy",2018,2019],["AC Milan",2020,2023]]},
+{n:"Thierry Henry",t:"p",c:[["Monaco",1994,1999],["Juventus",1999,1999],["Arsenal",1999,2007],["Barcelona",2007,2010],["New York Red Bulls",2010,2014]]},
+{n:"David Beckham",t:"p",c:[["Manchester United",1992,2003],["Real Madrid",2003,2007],["LA Galaxy",2007,2012],["Paris Saint-Germain",2013,2013]]},
+{n:"Zinedine Zidane",t:"p",c:[["Cannes",1989,1992],["Bordeaux",1992,1996],["Juventus",1996,2001],["Real Madrid",2001,2006]]},
+{n:"Ronaldinho",t:"p",c:[["Grêmio",1998,2001],["Paris Saint-Germain",2001,2003],["Barcelona",2003,2008],["AC Milan",2008,2011],["Flamengo",2011,2012],["Atlético Mineiro",2012,2014],["Querétaro",2014,2015]]},
+{n:"Ronaldo Nazário",t:"p",c:[["Cruzeiro",1993,1994],["PSV",1994,1996],["Barcelona",1996,1997],["Inter",1997,2002],["Real Madrid",2002,2007],["AC Milan",2007,2008],["Corinthians",2009,2011]]},
+{n:"Kaká",t:"p",c:[["São Paulo",2001,2003],["AC Milan",2003,2009],["Real Madrid",2009,2013],["AC Milan",2013,2014],["Orlando City",2015,2017]]},
+{n:"Luis Suárez",t:"p",c:[["Nacional",2005,2006],["Groningen",2006,2007],["Ajax",2007,2011],["Liverpool",2011,2014],["Barcelona",2014,2020],["Atlético Madrid",2020,2022],["Inter Miami",2024,null]]},
+{n:"Mohamed Salah",t:"p",c:[["Al Mokawloon",2010,2012],["Basel",2012,2014],["Chelsea",2014,2016],["Roma",2016,2017],["Liverpool",2017,2026],["Trabzonspor",2026,null]]},
+{n:"Mohamed Aboutrika",t:"p",c:[["Tersana",1996,2004],["Al Ahly",2004,2013],["Baniyas",2013,2014]]},
+{n:"Sadio Mané",t:"p",c:[["Metz",2011,2012],["Red Bull Salzburg",2012,2014],["Southampton",2014,2016],["Liverpool",2016,2022],["Bayern Munich",2022,2023],["Al Nassr",2023,null]]},
+{n:"Riyad Mahrez",t:"p",c:[["Le Havre",2009,2014],["Leicester City",2014,2018],["Manchester City",2018,2023],["Al Ahli",2023,null]]},
+{n:"Didier Drogba",t:"p",c:[["Le Mans",1998,2002],["Guingamp",2002,2003],["Marseille",2003,2004],["Chelsea",2004,2012],["Shanghai Shenhua",2012,2013],["Galatasaray",2013,2014],["Chelsea",2014,2015],["Montreal Impact",2015,2016]]},
+{n:"Samuel Eto'o",t:"p",c:[["Mallorca",2000,2004],["Barcelona",2004,2009],["Inter",2009,2011],["Anzhi",2011,2013],["Chelsea",2013,2014],["Everton",2014,2014],["Sampdoria",2015,2015],["Antalyaspor",2015,2018]]},
+{n:"Eden Hazard",t:"p",c:[["Lille",2007,2012],["Chelsea",2012,2019],["Real Madrid",2019,2023]]},
+{n:"Kevin De Bruyne",t:"p",c:[["Genk",2008,2012],["Chelsea",2012,2014],["Wolfsburg",2014,2015],["Manchester City",2015,2025],["Napoli",2025,null]]},
+{n:"Robert Lewandowski",t:"p",c:[["Znicz Pruszków",2006,2008],["Lech Poznań",2008,2010],["Borussia Dortmund",2010,2014],["Bayern Munich",2014,2022],["Barcelona",2022,2026],["Chicago Fire",2026,null]]},
+{n:"Erling Haaland",t:"p",c:[["Bryne",2016,2017],["Molde",2017,2019],["Red Bull Salzburg",2019,2020],["Borussia Dortmund",2020,2022],["Manchester City",2022,null]]},
+{n:"Kylian Mbappé",t:"p",c:[["Monaco",2015,2017],["Paris Saint-Germain",2017,2024],["Real Madrid",2024,null]]},
+{n:"Sergio Agüero",t:"p",c:[["Independiente",2003,2006],["Atlético Madrid",2006,2011],["Manchester City",2011,2021],["Barcelona",2021,2021]]},
+{n:"Gareth Bale",t:"p",c:[["Southampton",2006,2007],["Tottenham",2007,2013],["Real Madrid",2013,2022],["Los Angeles FC",2022,2023]]},
+{n:"Luka Modrić",t:"p",c:[["Dinamo Zagreb",2003,2008],["Tottenham",2008,2012],["Real Madrid",2012,2025],["AC Milan",2025,null]]},
+{n:"Cesc Fàbregas",t:"p",c:[["Arsenal",2003,2011],["Barcelona",2011,2014],["Chelsea",2014,2019],["Monaco",2019,2022],["Como",2022,2024]]},
+{n:"Wayne Rooney",t:"p",c:[["Everton",2002,2004],["Manchester United",2004,2017],["Everton",2017,2018],["DC United",2018,2019],["Derby County",2019,2020]]},
+{n:"Frank Lampard",t:"p",c:[["West Ham",1995,2001],["Chelsea",2001,2014],["Manchester City",2014,2015],["New York City FC",2015,2016]]},
+{n:"Andrea Pirlo",t:"p",c:[["Brescia",1995,1998],["Inter",1998,2001],["AC Milan",2001,2011],["Juventus",2011,2015],["New York City FC",2015,2017]]},
+{n:"Gianluigi Buffon",t:"p",c:[["Parma",1995,2001],["Juventus",2001,2018],["Paris Saint-Germain",2018,2019],["Juventus",2019,2021],["Parma",2021,2023]]},
+{n:"Roberto Baggio",t:"p",c:[["Vicenza",1982,1985],["Fiorentina",1985,1990],["Juventus",1990,1995],["AC Milan",1995,1997],["Bologna",1997,1998],["Inter",1998,2000],["Brescia",2000,2004]]},
+{n:"Dimitar Berbatov",t:"p",c:[["CSKA Sofia",1998,2001],["Bayer Leverkusen",2001,2006],["Tottenham",2006,2008],["Manchester United",2008,2012],["Fulham",2012,2014],["Monaco",2014,2015],["PAOK",2015,2016]]},
+{n:"Ruud van Nistelrooy",t:"p",c:[["Den Bosch",1994,1997],["Heerenveen",1997,1998],["PSV",1998,2001],["Manchester United",2001,2006],["Real Madrid",2006,2010],["Hamburg",2010,2011],["Málaga",2011,2012]]},
+{n:"Robin van Persie",t:"p",c:[["Feyenoord",2001,2004],["Arsenal",2004,2012],["Manchester United",2012,2015],["Fenerbahçe",2015,2018],["Feyenoord",2018,2019]]},
+{n:"Arjen Robben",t:"p",c:[["Groningen",2000,2002],["PSV",2002,2004],["Chelsea",2004,2007],["Real Madrid",2007,2009],["Bayern Munich",2009,2019],["Groningen",2020,2021]]},
+{n:"Fernando Torres",t:"p",c:[["Atlético Madrid",2001,2007],["Liverpool",2007,2011],["Chelsea",2011,2015],["Atlético Madrid",2015,2018],["Sagan Tosu",2018,2019]]},
+{n:"David Villa",t:"p",c:[["Sporting Gijón",2001,2003],["Zaragoza",2003,2005],["Valencia",2005,2010],["Barcelona",2010,2013],["Atlético Madrid",2013,2014],["New York City FC",2015,2018],["Vissel Kobe",2019,2020]]},
+{n:"Xabi Alonso",t:"p",c:[["Real Sociedad",1999,2004],["Liverpool",2004,2009],["Real Madrid",2009,2014],["Bayern Munich",2014,2017]]},
+{n:"Sergio Ramos",t:"p",c:[["Sevilla",2003,2005],["Real Madrid",2005,2021],["Paris Saint-Germain",2021,2023],["Sevilla",2023,2024],["Monterrey",2024,null]]},
+{n:"Virgil van Dijk",t:"p",c:[["Groningen",2011,2013],["Celtic",2013,2015],["Southampton",2015,2018],["Liverpool",2018,null]]},
+{n:"Roberto Carlos",t:"p",c:[["União São João",1991,1993],["Palmeiras",1993,1995],["Inter",1995,1996],["Real Madrid",1996,2007],["Fenerbahçe",2007,2009],["Corinthians",2010,2010],["Anzhi",2011,2012]]},
+{n:"Son Heung-min",t:"p",c:[["Hamburg",2010,2013],["Bayer Leverkusen",2013,2015],["Tottenham",2015,2025],["Los Angeles FC",2025,null]]},
+{n:"Mesut Özil",t:"p",c:[["Schalke",2006,2008],["Werder Bremen",2008,2010],["Real Madrid",2010,2013],["Arsenal",2013,2021],["Fenerbahçe",2021,2022],["İstanbul Başakşehir",2022,2023]]},
+{n:"Andriy Shevchenko",t:"p",c:[["Dynamo Kyiv",1994,1999],["AC Milan",1999,2006],["Chelsea",2006,2009],["Dynamo Kyiv",2009,2012]]},
+{n:"Hristo Stoichkov",t:"p",c:[["CSKA Sofia",1984,1990],["Barcelona",1990,1995],["Parma",1995,1996],["Barcelona",1996,1998],["Chicago Fire",2000,2003]]},
+{n:"Gabriel Batistuta",t:"p",c:[["Newell's Old Boys",1988,1989],["River Plate",1989,1990],["Boca Juniors",1990,1991],["Fiorentina",1991,2000],["Roma",2000,2003],["Al-Arabi",2003,2005]]},
+{n:"Carlos Tevez",t:"p",c:[["Boca Juniors",2001,2004],["Corinthians",2005,2006],["West Ham",2006,2007],["Manchester United",2007,2009],["Manchester City",2009,2013],["Juventus",2013,2015],["Boca Juniors",2015,2016],["Shanghai Shenhua",2017,2017],["Boca Juniors",2018,2021]]},
+{n:"Ángel Di María",t:"p",c:[["Rosario Central",2005,2007],["Benfica",2007,2010],["Real Madrid",2010,2014],["Manchester United",2014,2015],["Paris Saint-Germain",2015,2022],["Juventus",2022,2023],["Benfica",2023,2024],["Rosario Central",2025,null]]},
+{n:"Yaya Touré",t:"p",c:[["Beveren",2001,2003],["Metalurh Donetsk",2003,2005],["Olympiacos",2005,2006],["Monaco",2006,2007],["Barcelona",2007,2010],["Manchester City",2010,2018],["Olympiacos",2018,2018]]},
+{n:"Jay-Jay Okocha",t:"p",c:[["Eintracht Frankfurt",1992,1996],["Fenerbahçe",1996,1998],["Paris Saint-Germain",1998,2002],["Bolton Wanderers",2002,2006],["Hull City",2007,2008]]},
+{n:"George Weah",t:"p",c:[["Monaco",1988,1992],["Paris Saint-Germain",1992,1995],["AC Milan",1995,2000],["Chelsea",2000,2000],["Marseille",2000,2001],["Al Jazira",2001,2003]]},
+{n:"Nwankwo Kanu",t:"p",c:[["Ajax",1993,1996],["Inter",1996,1999],["Arsenal",1999,2004],["West Bromwich Albion",2004,2006],["Portsmouth",2006,2012]]},
+{n:"Gabriel Jesus",t:"p",c:[["Palmeiras",2015,2016],["Manchester City",2017,2022],["Arsenal",2022,2026],["Barcelona",2026,null]]},
+{n:"Diego Maradona",t:"p",c:[["Argentinos Juniors",1976,1981],["Boca Juniors",1981,1982],["Barcelona",1982,1984],["Napoli",1984,1991],["Sevilla",1992,1993],["Newell's Old Boys",1993,1993],["Boca Juniors",1995,1997]]},
+{n:"Johan Cruyff",t:"p",c:[["Ajax",1964,1973],["Barcelona",1973,1978],["Los Angeles Aztecs",1979,1979],["Washington Diplomats",1980,1981],["Ajax",1981,1983],["Feyenoord",1983,1984]]},
+
+{n:"Rodri",t:"p",c:[["Villarreal",2015,2018],["Atlético Madrid",2018,2019],["Manchester City",2019,2026],["Barcelona",2026,null]]},
+{n:"Enzo Fernández",t:"p",c:[["River Plate",2019,2022],["Benfica",2022,2023],["Chelsea",2023,2026],["Manchester City",2026,null]]},
+{n:"Sandro Tonali",t:"p",c:[["Brescia",2017,2019],["AC Milan",2019,2023],["Newcastle United",2023,2026],["Tottenham",2026,null]]},
+{n:"Bradley Barcola",t:"p",c:[["Lyon",2021,2023],["Paris Saint-Germain",2023,2026],["Liverpool",2026,null]]},
+{n:"Anthony Gordon",t:"p",c:[["Everton",2017,2023],["Newcastle United",2023,2026],["Barcelona",2026,null]]},
+{n:"Bruno Guimarães",t:"p",c:[["Athletico Paranaense",2017,2020],["Lyon",2020,2022],["Newcastle United",2022,2026],["Arsenal",2026,null]]},
+{n:"Trent Alexander-Arnold",t:"p",c:[["Liverpool",2016,2025],["Real Madrid",2025,null]]},
+{n:"Bernardo Silva",t:"p",c:[["Benfica",2013,2014],["Monaco",2014,2017],["Manchester City",2017,2026],["Real Madrid",2026,null]]},
+{n:"Harry Kane",t:"p",c:[["Tottenham",2011,2023],["Bayern Munich",2023,null]]},
+
+/* ---------- مدربين ---------- */
+{n:"José Mourinho",t:"c",c:[["Benfica",2000,2000],["União de Leiria",2001,2002],["Porto",2002,2004],["Chelsea",2004,2007],["Inter",2008,2010],["Real Madrid",2010,2013],["Chelsea",2013,2015],["Manchester United",2016,2018],["Tottenham",2019,2021],["Roma",2021,2024],["Fenerbahçe",2024,2025],["Benfica",2025,2026],["Real Madrid",2026,null]]},
+{n:"Carlo Ancelotti",t:"c",c:[["Reggiana",1995,1996],["Parma",1996,1998],["Juventus",1999,2001],["AC Milan",2001,2009],["Chelsea",2009,2011],["Paris Saint-Germain",2011,2013],["Real Madrid",2013,2015],["Bayern Munich",2016,2017],["Napoli",2018,2019],["Everton",2019,2021],["Real Madrid",2021,2025],["Brazil",2025,null]]},
+{n:"Pep Guardiola",t:"c",c:[["Barcelona B",2007,2008],["Barcelona",2008,2012],["Bayern Munich",2013,2016],["Manchester City",2016,2026]]},
+{n:"Jürgen Klopp",t:"c",c:[["Mainz",2001,2008],["Borussia Dortmund",2008,2015],["Liverpool",2015,2024]]},
+{n:"Alex Ferguson",t:"c",c:[["East Stirlingshire",1974,1974],["St Mirren",1974,1978],["Aberdeen",1978,1986],["Manchester United",1986,2013]]},
+{n:"Arsène Wenger",t:"c",c:[["Nancy",1984,1987],["Monaco",1987,1994],["Nagoya Grampus",1995,1996],["Arsenal",1996,2018]]},
+{n:"Diego Simeone",t:"c",c:[["Racing Club",2006,2006],["Estudiantes",2006,2006],["River Plate",2006,2007],["San Lorenzo",2007,2008],["Catania",2011,2011],["Racing Club",2011,2011],["Atlético Madrid",2011,null]]},
+{n:"Xabi Alonso (Coach)",t:"c",c:[["Real Sociedad B",2019,2022],["Bayer Leverkusen",2022,2025],["Real Madrid",2025,2026],["Chelsea",2026,null]]},
+{n:"Luis Enrique",t:"c",c:[["Roma",2011,2012],["Celta Vigo",2013,2014],["Barcelona",2014,2017],["Spain",2018,2022],["Paris Saint-Germain",2023,null]]}
+];
