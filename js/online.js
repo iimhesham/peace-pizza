@@ -70,8 +70,17 @@ function stats(){var u=U();db.ref("users/"+u.uid+"/stats").once("value").then(fu
   var v=s.val()||{},t={games:0,pts:0,wins:0},h="";
   Object.keys(G).forEach(function(k){var x=v[k];if(!x)return;t.games+=x.games||0;t.pts+=x.pts||0;t.wins+=x.wins||0;var tot=(x.right||0)+(x.wrong||0);
     h+='<div class="ol-st"><b>'+G[k].n+'</b><br>جلسات: '+x.games+' · فوز: '+(x.wins||0)+' · نقاط: '+x.pts+'<br>صح: '+(x.right||0)+' · غلط: '+(x.wrong||0)+(tot?' · دقة '+Math.round((x.right||0)/tot*100)+'%':'')+'</div>';});
-  shell(KICK('STATS')+'<div class="ol-me">'+(u.photoURL?'<img referrerpolicy="no-referrer" alt="" src="'+e(u.photoURL)+'">':'')+'<div><b>'+e(u.displayName||"لاعب")+'</b><small>'+e(u.email||"")+'</small></div></div><h2>'+IC('chart',1)+' إحصائياتي</h2>'+(h||'<div class="ol-w">لسه ملعبتش أونلاين</div>')+'<h2 style="margin-top:20px">'+IC('trophy',1)+' الإنجازات</h2><div class="ol-bd">'+BADGES.map(function(b){var on=b[2](t,v);return'<div class="'+(on?'on':'')+'">'+(on?IC('check'):IC('lock'))+' '+b[0]+'<small>'+b[1]+'</small></div>';}).join("")+'</div><button class="ol-b o" onclick="OL.back()">رجوع</button>'+(code?'':'<button class="ol-b r" onclick="OL.signOut()">تسجيل خروج</button>'));
+  shell(KICK('STATS')+'<div class="ol-me">'+(u.photoURL?'<img referrerpolicy="no-referrer" alt="" src="'+e(u.photoURL)+'">':'')+'<div><b>'+e(u.displayName||"لاعب")+'</b><small>'+e(u.email||"")+'</small></div></div><h2>'+IC('chart',1)+' إحصائياتي</h2>'+(h||'<div class="ol-w">لسه ملعبتش أونلاين</div>')+'<h2 style="margin-top:20px">'+IC('trophy',1)+' الإنجازات</h2><div class="ol-bd">'+BADGES.map(function(b){var on=b[2](t,v);return'<div class="'+(on?'on':'')+'">'+(on?IC('check'):IC('lock'))+' '+b[0]+'<small>'+b[1]+'</small></div>';}).join("")+'</div>'+(isAdmin()?'<button class="ol-b" onclick="OL.users()">'+IC('trophy',1)+' كل المستخدمين (أدمن)</button>':'')+'<button class="ol-b o" onclick="OL.back()">رجوع</button>'+(code?'':'<button class="ol-b r" onclick="OL.signOut()">تسجيل خروج</button>'));
  }).catch(function(){T("مقدرتش أجيب الإحصائيات");});}
+var ADMIN="modybadr966@gmail.com";
+function isAdmin(){return((U()||{}).email||"").toLowerCase()===ADMIN;}
+function users(){if(!isAdmin())return;
+  db.ref("users").once("value").then(function(s){var v=s.val()||{};
+    var L=Object.keys(v).map(function(id){var x=v[id]||{};return{p:x.profile||{},st:x.stats||{}};}).sort(function(a,b){return(b.p.updated||0)-(a.p.updated||0);});
+    shell(KICK('ADMIN')+'<h2>المستخدمين ('+L.length+')</h2>'+L.map(function(u){var g=0,pt=0;Object.keys(u.st).forEach(function(k){g+=u.st[k].games||0;pt+=u.st[k].pts||0;});
+      var d=u.p.updated?new Date(u.p.updated).toLocaleDateString("ar-EG"):"—";
+      return'<div class="ol-me">'+(u.p.photo?'<img referrerpolicy="no-referrer" alt="" src="'+e(u.p.photo)+'">':'')+'<div><b>'+e(u.p.name||"بدون اسم")+'</b><small>'+e(u.p.email||"(الإيميل هيظهر بعد ما يدخل تاني)")+'</small><small style="direction:rtl">آخر ظهور: '+d+' · جلسات أونلاين: '+g+' · نقاط: '+pt+'</small></div></div>';}).join("")+'<button class="ol-b o" onclick="OL.stats()">رجوع</button>');
+  }).catch(function(){T("مفيش صلاحية — اتأكد إن الـ Rules الجديدة اتنشرت");});}
 function push(u){db.ref("rooms/"+code).update(u);}
 function listen(){var r=db.ref("rooms/"+code),f=r.on("value",function(s){S=s.val();draw();});off=function(){r.off("value",f);};}
 function create(k){var u=U();code=String(1000+Math.floor(Math.random()*9000));role="host";
@@ -110,7 +119,7 @@ function ensure(go){
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
 function account(){mk=null;ensure(stats);}
-window.OL={open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,exit:exit,back:back,stats:stats,
+window.OL={users:users,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,exit:exit,back:back,stats:stats,
   signOut:function(){exit();if(window.ppSignOut)window.ppSignOut();},close:function(){db.ref("rooms/"+code).remove();}};
 var ls=document.createElement("script");ls.src="js/online-story.js";document.head.appendChild(ls);
 var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);

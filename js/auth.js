@@ -98,7 +98,7 @@
       var t=await token(),body={};
       KEYS.forEach(function(k){body[k]=seenGet(k);});
       await fetch(base+"/users/"+user.uid+"/seen.json?auth="+t,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-      await fetch(base+"/users/"+user.uid+"/profile.json?auth="+t,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:user.displayName||"",photo:user.photoURL||"",updated:Date.now()})});
+      await fetch(base+"/users/"+user.uid+"/profile.json?auth="+t,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:user.displayName||"",email:(user.email||"").toLowerCase(),photo:user.photoURL||"",updated:Date.now()})});
     }catch(e){}
   }
   function schedulePush(){
