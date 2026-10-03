@@ -1,0 +1,91 @@
+/* =========================================================
+   قصص الجرايم: ملف سري بالضغط المطوّل + هوية لكل قضية + قواعد قابلة للطي
+   (بيتحمّل بعد باقي ملفات الـCSS عشان يغلب عليهم)
+========================================================= */
+
+/* ---------- 2) هوية كل قضية ---------- */
+.app section[data-case]{--cs-line:var(--a-accent-line)}
+
+/* القطر: بيرث ثيم يوسف (ys-app) فلازم نغلبه بنفس متغيراته */
+.app section.ys-app.ys-app[data-case="train"]{
+  --y-deco:#ffb347;--y-teal:#15162b;--y-teal-deep:#1d1f3a;--y-teal-dark:#262a4d;
+  --y-ink:#fdf3e1;--y-line:rgba(255,179,71,.3);--y-black:#1a0f00;--muted:#c3bfd6;
+  --gold:#d98a1f;--gold2:#ffb347;--gold3:#ffd48a;--cs-on:#1a0f00;
+  background:radial-gradient(ellipse 700px 380px at 50% -10%,rgba(255,179,71,.1),transparent 65%),linear-gradient(180deg,#15162b 0%,#0a0b1a 100%);
+}
+body.mode-yousef:has(section[data-case="train"]:not(.hidden)){background:#10112a!important}
+body.mode-yousef:has(section[data-case="train"]:not(.hidden)) #toast{background:#ffb347!important;border-color:#15162b!important}
+/* يوسف: ثيمه الأخضر/التيل الأصلي زي ما هو، بنزوّد الشريط بس */
+.app section[data-case="yousef"]{--cs-on:#0a0a0a}
+.app section[data-case]:not([data-case="niyaba"]):not([data-case="niyaba2"]) .btn.primary{background:var(--a-accent);color:var(--cs-on,#111)}
+.app section[data-case] .card.hero{box-shadow:inset 0 3px 0 var(--a-accent)}
+
+/* شريط رأس القضية */
+.cs-strip{
+  position:relative;overflow:hidden;direction:ltr;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  min-height:44px;margin:2px 0 8px;padding:0 16px;border-radius:12px;
+  border:1px solid var(--a-accent-line);color:var(--a-accent);
+  font:700 12px/1 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;
+}
+.cs-strip span{position:relative;z-index:1}
+.cs-strip .cs-no{opacity:.75}
+.cs-strip::before,.cs-strip::after{content:"";position:absolute;pointer-events:none}
+
+
+
+
+[data-case="train"] .cs-strip{background:#1c1e3b;border-style:dashed}
+[data-case="train"] .cs-strip::before,[data-case="train"] .cs-strip::after{top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background:#10112a;border:1px solid var(--a-accent-line)}
+[data-case="train"] .cs-strip::before{left:-9px}[data-case="train"] .cs-strip::after{right:-9px}
+
+[data-case="yousef"] .cs-strip{background:linear-gradient(100deg,#143a4d,#0f2f3f)}
+[data-case="yousef"] .cs-strip::before{inset:0;background:repeating-radial-gradient(circle at 50% 190%,transparent 0 9px,rgba(216,224,164,.16) 9px 11px)}
+
+/* ملفات النيابة: بنفس ثيمها البني، بشريط ملف رسمي */
+.app section[data-case="niyaba"],.app section[data-case="niyaba2"]{--a-accent:var(--ny-gold);--a-accent-soft:rgba(226,176,100,.14);--a-accent-line:rgba(226,176,100,.4)}
+[data-case="niyaba"] .cs-strip,[data-case="niyaba2"] .cs-strip{background:linear-gradient(100deg,#3a2216,#1f110a)}
+[data-case="niyaba"] .cs-strip::before,[data-case="niyaba2"] .cs-strip::before{inset:0;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,244,199,.05) 7px 8px)}
+[data-case="niyaba"] .cs-strip::after{inset-block:0;inset-inline-start:0;width:5px;background:var(--ny-gold)}
+[data-case="niyaba2"] .cs-strip::after{inset-block:0;inset-inline-start:0;width:5px;background:var(--ny-red)}
+
+/* ---------- 1) الملف السري بالضغط المطوّل ---------- */
+.dossier{position:relative;border-style:dashed!important;border-width:1.5px!important}
+.dsr-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.dsr-stamp{
+  display:inline-block;padding:4px 12px;border:2px solid var(--a-accent,#d4b675);border-radius:6px;
+  color:var(--a-accent,#d4b675);font-weight:800;font-size:13px;letter-spacing:.08em;
+  transform:rotate(-3deg);opacity:.9;background:var(--a-accent-soft,rgba(212,182,117,.12))
+}
+.dsr-hold{
+  display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;
+  border:1.5px solid var(--a-accent,#d4b675);background:var(--a-accent-soft,rgba(212,182,117,.12));
+  color:var(--a-accent,#d4b675);font:700 14px 'IBM Plex Sans Arabic','Tajawal',sans-serif;cursor:pointer;
+  touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;
+  transition:background .12s,color .12s,transform .12s
+}
+.dsr-hold svg{width:18px;height:18px}
+.dsr-hold:active,.dsr-hold.on{background:var(--a-accent,#d4b675);color:#111;transform:scale(.97)}
+.dsr-body{transition:filter .15s,opacity .15s}
+.dsr-covered .dsr-body{filter:blur(9px) saturate(.5);opacity:.5;user-select:none;-webkit-user-select:none;pointer-events:none}
+section[id$="-player"].dsr-covered [id$="Mafia"]{visibility:hidden}
+
+/* ---------- 8) القواعد القابلة للطي ---------- */
+.rules-card{padding:0!important;overflow:hidden}
+.rl-head{
+  width:100%;display:flex;align-items:center;gap:12px;padding:16px 18px;background:none;border:0;
+  color:inherit;font:inherit;text-align:start;cursor:pointer
+}
+.rl-head h2{margin:0;flex:1;font-size:19px}
+.rl-ico{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--a-accent-soft,rgba(212,182,117,.12));color:var(--a-accent,#d4b675)}
+.rl-ico svg,.rl-chev svg{width:20px;height:20px}
+.rl-chev{color:var(--a-accent,#d4b675);transition:transform .2s}
+.rules-card.open .rl-chev{transform:rotate(180deg)}
+.rl-body{display:none;padding:0 18px 16px}
+.rules-card.open .rl-body{display:block}
+.rl-list{list-style:none;margin:0!important;padding:0!important;display:grid;gap:8px}
+.rl-list li{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);line-height:1.6}
+.rl-list li .rl-li-ico{flex:0 0 auto;display:grid;place-items:center;width:28px;height:28px;border-radius:8px;color:var(--a-accent,#d4b675);background:var(--a-accent-soft,rgba(212,182,117,.12))}
+.rl-list li .rl-li-ico svg{width:17px;height:17px}
+.niyaba-theme .rules-card{--a-accent:var(--ny-gold);--a-accent-soft:rgba(226,176,100,.14)}
+@media (prefers-reduced-motion:reduce){.rl-chev,.dsr-body,.dsr-hold{transition:none}}
