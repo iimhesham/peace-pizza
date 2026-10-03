@@ -63,6 +63,7 @@
 #hub .hm-row.is-story   {--ac:190,48,52}    /* أنا مين: أحمر */
 #hub .hm-row.is-football{--ac:87,199,160}   /* باسورد: أخضر */
 #hub .hm-row.is-flags   {--ac:248,165,125}  /* العلم: برتقالي */
+#hub .hm-row.is-career  {--ac:255,138,61}   /* الانتقالات: برتقالي جمري */
 #hub .hm-row:active{border-color:rgba(var(--ac),.6)}
 
 /* لو الجهاز مظبوط على "تقليل الحركة" نقفل كل ده */
