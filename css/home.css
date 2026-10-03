@@ -314,14 +314,24 @@ button.hm-case{border-color:#4a4127}
   body:not(.force-mobile-view) #hub .hm-fc-desc b{font-size:12.5px;color:inherit}
 }
 
-/* الكارت الخامس: TRANSFERS — نفس لغة كروت الواجهة (تدرج غامق + إطار داخلي رفيع + Anton) */
-.hm-fc5{display:flex;align-items:center;justify-content:center;gap:12px;width:244px;height:62px;margin:2px auto 16px;padding:0 16px;border-radius:14px;position:relative;overflow:hidden;cursor:pointer;text-align:start;
-  color:#b9d46f;background:linear-gradient(160deg,#143452,#0a1b2d);border:1px solid rgba(185,212,111,.4);box-shadow:0 10px 24px rgba(0,0,0,.45);
+/* الكارت الخامس: TRANSFERS — تذكرة + عقد انتقال. أزرق بترولي/نيلي، بوردر دهبي، خط Anton زي باقي الكروت */
+.hm-fc5w{width:min(100%,344px);margin:4px auto 18px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5))}
+.hm-fc5{--stub:88px;--notch:8px;direction:ltr;display:flex;align-items:stretch;width:100%;height:96px;padding:0;position:relative;overflow:hidden;cursor:pointer;text-align:start;
+  color:#d4b675;background:linear-gradient(160deg,#1f4a63 0%,#123349 55%,#0b2233 100%);border:1px solid rgba(212,182,117,.45);border-radius:14px;
+  -webkit-mask:radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0,#0000 97%,#000),radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%,#0000 97%,#000);
+  -webkit-mask-composite:source-in;mask:radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0,#0000 97%,#000),radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%,#0000 97%,#000);mask-composite:intersect;
   transition:transform .15s ease,filter .15s ease;-webkit-tap-highlight-color:transparent}
+.hm-fc5::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.07;background:repeating-linear-gradient(135deg,#fff 0 1px,transparent 1px 7px)}
 .hm-fc5>i{position:absolute;inset:5px;border-radius:10px;border:1px solid currentColor;opacity:.28;pointer-events:none}
-.hm-fc5-ic{display:block;flex:none;line-height:0}
-.hm-fc5-tx{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
-.hm-fc5 b{font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;font-size:16px;letter-spacing:.12em;line-height:1.1;color:#e6f2c4}
-.hm-fc5 small{font-size:8.5px;letter-spacing:.16em;opacity:.65}
+.hm-fc5-main{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:0 14px 0 20px}
+.hm-fc5-kicker{font-size:8px;letter-spacing:.22em;opacity:.7}
+.hm-fc5 b{font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;font-size:25px;letter-spacing:.1em;line-height:1;color:#efe6cf}
+.hm-fc5-route{display:flex;align-items:center;gap:6px;color:#9cc3d6}
+.hm-fc5-route em{flex:1;height:0;border-top:1.5px dashed currentColor;opacity:.55}
+.hm-fc5-route em:first-child{flex:none;width:6px;height:6px;border:1.5px solid currentColor;border-radius:50%;opacity:.8}
+.hm-fc5-route svg{flex:none;transform:rotate(90deg)}
+.hm-fc5-route span{flex:none;font-size:8.5px;letter-spacing:.16em;color:#d4b675;opacity:.75}
+.hm-fc5-stub{flex:none;width:var(--stub);position:relative;display:grid;place-items:center;border-inline-start:1.5px dashed rgba(212,182,117,.5);background:rgba(4,16,26,.28)}
+.hm-fc5-stamp{font-family:'Anton','Impact','Arial Black',sans-serif;font-size:14px;line-height:1.15;letter-spacing:.14em;text-align:center;padding:5px 8px 5px 10px;color:#e9c97a;border:1.5px solid #e9c97a;border-radius:4px;transform:rotate(-9deg);opacity:.92;box-shadow:inset 0 0 0 1px rgba(233,201,122,.25)}
 .hm-fc5:active{transform:scale(.97);filter:brightness(1.12)}
-@media (min-width:901px){body:not(.force-mobile-view) #hub .hm-fc5{margin-inline-start:282px}}
+@media (min-width:901px){body:not(.force-mobile-view) #hub .hm-fc5w{margin-inline-start:282px;margin-inline-end:auto}}
