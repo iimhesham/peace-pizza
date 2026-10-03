@@ -186,7 +186,7 @@ button.hm-case{border-color:#4a4127}
 
 /* ---------- hub: fanned cards (now 4: stories / who-am-i /
    password / flags) ---------- */
-.hm-fan-4{position:relative;height:200px;max-width:392px;margin:14px auto 0}
+.hm-fan-4{position:relative;height:200px;max-width:392px;margin:8px auto 0}
 .hm-fc{
   position:absolute;top:24px;left:50%;width:110px;height:164px;margin-left:-55px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
