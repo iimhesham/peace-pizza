@@ -43,7 +43,7 @@ function getLiveDbUrl(){
    فمن غيره ممكن نفتكر إن التفعيل نجح وهو أصلًا مش بيكتب/يقرأ حاجة. */
 async function testLiveDbConnection(url){
   try{
-    const res=await fetch(`${url}/.json?shallow=true`,{method:"GET"});
+    const res=await fetch(`${url}/sessions.json?shallow=true`,{method:"GET"});
     return res.ok;
   }catch(e){
     return false;
