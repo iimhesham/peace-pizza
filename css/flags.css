@@ -5,18 +5,18 @@
    never touches the warm dark-green theme used everywhere else.
 ========================================================= */
 
-body.mode-flags{background:#0e2b23}
+body.mode-flags{background:#151514}
 body.mode-flags .moon,
 body.mode-flags .fog{display:none}
 
 .fg-app{
-  --fg-bg:#0e2b23;
-  --fg-panel:#154237;
-  --fg-panel-hi:#1c5445;
-  --fg-line:#2c6455;
-  --fg-line-hi:#3f8069;
+  --fg-bg:#151514;
+  --fg-panel:#1f1e1c;
+  --fg-panel-hi:#292724;
+  --fg-line:#3a3833;
+  --fg-line-hi:#57544b;
   --fg-text:#f7f2d9;
-  --fg-muted:#a9c9ba;
+  --fg-muted:#b6b3a8;
   --fg-cyan:#7ccb9b;
   --fg-violet:#f8a57d;
   --fg-yes:#7ccb9b;
@@ -159,7 +159,7 @@ body.mode-flags .fog{display:none}
 .fg-mode:active{filter:brightness(1.15)}
 .fg-mode-active{
   background:linear-gradient(135deg,var(--fg-cyan),var(--fg-violet));
-  border-color:transparent;color:#0e2b23;font-weight:800;
+  border-color:transparent;color:#151514;font-weight:800;
   box-shadow:0 6px 16px rgba(0,0,0,.28);
 }
 

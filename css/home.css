@@ -4,15 +4,15 @@
    body.mode-home so the game screens are untouched.
 ========================================================= */
 
-body.mode-home{background-color:#0b1210}
+body.mode-home{background-color:#0b0b0a}
 body.mode-home .moon,
 body.mode-home .fog{display:none}
 
 .home{
-  --h-panel:#111b17;
-  --h-panel-hi:#17231e;
-  --h-line:#243530;
-  --h-line-hi:#38514a;
+  --h-panel:#141413;
+  --h-panel-hi:#1b1a18;
+  --h-line:#2a2927;
+  --h-line-hi:#41403b;
   --h-text:#e9efeb;
   --h-muted:#8d9d95;
   --h-faint:#6c7c74;
@@ -74,7 +74,7 @@ button.hm-row:active{background:var(--h-panel-hi);border-color:var(--h-line-hi)}
 .hm-ico{
   flex:none;width:46px;height:46px;
   display:grid;place-items:center;
-  background:#0c1411;border:1px solid var(--h-line);border-radius:12px;
+  background:#111110;border:1px solid var(--h-line);border-radius:12px;
   color:var(--h-gold);
 }
 .hm-row.is-football .hm-ico{color:var(--h-green)}
@@ -133,7 +133,7 @@ button.hm-case{border-color:#4a4127}
 /* seal on the stories list */
 .cs-emblem{display:block;width:150px;height:auto;margin:18px auto 6px}
 .hm-bar + .cs-emblem + .hm-sub{text-align:center}
-.hm-ico-books{background:#0c1411}
+.hm-ico-books{background:#111110}
 
 /* ---------- hub: stats strip, filter tabs, search ---------- */
 .hm-stats{
