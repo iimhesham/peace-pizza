@@ -19,6 +19,8 @@ let careerOrder=[];       // ترتيب كشف المحطات للجولة ال�
 let careerStages=3;       // 3 عادي · 4 صعب
 let careerFilter="all";   // all | p | c
 let careerStage=1;
+let careerPeek=new Set(); // محطات المشرف فتحها بالضغط
+let careerFlipIdx=-1;
 let careerPrevShown=0;    // عدد المحطات اللي كانت ظاهرة قبل آخر دليل (للأنيميشن)
 let careerGuesses={a:0,b:0};
 let careerHistory=[];
@@ -187,6 +189,7 @@ function careerNextRound(silent){
   careerCurrentIdx=idx;
   careerCurrent=CAREER_PLAYERS[idx];
   careerOrder=careerShuffleOrder(careerCurrent.c.length);
+  careerPeek=new Set();careerFlipIdx=-1;
   careerStage=1;
   careerGuesses={a:0,b:0};
   careerRoundOver=false;
@@ -292,9 +295,15 @@ function careerRenderRound(){
   const fresh=new Set(careerOrder.slice(careerPrevShown,shown));
 
   stops.forEach((s,i)=>{
-    const isOpen=open.has(i);
+    const official=open.has(i);
+    const isOpen=official||careerPeek.has(i);
     const row=document.createElement("div");
-    row.className="cr-stop "+(isOpen?"is-open":"is-hidden")+(isOpen&&fresh.has(i)&&careerPrevShown>0?" is-new":"");
+    if(!careerRoundOver&&!official){
+      row.classList.add("is-tap");row.setAttribute("role","button");row.tabIndex=0;
+      row.onclick=()=>careerFlipStop(i);
+      row.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();careerFlipStop(i);}};
+    }
+    row.className+=" cr-stop "+(isOpen?"is-open":"is-hidden")+(careerFlipIdx===i?" is-flip":"")+(isOpen&&fresh.has(i)&&careerPrevShown>0?" is-new":"");
 
     const node=document.createElement("div");
     node.className="cr-node";
@@ -368,6 +377,8 @@ function careerRenderRound(){
     if(right)right.disabled=blocked;
   });
 
+  const pk=document.getElementById("careerPeekAllBtn");
+  if(pk){pk.disabled=careerRoundOver;pk.textContent=careerPeek.size?"إخفاء المحطات المفتوحة 🙈":"إظهار كل المسيرة 👁️";}
   const skip=document.getElementById("careerSkipBtn");
   if(skip)skip.disabled=careerRoundOver;
 
@@ -381,6 +392,26 @@ function careerRenderRound(){
     ansBtn.textContent=careerAnswerShown?"إخفاء الإجابة 🙈":"إظهار الإجابة (للمشرف) 👁️";
   }
   setTxt("careerPointsNow",careerCurrentPoints());
+}
+
+function careerFlipStop(i){
+  if(careerRoundOver||!careerCurrent)return;
+  playClickSound();
+  if(careerPeek.has(i))careerPeek.delete(i);else careerPeek.add(i);
+  careerFlipIdx=i;
+  careerRenderRound();
+  careerFlipIdx=-1;
+}
+
+function careerPeekAll(){
+  if(careerRoundOver||!careerCurrent)return;
+  playClickSound();
+  const n=careerCurrent.c.length;
+  const hidden=[...Array(n).keys()].filter(i=>!careerOrder.slice(0,careerShownCount()).includes(i));
+  const all=hidden.every(i=>careerPeek.has(i));
+  hidden.forEach(i=>all?careerPeek.delete(i):careerPeek.add(i));
+  careerFlipIdx=-1;
+  careerRenderRound();
 }
 
 function careerRenderView(){
