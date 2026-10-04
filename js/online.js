@@ -147,7 +147,7 @@ function stats(){var u=U();vw="stats";
   Object.keys(G).forEach(function(k){var x=v[k];if(!x)return;t.games+=x.games||0;t.pts+=x.pts||0;t.wins+=x.wins||0;var tot=(x.right||0)+(x.wrong||0);
     h+='<div class="ol-st"><b>'+G[k].n+'</b><br>جلسات: '+x.games+' · فوز: '+(x.wins||0)+' · نقاط: '+x.pts+'<br>صح: '+(x.right||0)+' · غلط: '+(x.wrong||0)+(tot?' · دقة '+Math.round((x.right||0)/tot*100)+'%':'')+'</div>';});
   shell(me()+'<h2>'+IC('chart',1)+' إحصائياتي</h2>'+(h||'<div class="ol-w">لسه ملعبتش أونلاين</div>')+'<h2>'+IC('trophy',1)+' الإنجازات</h2><div class="ol-bd">'+BADGES.map(function(b){var on=b[2](t,v);return'<div class="'+(on?'on':'')+'">'+(on?IC('check'):IC('lock'))+' '+b[0]+'<small>'+b[1]+'</small></div>';}).join("")+'</div>'+
-    (isAdmin()?'<button type="button" class="ol-b" onclick="OL.users()">كل المستخدمين (أدمن)</button>':canClaim()?'<button type="button" class="ol-b o" onclick="OL.claim()">خليني أنا الأدمن (مرة واحدة بس)</button>':'')+(code?'':'<button type="button" class="ol-b r" onclick="OL.signOut()">تسجيل خروج</button>'),{t:"حسابي"});
+    (isAdmin()?'<button type="button" class="ol-b" onclick="OL.users()">كل المستخدمين (أدمن)</button><button type="button" class="ol-b o" onclick="OL.test()">فحص الأونلاين (أدمن)</button>':canClaim()?'<button type="button" class="ol-b o" onclick="OL.claim()">خليني أنا الأدمن (مرة واحدة بس)</button>':'')+(code?'':'<button type="button" class="ol-b r" onclick="OL.signOut()">تسجيل خروج</button>'),{t:"حسابي"});
  }).catch(function(){T("مقدرتش أجيب الإحصائيات");});}
 function users(){if(!isAdmin())return;vw="users";
   loadB().then(function(){return db.ref("users").once("value");}).then(function(s){var v=s.val()||{};
@@ -159,10 +159,10 @@ function users(){if(!isAdmin())return;vw="users";
 function push(u){db.ref("rooms/"+code).update(u);}
 function listen(){try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}var r=db.ref("rooms/"+code),f=r.on("value",function(s){S=s.val();draw();});off=function(){r.off("value",f);};}
 function bail(m){busy=false;code=role=null;T(m);if(!vw)OL.exit();}
-function mkRoom(pay,cb){var u=U(),n=0;(function go(){var c=String(1000+Math.floor(Math.random()*9000));
+function mkRoom(pay,cb,ns){var u=U(),n=0;(function go(){var c=String(1000+Math.floor(Math.random()*9000));
   db.ref("rooms/"+c).transaction(function(x){if(x&&Date.now()-(x.created||0)<43200000)return;return pay;},function(err,ok){
     if(err||!ok){if(++n<8)return go();return cb(err||new Error("full"));}
-    db.ref("secrets/"+c).remove().catch(function(){});db.ref("votes/"+c).remove().catch(function(){});cb(null,c);sweep(u.uid,c);});})();}
+    db.ref("secrets/"+c).remove().catch(function(){});db.ref("votes/"+c).remove().catch(function(){});cb(null,c);if(!ns)sweep(u.uid,c);});})();}
 function sweep(id,keep){var L=[];try{L=JSON.parse(localStorage.getItem("pp_hosted")||"[]");}catch(x){}
   L.forEach(function(c){if(c===keep)return;db.ref("rooms/"+c+"/host").once("value").then(function(s){if(s.val()!==id)return;
     return db.ref("secrets/"+c).remove().then(function(){return db.ref("votes/"+c).remove();}).then(function(){return db.ref("rooms/"+c).remove();});}).catch(function(){});});
@@ -226,7 +226,7 @@ function ensure(go){
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
 function account(){mk=null;ensure(stats);}
-window.OL={mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,
+window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=1";s.onload=function(){OLT.run();};s.onerror=function(){T("مقدرتش أحمّل الفحص");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,
   rejoin:function(c){ensure(function(){OL.join(c);});},
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("تقفل الغرفة للكل؟"))db.ref("rooms/"+code).remove();}};
 var ls=document.createElement("script");ls.src="js/online-story.js?v=7";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=7";document.head.appendChild(lp);
