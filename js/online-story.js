@@ -14,7 +14,7 @@ function rg(){return GAMES[S.st];}
 function ids(){return Object.keys(S.crew||{});}
 function open(){
   db=firebase.database();
-  shell('<div class="ol-w">اختار القصة اللي هتحكمها</div>'+Object.keys(GAMES).map(function(k){return'<button class="ol-b" onclick="OLS.create(\''+k+'\')">'+e(NM[k]||k)+'</button>';}).join("")+'<button type="button" class="ol-b o" onclick="OL.up()">رجوع</button>',{t:"قصص الجرايم"});
+  shell('<div class="ol-w">اختار القصة اللي هتحكمها</div>'+Object.keys(GAMES).map(function(k){return'<button class="ol-b" onclick="OLS.create(\''+k+'\')">'+e(NM[k]||k)+'</button>';}).join("")+'<button type="button" class="ol-b o" onclick="OL.up()">رجوع</button>',{t:"قصص الجرايم",g:"crime"});
 }
 function create(k){var u=U();clear();db=firebase.database();role="host";
   OL.mk({host:u.uid,hostName:u.displayName||"",game:"story",st:k,status:"lobby",created:Date.now()},function(err,c){
@@ -49,17 +49,17 @@ function vote(t){var k="olv_"+code+"_"+S.vote;try{localStorage.setItem(k,"1");}c
   db.ref("votes/"+code+"/"+S.vote+"/"+U().uid).set(t).catch(function(){T("صوتك اتسجل قبل كده");});draw();}
 function voted(){try{return localStorage.getItem("olv_"+code+"_"+S.vote);}catch(x){return null;}}
 function cast(forVote,me){var c=S.cast||{};return Object.keys(c).map(function(u){var x=c[u];
-  return'<div class="ol-t'+(x.alive?'':' ol-dead')+'"><div class="ol-v" style="width:100%"><span style="color:#e9efeb;text-align:right"><b>'+e(x.role)+'</b><br><small style="color:#8d9d95;font-weight:400">'+e(x.pub)+'</small></span>'+
+  return'<div class="ol-t'+(x.alive?'':' ol-dead')+'"><div class="ol-v" style="width:100%"><span style="color:var(--ink);text-align:right"><b>'+e(x.role)+'</b><br><small style="color:var(--mu);font-weight:400">'+e(x.pub)+'</small></span>'+
    (forVote&&x.alive&&u!==me?'<button class="ol-b" onclick="OLS.vote(\''+u+'\')">صوّت</button>':'')+'</div></div>';}).join("");}
 function draw(){
   if(!S||!document.getElementById("olRoot"))return;
-  var host=role==="host",me=U().uid,p=S.pub||{},c=S.cast||{},O={room:true,code:code,t:NM[S.st]||S.st,playing:S.status==="play"};
+  var host=role==="host",me=U().uid,p=S.pub||{},c=S.cast||{},O={room:true,code:code,t:NM[S.st]||S.st,playing:S.status==="play",g:"crime",c:S.st};
   if(S.status==="lobby"){
     shell('<div class="ol-ticket" onclick="OL.copy()"><small>كود الغرفة · دوس عشان تنسخه</small><div class="ol-code">'+e(code)+'</div><span>ابعت الكود للاعبين</span></div><div class="ol-sec">اللاعبين ('+ids().length+')</div>'+ids().map(function(u){return'<div class="ol-t"><b>'+(S.crew[u].photo?'<img class="ol-av" referrerpolicy="no-referrer" alt="" src="'+e(S.crew[u].photo)+'">':'<span class="ol-ph"></span>')+(OL.nmu?OL.nmu(u,S.crew[u].name):e(S.crew[u].name))+'</b></div>';}).join("")+(host?'<button type="button" class="ol-b" onclick="OLS.start()">وزّع الأدوار وابدأ</button>':'<div class="ol-w">مستني الـ GM يوزع الأدوار…</div>'),O);
     return;}
   var rd=rg().rounds[S.round]||{},top='<div class="ol-p"><h3>'+e(p.title)+'</h3>'+e(p.text)+(p.evidence?'<br><small>الدليل</small><br>'+e(p.evidence):'')+'</div>'+(S.last?'<div class="ol-bz">'+e(S.last)+'</div>':'');
   if(host){
-    var rows=Object.keys(c).map(function(u){var r=(R||{})[u]||{};return'<div class="ol-t'+(c[u].alive?'':' ol-dead')+'"><b>'+e(c[u].role)+'</b><span style="font-weight:400;color:#8d9d95">'+e(c[u].who)+(r.killer?'<i class="ol-tag">قاتل</i>':r.accomplice?'<i class="ol-tag">شريك</i>':'')+'</span></div>';}).join("");
+    var rows=Object.keys(c).map(function(u){var r=(R||{})[u]||{};return'<div class="ol-t'+(c[u].alive?'':' ol-dead')+'"><b>'+e(c[u].role)+'</b><span style="font-weight:400;color:var(--mu)">'+e(c[u].who)+(r.killer?'<i class="ol-tag">قاتل</i>':r.accomplice?'<i class="ol-tag">شريك</i>':'')+'</span></div>';}).join("");
     var tally="";if(S.vote){var cnt={};Object.keys(V||{}).forEach(function(v){cnt[V[v]]=(cnt[V[v]]||0)+1;});
       tally='<div class="ol-p"><h3>التصويت</h3><small>صوّت '+Object.keys(V||{}).length+' من '+Object.keys(c).filter(function(u){return c[u].alive;}).length+'</small>'+Object.keys(c).filter(function(u){return c[u].alive;}).map(function(u){return'<div class="ol-v"><span>'+e(c[u].role)+' — '+(cnt[u]||0)+'</span><button class="ol-b r" onclick="OLS.elim(\''+u+'\')">اقصِ</button></div>';}).join("")+'</div>';}
     shell(top+'<div class="ol-p"><h3>للـ GM فقط</h3>'+(rd.surface?'<small>سطحي</small><br>'+e(rd.surface)+'<br>':'')+(rd.deep?'<small>أعمق</small><br>'+e(rd.deep):'')+(rd.private?'<br><small>الدليل الخاص اتبعت لصاحب الدور تلقائيًا</small>':'')+'</div>'+rows+tally+
