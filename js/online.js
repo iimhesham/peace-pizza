@@ -158,28 +158,34 @@ function users(){if(!isAdmin())return;vw="users";
   }).catch(function(){T("مفيش صلاحية — اتأكد إن الـ Rules الجديدة اتنشرت");});}
 function push(u){db.ref("rooms/"+code).update(u);}
 function listen(){try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}var r=db.ref("rooms/"+code),f=r.on("value",function(s){S=s.val();draw();});off=function(){r.off("value",f);};}
-function create(k){if(busy)return;var u=U();busy=true;role="host";var n=0;
-  (function go(){code=String(1000+Math.floor(Math.random()*9000));
-    db.ref("rooms/"+code).transaction(function(c){if(c&&Date.now()-(c.created||0)<43200000)return;return{host:u.uid,hostName:u.displayName||"",game:k,status:"lobby",created:Date.now()};},function(err,ok){
-      if(err||!ok){if(++n<8)return go();busy=false;code=role=null;var pd=err&&(err.code==="PERMISSION_DENIED"||/permission/i.test(err.message||""));T(pd?"مش مسموح تفتح غرفة. اتأكد إن الـ Rules اتنشرت":"مفيش كود فاضي دلوقتي، جرّب تاني");return;}
-      busy=false;listen();sweep(u.uid);});})();}
-function sweep(id){db.ref("rooms").orderByChild("host").equalTo(id).once("value").then(function(s){var o=s.val()||{};Object.keys(o).forEach(function(c){if(c===code)return;var r=o[c]||{};
-  if(r.status==="end"||Date.now()-(r.created||0)>43200000){db.ref("rooms/"+c).remove();db.ref("secrets/"+c).remove();db.ref("votes/"+c).remove();}});}).catch(function(){});}
+function bail(m){busy=false;code=role=null;T(m);if(!vw)OL.exit();}
+function mkRoom(pay,cb){var u=U(),n=0;(function go(){var c=String(1000+Math.floor(Math.random()*9000));
+  db.ref("rooms/"+c).transaction(function(x){if(x&&Date.now()-(x.created||0)<43200000)return;return pay;},function(err,ok){
+    if(err||!ok){if(++n<8)return go();return cb(err||new Error("full"));}
+    cb(null,c);sweep(u.uid,c);});})();}
+function sweep(id,keep){var L=[];try{L=JSON.parse(localStorage.getItem("pp_hosted")||"[]");}catch(x){}
+  L.forEach(function(c){if(c===keep)return;db.ref("rooms/"+c+"/host").once("value").then(function(s){if(s.val()!==id)return;
+    db.ref("rooms/"+c).remove();db.ref("secrets/"+c).remove();db.ref("votes/"+c).remove();}).catch(function(){});});
+  try{localStorage.setItem("pp_hosted",JSON.stringify([keep]));}catch(x){}}
+function create(k){if(busy)return;var u=U();busy=true;role="host";
+  mkRoom({host:u.uid,hostName:u.displayName||"",game:k,status:"lobby",created:Date.now()},function(err,c){
+    if(err){var pd=err.code==="PERMISSION_DENIED"||/permission/i.test(err.message||"");return bail(pd?"مش مسموح تفتح غرفة. اتأكد إن الـ Rules اتنشرت":"مفيش كود فاضي دلوقتي، جرّب تاني");}
+    busy=false;code=c;listen();});}
 function join(c0){if(busy)return;var u=U(),c=String(c0||(document.getElementById("olCode")||{}).value||"").replace(/\D/g,"");
   if(c.length!==4){T("اكتب كود الغرفة (4 أرقام)");return;}busy=true;
   db.ref("rooms/"+c).once("value").then(function(s){var r=s.val();
-    if(!r){busy=false;try{localStorage.removeItem("pp_room");}catch(x){}T("الغرفة مش موجودة");return;}
+    if(!r){try{localStorage.removeItem("pp_room");}catch(x){}return bail("الغرفة مش موجودة");}
     code=c;role=r.host===u.uid?"host":"player";
     if(role==="host"){busy=false;return listen();}
     var v=r.players||{},mine=["a","b"].filter(function(x){return v[x]&&v[x].uid===u.uid;})[0];
     if(mine){busy=false;return listen();}
-    if(r.status&&r.status!=="lobby"){busy=false;code=role=null;T("اللعبة بدأت، مينفعش تدخل دلوقتي");return;}
+    if(r.status&&r.status!=="lobby")return bail("اللعبة بدأت، مينفعش تدخل دلوقتي");
     var me={uid:u.uid,name:u.displayName||"لاعب",photo:u.photoURL||""};
-    (function claim(i){var k=["a","b"][i];if(!k){busy=false;code=role=null;T("الغرفة ممتلئة");return;}
+    (function claim(i){var k=["a","b"][i];if(!k)return bail("الغرفة ممتلئة");
       db.ref("rooms/"+c+"/players/"+k).transaction(function(x){return x&&x.uid!==u.uid?undefined:me;},function(err,ok){
-        if(err){busy=false;code=role=null;T("مقدرتش أدخل");return;}
+        if(err)return bail("مقدرتش أدخل");
         if(ok){busy=false;listen();}else claim(i+1);});})(0);
-  }).catch(function(){busy=false;code=role=null;T("مقدرتش أدخل");});}
+  }).catch(function(){bail("مقدرتش أدخل");});}
 function shuf(n){var a=[],i;for(i=0;i<n;i++)a.push(i);return a.sort(function(){return Math.random()-.5;});}
 function ordFor(i){var x=g().data()[i];return x&&x.c?shuf(x.c.length):null;}
 function start(){var gm=g(),a=shuf(gm.data().length).slice(0,gm.c),sc={};
@@ -220,7 +226,7 @@ function ensure(go){
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
 function account(){mk=null;ensure(stats);}
-window.OL={nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,
+window.OL={mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,
   rejoin:function(c){ensure(function(){OL.join(c);});},
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("تقفل الغرفة للكل؟"))db.ref("rooms/"+code).remove();}};
 var ls=document.createElement("script");ls.src="js/online-story.js?v=7";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=7";document.head.appendChild(lp);

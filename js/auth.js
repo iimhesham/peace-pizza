@@ -3,6 +3,8 @@
    مفيش حاجة بتتغير في اللعب نفسه: لو فشل أي شيء الموقع بيكمّل عادي بالمحفوظ على الجهاز.
 ========================================================= */
 (function(){
+  /* كاش للملفات: الموقع بيفتح أسرع وبيفضل شغال لو النت ضعيف */
+  try{if("serviceWorker" in navigator&&location.protocol==="https:")window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}catch(e){}
   var cfg=window.FIREBASE_WEB_CONFIG||(typeof FIREBASE_WEB_CONFIG!=="undefined"?FIREBASE_WEB_CONFIG:null);
   if(!cfg||!cfg.apiKey||!cfg.appId)return; /* مش متفعّل لسه */
 

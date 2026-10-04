@@ -16,10 +16,11 @@ function open(){
   db=firebase.database();
   shell('<div class="ol-w">اختار القصة اللي هتحكمها</div>'+Object.keys(GAMES).map(function(k){return'<button class="ol-b" onclick="OLS.create(\''+k+'\')">'+e(NM[k]||k)+'</button>';}).join("")+'<button type="button" class="ol-b o" onclick="OL.up()">رجوع</button>',{t:"قصص الجرايم"});
 }
-function create(k){var u=U();clear();db=firebase.database();code=String(1000+Math.floor(Math.random()*9000));role="host";
-  db.ref("rooms/"+code).set({host:u.uid,hostName:u.displayName||"",game:"story",st:k,status:"lobby",created:Date.now()}).then(listen).catch(function(){T("فشل إنشاء الغرفة");clear();});}
+function create(k){var u=U();clear();db=firebase.database();role="host";
+  OL.mk({host:u.uid,hostName:u.displayName||"",game:"story",st:k,status:"lobby",created:Date.now()},function(err,c){
+    if(err){clear();T("فشل إنشاء الغرفة");return;}code=c;listen();});}
 function join(c){var u=U();db=firebase.database();clear();code=c;role="player";
-  db.ref("rooms/"+c+"/crew/"+u.uid).set({name:u.displayName||"لاعب",photo:u.photoURL||""}).then(listen).catch(function(){clear();T("مقدرتش أدخل");});}
+  db.ref("rooms/"+c+"/crew/"+u.uid).set({name:u.displayName||"لاعب",photo:u.photoURL||""}).then(listen).catch(function(){clear();T("مقدرتش أدخل");if(!document.querySelector("#olRoot .ol-c"))OL.exit();});}
 function listen(){
   try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}
   on(db.ref("rooms/"+code),function(s){S=s.val();if(!S){if(code){T("الغرفة اتقفلت");OL.exit();}return;}
@@ -76,7 +77,7 @@ OL.join=function(c0){var c=String(c0||(document.getElementById("olCode")||{}).va
   db.ref("rooms/"+c).once("value").then(function(s){var r=s.val();
     if(r&&r.game==="story"&&r.st){var me=U().uid;
       if(r.host===me){clear();code=c;role="host";listen();return;}
-      if(r.status&&r.status!=="lobby"&&!(r.crew&&r.crew[me])){T("اللعبة بدأت، مينفعش تدخل دلوقتي");return;}
+      if(r.status&&r.status!=="lobby"&&!(r.crew&&r.crew[me])){T("اللعبة بدأت، مينفعش تدخل دلوقتي");if(!document.querySelector("#olRoot .ol-c"))OL.exit();return;}
       join(c);}else oj(c);}).catch(function(){oj(c);});};
 window.OLS={open:open,create:create,start:start,next:next,openVote:openVote,closeVote:closeVote,elim:elim,reveal:reveal,vote:vote,peek:function(){peek=!peek;draw();},close:function(){if(!confirm("تقفل الغرفة للكل؟"))return;var c=code;db.ref("secrets/"+c).remove().then(function(){return db.ref("votes/"+c).remove();}).then(function(){return db.ref("rooms/"+c).remove();});}};
 })();
