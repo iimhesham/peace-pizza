@@ -21,6 +21,7 @@ function create(k){var u=U();clear();db=firebase.database();code=String(1000+Mat
 function join(c){var u=U();db=firebase.database();clear();code=c;role="player";
   db.ref("rooms/"+c+"/crew/"+u.uid).set({name:u.displayName||"لاعب",photo:u.photoURL||""}).then(listen).catch(function(){clear();T("مقدرتش أدخل");});}
 function listen(){
+  try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}
   on(db.ref("rooms/"+code),function(s){S=s.val();if(!S){if(code){T("الغرفة اتقفلت");OL.exit();}return;}
     if(role==="host"&&S.vote&&S.vote!==vkey){vkey=S.vote;if(vref)vref.off();vref=db.ref("votes/"+code+"/"+vkey);vref.on("value",function(v){V=v.val()||{};draw();});}
     if(!S.vote)V=null;draw();});
@@ -71,8 +72,11 @@ function draw(){
 }
 var oe=OL.exit,oj=OL.join;
 OL.exit=function(){clear();oe();};
-OL.join=function(){var c=(document.getElementById("olCode").value||"").replace(/\D/g,"");if(c.length!==4){T("اكتب كود الغرفة (4 أرقام)");return;}db=firebase.database();
+OL.join=function(c0){var c=String(c0||(document.getElementById("olCode")||{}).value||"").replace(/\D/g,"");if(c.length!==4){T("اكتب كود الغرفة (4 أرقام)");return;}db=firebase.database();
   db.ref("rooms/"+c).once("value").then(function(s){var r=s.val();
-    if(r&&r.game==="story"){if(r.host===U().uid){clear();code=c;role="host";listen();}else join(c);}else oj();}).catch(function(){oj();});};
+    if(r&&r.game==="story"&&r.st){var me=U().uid;
+      if(r.host===me){clear();code=c;role="host";listen();return;}
+      if(r.status&&r.status!=="lobby"&&!(r.crew&&r.crew[me])){T("اللعبة بدأت، مينفعش تدخل دلوقتي");return;}
+      join(c);}else oj(c);}).catch(function(){oj(c);});};
 window.OLS={open:open,create:create,start:start,next:next,openVote:openVote,closeVote:closeVote,elim:elim,reveal:reveal,vote:vote,peek:function(){peek=!peek;draw();},close:function(){if(!confirm("تقفل الغرفة للكل؟"))return;var c=code;db.ref("secrets/"+c).remove().then(function(){return db.ref("votes/"+c).remove();}).then(function(){return db.ref("rooms/"+c).remove();});}};
 })();

@@ -58,7 +58,9 @@
   }
 
   /* ---------- الدخول ---------- */
+  function inApp(){return /FBAN|FBAV|FB_IAB|Instagram|Messenger|Snapchat|TikTok|Line\/|MicroMessenger|; wv\)/i.test(navigator.userAgent||"");}
   function signIn(){
+    if(inApp()){try{navigator.clipboard.writeText(location.href);}catch(e){}say("جوجل مش بتشتغل جوا المتصفح ده. افتح اللينك في كروم أو سفاري (اللينك اتنسخ)");return;}
     var provider=new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({prompt:"select_account"});
     auth.signInWithPopup(provider).catch(function(e){
@@ -121,7 +123,7 @@
         if(user){if(!was)say("أهلًا "+((user.displayName||"").split(" ")[0]||"بيك"));pull();}
       });
       auth.getRedirectResult().catch(function(){});
-      loadScript("js/online.js?v=6").catch(function(){});
+      loadScript("js/online.js?v=7").catch(function(){});
     }).catch(function(){if(chip)chip.style.display="none";});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
