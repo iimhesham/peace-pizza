@@ -76,7 +76,12 @@ var CSS=':root{--o-bell:'+SV("<path d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9
 '.ol-bd{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.ol-bd div{background:#141413;border:1px solid #2a2927;border-radius:12px;padding:10px 4px;font-size:13px;color:#555;text-align:center}.ol-bd .on{color:#d4b675;border-color:#d4b675}.ol-bd small{display:block;font-size:11px;opacity:.8}'+
 '.ol-st{background:#141413;border:1px solid #2a2927;border-radius:14px;padding:12px;margin:8px 0}.ol-st b{color:#d4b675}'+
 '.ol-me{display:flex;align-items:center;gap:12px;background:#141413;border:1px solid #2a2927;border-radius:14px;padding:12px;margin:8px 0}.ol-me img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #10b981;flex:none}.ol-me b{display:block;color:#fff}.ol-me small{display:block;color:#8d9d95;direction:ltr;text-align:right;word-break:break-all}'+
-'.ol-bdg{display:inline-flex;align-items:center;gap:4px;margin-inline-start:7px;padding:2px 9px 0;border-radius:999px;font:400 12px/1.5 Anton,Impact,sans-serif;letter-spacing:1.5px;color:#241a04;background:linear-gradient(135deg,#f6e3a1,#c9992f);white-space:nowrap;font-style:normal;vertical-align:middle}.ol-av.gold,.ol-me img.gold{border-color:#e6c25a;box-shadow:0 0 0 2px rgba(230,194,90,.35)}.ol-mini{margin-top:8px;padding:6px 14px;border-radius:999px;border:1px solid #6b5a35;background:#1b1a18;color:#d4b675;font:600 13px "IBM Plex Sans Arabic",sans-serif;cursor:pointer}.ol-mini.off{color:#8d9d95;border-color:#41403b}'+
+'.ol-bdg{display:inline-flex;align-items:center;gap:4px;margin-inline-start:7px;padding:2px 9px 0;border-radius:999px;font:400 12px/1.5 Anton,Impact,sans-serif;letter-spacing:1.5px;color:#1c1604;white-space:nowrap;font-style:normal;vertical-align:middle}'+
+'.ol-bdg.t-gold{background:linear-gradient(135deg,#f6e3a1,#c9992f)}.ol-bdg.t-silver{background:linear-gradient(135deg,#f1f4f7,#9aa7b3)}.ol-bdg.t-premium{background:linear-gradient(135deg,#e4c6ff,#9a6bd6);color:#240a3d}'+
+'.ol-nm.t-gold,.ol-nm.t-silver,.ol-nm.t-premium{-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:800}'+
+'.ol-nm.t-gold{background-image:linear-gradient(100deg,#fff1b8,#e0ac35 45%,#b9831f)}.ol-nm.t-silver{background-image:linear-gradient(100deg,#ffffff,#b9c4cf 50%,#8895a2)}.ol-nm.t-premium{background-image:linear-gradient(100deg,#f1dcff,#b98cf0 50%,#8a5bc9)}'+
+'.ol-av.r-gold,.ol-me img.r-gold{border-color:#e6c25a;box-shadow:0 0 0 2px rgba(230,194,90,.35)}.ol-av.r-silver,.ol-me img.r-silver{border-color:#c3ccd5;box-shadow:0 0 0 2px rgba(195,204,213,.3)}.ol-av.r-premium,.ol-me img.r-premium{border-color:#b98cf0;box-shadow:0 0 0 2px rgba(185,140,240,.35)}'+
+'.ol-mrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.ol-mini{padding:5px 13px;border-radius:999px;border:1px solid #41403b;background:#1b1a18;color:#8d9d95;font:600 13px "IBM Plex Sans Arabic",sans-serif;cursor:pointer}.ol-mini.on{color:#241a04;background:#d4b675;border-color:#d4b675}'+
 '.ol-c h2{color:#d4b675;margin:16px 0 8px;font-weight:700;font-size:20px}'+
 /* قصص الجرايم */
 '.ol-p{background:#141413;border:1px solid #2a2927;border-radius:14px;padding:12px;margin:8px 0;line-height:1.7}.ol-p h3{margin:0 0 6px;color:#d4b675;font-size:16px}.ol-p small{color:#8d9d95}'+
@@ -92,13 +97,16 @@ function shell(h,o){o=o||{};root();var top=ov.scrollTop;inRoom=!!o.room;playing=
 function menu(k){if(k)mk=k;k=mk||"flags";vw="menu";var m=META[k],crime=k==="crime";
   shell('<div class="ol-pass"><div class="ol-pass-top"><span class="ol-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+m.ic+'</svg></span><div><b>'+e(m.n)+'</b><small>'+e(m.d)+'</small></div></div><div class="ol-perf"></div><div class="ol-pass-bot"><button type="button" class="ol-b" onclick="'+(crime?'OLS.open()':'OL.create(\''+k+'\')')+'">'+(crime?'اختار القصة وافتح الغرفة':'افتح غرفة جديدة')+'</button><p class="ol-hint">'+e(m.who)+'. إنت اللي بتحكم في الغرفة.</p></div></div>'+
    '<div class="ol-join"><label for="olCode">عندك كود غرفة؟</label><div class="ol-join-row"><input id="olCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0000" autocomplete="off" onkeydown="if(event.key===\'Enter\')OL.join()"><button type="button" class="ol-b g" onclick="OL.join()">ادخل</button></div></div>',{t:m.n+" أونلاين"});}
-function bdg(id){return BDG[id]==="gold"?'<i class="ol-bdg">&#9733; Golden</i>':"";}
-function nm(p){return e(p.name)+bdg(p.uid);}
+var BD={gold:"Golden",silver:"Silver",premium:"Premium"},BK=["gold","silver","premium"];
+function bk(id){return BD[BDG[id]]?BDG[id]:"";}
+function bdg(id){var k=bk(id);return k?'<i class="ol-bdg t-'+k+'">&#9733; '+BD[k]+'</i>':"";}
+function nmu(id,name){var k=bk(id);return'<span class="ol-nm'+(k?' t-'+k:'')+'">'+e(name)+'</span>'+bdg(id);}
+function nm(p){return nmu(p.uid,p.name);}
 function loadB(){return db.ref("badges").once("value").then(function(s){BDG=s.val()||{};},function(){});}
-function setBadge(id,on){db.ref("badges/"+id).set(on?"gold":null).then(function(){if(on)BDG[id]="gold";else delete BDG[id];T(on?"اتدّى Golden":"اتشال البادج");users();}).catch(function(){T("مقدرتش أغيّر البادج. اتأكد إن الـ Rules الجديدة اتنشرت");});}
+function setBadge(id,k){var on=k&&BD[k];db.ref("badges/"+id).set(on?k:null).then(function(){if(on)BDG[id]=k;else delete BDG[id];T(on?"اتدّى "+BD[k]:"اتشال البادج");users();}).catch(function(){T("مقدرتش أغيّر البادج. اتأكد إن الـ Rules اتنشرت");});}
 function pl(){var P=S.players||{};return Object.keys(P).map(function(k){return P[k];});}
 function ids(){return pl().map(function(p){return p.uid;});}
-function av(p){return p.photo?'<img class="ol-av'+(BDG[p.uid]?' gold':'')+'" referrerpolicy="no-referrer" alt="" src="'+e(p.photo)+'">':'<span class="ol-ph"></span>';}
+function av(p){return p.photo?'<img class="ol-av'+(bk(p.uid)?' r-'+bk(p.uid):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(p.photo)+'">':'<span class="ol-ph"></span>';}
 function board(){var sc=S.scores||{};return pl().map(function(p){return'<div class="ol-t"><b>'+av(p)+nm(p)+'</b><span>'+((sc[p.uid]||{}).pts||0)+'</span></div>';}).join("")||'<div class="ol-w">لسه محدش دخل</div>';}
 function g(){return G[S.game||"flags"];}
 function cur(){return g().data()[S.deck[S.i]];}
@@ -132,7 +140,7 @@ function isAdmin(){var u=U();return!!(u&&ADM&&ADM[u.uid]===true);}
 function canClaim(){return ADM===false;}
 function claim(){var u=U();if(!canClaim())return;
   db.ref("admins/"+u.uid).set(true).then(function(){T("اتسجّلت أدمن");stats();}).catch(function(){T("مقدرتش أسجّلك أدمن. اتأكد إن الـ Rules الجديدة اتنشرت");});}
-function me(){var u=U();return'<div class="ol-me">'+(u.photoURL?'<img class="'+(BDG[u.uid]?'gold':'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.photoURL)+'">':'')+'<div><b>'+e(u.displayName||"لاعب")+bdg(u.uid)+'</b><small>'+e(mail(u))+'</small></div></div>';}
+function me(){var u=U();return'<div class="ol-me">'+(u.photoURL?'<img class="'+(bk(u.uid)?'r-'+bk(u.uid):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.photoURL)+'">':'')+'<div><b>'+nmu(u.uid,u.displayName||"لاعب")+'</b><small>'+e(mail(u))+'</small></div></div>';}
 function stats(){var u=U();vw="stats";
   db.ref("admins").once("value").then(function(a){ADM=a.exists()?a.val():false;},function(){ADM=null;}).then(function(){return db.ref("users/"+u.uid+"/stats").once("value");}).then(function(s){
   var v=s.val()||{},t={games:0,pts:0,wins:0},h="";
@@ -146,7 +154,7 @@ function users(){if(!isAdmin())return;vw="users";
     var L=Object.keys(v).map(function(id){var x=v[id]||{};return{id:id,p:x.profile||{},st:x.stats||{}};}).sort(function(a,b){return(b.p.updated||0)-(a.p.updated||0);});
     shell('<div class="ol-w">'+L.length+' مستخدم</div>'+L.map(function(u){var gg=0,pt=0;Object.keys(u.st).forEach(function(k){gg+=u.st[k].games||0;pt+=u.st[k].pts||0;});
       var d=u.p.updated?new Date(u.p.updated).toLocaleDateString("ar-EG"):"—";
-      return'<div class="ol-me">'+(u.p.photo?'<img class="'+(BDG[u.id]?'gold':'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.p.photo)+'">':'')+'<div><b>'+e(u.p.name||"بدون اسم")+bdg(u.id)+'</b><small>'+e(u.p.email||"بدون إيميل ظاهر")+'</small><small dir="ltr">ID: '+e(u.id.slice(0,10))+'…</small><small style="direction:rtl;text-align:right">آخر ظهور: '+d+' · جلسات أونلاين: '+gg+' · نقاط: '+pt+'</small><button type="button" class="ol-mini'+(BDG[u.id]?' off':'')+'" onclick="OL.badge(\''+e(u.id)+'\','+(BDG[u.id]?'0':'1')+')">'+(BDG[u.id]?'شيل بادج Golden':'ادّيه بادج Golden')+'</button></div></div>';}).join(""),{t:"المستخدمين"});
+      return'<div class="ol-me">'+(u.p.photo?'<img class="'+(bk(u.id)?'r-'+bk(u.id):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.p.photo)+'">':'')+'<div><b>'+nmu(u.id,u.p.name||"بدون اسم")+'</b><small>'+e(u.p.email||"بدون إيميل ظاهر")+'</small><small dir="ltr">ID: '+e(u.id.slice(0,10))+'…</small><small style="direction:rtl;text-align:right">آخر ظهور: '+d+' · جلسات أونلاين: '+gg+' · نقاط: '+pt+'</small><div class="ol-mrow">'+BK.map(function(k){return'<button type="button" class="ol-mini'+(bk(u.id)===k?' on':'')+'" onclick="OL.badge(\''+e(u.id)+'\',\''+(bk(u.id)===k?'':k)+'\')">'+BD[k]+'</button>';}).join("")+'</div></div></div>';}).join(""),{t:"المستخدمين"});
   }).catch(function(){T("مفيش صلاحية — اتأكد إن الـ Rules الجديدة اتنشرت");});}
 function push(u){db.ref("rooms/"+code).update(u);}
 function listen(){var r=db.ref("rooms/"+code),f=r.on("value",function(s){S=s.val();draw();});off=function(){r.off("value",f);};}
@@ -206,7 +214,7 @@ function ensure(go){
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
 function account(){mk=null;ensure(stats);}
-window.OL={bdg:bdg,badge:setBadge,shell:shell,users:users,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,
+window.OL={nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("تقفل الغرفة للكل؟"))db.ref("rooms/"+code).remove();}};
 var ls=document.createElement("script");ls.src="js/online-story.js?v=6";document.head.appendChild(ls);
 var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);

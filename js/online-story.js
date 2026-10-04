@@ -53,7 +53,7 @@ function draw(){
   if(!S||!document.getElementById("olRoot"))return;
   var host=role==="host",me=U().uid,p=S.pub||{},c=S.cast||{},O={room:true,code:code,t:NM[S.st]||S.st,playing:S.status==="play"};
   if(S.status==="lobby"){
-    shell('<div class="ol-ticket" onclick="OL.copy()"><small>كود الغرفة · دوس عشان تنسخه</small><div class="ol-code">'+e(code)+'</div><span>ابعت الكود للاعبين</span></div><div class="ol-sec">اللاعبين ('+ids().length+')</div>'+ids().map(function(u){return'<div class="ol-t"><b>'+(S.crew[u].photo?'<img class="ol-av" referrerpolicy="no-referrer" alt="" src="'+e(S.crew[u].photo)+'">':'<span class="ol-ph"></span>')+e(S.crew[u].name)+(OL.bdg?OL.bdg(u):'')+'</b></div>';}).join("")+(host?'<button type="button" class="ol-b" onclick="OLS.start()">وزّع الأدوار وابدأ</button>':'<div class="ol-w">مستني الـ GM يوزع الأدوار…</div>'),O);
+    shell('<div class="ol-ticket" onclick="OL.copy()"><small>كود الغرفة · دوس عشان تنسخه</small><div class="ol-code">'+e(code)+'</div><span>ابعت الكود للاعبين</span></div><div class="ol-sec">اللاعبين ('+ids().length+')</div>'+ids().map(function(u){return'<div class="ol-t"><b>'+(S.crew[u].photo?'<img class="ol-av" referrerpolicy="no-referrer" alt="" src="'+e(S.crew[u].photo)+'">':'<span class="ol-ph"></span>')+(OL.nmu?OL.nmu(u,S.crew[u].name):e(S.crew[u].name))+'</b></div>';}).join("")+(host?'<button type="button" class="ol-b" onclick="OLS.start()">وزّع الأدوار وابدأ</button>':'<div class="ol-w">مستني الـ GM يوزع الأدوار…</div>'),O);
     return;}
   var rd=rg().rounds[S.round]||{},top='<div class="ol-p"><h3>'+e(p.title)+'</h3>'+e(p.text)+(p.evidence?'<br><small>الدليل</small><br>'+e(p.evidence):'')+'</div>'+(S.last?'<div class="ol-bz">'+e(S.last)+'</div>':'');
   if(host){
