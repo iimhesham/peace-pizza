@@ -162,10 +162,10 @@ function bail(m){busy=false;code=role=null;T(m);if(!vw)OL.exit();}
 function mkRoom(pay,cb){var u=U(),n=0;(function go(){var c=String(1000+Math.floor(Math.random()*9000));
   db.ref("rooms/"+c).transaction(function(x){if(x&&Date.now()-(x.created||0)<43200000)return;return pay;},function(err,ok){
     if(err||!ok){if(++n<8)return go();return cb(err||new Error("full"));}
-    cb(null,c);sweep(u.uid,c);});})();}
+    db.ref("secrets/"+c).remove().catch(function(){});db.ref("votes/"+c).remove().catch(function(){});cb(null,c);sweep(u.uid,c);});})();}
 function sweep(id,keep){var L=[];try{L=JSON.parse(localStorage.getItem("pp_hosted")||"[]");}catch(x){}
   L.forEach(function(c){if(c===keep)return;db.ref("rooms/"+c+"/host").once("value").then(function(s){if(s.val()!==id)return;
-    db.ref("rooms/"+c).remove();db.ref("secrets/"+c).remove();db.ref("votes/"+c).remove();}).catch(function(){});});
+    return db.ref("secrets/"+c).remove().then(function(){return db.ref("votes/"+c).remove();}).then(function(){return db.ref("rooms/"+c).remove();});}).catch(function(){});});
   try{localStorage.setItem("pp_hosted",JSON.stringify([keep]));}catch(x){}}
 function create(k){if(busy)return;var u=U();busy=true;role="host";
   mkRoom({host:u.uid,hostName:u.displayName||"",game:k,status:"lobby",created:Date.now()},function(err,c){

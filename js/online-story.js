@@ -39,11 +39,11 @@ function start(){var g=rg(),n=ids().length,rl=getGameRoles(S.st,code,n),us=shuf(
   p["rooms/"+code+"/status"]="play";p["rooms/"+code+"/round"]=0;p["rooms/"+code+"/cast"]=cast;p["rooms/"+code+"/pub"]=pub(g.rounds[0]);
   db.ref().update(p);}
 function next(){var n=S.round+1,g=rg();if(n>=g.rounds.length)return db.ref("rooms/"+code).update({status:"end",vote:null});
-  var p=privs(n,R);p["rooms/"+code+"/round"]=n;p["rooms/"+code+"/pub"]=pub(g.rounds[n]);p["rooms/"+code+"/vote"]=null;db.ref().update(p);}
+  var p=privs(n,R||{});p["rooms/"+code+"/round"]=n;p["rooms/"+code+"/pub"]=pub(g.rounds[n]);p["rooms/"+code+"/vote"]=null;db.ref().update(p);}
 function openVote(){var n=(S.vc||0)+1;db.ref("rooms/"+code).update({vote:"v"+n,vc:n});}
 function closeVote(){db.ref("rooms/"+code).update({vote:null});}
 function elim(u){var p={};p["cast/"+u+"/alive"]=false;p.vote=null;p.last=S.cast[u].role+" ("+S.cast[u].who+") اتقصى";db.ref("rooms/"+code).update(p);}
-function reveal(){var k=Object.keys(R).filter(function(u){return R[u].killer||R[u].accomplice;}).map(function(u){return(R[u].killer?"القاتل: ":"الشريك: ")+S.cast[u].role+" ("+S.cast[u].who+")";});
+function reveal(){var k=Object.keys(R||{}).filter(function(u){return R[u].killer||R[u].accomplice;}).map(function(u){return(R[u].killer?"القاتل: ":"الشريك: ")+S.cast[u].role+" ("+S.cast[u].who+")";});
   db.ref("rooms/"+code).update({status:"end",vote:null,reveal:k});}
 function vote(t){var k="olv_"+code+"_"+S.vote;try{localStorage.setItem(k,"1");}catch(x){}
   db.ref("votes/"+code+"/"+S.vote+"/"+U().uid).set(t).catch(function(){T("صوتك اتسجل قبل كده");});draw();}
