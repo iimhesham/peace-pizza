@@ -1,6 +1,6 @@
 {
-  "name": "GAME — Play Night",
-  "short_name": "GAME",
+  "name": "Peace Pizza",
+  "short_name": "Peace Pizza",
   "description": "منصة ألعاب ليلة واحدة",
   "start_url": "./",
   "scope": "./",
@@ -8,11 +8,26 @@
   "orientation": "portrait",
   "lang": "ar",
   "dir": "rtl",
-  "background_color": "#061611",
-  "theme_color": "#061611",
+  "background_color": "#050505",
+  "theme_color": "#050505",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
