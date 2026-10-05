@@ -18,3 +18,18 @@
     setStat("hmStatNames",fmt(FOOTBALL_PLAYERS.length)+"+");
   }
 })();
+
+/* ---------- الدُرج الجانبي (اختصارات) ---------- */
+(function(){
+  const h=document.getElementById("dxHandle"),d=document.getElementById("dx"),sc=document.getElementById("dxScrim"),x=document.getElementById("dxClose");
+  if(!h||!d)return;
+  const set=on=>{
+    document.body.classList.toggle("dx-open",on);
+    h.setAttribute("aria-expanded",on?"true":"false");
+    d.setAttribute("aria-hidden",on?"false":"true");
+  };
+  h.addEventListener("click",()=>{if(typeof playClickSound==="function")playClickSound();set(true);});
+  [sc,x].forEach(e=>e&&e.addEventListener("click",()=>set(false)));
+  d.addEventListener("click",e=>{if(e.target.closest(".hm-fc,.hm-fc5"))set(false);});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")set(false);});
+})();
