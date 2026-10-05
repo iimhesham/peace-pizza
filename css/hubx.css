@@ -227,3 +227,17 @@ body.dx-open{overflow:hidden}
 .dx .hm-fc-x .hm-fc-cap b{color:#FF4777}
 @media (prefers-reduced-motion:reduce){.dx,.dx-scrim{transition:none}}
 body.dx-open .credits-toggle,body.dx-open .view-mode-toggle{visibility:hidden}
+
+/* =========================================================
+   شيلنا كل الخطوط المتقطعة اللي بتفصل (تحت العنوان وجنب
+   عناوين الأقسام). الفصل دلوقتي بمسافة + عنوان بشريط لون
+   عمودي صغير بلون القسم، من غير صندوق ولا خط.
+========================================================= */
+#hub .hm-head-c .hm-sub::before,#hub .hm-head-c .hm-sub::after{display:none}
+#hub .hm-head-c .hm-sub{display:block;text-align:center}
+
+.hx-h{gap:10px;margin:34px 2px 14px;font-size:17px;font-weight:800;letter-spacing:.01em}
+.hx-h::before{content:"";flex:none;width:5px;height:20px;border-radius:3px;background:currentColor}
+.hx-h::after{display:none}
+.hx-h span{padding:0;border:0;border-radius:0;transform:none;line-height:1.3}
+.hx-stats+.hx-h,#hub .hm-head-c+.hx-h{margin-top:22px}
