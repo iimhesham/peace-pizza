@@ -149,3 +149,29 @@
   body:not(.force-mobile-view) .hx-card{min-height:220px}
   body:not(.force-mobile-view) .hx-wide{min-height:140px}
 }
+
+/* =========================================================
+   تصغير الكروت العريضة (القصص + الانتقالات): نفس الشكل بمساحة أقل
+========================================================= */
+.hx-wide{min-height:0}
+.hx-wide .hx-art{width:84px}
+.hx-wide .hx-art svg{transform:scale(.8)}
+.hx-wide .hx-body{padding:11px 12px;gap:1px}
+.hx-wide .hx-ar{font-size:16px;line-height:1.3}
+.hx-wide .hx-desc{font-size:12px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hx-wide .hx-en{font-size:9.5px}
+.hx-wide .hx-stamp{font-size:9px}
+.hx-case .hx-tab{padding:5px 11px 6px 10px;font-size:7.5px}
+.hx-case .hx-art{padding-top:14px}
+.hx-case .hx-stamp{left:50%;bottom:9px;margin-left:-26px}
+.hx-mvp{margin-top:4px;padding:0 9px;font-size:11.5px;line-height:1.6}
+.hx-career{--stub:84px;--notch:7px}
+.hx-career .hx-stamp{margin-top:6px;font-size:10px;padding:3px 6px 3px 8px}
+.hx-career .hx-art svg{transform:scale(.7)}
+@media (max-width:360px){
+  .hx-wide .hx-art{width:76px}
+  .hx-career{--stub:76px}
+}
+@media (min-width:901px){
+  body:not(.force-mobile-view) .hx-wide{min-height:0}
+}
