@@ -48,8 +48,8 @@
 
   /* ---------- أسامي ---------- */
   const nameOf=p=>{
-    if(p==="x")return S.nameX.trim()||(S.mode==="cpu"?"أنت":"لاعب X");
-    return S.mode==="cpu"?"الكمبيوتر":(S.nameO.trim()||"لاعب O");
+    if(p==="x")return S.nameX.trim()||(S.mode==="cpu"?"You":"Player X");
+    return S.mode==="cpu"?"Computer":(S.nameO.trim()||"Player O");
   };
 
   /* ---------- منطق اللعبة ---------- */
@@ -126,16 +126,16 @@
     });
   }
 
+  const verb=p=>nameOf(p)==="You"?" win":" wins";
   function statusText(){
     const el=$("xoStatus");
     el.textContent="";
     const add=(t,cls)=>{const s=document.createElement("span");if(cls)s.className=cls;s.textContent=t;el.appendChild(s);};
     if(S.over){
-      if(S.lastWinner){add(nameOf(S.lastWinner),"xo-"+S.lastWinner);add(" كسب الجولة");}
-      else add("تعادل — محدش كسب الجولة");
+      if(S.lastWinner){add(nameOf(S.lastWinner),"xo-"+S.lastWinner);add(verb(S.lastWinner)+" the round");}
+      else add("Draw — no winner this round");
     }else{
-      add("دور ");add(nameOf(S.turn),"xo-"+S.turn);
-      if(S.mode==="cpu"&&S.turn==="o")add(" ...");
+      add(nameOf(S.turn),"xo-"+S.turn);add(S.mode==="cpu"&&S.turn==="o"?" is thinking...":nameOf(S.turn)==="You"?" — your turn":"'s turn");
     }
   }
 
@@ -151,7 +151,7 @@
       c.classList.toggle("is-win",win);
       c.classList.toggle("is-dim",!!S.line&&!win);
       c.disabled=!!v||S.over||(S.mode==="cpu"&&S.turn==="o");
-      c.setAttribute("aria-label","خانة "+(i+1)+(v?"، "+v.toUpperCase():"، فاضية"));
+      c.setAttribute("aria-label","Cell "+(i+1)+(v?", "+v.toUpperCase():", empty"));
     });
     $("xoBoard").classList.toggle("is-draw",S.over&&!S.lastWinner);
 
@@ -164,7 +164,7 @@
     $("xoPlO").classList.toggle("is-turn",!S.over&&S.turn==="o");
 
     const need=NEED[S.best];
-    $("xoMeta").textContent=S.best===1?"جولة واحدة":"جولة "+S.round+" · الأول لـ "+need;
+    $("xoMeta").textContent=S.best===1?"Single round":"Round "+S.round+" · First to "+need;
     $("xoNext").classList.toggle("hidden",!(S.over&&!S.seriesOver));
     statusText();
   }
@@ -208,8 +208,8 @@
     let champ=sx>so?"x":so>sx?"o":null;
     $("xoFinalMark").className="xo-final-mark"+(champ?" xo-"+champ+"-mark":" is-tie");
     $("xoFinalMark").innerHTML=champ?MARK[champ]:'<span class="xo-tie-eq">=</span>';
-    $("xoFinalTitle").textContent=champ?nameOf(champ)+" كسب المباراة":"المباراة تعادل";
-    $("xoFinalScore").textContent=sx+" - "+so+(S.scores.d?"   (تعادل "+S.scores.d+")":"");
+    $("xoFinalTitle").textContent=champ?nameOf(champ)+verb(champ)+" the match":"Match tied";
+    $("xoFinalScore").textContent=sx+" - "+so+(S.scores.d?"   (draws "+S.scores.d+")":"");
     f.classList.remove("hidden");
     $("xoAgain").focus({preventScroll:true});
   }
@@ -246,10 +246,10 @@
     $("xoDiffWrap").classList.toggle("hidden",S.mode!=="cpu");
     const o=$("xoNameO");
     o.disabled=S.mode==="cpu";
-    o.value=S.mode==="cpu"?"الكمبيوتر":S.nameO;
-    o.placeholder="لاعب O";
+    o.value=S.mode==="cpu"?"Computer":S.nameO;
+    o.placeholder="Player O";
     $("xoNameX").value=S.nameX;
-    $("xoNameX").placeholder=S.mode==="cpu"?"أنت":"لاعب X";
+    $("xoNameX").placeholder=S.mode==="cpu"?"You":"Player X";
   }
 
   window.xoOpen=function(){
