@@ -181,18 +181,20 @@
    مفيش تحميل زيادة: نفس الـSVG ونفس CSS الكروت الموجود، والدُرج
    مقفول (visibility:hidden) فمش بيتحسب ولا بيتفتح إلا بالضغط.
 ========================================================= */
-.dx-handle,.dx-scrim,.dx{display:none}
-body:has(#hub:not(.hidden)) .dx-handle{display:grid}
+.dx-scrim,.dx{display:none}
 body:has(#hub:not(.hidden)) .dx-scrim,
 body:has(#hub:not(.hidden)) .dx{display:block}
+#hub{position:relative}
 
+/* الزرار جوه الصفحة نفسها (مش fixed): بيمشي مع السكرول ومش بيتهز مع شريط المتصفح */
 .dx-handle{
-  position:fixed;left:0;top:50%;z-index:40;margin-top:-44px;
-  width:30px;height:88px;min-height:0;padding:0;place-items:center;
+  position:absolute;left:0;top:92px;z-index:5;
+  width:24px;height:54px;min-height:0;padding:0;display:grid;place-items:center;
   background:#141413;color:#d4b675;
-  border:1.5px solid rgba(212,182,117,.5);border-left:0;border-radius:0 14px 14px 0;
-  box-shadow:4px 0 14px rgba(0,0,0,.5);cursor:pointer;
+  border:1.5px solid rgba(212,182,117,.5);border-left:0;border-radius:0 12px 12px 0;
+  cursor:pointer;
 }
+.dx-handle svg{width:15px;height:20px}
 .dx-handle:active{background:#1b1a18}
 .dx-handle:focus-visible{outline:2px solid #d4b675;outline-offset:2px}
 .dx-scrim{position:fixed;inset:0;z-index:41;background:rgba(0,0,0,.62);opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}

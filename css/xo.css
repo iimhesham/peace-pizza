@@ -22,8 +22,8 @@ body.mode-xo #toast{background:#FF4777!important;color:#1a1214!important}
   max-width:460px;margin:0 auto;min-height:100dvh;
   padding:calc(14px + env(safe-area-inset-top)) 14px 32px;
   color:var(--xo-sand);
-  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
-  line-height:1.55;
+  font-family:'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  line-height:1.55;direction:ltr;
 }
 
 /* ---------- الشريط العلوي ---------- */
@@ -107,7 +107,7 @@ body.mode-xo #toast{background:#FF4777!important;color:#1a1214!important}
 .xo-pm svg path,.xo-pm svg circle{stroke-dasharray:none;animation:none}
 .xo-pl b{
   max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font-size:14px;font-weight:700;color:var(--xo-sand);direction:rtl;
+  font-size:14px;font-weight:700;color:var(--xo-sand);direction:ltr;
 }
 .xo-pl em{
   font-style:normal;font-family:'Anton','Impact','Arial Black',sans-serif;
