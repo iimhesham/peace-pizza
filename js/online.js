@@ -273,10 +273,19 @@ function stats(){var u=U();vw="stats";
   shell(X("tabs","me")+me()+'<div class="ol-kpis"><div><b>'+t.pts+'</b><small>نقطة (الكل)</small></div><div><b>'+t.wins+'</b><small>فوز</small></div><div><b>'+t.games+'</b><small>جلسة</small></div></div>'+
     '<h2>'+IC('chart',1)+' كل لعبة لوحدها</h2>'+(h||'<div class="ol-w">لسه ملعبتش أونلاين</div>')+'<h2>'+IC('trophy',1)+' Achievements</h2><div class="ol-bd">'+BADGES.map(function(b){var on=b[2](t,v);return'<div class="'+(on?'on':'')+'">'+(on?IC('check'):IC('lock'))+' '+b[0]+'<small>'+b[1]+'</small></div>';}).join("")+'</div>'+
     '<button type="button" class="ol-b o" onclick="OL.sug()">'+IX('pencil')+' اقترح سؤال</button>'+
-    (isAdmin()?'<button type="button" class="ol-b" onclick="OL.queue()">'+IX('send')+' طلبات الأسئلة (أدمن)</button><button type="button" class="ol-b o" onclick="OL.users()">كل المستخدمين (أدمن)</button><button type="button" class="ol-b o" onclick="OL.test()">فحص الأونلاين (أدمن)</button>':canClaim()?'<button type="button" class="ol-b o" onclick="OL.claim()">خليني أنا الأدمن (مرة واحدة بس)</button>':'')+(code?'':'<button type="button" class="ol-b r" onclick="OL.signOut()">تسجيل خروج</button>'),{t:"حسابي",g:"base"});
+    (isAdmin()?'<button type="button" class="ol-b" onclick="OL.queue()">'+IX('send')+' طلبات الأسئلة (أدمن)</button><button type="button" class="ol-b o" onclick="OL.users()">كل المستخدمين (أدمن)</button><button type="button" class="ol-b o" id="olSyncB" onclick="OL.syncAll()">مزامنة الترتيب (أدمن)</button><button type="button" class="ol-b o" onclick="OL.test()">فحص الأونلاين (أدمن)</button>':canClaim()?'<button type="button" class="ol-b o" onclick="OL.claim()">خليني أنا الأدمن (مرة واحدة بس)</button>':'')+(code?'':'<button type="button" class="ol-b r" onclick="OL.signOut()">تسجيل خروج</button>'),{t:"حسابي",g:"base"});
   if(window.OLX)OLX.pre();
   if(!synced){synced=true;syncLB();}
  }).catch(function(){T("مقدرتش أجيب الإحصائيات");});}
+/* مزامنة الترتيب (أدمن): بينقل نقط كل اللاعبين من users لـ lb مرة واحدة، من غير ما يمس نقط الشهر */
+function syncAll(){if(!isAdmin())return;var b=document.getElementById("olSyncB");if(b&&b.disabled)return;if(b)b.disabled=true;
+  db.ref("users").once("value").then(function(s){var v=s.val()||{},d={},n=0;
+    Object.keys(v).forEach(function(id){var x=v[id]||{},st=x.stats,p=x.profile||{};if(!st||typeof st!=="object")return;
+      var g=0;Object.keys(st).forEach(function(k){g+=((st[k]||{}).games)||0;});if(!g)return;
+      d["lb/"+id+"/n"]=p.name||"لاعب";d["lb/"+id+"/p"]=p.photo||"";d["lb/"+id+"/s"]=st;d["lb/"+id+"/u"]=Date.now();n++;});
+    if(!n){T("مفيش لاعبين محتاجين مزامنة");return;}
+    return db.ref().update(d).then(function(){T("اتزامن "+n+" لاعب");});
+  }).catch(function(){T("مقدرتش أزامن. اتأكد إن الـ Rules الجديدة اتنشرت");}).then(function(){if(b)b.disabled=false;});}
 function users(){if(!isAdmin())return;vw="users";
   loadB().then(function(){return db.ref("users").once("value");}).then(function(s){var v=s.val()||{};
     var L=Object.keys(v).map(function(id){var x=v[id]||{};return{id:id,p:x.profile||{},st:x.stats||{}};}).sort(function(a,b){return(b.p.updated||0)-(a.p.updated||0);});
@@ -366,7 +375,7 @@ function ensure(go){
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
 function account(){mk=null;ensure(stats);}
-window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=1";s.onload=function(){OLT.run();};s.onerror=function(){T("مقدرتش أحمّل الفحص");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,opt:opt,shuffle:shuffle,fin:endNow,
+window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=1";s.onload=function(){OLT.run();};s.onerror=function(){T("مقدرتش أحمّل الفحص");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,syncAll:syncAll,claim:claim,open:open,account:account,create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,opt:opt,shuffle:shuffle,fin:endNow,
   prof:function(id,fb){if(!fb&&S){var P=S.players||{};Object.keys(P).forEach(function(k){if(P[k].uid===id)fb={name:P[k].name,photo:P[k].photo};});}if(window.OLX)OLX.prof(id,fb);},rank:function(){if(window.OLX)OLX.go("rank");},queue:function(){if(window.OLX)OLX.queue();},
   sug:function(k){if(!U()){T("سجّل دخول بجوجل الأول");return;}if(window.OLX)OLX.sug(k,k?function(){OL.open(k);}:null);},
   rejoin:function(c){ensure(function(){OL.join(c);});},
