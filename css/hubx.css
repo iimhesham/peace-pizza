@@ -175,3 +175,53 @@
 @media (min-width:901px){
   body:not(.force-mobile-view) .hx-wide{min-height:0}
 }
+
+/* =========================================================
+   الدُرج الجانبي: الكروت الصغيرة القديمة كاختصارات.
+   مفيش تحميل زيادة: نفس الـSVG ونفس CSS الكروت الموجود، والدُرج
+   مقفول (visibility:hidden) فمش بيتحسب ولا بيتفتح إلا بالضغط.
+========================================================= */
+.dx-handle,.dx-scrim,.dx{display:none}
+body:has(#hub:not(.hidden)) .dx-handle{display:grid}
+body:has(#hub:not(.hidden)) .dx-scrim,
+body:has(#hub:not(.hidden)) .dx{display:block}
+
+.dx-handle{
+  position:fixed;left:0;top:50%;z-index:40;margin-top:-44px;
+  width:30px;height:88px;min-height:0;padding:0;place-items:center;
+  background:#141413;color:#d4b675;
+  border:1.5px solid rgba(212,182,117,.5);border-left:0;border-radius:0 14px 14px 0;
+  box-shadow:4px 0 14px rgba(0,0,0,.5);cursor:pointer;
+}
+.dx-handle:active{background:#1b1a18}
+.dx-handle:focus-visible{outline:2px solid #d4b675;outline-offset:2px}
+.dx-scrim{position:fixed;inset:0;z-index:41;background:rgba(0,0,0,.62);opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+.dx{
+  position:fixed;top:0;bottom:0;left:0;z-index:42;
+  width:min(88vw,348px);overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));
+  background:#0e0e0d;border-right:1.5px solid rgba(212,182,117,.4);
+  box-shadow:10px 0 30px rgba(0,0,0,.6);
+  transform:translateX(-102%);visibility:hidden;
+  transition:transform .24s cubic-bezier(.2,.8,.25,1),visibility .24s;
+  font-family:'IBM Plex Sans Arabic','Tajawal',sans-serif;
+}
+body.dx-open .dx{transform:none;visibility:visible}
+body.dx-open .dx-scrim{opacity:1;visibility:visible}
+body.dx-open{overflow:hidden}
+
+.dx-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;color:#d4b675;font-size:16px;font-weight:700}
+.dx-x{width:40px;height:40px;min-height:0;padding:0;display:grid;place-items:center;background:#141413;color:#efe6cf;border:1px solid #2a2927;border-radius:12px;cursor:pointer}
+.dx-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dx .hm-fc{
+  position:relative;top:auto;left:auto;margin:0;width:auto;height:168px;
+  transform:none!important;animation:none;box-shadow:0 8px 18px rgba(0,0,0,.45);
+}
+.dx .hm-fc:active{filter:brightness(1.12);transform:scale(.97)!important}
+.dx .hm-fc-cap{padding:7px 10px 10px}
+.dx .hm-fc5w{width:100%;margin:14px 0 0}
+.dx .hm-fc-x{background:linear-gradient(160deg,#36434A,#2a353b);border:1px solid rgba(255,71,119,.5);color:#E5D4C8}
+.dx .hm-fc-x .hm-fc-tag{color:#FF4777;opacity:1}
+.dx .hm-fc-x .hm-fc-cap b{color:#FF4777}
+@media (prefers-reduced-motion:reduce){.dx,.dx-scrim{transition:none}}
+body.dx-open .credits-toggle,body.dx-open .view-mode-toggle{visibility:hidden}
