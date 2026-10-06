@@ -45,37 +45,37 @@
   function render(){
     if(!chip)return;
     if(!user){
-      chip.className="acc-chip";chip.innerHTML=G+'<span>دخول</span>';chip.setAttribute("aria-label","تسجيل الدخول بحساب جوجل");
+      chip.className="acc-chip";chip.innerHTML=G+'<span>Sign in</span>';chip.setAttribute("aria-label","Sign in with Google");
       pop.classList.add("hidden");return;
     }
     chip.className="acc-chip in";
     var img=user.photoURL?'<img alt="" referrerpolicy="no-referrer" src="'+user.photoURL.replace(/"/g,"")+'">':'<b>'+(user.displayName||"?").trim().charAt(0)+'</b>';
-    chip.innerHTML=img;chip.setAttribute("aria-label","حسابي");
-    var name=(user.displayName||"لاعب").replace(/[<>&"]/g,"");
-    pop.innerHTML='<div class="acc-name">'+name+'</div><div class="acc-mail" dir="ltr">'+(user.email||"").replace(/[<>&"]/g,"")+'</div><button type="button" class="acc-out">تسجيل خروج</button>';
+    chip.innerHTML=img;chip.setAttribute("aria-label","My account");
+    var name=(user.displayName||"Player").replace(/[<>&"]/g,"");
+    pop.innerHTML='<div class="acc-name">'+name+'</div><div class="acc-mail" dir="ltr">'+(user.email||"").replace(/[<>&"]/g,"")+'</div><button type="button" class="acc-out">Sign out</button>';
     pop.querySelector(".acc-out").addEventListener("click",function(){
       if(typeof playClickSound==="function")playClickSound();
-      auth.signOut().then(function(){say("اتسجّل خروج");});
+      auth.signOut().then(function(){say("Signed out");});
     });
   }
 
   /* ---------- الدخول ---------- */
   function inApp(){return /FBAN|FBAV|FB_IAB|Instagram|Messenger|Snapchat|TikTok|Line\/|MicroMessenger|; wv\)/i.test(navigator.userAgent||"");}
   function signIn(){
-    if(inApp()){try{navigator.clipboard.writeText(location.href);}catch(e){}say("جوجل مش بتشتغل جوا المتصفح ده. افتح اللينك في كروم أو سفاري (اللينك اتنسخ)");return;}
+    if(inApp()){try{navigator.clipboard.writeText(location.href);}catch(e){}say("Google sign-in does not work inside this browser. Open the link in Chrome or Safari (the link was copied)");return;}
     var provider=new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({prompt:"select_account"});
     auth.signInWithPopup(provider).catch(function(e){
       var c=e&&e.code;
       if(c==="auth/popup-closed-by-user"||c==="auth/cancelled-popup-request")return;
       if(c==="auth/popup-blocked"){auth.signInWithRedirect(provider);return;}
-      if(c==="auth/unauthorized-domain"){say("الدومين ده مش مضاف في Firebase (Authorized domains)");return;}
-      if(c==="auth/operation-not-allowed"){say("تسجيل جوجل مش مفعّل في Firebase");return;}
-      say("فشل تسجيل الدخول");
+      if(c==="auth/unauthorized-domain"){say("This domain is not added in Firebase (Authorized domains)");return;}
+      if(c==="auth/operation-not-allowed"){say("Google sign-in is not enabled in Firebase");return;}
+      say("Sign-in failed");
     });
   }
 
-  window.ppSignOut=function(){if(auth)auth.signOut().then(function(){say("اتسجّل خروج");});};
+  window.ppSignOut=function(){if(auth)auth.signOut().then(function(){say("Signed out");});};
 
   /* ---------- مزامنة السيرفر ---------- */
   async function token(){return user?await user.getIdToken():null;}
@@ -122,10 +122,10 @@
       auth=firebase.auth();
       auth.onAuthStateChanged(function(u){
         var was=user;user=u||null;render();window.ppUser=user;
-        if(user){if(!was)say("أهلًا "+((user.displayName||"").split(" ")[0]||"بيك"));pull();}
+        if(user){if(!was)say("Welcome "+((user.displayName||"").split(" ")[0]||"back"));pull();}
       });
       auth.getRedirectResult().catch(function(){});
-      loadScript("js/online.js?v=7").catch(function(){});
+      loadScript("js/online.js?v=8").catch(function(){});
     }).catch(function(){if(chip)chip.style.display="none";});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
