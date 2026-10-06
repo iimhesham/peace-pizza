@@ -26,9 +26,11 @@
 <link rel="stylesheet" href="css/games.css?v=1">
 <link rel="stylesheet" href="css/dossier.css?v=1">
 <link rel="stylesheet" href="css/account.css?v=1">
-<link rel="stylesheet" href="css/hubx.css?v=5">
+<link rel="stylesheet" href="css/hubx.css?v=6">
 <link rel="stylesheet" href="css/xo.css?v=2">
 <link rel="stylesheet" href="css/ludo.css?v=1">
+<link rel="stylesheet" href="css/tawla.css?v=1">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -143,6 +145,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
     <div class="hm-fc hm-fc-f" role="button" tabindex="0" onclick="playClickSound();show('flags');flagsInit()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();show('flags');flagsInit()}"><i></i><span class="hm-fc-flagmini" aria-hidden="true"></span><span class="hm-fc-art"><svg viewBox="0 0 80 62" width="66" height="51" fill="none" stroke="currentColor" aria-hidden="true"><g transform="rotate(-12 34 30)"><circle cx="34" cy="30" r="25" stroke-width="1.7"/><circle cx="34" cy="30" r="20" stroke-width=".8"/><text x="34" y="33" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="9" letter-spacing=".6" fill="currentColor" stroke="none">ARRIVED</text><text x="34" y="43" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="5.5" letter-spacing="1.4" fill="currentColor" stroke="none">2026</text><path d="M22 22h24" stroke-width=".8"/></g><g transform="rotate(9 60 50)" opacity=".65"><rect x="46" y="42" width="31" height="17" rx="2" stroke-width="1.2" stroke-dasharray="3 1.6"/><text x="61.5" y="54" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="8" letter-spacing="1" fill="currentColor" stroke="none">ENTRY</text></g></svg></span><span class="hm-fc-cap"><b>FLAGS</b><small>GUESS THE FLAG</small></span><span class="hm-fc-desc">كل أعلام دول العالم، خمّن اسم الدولة<br><b>197</b> علم</span></div>
 <div class="hm-fc hm-fc-x" role="button" tabindex="0" onclick="playClickSound();xoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();xoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">SLATE 3x3</span><span class="hm-fc-art"><svg viewBox="0 0 60 60" width="50" height="50" fill="none" stroke-linecap="round"><path d="M20 4v52M40 4v52M4 20h52M4 40h52" stroke="#E5D4C8" stroke-width="2.6" opacity=".7"/><path d="M5.5 5.5l9 9m0-9l-9 9M25.5 25.5l9 9m0-9l-9 9M45.5 45.5l9 9m0-9l-9 9" stroke="#FF4777" stroke-width="3.2"/><circle cx="30" cy="10" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/><circle cx="10" cy="50" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/></svg></span><span class="hm-fc-cap"><b>XO</b><small>TIC TAC TOE</small></span></div>
 <div class="hm-fc hm-fc-ludo" role="button" tabindex="0" onclick="playClickSound();ludoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();ludoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2-4 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 64 64" width="50" height="50" fill="none"><rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/><rect x="2" y="2" width="25" height="25" rx="6" fill="#E5484D"/><rect x="37" y="2" width="25" height="25" rx="6" fill="#2EAE6B"/><rect x="37" y="37" width="25" height="25" rx="6" fill="#F2B632"/><rect x="2" y="37" width="25" height="25" rx="6" fill="#3B82E0"/><rect x="21" y="21" width="22" height="22" rx="5" fill="#fff" stroke="#1a120d" stroke-width="2" transform="rotate(12 32 32)"/></svg></span><span class="hm-fc-cap"><b>LUDO</b><small>BOARD GAME</small></span></div>
+<div class="hm-fc hm-fc-tawla" role="button" tabindex="0" onclick="playClickSound();tawlaOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();tawlaOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 60 40" width="52" height="35" fill="none"><rect x="1" y="1" width="58" height="38" rx="5" fill="#4a2c1a" stroke="#6b4326" stroke-width="2"/><path d="M5 4l4 14 4-14zM21 4l4 14 4-14zM37 4l4 14 4-14z" fill="#A8452F"/><path d="M13 4l4 14 4-14zM29 4l4 14 4-14zM45 4l4 14 4-14z" fill="#D9BE8C"/><path d="M5 36l4-14 4 14zM21 36l4-14 4 14zM37 36l4-14 4 14z" fill="#D9BE8C"/><path d="M13 36l4-14 4 14zM29 36l4-14 4 14zM45 36l4-14 4 14z" fill="#A8452F"/><circle cx="9" cy="6" r="3" fill="#fffdf6"/><circle cx="41" cy="34" r="3" fill="#2a1d18"/></svg></span><span class="hm-fc-cap"><b>TAWLA</b><small>BACKGAMMON</small></span></div>
   </div>
   <div class="hm-fc5w"><button type="button" class="hm-fc5" onclick="playClickSound();show('career')" aria-label="TRANSFERS - CAREER PATH"><i></i>
     <span class="hm-fc5-main">
@@ -311,6 +314,28 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">BOARD GAME · 2–4 PLAYERS</small>
         <b class="hx-ar">Ludo</b>
         <span class="hx-desc">نرد وحظ وذكاء: وصّل قطعك الأربعة الأول. أوفلاين أو أونلاين مع صحابك.</span>
+      </span>
+    </button>
+
+    <button type="button" class="hx-card hx-wide hx-tawla" onclick="playClickSound();tawlaOpen()" aria-label="الطاولة">
+      <span class="hx-art" aria-hidden="true">
+        <svg viewBox="0 0 96 64" width="96" height="64" fill="none">
+          <rect x="2" y="2" width="92" height="60" rx="8" fill="#4a2c1a" stroke="#6b4326" stroke-width="3"/>
+          <path d="M8 6l6 24 6-24zM32 6l6 24 6-24zM56 6l6 24 6-24z" fill="#A8452F"/>
+          <path d="M20 6l6 24 6-24zM44 6l6 24 6-24zM68 6l6 24 6-24z" fill="#D9BE8C"/>
+          <path d="M8 58l6-24 6 24zM32 58l6-24 6 24zM56 58l6-24 6 24z" fill="#D9BE8C"/>
+          <path d="M20 58l6-24 6 24zM44 58l6-24 6 24zM68 58l6-24 6 24z" fill="#A8452F"/>
+          <circle cx="14" cy="9" r="4.5" fill="#fffdf6" stroke="#a8966a" stroke-width="1.4"/>
+          <circle cx="14" cy="18" r="4.5" fill="#fffdf6" stroke="#a8966a" stroke-width="1.4"/>
+          <circle cx="62" cy="55" r="4.5" fill="#2a1d18" stroke="#6e5330" stroke-width="1.4"/>
+          <circle cx="62" cy="46" r="4.5" fill="#2a1d18" stroke="#6e5330" stroke-width="1.4"/>
+          <rect x="79" y="22" width="13" height="13" rx="3" fill="#fffdf6" stroke="#9a8a62"/><circle cx="85.5" cy="28.5" r="1.6" fill="#2a1a10"/>
+        </svg>
+      </span>
+      <span class="hx-body">
+        <small class="hx-en" dir="ltr">BACKGAMMON · الفورة من 31</small>
+        <b class="hx-ar">الطاولة</b>
+        <span class="hx-desc">طاولة مصرية بنردين ودبل: أخرج قشاطاتك الـ15 الأول. ضد صاحبك أو الكمبيوتر.</span>
       </span>
     </button>
   </div>
@@ -3109,6 +3134,93 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
   </div>
 </section>
 
+<!-- ========================================================
+     TAWLA — الطاولة المصرية (الفورة من 31). أوفلاين: جهاز واحد أو ضد الكمبيوتر.
+     القواعد: js/tawla-engine.js · الواجهة واللعب: js/tawla.js · الشكل: css/tawla.css
+======================================================== -->
+<section id="tawla" class="hidden tw-app" lang="ar" dir="rtl">
+  <header class="tw-bar">
+    <button class="tw-back" onclick="tawlaHome()" aria-label="رجوع">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="tw-title"><b>الطاولة</b><span>الفورة من 31</span></div>
+    <button class="tw-gear is-off" id="twGear" onclick="tawlaShowSetup()" aria-label="الإعدادات">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>
+    </button>
+  </header>
+
+  <div id="twSetup" class="tw-view">
+    <div class="tw-panel">
+      <div class="tw-label">هتلعب ضد مين؟</div>
+      <div class="tw-seg" id="twModeSeg" role="group" aria-label="نوع اللعب">
+        <button type="button" data-v="pvp">لاعبين</button>
+        <button type="button" data-v="cpu">ضد الكمبيوتر</button>
+      </div>
+    </div>
+    <div class="tw-panel hidden" id="twDiffWrap">
+      <div class="tw-label">مستوى الكمبيوتر</div>
+      <div class="tw-seg" id="twDiffSeg" role="group" aria-label="مستوى الكمبيوتر">
+        <button type="button" data-v="easy">سهل</button>
+        <button type="button" data-v="mid">متوسط</button>
+        <button type="button" data-v="hard">صعب</button>
+      </div>
+    </div>
+    <div class="tw-panel">
+      <div class="tw-label">الأسامي</div>
+      <div class="tw-names">
+        <label class="tw-name"><span class="tw-pc w" style="width:26px;height:26px" aria-hidden="true"></span><input id="twNameW" maxlength="14" autocomplete="off" placeholder="الأبيض"></label>
+        <label class="tw-name"><span class="tw-pc b" style="width:26px;height:26px" aria-hidden="true"></span><input id="twNameB" maxlength="14" autocomplete="off" placeholder="الأسود"></label>
+      </div>
+    </div>
+    <button type="button" class="tw-start" onclick="tawlaStart()">ابدأ المباراة</button>
+    <details class="tw-rules">
+      <summary>القواعد باختصار</summary>
+      <ul>
+        <li>كل لاعب 15 قشاطة، ونردين. أول واحد يوصل 31 نقطة يكسب المباراة.</li>
+        <li>الدبل (نفس الرقم على النردين) بيتلعب 4 مرات.</li>
+        <li>في أول الجيم قشاطة واحدة بس تتحرك لحد ما تدخل منطقة التجميع، وبعدها باقي القشاطات تتفتح.</li>
+        <li>الأبيض بيبدأ من أسفل اليمين وبيخلص أعلى اليمين، والأسود العكس. الاتنين بيعدّوا على نفس الخانات.</li>
+        <li>قشاطة الخصم في الخانة بتمنعك توصلها. مفيش ضرب ولا رجوع للبداية.</li>
+        <li>في التجميع: النرد اللي على رقم فيه قشاطة بياكلها، ولو الخانة فاضية بتنزّل قشاطة من خانة أعلى.</li>
+        <li>نقاط الجيم = 15 − القشاطات اللي الخصم أكلها.</li>
+      </ul>
+    </details>
+  </div>
+
+  <div id="twPlay" class="tw-view hidden">
+    <div class="tw-pl" id="twPlB">
+      <div class="tw-pl-top"><span class="tw-pc b"></span><span class="tw-pl-name"></span><span class="tw-pl-pts"></span></div>
+      <div class="tw-chips"></div>
+    </div>
+
+    <div class="tw-board-wrap"><div class="tw-board" id="twBoard" aria-label="لوحة الطاولة"></div></div>
+
+    <p class="tw-status" id="twStatus" role="status" aria-live="polite"></p>
+    <div class="tw-dice-row" id="twDice"></div>
+    <button type="button" class="tw-roll hidden" id="twRoll" onclick="tawlaRoll()">ارمِ النرد 🎲</button>
+    <p class="tw-hint" id="twHint"></p>
+
+    <div class="tw-pl is-turn" id="twPlW">
+      <div class="tw-pl-top"><span class="tw-pc w"></span><span class="tw-pl-name"></span><span class="tw-pl-pts"></span></div>
+      <div class="tw-chips"></div>
+    </div>
+
+
+    <div class="tw-final hidden" id="twFinal" role="dialog" aria-modal="true" aria-labelledby="twFinalTitle">
+      <div class="tw-final-card">
+        <div class="tw-final-mark" id="twFinalMark"></div>
+        <h3 id="twFinalTitle"></h3>
+        <p class="tw-final-sub" id="twFinalSub"></p>
+        <div class="tw-final-score" id="twFinalScore"></div>
+        <div class="tw-hist" id="twHist"></div>
+        <button type="button" class="tw-fb-main" id="twAgain">الجيم التالي</button>
+        <button type="button" class="tw-fb-alt" onclick="tawlaShowSetup()">تغيير الإعدادات</button>
+        <button type="button" class="tw-fb-link" onclick="tawlaHome()">الرجوع للرئيسية</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
 </div>
 
@@ -3129,6 +3241,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/xo.js"></script>
 <script src="js/ludo-engine.js?v=1"></script>
 <script src="js/ludo.js?v=1"></script>
+<script src="js/tawla-engine.js?v=1"></script>
+<script src="js/tawla.js?v=1"></script>
 <script src="js/flags-data.js"></script>
 <script src="js/flags-historical-data.js"></script>
 <script src="js/flags.js"></script>
