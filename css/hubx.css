@@ -118,6 +118,12 @@
 .hx-xo .hx-body{background:rgba(0,0,0,.28)}
 .hx-xo .hx-en{color:#FF4777;opacity:.95}
 
+/* ---------- LUDO: طاولة خشب جوز ولوح كريمي بأربع ألوان ---------- */
+.hx-ludo{--c:#F2E6CF;--ac:242,182,50;--b1:#3a2a1f;--b2:#221810;--rad:22px}
+.hx-ludo .hx-art{background:rgba(0,0,0,.2)}
+.hx-ludo .hx-en{color:#F2B632;opacity:.95}
+.hx-ludo .hx-body{background:none}
+
 /* ---------- الحركة: ختم واحد بيتخبط لما الصفحة تفتح ---------- */
 @keyframes hxStamp{from{opacity:0;transform:rotate(-14deg) scale(2.2)}55%{opacity:1}}
 #hub .hx-case .hx-stamp,#hub .hx-who .hx-stamp{animation:hxStamp .36s cubic-bezier(.3,1.5,.5,1) .5s backwards}
@@ -225,6 +231,9 @@ body.dx-open{overflow:hidden}
 .dx .hm-fc-x{background:linear-gradient(160deg,#36434A,#2a353b);border:1px solid rgba(255,71,119,.5);color:#E5D4C8}
 .dx .hm-fc-x .hm-fc-tag{color:#FF4777;opacity:1}
 .dx .hm-fc-x .hm-fc-cap b{color:#FF4777}
+.dx .hm-fc-ludo{background:linear-gradient(160deg,#3a2a1f,#221810);border:1px solid rgba(242,182,50,.5);color:#F2E6CF}
+.dx .hm-fc-ludo .hm-fc-tag{color:#F2B632;opacity:1}
+.dx .hm-fc-ludo .hm-fc-cap b{color:#F2E6CF}
 @media (prefers-reduced-motion:reduce){.dx,.dx-scrim{transition:none}}
 body.dx-open .credits-toggle,body.dx-open .view-mode-toggle{visibility:hidden}
 
