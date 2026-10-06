@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="css/account.css?v=1">
 <link rel="stylesheet" href="css/hubx.css?v=5">
 <link rel="stylesheet" href="css/xo.css?v=2">
+<link rel="stylesheet" href="css/ludo.css?v=1">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,6 +142,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
     <div class="hm-fc hm-fc-r" role="button" tabindex="0" onclick="playClickSound();show('password')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();show('password')}"><i></i><span class="hm-fc-art"><svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><circle cx="12" cy="12" r="10.4"/><polygon points="12.00,2.40 13.53,9.90 21.13,9.03 14.47,12.80 17.64,19.77 12.00,14.60 6.36,19.77 9.53,12.80 2.87,9.03 10.47,9.90" fill="currentColor" stroke-width=".8"/><polygon points="15.17,7.63 14.48,5.51 16.29,4.19 18.10,5.51 17.41,7.63" stroke-width="1"/><polygon points="17.14,13.67 18.94,12.36 20.75,13.67 20.06,15.79 17.83,15.79" stroke-width="1"/><polygon points="12.00,17.40 13.81,18.71 13.12,20.84 10.88,20.84 10.19,18.71" stroke-width="1"/><polygon points="6.86,13.67 6.17,15.79 3.94,15.79 3.25,13.67 5.06,12.36" stroke-width="1"/><polygon points="8.83,7.63 6.59,7.63 5.90,5.51 7.71,4.19 9.52,5.51" stroke-width="1"/></svg><span class="hm-fc-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></span><span class="hm-fc-cap"><b>PASSWORD</b><small>PLAYER NAME</small></span><span class="hm-fc-desc">تخمين أسامي لاعبين الكورة<br><b>1,024+</b> اسم</span></div>
     <div class="hm-fc hm-fc-f" role="button" tabindex="0" onclick="playClickSound();show('flags');flagsInit()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();show('flags');flagsInit()}"><i></i><span class="hm-fc-flagmini" aria-hidden="true"></span><span class="hm-fc-art"><svg viewBox="0 0 80 62" width="66" height="51" fill="none" stroke="currentColor" aria-hidden="true"><g transform="rotate(-12 34 30)"><circle cx="34" cy="30" r="25" stroke-width="1.7"/><circle cx="34" cy="30" r="20" stroke-width=".8"/><text x="34" y="33" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="9" letter-spacing=".6" fill="currentColor" stroke="none">ARRIVED</text><text x="34" y="43" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="5.5" letter-spacing="1.4" fill="currentColor" stroke="none">2026</text><path d="M22 22h24" stroke-width=".8"/></g><g transform="rotate(9 60 50)" opacity=".65"><rect x="46" y="42" width="31" height="17" rx="2" stroke-width="1.2" stroke-dasharray="3 1.6"/><text x="61.5" y="54" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="8" letter-spacing="1" fill="currentColor" stroke="none">ENTRY</text></g></svg></span><span class="hm-fc-cap"><b>FLAGS</b><small>GUESS THE FLAG</small></span><span class="hm-fc-desc">كل أعلام دول العالم، خمّن اسم الدولة<br><b>197</b> علم</span></div>
 <div class="hm-fc hm-fc-x" role="button" tabindex="0" onclick="playClickSound();xoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();xoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">SLATE 3x3</span><span class="hm-fc-art"><svg viewBox="0 0 60 60" width="50" height="50" fill="none" stroke-linecap="round"><path d="M20 4v52M40 4v52M4 20h52M4 40h52" stroke="#E5D4C8" stroke-width="2.6" opacity=".7"/><path d="M5.5 5.5l9 9m0-9l-9 9M25.5 25.5l9 9m0-9l-9 9M45.5 45.5l9 9m0-9l-9 9" stroke="#FF4777" stroke-width="3.2"/><circle cx="30" cy="10" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/><circle cx="10" cy="50" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/></svg></span><span class="hm-fc-cap"><b>XO</b><small>TIC TAC TOE</small></span></div>
+<div class="hm-fc hm-fc-ludo" role="button" tabindex="0" onclick="playClickSound();ludoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();ludoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2-4 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 64 64" width="50" height="50" fill="none"><rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/><rect x="2" y="2" width="25" height="25" rx="6" fill="#E5484D"/><rect x="37" y="2" width="25" height="25" rx="6" fill="#2EAE6B"/><rect x="37" y="37" width="25" height="25" rx="6" fill="#F2B632"/><rect x="2" y="37" width="25" height="25" rx="6" fill="#3B82E0"/><rect x="21" y="21" width="22" height="22" rx="5" fill="#fff" stroke="#1a120d" stroke-width="2" transform="rotate(12 32 32)"/></svg></span><span class="hm-fc-cap"><b>LUDO</b><small>BOARD GAME</small></span></div>
   </div>
   <div class="hm-fc5w"><button type="button" class="hm-fc5" onclick="playClickSound();show('career')" aria-label="TRANSFERS - CAREER PATH"><i></i>
     <span class="hm-fc5-main">
@@ -288,6 +290,27 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">XO</small>
         <b class="hx-ar">إكس أو</b>
         <span class="hx-desc">على اللوح، ضد صاحبك أو الكمبيوتر.</span>
+      </span>
+    </button>
+
+    <button type="button" class="hx-card hx-wide hx-ludo" onclick="playClickSound();ludoOpen()" aria-label="لودو - Ludo">
+      <span class="hx-art" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="70" height="70" fill="none">
+          <rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/>
+          <rect x="2" y="2" width="25" height="25" rx="6" fill="#E5484D"/>
+          <rect x="37" y="2" width="25" height="25" rx="6" fill="#2EAE6B"/>
+          <rect x="37" y="37" width="25" height="25" rx="6" fill="#F2B632"/>
+          <rect x="2" y="37" width="25" height="25" rx="6" fill="#3B82E0"/>
+          <circle cx="14.5" cy="14.5" r="6" fill="#FBF4E4"/><circle cx="49.5" cy="14.5" r="6" fill="#FBF4E4"/>
+          <circle cx="49.5" cy="49.5" r="6" fill="#FBF4E4"/><circle cx="14.5" cy="49.5" r="6" fill="#FBF4E4"/>
+          <rect x="21" y="21" width="22" height="22" rx="5" fill="#fff" stroke="#1a120d" stroke-width="2" transform="rotate(12 32 32)"/>
+          <g fill="#1a120d" transform="rotate(12 32 32)"><circle cx="26.5" cy="26.5" r="2.1"/><circle cx="37.5" cy="26.5" r="2.1"/><circle cx="32" cy="32" r="2.1"/><circle cx="26.5" cy="37.5" r="2.1"/><circle cx="37.5" cy="37.5" r="2.1"/></g>
+        </svg>
+      </span>
+      <span class="hx-body">
+        <small class="hx-en" dir="ltr">LUDO · 2–4 PLAYERS</small>
+        <b class="hx-ar">لودو</b>
+        <span class="hx-desc">نرد وحظ وذكاء: وصّل قطعك الأربعة الأول. أوفلاين أو أونلاين مع صحابك.</span>
       </span>
     </button>
   </div>
@@ -2904,7 +2927,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
       <div class="xo-label">Who are you playing?</div>
       <div class="xo-seg" id="xoModeSeg" role="group" aria-label="Game mode">
         <button type="button" data-v="pvp" class="is-on">Two Players</button>
-        <button type="button" data-v="cpu">vs Computer</button>
+        <button type="button" data-v="cpu">vs CPU</button>
       </div>
     </div>
 
@@ -2978,6 +3001,103 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
   </div>
 </section>
 
+<!-- ========================================================
+     LUDO — طاولة خشب جوز ولوح كريمي. أوفلاين هنا + أونلاين من جوه (js/online-ludo.js).
+     القواعد: js/ludo-engine.js · العرض واللعب الأوفلاين: js/ludo.js · الشكل: css/ludo.css
+======================================================== -->
+<section id="ludo" class="hidden lu-app" lang="en" dir="ltr">
+  <header class="lu-bar">
+    <button class="lu-back" onclick="ludoBack()" aria-label="Back">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <div class="lu-title"><b dir="ltr">LUDO</b><i aria-hidden="true"><s></s><s></s><s></s><s></s></i></div>
+    <button class="lu-gear is-off" id="luGear" onclick="ludoShowSetup()" aria-label="Change settings">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+    </button>
+  </header>
+
+  <!-- الإعدادات -->
+  <div id="luSetup" class="lu-view">
+    <button type="button" class="lu-resume hidden" id="luResume" onclick="ludoResume()">
+      <span><b>Continue your game</b><small id="luResumeTxt"></small></span><em>Resume</em>
+    </button>
+
+    <div class="lu-panel">
+      <div class="lu-label">Players · tap a seat to change it</div>
+      <div class="lu-presets">
+        <button type="button" onclick="ludoPreset('cpu')">vs CPU</button>
+        <button type="button" onclick="ludoPreset('two')">2 Players</button>
+        <button type="button" onclick="ludoPreset('four')">4 Players</button>
+      </div>
+      <div id="luSeats"></div>
+    </div>
+
+    <div class="lu-panel">
+      <div class="lu-label">Rules</div>
+      <button type="button" class="lu-sw on" id="luSw3" onclick="ludoTog('three')"><span><b>Three 6s in a row cancel the turn</b><small>The third 6 is lost and the turn passes</small></span><i></i></button>
+      <button type="button" class="lu-sw" id="luSwFull" onclick="ludoTog('full')"><span><b>Play for every place</b><small>Keep playing after the first winner</small></span><i></i></button>
+      <button type="button" class="lu-sw on" id="luSwAuto" onclick="ludoTog('auto')"><span><b>Auto-move when there is one choice</b><small>Skips the tap when only one move is possible</small></span><i></i></button>
+      <div class="lu-label" style="margin-top:14px">Turn timer (players only)</div>
+      <div class="lu-seg" id="luTimerSeg" role="group" aria-label="Turn timer">
+        <button type="button" data-v="0" onclick="ludoTimer(0)">Off</button>
+        <button type="button" data-v="15" onclick="ludoTimer(15)">15s</button>
+        <button type="button" data-v="30" onclick="ludoTimer(30)">30s</button>
+      </div>
+    </div>
+
+    <button type="button" class="lu-start" onclick="ludoStart()">Start Game</button>
+    <button type="button" class="lu-link" onclick="ludoStats()">Stats &amp; Achievements</button>
+  </div>
+
+  <!-- اللعب -->
+  <div id="luPlay" class="lu-view hidden">
+    <div class="lu-strip" id="luStrip"></div>
+    <div class="lu-boardwrap" id="luBoard"></div>
+    <div class="lu-ctl" id="luCtl">
+      <div id="luDie" class="lu-die is-empty" aria-label="Dice"></div>
+      <div class="lu-side">
+        <p class="lu-status" id="luStatus" role="status" aria-live="polite"></p>
+        <button type="button" class="lu-roll" id="luRoll" onclick="ludoRoll()">Roll Dice</button>
+      </div>
+    </div>
+    <div class="lu-meta"><span id="luMeta"></span><span class="lu-timer" id="luTT"></span><span id="luClock">00:00</span></div>
+    <div class="lu-foot">
+      <button type="button" onclick="ludoRestart()">Restart</button>
+      <button type="button" onclick="ludoMenu()">Menu</button>
+      <button type="button" id="luMute" onclick="ludoMute()">Sound: on</button>
+    </div>
+
+    <div class="lu-final hidden" id="luFinal" role="dialog" aria-modal="true" aria-labelledby="luWinTitle">
+      <div class="lu-final-card" id="luWinCard">
+        <div class="lu-trophy"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a3 3 0 0 0 4 3M16 6h4v1a3 3 0 0 1-4 3M12 13v4M8 21h8M10 17h4"/></svg></div>
+        <h3 id="luWinTitle"></h3>
+        <p id="luWinSub"></p>
+        <div class="lu-rank" id="luRank"></div>
+        <button type="button" class="lu-main" id="luAgain" onclick="ludoAgain()">Play Again</button>
+        <button type="button" class="lu-alt" onclick="ludoMenu()">Change Settings</button>
+        <button type="button" class="lu-link" onclick="ludoHome()">Back to Home</button>
+      </div>
+    </div>
+
+    <div class="lu-final hidden" id="luQuit" role="dialog" aria-modal="true" aria-labelledby="luQuitT">
+      <div class="lu-final-card">
+        <h3 id="luQuitT">Leave this match?</h3>
+        <p>You can save it and come back to it later.</p>
+        <button type="button" class="lu-main" onclick="ludoQuitKeep()">Keep Playing</button>
+        <button type="button" class="lu-alt" onclick="ludoQuitLater()">Resume Later</button>
+        <button type="button" class="lu-link" onclick="ludoQuitNow()">Quit and discard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- الإحصائيات -->
+  <div id="luStats" class="lu-view hidden">
+    <div class="lu-panel"><div class="lu-label">Your stats on this device</div><div class="lu-kpis" id="luKpis"></div></div>
+    <div class="lu-panel"><div class="lu-label">Achievements</div><div id="luAchs"></div></div>
+    <button type="button" class="lu-link" onclick="ludoResetStats()">Reset stats</button>
+  </div>
+</section>
+
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
 </div>
 
@@ -2996,6 +3116,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/career.js"></script>
 <script src="js/hub.js"></script>
 <script src="js/xo.js"></script>
+<script src="js/ludo-engine.js?v=1"></script>
+<script src="js/ludo.js?v=1"></script>
 <script src="js/flags-data.js"></script>
 <script src="js/flags-historical-data.js"></script>
 <script src="js/flags.js"></script>
