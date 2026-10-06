@@ -13,6 +13,7 @@ const FLAGS_SCREENS=["flags"];
 const STORY_SCREENS=["story","story-game"];  // «أنا مين» has its own colours
 const CAREER_SCREENS=["career","career-game"];  // «الانتقالات» has its own colours
 const LUDO_SCREENS=["ludo"];  // «لودو» طاولة خشب جوز + لوح كريمي
+const TAWLA_SCREENS=["tawla"];  // «الطاولة» خشب جوز + عاج وأبنوس
 const XO_SCREENS=["xo"];  // «XO» لوح إردواز: وردي / إردواز / رملي
 const START_SCREEN="hub";
 
@@ -72,8 +73,9 @@ function show(id,opts){
   document.body.classList.toggle("mode-career",CAREER_SCREENS.includes(id));
   document.body.classList.toggle("mode-xo",XO_SCREENS.includes(id));
   document.body.classList.toggle("mode-ludo",LUDO_SCREENS.includes(id));
+  document.body.classList.toggle("mode-tawla",TAWLA_SCREENS.includes(id));
   const tc=document.querySelector('meta[name="theme-color"]');
-  if(tc){if(!tc.dataset.def)tc.dataset.def=tc.content;tc.content=CAREER_SCREENS.includes(id)?"#003566":XO_SCREENS.includes(id)?"#000000":LUDO_SCREENS.includes(id)?"#120d0a":tc.dataset.def;}
+  if(tc){if(!tc.dataset.def)tc.dataset.def=tc.content;tc.content=CAREER_SCREENS.includes(id)?"#003566":XO_SCREENS.includes(id)?"#000000":LUDO_SCREENS.includes(id)?"#120d0a":TAWLA_SCREENS.includes(id)?"#140c08":tc.dataset.def;}
   document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id)||TRAIN_SCREENS.includes(id));
   document.body.classList.toggle("mode-flags",FLAGS_SCREENS.includes(id));
   const creditsBtn=document.getElementById("creditsToggle");
