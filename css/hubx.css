@@ -119,10 +119,12 @@
 .hx-xo .hx-en{color:#FF4777;opacity:.95}
 
 /* ---------- LUDO: طاولة خشب جوز ولوح كريمي بأربع ألوان ---------- */
-.hx-ludo{--c:#F2E6CF;--ac:242,182,50;--b1:#3a2a1f;--b2:#221810;--rad:22px}
-.hx-ludo .hx-art{background:rgba(0,0,0,.2)}
-.hx-ludo .hx-en{color:#F2B632;opacity:.95}
-.hx-ludo .hx-body{background:none}
+.hx-ludo{--c:#F4E9D3;--ac:204,146,68;--b1:#22262d;--b2:#22262d;--rad:22px;background:linear-gradient(90deg,rgba(34,38,45,.35),rgba(34,38,45,.05)),url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 140' preserveAspectRatio='xMidYMid slice'><rect width='400' height='140' fill='%2322262d'/><path d='M0 0H150C172 30 120 58 132 90C142 120 60 132 0 102Z' fill='%23C2533A'/><path d='M0 0H98C112 25 72 50 80 72C86 92 30 98 0 80Z' fill='%239E3020'/><path d='M0 0H46C56 20 30 38 0 42Z' fill='%237A1A12'/><path d='M400 0H250C230 30 270 55 262 85C255 115 330 125 400 95Z' fill='%23B05361'/><path d='M400 0H302C286 25 316 45 309 68C302 88 360 95 400 78Z' fill='%23962F40'/><path d='M400 0H352C341 18 366 32 400 36Z' fill='%2372243A'/><path d='M170 140C165 118 200 112 215 120C235 100 260 108 270 125C275 135 270 140 270 140Z' fill='%238F6029'/><path d='M0 140V96C40 90 92 86 112 110C126 130 100 140 92 140Z' fill='%233E6498'/><path d='M0 140V114C30 108 62 112 70 128L64 140Z' fill='%231D3A6C'/><path d='M400 140V80C350 68 298 86 300 112C301 130 330 140 342 140Z' fill='%23CC9244'/><path d='M400 140V102C370 98 336 108 342 140Z' fill='%23A87225'/></svg>") center/cover no-repeat!important;border-color:rgba(244,233,211,.35)!important}
+.hx-ludo .hx-art{background:transparent!important}
+.hx-ludo .hx-en{color:#F4E9D3;opacity:.9;letter-spacing:.14em}
+.hx-ludo .hx-ar{font-family:'Anton','Impact','Arial Black',sans-serif;font-weight:400;letter-spacing:.14em;font-size:26px;text-align:right}
+.hx-ludo .hx-desc{color:#F4E9D3;opacity:.92}
+.hx-ludo .hx-body{background:none!important}
 
 /* ---------- الحركة: ختم واحد بيتخبط لما الصفحة تفتح ---------- */
 @keyframes hxStamp{from{opacity:0;transform:rotate(-14deg) scale(2.2)}55%{opacity:1}}
@@ -231,7 +233,7 @@ body.dx-open{overflow:hidden}
 .dx .hm-fc-x{background:linear-gradient(160deg,#36434A,#2a353b);border:1px solid rgba(255,71,119,.5);color:#E5D4C8}
 .dx .hm-fc-x .hm-fc-tag{color:#FF4777;opacity:1}
 .dx .hm-fc-x .hm-fc-cap b{color:#FF4777}
-.dx .hm-fc-ludo{background:linear-gradient(160deg,#3a2a1f,#221810);border:1px solid rgba(242,182,50,.5);color:#F2E6CF}
+.dx .hm-fc-ludo{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 140' preserveAspectRatio='xMidYMid slice'><rect width='400' height='140' fill='%2322262d'/><path d='M0 0H150C172 30 120 58 132 90C142 120 60 132 0 102Z' fill='%23C2533A'/><path d='M0 0H98C112 25 72 50 80 72C86 92 30 98 0 80Z' fill='%239E3020'/><path d='M0 0H46C56 20 30 38 0 42Z' fill='%237A1A12'/><path d='M400 0H250C230 30 270 55 262 85C255 115 330 125 400 95Z' fill='%23B05361'/><path d='M400 0H302C286 25 316 45 309 68C302 88 360 95 400 78Z' fill='%23962F40'/><path d='M400 0H352C341 18 366 32 400 36Z' fill='%2372243A'/><path d='M170 140C165 118 200 112 215 120C235 100 260 108 270 125C275 135 270 140 270 140Z' fill='%238F6029'/><path d='M0 140V96C40 90 92 86 112 110C126 130 100 140 92 140Z' fill='%233E6498'/><path d='M0 140V114C30 108 62 112 70 128L64 140Z' fill='%231D3A6C'/><path d='M400 140V80C350 68 298 86 300 112C301 130 330 140 342 140Z' fill='%23CC9244'/><path d='M400 140V102C370 98 336 108 342 140Z' fill='%23A87225'/></svg>") center/cover no-repeat;border:1px solid rgba(244,233,211,.35);color:#F4E9D3}
 .dx .hm-fc-ludo .hm-fc-tag{color:#F2B632;opacity:1}
 .dx .hm-fc-ludo .hm-fc-cap b{color:#F2E6CF}
 @media (prefers-reduced-motion:reduce){.dx,.dx-scrim{transition:none}}
