@@ -252,3 +252,14 @@ body.dx-open .credits-toggle,body.dx-open .view-mode-toggle{visibility:hidden}
 .hx-h::after{display:none}
 .hx-h span{padding:0;border:0;border-radius:0;transform:none;line-height:1.3}
 .hx-stats+.hx-h,#hub .hm-head-c+.hx-h{margin-top:22px}
+
+
+/* ---------- الطاولة ---------- */
+.hx-tawla{--c:#F1E4C8;--ac:227,177,92;--b1:#3a2216;--b2:#1c110a;--rad:22px}
+.hx-tawla .hx-en{color:#E3B15C;opacity:.95;letter-spacing:.14em}
+.hx-tawla .hx-ar{font-family:'El Messiri','Noto Sans Arabic',sans-serif;font-weight:700;font-size:24px;color:#F1E4C8}
+.hx-tawla .hx-desc{color:#F1E4C8;opacity:.9}
+.hx-tawla .hx-body{background:rgba(0,0,0,.28)}
+.dx .hm-fc-tawla{background:linear-gradient(160deg,#3a2216,#1c110a);border:1px solid rgba(227,177,92,.5);color:#F1E4C8}
+.dx .hm-fc-tawla .hm-fc-tag{color:#E3B15C;opacity:1}
+.dx .hm-fc-tawla .hm-fc-cap b{color:#E3B15C}
