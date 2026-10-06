@@ -148,11 +148,11 @@ function boardSVG(active){
     }
 
     // حركة خطوة خطوة (من الـ position الحالي للمعروض لحد الجديد)
-    async function animateMove(id,toPos){
+    async function animateMove(id,toPos,stepMs){
       const from=disp[id];
       layer.appendChild(tokens[id]);
       if(reduce()||from<0||toPos<=from){disp[id]=toPos;layout();await sleep(reduce()?0:160);return;}
-      for(let p=from+1;p<=toPos;p++){disp[id]=p;layout();await sleep(125);}
+      for(let p=from+1;p<=toPos;p++){disp[id]=p;layout();await sleep(stepMs||125);}
       await sleep(70);
     }
     async function flyHome(ids){
@@ -170,23 +170,57 @@ function boardSVG(active){
   /* =======================================================
      2) النرد
   ======================================================= */
+  /* نرد: "real" = مكعب 3D بيتقلّب ويقف على الرقم، "flat" = مسطّح بسيط.
+     نفس الدوال بتشتغل لأي عدد نردات (طاولة هتستخدمها مرتين: dieEl لكل نرد). */
+  const ORI={1:"",2:"rotateX(-90deg)",3:"rotateY(-90deg)",4:"rotateY(90deg)",5:"rotateX(90deg)",6:"rotateY(180deg)"};
+  function dieStyle(){try{return localStorage.getItem("ludoDiceStyle")==="flat"?"flat":"real";}catch(e){return"real";}}
   function dieEl(el){
-    el.innerHTML="<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>";
-    el.classList.add("lu-die","is-empty");el.dataset.v="0";
+    el.classList.remove("lu-die","lu-die3","is-empty","rolling","is-faded");
+    el._rolling=false;el._v=0;
+    if(dieStyle()==="real"){
+      el.classList.add("lu-die3","is-faded");
+      let f="";for(let v=1;v<=6;v++)f+='<div class="lu-face" data-v="'+v+'">'+"<i></i>".repeat(9)+"</div>";
+      el.innerHTML='<div class="lu-toss"><div class="lu-cube">'+f+'</div></div>';
+      el._cube=el.querySelector(".lu-cube");el._toss=el.querySelector(".lu-toss");
+      el._cube.style.transform=ORI[1];
+    }else{
+      el.classList.add("lu-die","is-empty");el.innerHTML="<i></i>".repeat(9);el._cube=null;el.dataset.v="0";
+    }
   }
-  function setDie(el,v){
-    el.dataset.v=String(v||0);
-    el.classList.toggle("is-empty",!v);
+  function setDie(el,v,faded){
+    if(el._rolling)return;
+    el._v=v||0;
+    if(el._cube){
+      if(v){el._cube.style.transition="none";el._cube.style.transform=ORI[v];}
+      el.classList.toggle("is-faded",!!faded||!v);
+    }else{
+      el.dataset.v=String(v||0);el.classList.toggle("is-empty",!v||!!faded);
+    }
   }
   async function rollAnim(el,final,ms){
     if(reduce()){setDie(el,final);return;}
-    el.classList.add("rolling");el.classList.remove("is-empty");
-    const t0=Date.now();
-    while(Date.now()-t0<(ms||620)){
-      el.dataset.v=String(1+Math.floor(Math.random()*6));
-      await sleep(75);
+    if(!el._cube){
+      el.classList.add("rolling");el.classList.remove("is-empty");
+      const t0=Date.now();
+      while(Date.now()-t0<(ms||620)){el.dataset.v=String(1+Math.floor(Math.random()*6));await sleep(75);}
+      el.classList.remove("rolling");setDie(el,final);return;
     }
-    el.classList.remove("rolling");setDie(el,final);
+    ms=Math.max(ms||0,900);
+    el._rolling=true;
+    const cube=el._cube,toss=el._toss;
+    el.classList.remove("is-faded");
+    const spin=()=>360*(1+Math.floor(Math.random()*3))*(Math.random()<.5?-1:1);
+    cube.style.transition="none";
+    cube.style.transform="rotateX("+Math.floor(Math.random()*360)+"deg) rotateY("+Math.floor(Math.random()*360)+"deg)";
+    void cube.offsetWidth;
+    cube.style.transition="transform "+ms+"ms cubic-bezier(.15,.7,.25,1)";
+    cube.style.transform="rotateX("+spin()+"deg) rotateY("+spin()+"deg) "+ORI[final];
+    toss.classList.remove("tossing");void toss.offsetWidth;
+    toss.style.animationDuration=ms+"ms";toss.classList.add("tossing");
+    await sleep(ms+50);
+    toss.classList.remove("tossing");
+    cube.style.transition="none";cube.style.transform=ORI[final];
+    el._rolling=false;el._v=final;
   }
 
   /* ترتيب الألوان حسب عدد اللاعبين في الأونلاين */
@@ -206,12 +240,14 @@ function boardSVG(active){
 
   const DEF={
     seats:{red:{t:"human",n:""},green:{t:"off",n:""},yellow:{t:"mid",n:""},blue:{t:"off",n:""}},
-    three:true,full:false,auto:true,timer:0
+    three:true,full:false,auto:true,timer:0,speed:"normal",dice:"real"
   };
   let cfg=JSON.parse(JSON.stringify(DEF));
   let G=null,board=null,A=null;       // G=game  A=active colors
   let busy=false,gen=0,elapsed=0,tick=null,tt=null,ttLeft=0,startedAt=0,humanColor=null;
-  let muted=false;
+  let muted=false,lastDie=0;
+  const SP={fast:.55,normal:1,slow:1.7};
+  const sp=()=>SP[cfg.speed]||1;
 
   const lsGet=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k)||"null");return v==null?d:v;}catch(e){return d;}};
   const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
@@ -225,7 +261,9 @@ function boardSVG(active){
       }
       cfg.three=j.three!==false;cfg.full=!!j.full;cfg.auto=j.auto!==false;
       cfg.timer=[0,15,30].indexOf(j.timer)>=0?j.timer:0;
+      cfg.speed=["fast","normal","slow"].indexOf(j.speed)>=0?j.speed:"normal";
     }
+    try{cfg.dice=localStorage.getItem("ludoDiceStyle")==="flat"?"flat":"real";}catch(e){cfg.dice="real";}
     muted=!!lsGet(KEY_MUTE,false);
   }
   const saveSettings=()=>lsSet(KEY_SET,cfg);
@@ -288,6 +326,8 @@ function boardSVG(active){
     $("luSwFull").classList.toggle("on",cfg.full);
     $("luSwAuto").classList.toggle("on",cfg.auto);
     root.querySelectorAll("#luTimerSeg button").forEach(b=>b.classList.toggle("is-on",+b.dataset.v===cfg.timer));
+    root.querySelectorAll("#luSpeedSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===cfg.speed));
+    root.querySelectorAll("#luDiceSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===cfg.dice));
     const sv=lsGet(KEY_SAVE,null),ok=savedOk(sv);
     $("luResume").classList.toggle("hidden",!ok);
     if(ok){
@@ -338,7 +378,7 @@ function boardSVG(active){
     G=E.initializeGame(players,{threeSixes:cfg.three,fullRanking:cfg.full},first);
     G.settings={auto:cfg.auto,timer:cfg.timer};
     humanColor=seats.find(c=>cfg.seats[c].t==="human");
-    elapsed=0;
+    elapsed=0;lastDie=0;
     return true;
   }
   function toast_(m){try{toast(m);}catch(e){}}
@@ -409,9 +449,7 @@ function boardSVG(active){
     const ctl=$("luCtl");
     ["red","green","yellow","blue"].forEach(c=>ctl.classList.remove("c-"+c));
     if(!over)ctl.classList.add("c-"+cp.color);
-    setDie($("luDie"),G.diceValue);
-    $("luDie").classList.remove("is-empty");
-    if(G.diceValue==null)$("luDie").classList.add("is-empty");
+    setDie($("luDie"),G.diceValue||lastDie,!G.diceValue);
 
     const roll=$("luRoll"),human=cp.type==="human";
     const canRoll=!over&&human&&G.phase==="roll"&&!busy;
@@ -433,7 +471,7 @@ function boardSVG(active){
     else if(l&&l.type==="nomove")pre="No move for "+l.dice+". ";
     else if(l&&l.type==="timeout")pre="Time ran out. ";
     else if(l&&l.type==="move"&&l.captured&&l.captured.length)pre="Captured! ";
-    if(cp.type==="ai")return pre+nm+" is thinking...";
+    if(cp.type==="ai")return G.phase==="move"?pre+nm+" rolled <b>"+G.diceValue+"</b>":pre+nm+" is rolling...";
     if(G.phase==="roll"){
       const humans=G.players.filter(p=>p.type==="human").length;
       return pre+nm+(G.consecutiveSixes?" — rolled a 6, roll again":(humans>1?" — your turn":" — roll the dice"));
@@ -449,7 +487,7 @@ function boardSVG(active){
     startTurnTimer();
     if(cp.type==="ai"){
       busy=true;render();
-      setTimeout(()=>{if(my===gen&&isOpen())doRoll();},reduce()?150:650);
+      setTimeout(()=>{if(my===gen&&isOpen())doRoll();},reduce()?150:Math.round(850*sp()));
     }else{
       busy=false;render();
       if(G.phase==="move")autoPickIfSingle(my);
@@ -472,14 +510,16 @@ function boardSVG(active){
     busy=true;stopTurnTimer();render();
     sfx("click");
     const dice=E.rollDice();
-    await rollAnim($("luDie"),dice,600);
+    await rollAnim($("luDie"),dice,950);
+    lastDie=dice;
     if(my!==gen||!isOpen())return;
+    const cp0=E.cur(G);
     const res=E.applyRoll(G,dice);
     saveGame();
     if(res.cancelled||res.noMove){
       render();
       sfx("click");
-      await sleep(reduce()?100:950);
+      await sleep(reduce()?100:Math.round(1100*(cp0.type==="ai"?sp():1)));
       if(my!==gen||!isOpen())return;
       busy=false;drive();return;
     }
@@ -487,9 +527,12 @@ function boardSVG(active){
     const cp=E.cur(G);
     if(cp.type==="ai"){
       render();
-      await sleep(reduce()?100:520);
+      await sleep(reduce()?100:Math.round(850*sp()));
       if(my!==gen||!isOpen())return;
       const m=E.chooseAIMove(G,cp.level);
+      board.setValid([m.tokenId],null);          // بنبرز القطعة اللي الكمبيوتر اختارها
+      await sleep(reduce()?60:Math.round(550*sp()));
+      if(my!==gen||!isOpen())return;
       doMove(m.tokenId);
     }else{
       busy=false;render();
@@ -511,7 +554,7 @@ function boardSVG(active){
     const res=E.moveToken(G,id,G.diceValue);
     if(!res.ok){busy=false;render();return;}
     sfx("click");
-    await board.animateMove(id,res.to);
+    await board.animateMove(id,res.to,cp.type==="ai"?Math.round(125*Math.max(.9,sp())):125);
     if(my!==gen)return;
     if(res.captured.length){sfx("capture");await board.flyHome(res.captured);if(my!==gen)return;}
     if(res.finished)sfx("capture");
@@ -642,6 +685,8 @@ function boardSVG(active){
     if(k==="three")cfg.three=!cfg.three;else if(k==="full")cfg.full=!cfg.full;else cfg.auto=!cfg.auto;
     sfx("click");syncSetup();
   };
+  window.ludoDice=function(v){cfg.dice=v;try{localStorage.setItem("ludoDiceStyle",v);}catch(e){}sfx("click");syncSetup();};
+  window.ludoSpeed=function(v){cfg.speed=v;sfx("click");syncSetup();};
   window.ludoTimer=function(v){cfg.timer=+v;sfx("click");syncSetup();};
   window.ludoResetStats=function(){
     if(!confirm("Reset all Ludo stats and achievements on this device?"))return;
