@@ -3043,6 +3043,17 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <button type="button" data-v="15" onclick="ludoTimer(15)">15s</button>
         <button type="button" data-v="30" onclick="ludoTimer(30)">30s</button>
       </div>
+      <div class="lu-label" style="margin-top:14px">CPU speed</div>
+      <div class="lu-seg" id="luSpeedSeg" role="group" aria-label="CPU speed">
+        <button type="button" data-v="fast" onclick="ludoSpeed('fast')">Fast</button>
+        <button type="button" data-v="normal" onclick="ludoSpeed('normal')">Normal</button>
+        <button type="button" data-v="slow" onclick="ludoSpeed('slow')">Slow</button>
+      </div>
+      <div class="lu-label" style="margin-top:14px">Dice</div>
+      <div class="lu-seg" id="luDiceSeg" role="group" aria-label="Dice style">
+        <button type="button" data-v="real" onclick="ludoDice('real')">Natural 3D</button>
+        <button type="button" data-v="flat" onclick="ludoDice('flat')">Simple</button>
+      </div>
     </div>
 
     <button type="button" class="lu-start" onclick="ludoStart()">Start Game</button>
@@ -3054,7 +3065,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
     <div class="lu-strip" id="luStrip"></div>
     <div class="lu-boardwrap" id="luBoard"></div>
     <div class="lu-ctl" id="luCtl">
-      <div id="luDie" class="lu-die is-empty" aria-label="Dice"></div>
+      <div id="luDie" aria-label="Dice"></div>
       <div class="lu-side">
         <p class="lu-status" id="luStatus" role="status" aria-live="polite"></p>
         <button type="button" class="lu-roll" id="luRoll" onclick="ludoRoll()">Roll Dice</button>
