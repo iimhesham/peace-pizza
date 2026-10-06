@@ -7,11 +7,11 @@
 if(!window.OL||!OL.i)return;
 var I=OL.i,e=I.e,U=I.U,T=I.T,IC=I.IC,IX=I.IX;
 var D=function(){return I.db();};
-var GK=["flags","story","career","xo"];
-var GN={flags:"Flags",story:"Who Am I",career:"Transfers",xo:"XO",crime:"Crime Story"};
-var GS={flags:"Flags",story:"Who",career:"Transfers",xo:"XO"};
-var GI={flags:"flag",story:"who",career:"move",xo:"grid"};
-var GC={flags:"#7ccb9b",story:"#74a5be",career:"#d4b675",xo:"#FF4777"};
+var GK=["flags","story","career","xo","ludo"];
+var GN={flags:"Flags",story:"Who Am I",career:"Transfers",xo:"XO",ludo:"Ludo",crime:"Crime Story"};
+var GS={flags:"Flags",story:"Who",career:"Transfers",xo:"XO",ludo:"Ludo"};
+var GI={flags:"flag",story:"who",career:"move",xo:"grid",ludo:"dice"};
+var GC={flags:"#7ccb9b",story:"#74a5be",career:"#d4b675",xo:"#FF4777",ludo:"#F2B632"};
 var LB=null,NREQ=0,preAt=0,ret=null,curTab="me",rf="all",F={g:"career"},QL=[],profId=null,fq="",FB={},FLC={};
 
 /* ---------- helpers ---------- */
@@ -44,6 +44,7 @@ var TT=[
  {k:"story",n:"Top Detective",d:"Most points in Who Am I",ic:"x:who",u:"pts",f:function(r){return gp(r.x,"story");}},
  {k:"career",n:"Transfer King",d:"Most points in Transfers",ic:"x:move",u:"pts",f:function(r){return gp(r.x,"career");}},
  {k:"xo",n:"XO Champion",d:"Most points in XO",ic:"x:grid",u:"pts",f:function(r){return gp(r.x,"xo");}},
+ {k:"ludo",n:"Ludo Champion",d:"Most points in Ludo",ic:"x:dice",u:"pts",f:function(r){return gp(r.x,"ludo");}},
  {k:"active",n:"Marathoner",d:"Most sessions played",ic:"x:bolt",u:"sessions",f:function(r){return r.a.games;}}
 ];
 function holders(){var R=list("all");return TT.map(function(t){var best=null;R.forEach(function(r){var v=t.f(r);if(v>0&&(!best||v>best.v))best={id:r.id,v:v,n:r.n,p:r.p};});return{t:t,h:best};});}
@@ -76,7 +77,7 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       '<div class="ac-pills">'+(ix>=0?'<span class="ac-pill gold">'+IC("chart",1)+' Rank #'+(ix+1)+'<em>of '+R.length+'</em></span>':'<span class="ac-pill">Unranked</span>')+
       mine.slice(0,2).map(function(x){return'<span class="ac-pill">'+ico(x.ic)+' '+x.n+'</span>';}).join("")+'</div></div></div>'+
       '<div class="ac-stats">'+[[t.pts,"Points"],[t.wins,"Wins"],[t.games,"Sessions"],[acc===null?"-":acc+"%","Accuracy"]].map(function(c){return'<div><b>'+c[0]+'</b><small>'+c[1]+'</small></div>';}).join("")+'</div></section>';
-    h+=sec("Games")+'<div class="ac-games">'+GK.map(function(k){var x=v[k],xoG=k==="xo",tot=x?(xoG?(x.games||0):(x.right||0)+(x.wrong||0)):0,pc=tot?Math.round((xoG?(x.wins||0):(x.right||0))/tot*100):0;
+    h+=sec("Games")+'<div class="ac-games">'+GK.map(function(k){var x=v[k],xoG=k==="xo"||k==="ludo",tot=x?(xoG?(x.games||0):(x.right||0)+(x.wrong||0)):0,pc=tot?Math.round((xoG?(x.wins||0):(x.right||0))/tot*100):0;
       return'<div class="ac-g'+(x?'':' off')+'" style="--gc:'+GC[k]+'"><span class="ac-gi">'+IX(GI[k])+'</span><small>'+GN[k]+'</small><b>'+(x?x.pts:"-")+'</b>'+
         (x?'<div class="ac-gr">'+(xoG?'<span>'+IC("check")+(x.wins||0)+' wins</span><span>'+(x.games||0)+' games</span>':'<span>'+IC("check")+(x.right||0)+'</span><span>'+IC("x")+(x.wrong||0)+'</span>')+'</div><i class="ol-acc"><i style="width:'+pc+'%"></i></i>':'<em>Not played yet</em>')+'</div>';}).join("")+'</div>';
     var B=I.BADGES,done=B.filter(function(b){return b[2](t,v);}),next=B.filter(function(b){return!b[2](t,v);}).map(function(b){return{b:b,c:Math.min(b[3](t,v),b[4])};}).sort(function(a,c){return c.c/c.b[4]-a.c/a.b[4];})[0];
@@ -96,12 +97,12 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
   });}
 
 /* ---------- Ranking ---------- */
-function row(r,rk,mid){var s=r.x.s||{},z=s[rf]||{},sub=rf==="all"?GK.map(function(k){return GS[k]+" "+gp(r.x,k);}).join(" · "):(rf==="xo"?"Wins "+(z.wins||0)+" · Games "+(z.games||0):"Right "+(z.right||0)+" · Wrong "+(z.wrong||0)+" · Sessions "+(z.games||0));
+function row(r,rk,mid){var s=r.x.s||{},z=s[rf]||{},sub=rf==="all"?GK.map(function(k){return GS[k]+" "+gp(r.x,k);}).join(" · "):((rf==="xo"||rf==="ludo")?"Wins "+(z.wins||0)+" · Games "+(z.games||0):"Right "+(z.right||0)+" · Wrong "+(z.wrong||0)+" · Sessions "+(z.games||0));
   return'<div class="ox-row'+(r.id===mid?' me':'')+'" onclick="OLX.prof(\''+e(r.id)+'\')"><span class="ox-rk">'+rk+'</span>'+av(r.p,r.id,"",r.n)+'<div class="ox-rw"><b>'+I.nmu(r.id,r.n)+'</b><small>'+e(sub)+'</small></div><span class="ox-pts">'+r.v+'</span></div>';}
 function pod(r,rk){var c=["","g","s","b"][rk];return'<div class="ox-pc '+c+'" onclick="OLX.prof(\''+e(r.id)+'\')">'+(rk===1?'<i class="ox-cr">'+IX("crown")+'</i>':'')+av(r.p,r.id,"",r.n)+'<span class="ox-pn">'+I.nmu(r.id,r.n)+'</span><b class="ox-pv">'+r.v+'</b><div class="ox-pl"><span>'+rk+'</span></div></div>';}
 function rank(f){if(f)rf=f;I.sv("stats");curTab="rank";
   load(function(){if(!alive())return;var R=list(rf),mid=U().uid,h=tabs("rank");
-    h+='<div class="ox-chips">'+[["all","All"],["flags","Flags"],["story","Who"],["career","Moves"],["xo","XO"]].map(function(c){return'<button type="button" class="ox-chip'+(rf===c[0]?' on':'')+'" onclick="OLX.rf(\''+c[0]+'\')">'+c[1]+'</button>';}).join("")+'</div>';
+    h+='<div class="ox-chips">'+[["all","All"],["flags","Flags"],["story","Who"],["career","Moves"],["xo","XO"],["ludo","Ludo"]].map(function(c){return'<button type="button" class="ox-chip'+(rf===c[0]?' on':'')+'" onclick="OLX.rf(\''+c[0]+'\')">'+c[1]+'</button>';}).join("")+'</div>';
     if(!R.length)h+='<div class="ox-none">Nobody has played online yet. The first player to finish a game shows up here.</div>';
     else{var top3=R.length>=3;if(top3)h+='<div class="ox-pod">'+pod(R[1],2)+pod(R[0],1)+pod(R[2],3)+'</div>';
       h+='<div class="ox-list">'+R.slice(top3?3:0).map(function(r,i){return row(r,i+(top3?4:1),mid);}).join("")+'</div>';
@@ -253,7 +254,7 @@ function qcopy(i){var r=QL[i];if(!r)return;var t=srcOf(r.x.g,r.x.d);try{navigato
 
 /* ---------- styles ---------- */
 var SVG=function(p){return'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'black\' stroke-width=\'2.1\' stroke-linecap=\'round\' stroke-linejoin=\'round\'>'+p+'</svg>")';};
-var css=':root{--x-grid:'+SVG("<path d=\'M9 4v16M15 4v16M4 9h16M4 15h16\'/>")+';--x-flag:'+SVG("<path d=\'M5 21V4M5 4h12l-2.5 4L17 12H5\'/>")+';--x-who:'+SVG("<circle cx=\'12\' cy=\'8\' r=\'3.5\'/><path d=\'M5 20c0-4 3-6 7-6s7 2 7 6\'/>")+';--x-move:'+SVG("<path d=\'M3 17l18-6-8 9-2-5-8 2zM11 15l10-4\'/>")+';--x-target:'+SVG("<circle cx=\'12\' cy=\'12\' r=\'9\'/><circle cx=\'12\' cy=\'12\' r=\'5\'/><circle cx=\'12\' cy=\'12\' r=\'1.2\'/>")+';--x-bolt:'+SVG("<path d=\'M13 2L4 14h7l-1 8 9-12h-7z\'/>")+';--x-sync:'+SVG("<path d=\'M20 8a8 8 0 0 0-14-2L4 8M4 4v4h4M4 16a8 8 0 0 0 14 2l2-2M20 20v-4h-4\'/>")+';--x-shield:'+SVG("<path d=\'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z\'/><path d=\'M8.5 12l2.5 2.5L16 9.5\'/>")+';--x-logout:'+SVG("<path d=\'M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9\'/>")+';--x-medal:'+SVG("<circle cx=\'12\' cy=\'14\' r=\'6\'/><path d=\'M8.5 3l3.5 6 3.5-6\'/>")+';--x-chev:'+SVG("<path d=\'M9 6l6 6-6 6\'/>")+'}'+`
+var css=':root{--x-grid:'+SVG("<path d=\'M9 4v16M15 4v16M4 9h16M4 15h16\'/>")+';--x-dice:'+SVG("<rect x=\'4\' y=\'4\' width=\'16\' height=\'16\' rx=\'3.5\'/><circle cx=\'9\' cy=\'9\' r=\'.9\'/><circle cx=\'15\' cy=\'15\' r=\'.9\'/><circle cx=\'12\' cy=\'12\' r=\'.9\'/>")+';--x-flag:'+SVG("<path d=\'M5 21V4M5 4h12l-2.5 4L17 12H5\'/>")+';--x-who:'+SVG("<circle cx=\'12\' cy=\'8\' r=\'3.5\'/><path d=\'M5 20c0-4 3-6 7-6s7 2 7 6\'/>")+';--x-move:'+SVG("<path d=\'M3 17l18-6-8 9-2-5-8 2zM11 15l10-4\'/>")+';--x-target:'+SVG("<circle cx=\'12\' cy=\'12\' r=\'9\'/><circle cx=\'12\' cy=\'12\' r=\'5\'/><circle cx=\'12\' cy=\'12\' r=\'1.2\'/>")+';--x-bolt:'+SVG("<path d=\'M13 2L4 14h7l-1 8 9-12h-7z\'/>")+';--x-sync:'+SVG("<path d=\'M20 8a8 8 0 0 0-14-2L4 8M4 4v4h4M4 16a8 8 0 0 0 14 2l2-2M20 20v-4h-4\'/>")+';--x-shield:'+SVG("<path d=\'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z\'/><path d=\'M8.5 12l2.5 2.5L16 9.5\'/>")+';--x-logout:'+SVG("<path d=\'M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9\'/>")+';--x-medal:'+SVG("<circle cx=\'12\' cy=\'14\' r=\'6\'/><path d=\'M8.5 3l3.5 6 3.5-6\'/>")+';--x-chev:'+SVG("<path d=\'M9 6l6 6-6 6\'/>")+'}'+`
 #olSheet{--bg:#0a0a0a;--card:#141413;--card2:#1b1a18;--h1:#1b1a18;--h2:#141413;--ln:#2a2927;--ln2:#41403b;--mu:#8d9d95;--mu2:#6c7c74;--ink:#e9efeb;--ac:#d4b675;--acr:212,182,117;--on:#111;--gr:#0d6b50;--gon:#fff;position:fixed;inset:0;z-index:9995;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.66);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);direction:ltr;text-align:left;color:var(--ink);font-family:'IBM Plex Sans Arabic','Tajawal',system-ui,sans-serif;animation:oxF .15s}
 #olSheet *{box-sizing:border-box}
 .ox-pts,.ox-pv,.ox-wp,.ox-kp b,.ox-gr b{direction:ltr;unicode-bidi:isolate}

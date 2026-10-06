@@ -29,7 +29,9 @@ var META={
  crime:{n:"Crime Stories",d:"Secret roles, private clues and votes until the killer is revealed.",who:"3 or more players",
   ic:"<path d='M4 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H4zM20 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z'/>"},
  xo:{n:"XO",d:"Tic-tac-toe against one friend. Win a game and earn 3 points in your stats.",who:"Two players. No host, no judge",
-  ic:"<path d='M9 4v16M15 4v16M4 9h16M4 15h16'/>"}
+  ic:"<path d='M9 4v16M15 4v16M4 9h16M4 15h16'/>"},
+ ludo:{n:"Ludo",d:"Roll, race and capture. Bring all four pieces home first. Win a game and earn 5 points in your stats.",who:"2 to 4 players. The host starts the game",
+  ic:"<rect x='4' y='4' width='16' height='16' rx='3.5'/><circle cx='9' cy='9' r='.9'/><circle cx='15' cy='15' r='.9'/><circle cx='12' cy='12' r='.9'/>"}
 };
 function RW(s){var r=0,w=0;Object.keys(s||{}).forEach(function(k){r+=(s[k]||{}).right||0;w+=(s[k]||{}).wrong||0;});return[r,w];}
 function GP(s,k){return((s||{})[k]||{}).pts||0;}
@@ -48,6 +50,8 @@ var BADGES=[
  ["Sharpshooter","80% accuracy, 20+ answers",function(t,s){var a=RW(s),n=a[0]+a[1];return n>=20&&a[0]/n>=.8;},function(t,s){var a=RW(s);return a[0]+a[1];},20],
  ["XO Rookie","Win 1 XO game",function(t,s){return((s||{}).xo||{}).wins>=1;},function(t,s){return((s||{}).xo||{}).wins||0;},1],
  ["XO Ace","Win 10 XO games",function(t,s){return((s||{}).xo||{}).wins>=10;},function(t,s){return((s||{}).xo||{}).wins||0;},10],
+ ["Ludo Rookie","Win 1 Ludo game",function(t,s){return((s||{}).ludo||{}).wins>=1;},function(t,s){return((s||{}).ludo||{}).wins||0;},1],
+ ["Ludo Ace","Win 10 Ludo games",function(t,s){return((s||{}).ludo||{}).wins>=10;},function(t,s){return((s||{}).ludo||{}).wins||0;},10],
  ["All-Rounder","Score in Flags, Who Am I and Transfers",function(t,s){return GP(s,"flags")>0&&GP(s,"story")>0&&GP(s,"career")>0;},function(t,s){return(GP(s,"flags")>0)+(GP(s,"story")>0)+(GP(s,"career")>0);},3]
 ];
 var CSS=':root{--o-bell:'+SV("<path d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9'/><path d='M10.3 21a1.9 1.9 0 0 0 3.4 0'/>")+';--o-trophy:'+SV("<path d='M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z'/><path d='M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3'/>")+';--o-chart:'+SV("<path d='M4 20V10M10 20V4M16 20v-7M22 20H2'/>")+';--o-copy:'+SV("<rect x='9' y='9' width='11' height='11' rx='2'/><path d='M5 15V6a2 2 0 0 1 2-2h8'/>")+'}'+
@@ -217,8 +221,8 @@ function shell(h,o){o=o||{};root();var top=ov.scrollTop;ov.setAttribute("data-g"
   ov.innerHTML='<div class="ol-c"><div class="ol-bar"><button type="button" class="ol-back" onclick="OL.up()" aria-label="Back">'+CHEV+'</button><div class="ol-ttl">'+e(o.t||"Online")+'</div>'+(c?'<div class="ol-pill" dir="ltr">'+e(c)+'</div>':'')+'</div>'+h+'</div>';
   ov.scrollTop=(lastT===o.t)?top:0;lastT=o.t;}
 function menu(k){if(k)mk=k;k=mk||"flags";vw="menu";var m=META[k],crime=k==="crime";
-  shell('<div class="ol-pass"><div class="ol-pass-top"><span class="ol-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+m.ic+'</svg></span><div><b>'+e(m.n)+'</b><small>'+e(m.d)+'</small></div></div><div class="ol-perf"></div><div class="ol-pass-bot"><button type="button" class="ol-b" onclick="'+(crime?'OLS.open()':'OL.create(\''+k+'\')')+'">'+(crime?'Pick a story and open the room':'Open a new room')+'</button><p class="ol-hint">'+e(m.who)+(k==="xo"?'.':'. You run the room.')+'</p></div></div>'+
-   '<div class="ol-join"><label for="olCode">Have a room code?</label><div class="ol-join-row"><input id="olCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0000" autocomplete="off" onkeydown="if(event.key===\'Enter\')OL.join()"><button type="button" class="ol-b g" onclick="OL.join()">Join</button></div></div>'+(k==="xo"?'':'<button type="button" class="ol-s" onclick="OL.sug(\''+k+'\')">'+IX('pencil')+' Suggest a question for this game</button>'),{t:m.n+" Online",g:k});}
+  shell('<div class="ol-pass"><div class="ol-pass-top"><span class="ol-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+m.ic+'</svg></span><div><b>'+e(m.n)+'</b><small>'+e(m.d)+'</small></div></div><div class="ol-perf"></div><div class="ol-pass-bot"><button type="button" class="ol-b" onclick="'+(crime?'OLS.open()':'OL.create(\''+k+'\')')+'">'+(crime?'Pick a story and open the room':'Open a new room')+'</button><p class="ol-hint">'+e(m.who)+((k==="xo"||k==="ludo")?'.':'. You run the room.')+'</p></div></div>'+
+   '<div class="ol-join"><label for="olCode">Have a room code?</label><div class="ol-join-row"><input id="olCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0000" autocomplete="off" onkeydown="if(event.key===\'Enter\')OL.join()"><button type="button" class="ol-b g" onclick="OL.join()">Join</button></div></div>'+((k==="xo"||k==="ludo")?'':'<button type="button" class="ol-s" onclick="OL.sug(\''+k+'\')">'+IX('pencil')+' Suggest a question for this game</button>'),{t:m.n+" Online",g:k});}
 var BD={gold:"Golden",silver:"Silver",premium:"Premium",master:"Master",elite:"Elite",king:"King",legend:"Legend",phantom:"Phantom",savage:"Savage"},BK=["premium","silver","gold","master","elite","king","legend","phantom","savage"];
 function bk(id){return BD[BDG[id]]?BDG[id]:"";}
 function bdg(id){var k=bk(id);return k?'<i class="ol-bdg t-'+k+'">&#9733; '+BD[k]+'</i>':"";}
@@ -247,6 +251,7 @@ function draw(){
   if(!ov)return;
   if(!S){if(code){T("The room was closed");OL.exit();}return;}
   if(S.game==="xo"){if(window.OLXO)return OLXO.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"XO",g:"xo"});setTimeout(draw,300);return;}
+  if(S.game==="ludo"){if(window.OLLUDO)return OLLUDO.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"LUDO",g:"ludo"});setTimeout(draw,300);return;}
   var host=role==="host",me=U().uid,b=S.buzz,gm=g(),st=S.step||0,op=opts(),o={room:true,t:gm.n+" Room"};vw="room";
   if(S.status==="lobby"){
     var ps=pl(),rows=ps.map(function(p){return'<div class="ol-t ol-ck" onclick="OL.prof(\''+e(p.uid)+'\')"><b>'+av(p)+nm(p)+'</b>'+IX('user')+'</div>';}).join("")+(ps.length<2?'<div class="ol-t empty">Waiting for a player...</div>':"");
@@ -323,6 +328,7 @@ function sweep(id,keep){var L=[];try{L=JSON.parse(localStorage.getItem("pp_hoste
 function create(k){if(busy)return;var u=U();busy=true;role="host";
   var pay={host:u.uid,hostName:u.displayName||"",game:k,status:"lobby",opts:{neg:1,tg:10},created:Date.now()};
   if(k==="xo")pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",rd:1,mv:"",w:0}};
+  if(k==="ludo"){pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",mv:""}};pay.opts={three:1,full:0};pay.gid=0;}
   mkRoom(pay,function(err,c){
     if(err){var pd=err.code==="PERMISSION_DENIED"||/permission/i.test(err.message||"");return bail(pd?"Not allowed to open a room. Make sure the Rules are published":"No free room code right now, try again");}
     busy=false;code=c;listen();});}
@@ -332,11 +338,11 @@ function join(c0){if(busy)return;var u=U(),c=String(c0||(document.getElementById
     if(!r){try{localStorage.removeItem("pp_room");}catch(x){}return bail("Room not found");}
     code=c;role=r.host===u.uid?"host":"player";
     if(role==="host"){busy=false;return listen();}
-    var v=r.players||{},mine=["a","b"].filter(function(x){return v[x]&&v[x].uid===u.uid;})[0];
+    var SL=r.game==="ludo"?["a","b","c","d"]:["a","b"],v=r.players||{},mine=SL.filter(function(x){return v[x]&&v[x].uid===u.uid;})[0];
     if(mine){busy=false;return listen();}
     if(r.status&&r.status!=="lobby")return bail("The game already started, you cannot join now");
     var me={uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||""};
-    (function claim(i){var k=["a","b"][i];if(!k)return bail("The room is full");
+    (function claim(i){var k=SL[i];if(!k)return bail("The room is full");
       db.ref("rooms/"+c+"/players/"+k).transaction(function(x){return x&&x.uid!==u.uid?undefined:me;},function(err,ok){
         if(err)return bail("Could not join");
         if(ok){busy=false;listen();}else claim(i+1);});})(0);
@@ -400,7 +406,7 @@ window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createE
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("Close the room for everyone?"))db.ref("rooms/"+code).remove();}};
 OL.i={db:function(){return db;},e:e,U:U,T:T,IC:IC,IX:IX,bk:bk,nmu:nmu,loadB:loadB,adm:isAdmin,BADGES:BADGES,G:G,META:META,shell:shell,syncLB:syncLB,mkey:mkey,MO:MO,ctx:function(){return{S:S,code:code,role:role};},sv:function(v){vw=v;},mail:mail};
 var lx=document.createElement("script");lx.src="js/online-social.js?v=2";document.head.appendChild(lx);
-var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);
+var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=1";document.head.appendChild(ll);
 var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
 /* "Play Online" button inside each game as a separate option (no outer button on the hub) */
 function mount(id,k,anchor,mode){var sec=document.getElementById(id);if(!sec||sec.querySelector(".ol-go"))return;
@@ -414,4 +420,5 @@ mount("story","story","#storyStartBtn","beforeGrid");
 mount("career","career","#careerStartBtn","beforeGrid");
 mount("games","crime",".hm-sub","after");
 mount("xo","xo","#xoSetup .xo-start","after");
+mount("ludo","ludo","#luSetup .lu-start","after");
 })();
