@@ -13,7 +13,7 @@
    - Host-only fields: status, cols (slot -> colour), seed, gid, opts, bots.
    - bots/<colour> = n: the host hands a seat that stopped playing to the CPU;
      the player's first n actions stay, then the CPU plays that seat.
-   Every finished game: the winner gets +5 points in stats.
+   Every finished game: 1st place +10, 2nd +7, 3rd +5, 4th 0 points in stats.
 ========================================================= */
 (function(){
 if(!window.OL||!OL.i||!window.LudoEngine||!window.LudoUI)return;
@@ -101,14 +101,15 @@ function leave(){
   if(confirm("Leave this room?"))OL.exit();
 }
 
-/* ---------- stats: winner +5 ---------- */
+/* ---------- stats: 1st +10, 2nd +7, 3rd +5 ---------- */
+var PTS=[10,7,5];
 function record(R,ctx){
   var u=U(),S=ctx.S,my=R.cols[mySeat(S,u.uid)];if(!my)return;
   if(R.bots[my]!=null)return;
   var key="ollu_"+ctx.code+"_"+(S.created||0)+"_"+R.gid;
   if(done[key])return;done[key]=1;
   try{if(localStorage.getItem(key))return;localStorage.setItem(key,"1");}catch(x){}
-  var win=R.g.winner===my,pts=win?5:0,d=db();
+  var win=R.g.winner===my,pts=PTS[R.g.ranking.indexOf(my)]||0,d=db();
   d.ref("users/"+u.uid+"/stats/ludo").transaction(function(s){s=s||{pts:0,right:0,wrong:0,games:0,wins:0};s.pts+=pts;s.games+=1;if(win)s.wins+=1;return s;},function(err){
     if(err)return;
     I.syncLB(function(){if(pts)d.ref("lb/"+u.uid+"/m/"+I.mkey()).transaction(function(v){return(v||0)+pts;});});});
@@ -133,7 +134,7 @@ function lobby(ctx,S){
     '<div class="ol-sec">Players ('+n+'/4)</div>'+rows+set+
     (host?'<button type="button" class="ol-b" '+(n<2?'disabled ':'')+'onclick="OLLUDO.start()">'+(n<2?'Waiting for players...':'Start Game')+'</button><button type="button" class="ol-b r" onclick="OL.close()">Close Room</button>'
          :'<div class="ol-w">Waiting for the host to start...</div><button type="button" class="ol-s" onclick="OLLUDO.leave()">Leave Room</button>')+
-    '<div class="xo2-rules">Win a game and get <b>+5</b> points in your stats.</div>',{room:true,t:"LUDO",g:"ludo",c:""});
+    '<div class="xo2-rules">Finish 1st for <b>+10</b> points, 2nd for <b>+7</b>, 3rd for <b>+5</b>.</div>',{room:true,t:"LUDO",g:"ludo",c:""});
 }
 
 function playHTML(){
@@ -253,9 +254,9 @@ function showResult(){
   try{if(typeof playRevealSound==="function")playRevealSound();}catch(x){}
   var g=R.g,w=E.playerOf(g,g.winner),host=ctx.role==="host";
   var ranks=g.ranking.map(function(c,i){var p=E.playerOf(g,c);
-    return'<div class="c-'+c+'"><em>'+(i+1)+'</em><b dir="auto">'+e(p.name)+'</b><small>'+p.finishedTokens+'/4 home · '+p.captures+' captures</small></div>';}).join("");
+    return'<div class="c-'+c+'"><em>'+(i+1)+'</em><b dir="auto">'+e(p.name)+'</b><small>'+p.finishedTokens+'/4 home · '+p.captures+' captures'+(PTS[i]&&p.color&&R.bots[p.color]==null?' · +'+PTS[i]+' pts':'')+'</small></div>';}).join("");
   $("oluRes").innerHTML='<div class="lu-final-card c-'+g.winner+' olu-res"><div class="lu-trophy"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a3 3 0 0 0 4 3M16 6h4v1a3 3 0 0 1-4 3M12 13v4M8 21h8M10 17h4"/></svg></div>'+
-    '<h3>'+e(w.name)+' wins!</h3><p>Winner gets +5 points in stats</p><div class="lu-rank">'+ranks+'</div>'+
+    '<h3>'+e(w.name)+' wins!</h3><p>1st +10 · 2nd +7 · 3rd +5 points in stats</p><div class="lu-rank">'+ranks+'</div>'+
     (host?'<button type="button" class="lu-main" onclick="OLLUDO.again()">Play Again</button><button type="button" class="lu-alt" onclick="OL.close()">Close Room</button>'
          :'<div class="ol-w">Waiting for the host to start another game...</div>')+
     '<button type="button" class="lu-alt" onclick="OL.rank()">Ranking</button><button type="button" class="lu-link" onclick="OL.stats()">My Stats</button></div>';
