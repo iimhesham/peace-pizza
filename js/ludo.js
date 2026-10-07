@@ -562,7 +562,7 @@ function boardSVG(active){
     saveGame();
     if(res.over){busy=false;render();setTimeout(()=>{if(my===gen)finish();},reduce()?100:700);return;}
     busy=false;render();
-    if(res.again&&cp.type==="human")toast_("Six! Roll again");
+    if(res.again&&cp.type==="human")toast_(res.bonusFinish?"Piece home! Roll again":"Six! Roll again");
     drive();
   }
 

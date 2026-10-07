@@ -299,7 +299,8 @@
     res.win=p.finishedTokens>=4;
 
     // رمية زيادة عند الـ 6، وإلا الدور اللي بعده (لو اللاعب خلّص بالـ 6 الدور بيعدّي برضه)
-    if(dice===6&&p.finishedTokens<4){g.phase="roll";g.valid=[];g.diceValue=null;res.again=true;}
+    // رمية زيادة عند الـ 6 أو لما قطعة توصل (تدخل البيت) — ما لم يكن اللاعب خلّص كل قطعه
+    if((dice===6||fin)&&p.finishedTokens<4){g.phase="roll";g.valid=[];g.diceValue=null;res.again=true;res.bonusFinish=fin&&dice!==6;}
     else{nextTurn(g);res.again=false;}
     return res;
   }
