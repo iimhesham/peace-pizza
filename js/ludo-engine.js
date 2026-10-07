@@ -154,18 +154,24 @@
     return{ok:true,pos:np,exit:false};
   }
 
-  // مين هيتاكل لو القطعة دي نزلت على الخانة دي؟ (مفيش أكل على safe ولا على block)
-  function checkCapture(g,color,newPos){
+  // مين هيتاكل لو القطعة دي نزلت على الخانة دي؟
+  // مفيش أكل على: خانة safe، ولا Block، ولا خانة فيها أكتر من لون مع بعض
+  // (يعني فيها قطع من ناحيتين قاعدين مع بعض بالفعل — مفيش حد فيهم يتاكل).
+  // movingId = القطعة اللي بتتحرك دلوقتي (بنتجاهلها عشان النتيجة تطلع واحدة
+  // سواء اتحسبت قبل الحركة (getValidMoves) أو بعدها (moveToken)).
+  function checkCapture(g,color,newPos,movingId){
     const abs=absCell(color,newPos);
     if(abs<0||isSafeCell(abs))return[];
-    const victims=[];
     const byColor={};
     for(const t of tokensOnCell(g,abs)){
-      if(t.playerId===color)continue;
+      if(movingId&&t.id===movingId)continue;
       (byColor[t.playerId]=byColor[t.playerId]||[]).push(t);
     }
+    if(Object.keys(byColor).length>=2)return[];      // خانة مشتركة: محدش بياكل حد
+    const victims=[];
     for(const c in byColor){
-      if(byColor[c].length>=2)continue;           // Block محمي
+      if(c===color)continue;                          // قطعي أنا
+      if(byColor[c].length>=2)continue;               // Block محمي
       victims.push(byColor[c][0]);
     }
     return victims;
@@ -181,7 +187,7 @@
     for(const t of p.tokens){
       const d=calculateDestination(t,dice);
       if(!d.ok)continue;
-      const caps=checkCapture(g,p.color,d.pos);
+      const caps=checkCapture(g,p.color,d.pos,t.id);
       moves.push({
         tokenId:t.id,idx:t.idx,from:t.position,to:d.pos,exit:!!d.exit,
         captures:caps.map(x=>x.id),capturesN:caps.length,
@@ -283,7 +289,7 @@
     const from=t.position;
     t.position=mv.to;t.state=stateOf(mv.to);
 
-    const victims=checkCapture(g,p.color,mv.to);   // (بعد ما القطعة اتحركت: الخانة فيها الضحية بس)
+    const victims=checkCapture(g,p.color,mv.to,t.id);
     victims.forEach(v=>captureToken(g,v));
     if(victims.length){p.captures+=victims.length;p.score+=10*victims.length;}
 
@@ -299,8 +305,9 @@
     res.win=p.finishedTokens>=4;
 
     // رمية زيادة عند الـ 6، وإلا الدور اللي بعده (لو اللاعب خلّص بالـ 6 الدور بيعدّي برضه)
-    // رمية زيادة عند الـ 6 أو لما قطعة توصل (تدخل البيت) — ما لم يكن اللاعب خلّص كل قطعه
-    if((dice===6||fin)&&p.finishedTokens<4){g.phase="roll";g.valid=[];g.diceValue=null;res.again=true;res.bonusFinish=fin&&dice!==6;}
+    // رمية زيادة عند الـ 6 أو لما قطعة توصل (تدخل البيت) أو لما تاكل قطعة خصم — ما لم يكن اللاعب خلّص كل قطعه
+    const cap=victims.length>0;
+    if((dice===6||fin||cap)&&p.finishedTokens<4){g.phase="roll";g.valid=[];g.diceValue=null;res.again=true;res.bonusFinish=fin&&dice!==6;res.bonusCapture=cap&&dice!==6&&!fin;}
     else{nextTurn(g);res.again=false;}
     return res;
   }

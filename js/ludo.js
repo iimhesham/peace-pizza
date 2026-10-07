@@ -57,7 +57,7 @@ function boardSVG(active){
     E.TRACK.forEach((p,i)=>{
       const sc=startAt[i];
       s+='<g'+(sc?' class="c-'+sc+(on(sc)?'':' lu-off')+'"':'')+'>';
-      s+='<rect class="lu-cell'+(sc?' is-start':'')+'" x="'+(p[1]+.03)+'" y="'+(p[0]+.03)+'" width=".94" height=".94" rx=".12"/>';
+      s+='<rect class="lu-cell'+(sc?' is-start':E.isSafeCell(i)?' is-safe':'')+'" x="'+(p[1]+.03)+'" y="'+(p[0]+.03)+'" width=".94" height=".94" rx=".12"/>';
       if(sc)s+=arrowPath(p[1]+.5,p[0]+.5,{red:0,green:90,yellow:180,blue:270}[sc]);
       else if(E.isSafeCell(i))s+='<path class="lu-star" d="'+starPath(p[1]+.5,p[0]+.5,.3,.13)+'"/>';
       s+='</g>';
@@ -562,7 +562,7 @@ function boardSVG(active){
     saveGame();
     if(res.over){busy=false;render();setTimeout(()=>{if(my===gen)finish();},reduce()?100:700);return;}
     busy=false;render();
-    if(res.again&&cp.type==="human")toast_(res.bonusFinish?"Piece home! Roll again":"Six! Roll again");
+    if(res.again&&cp.type==="human")toast_(res.bonusCapture?"Capture! Roll again":res.bonusFinish?"Piece home! Roll again":"Six! Roll again");
     drive();
   }
 
