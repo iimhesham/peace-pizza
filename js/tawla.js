@@ -127,9 +127,10 @@
       const pips=dst[q]!==undefined?dst[q].reduce((a,m)=>a+m.die,0):0;
       return '<div class="'+cls.join(" ")+'" data-ph="'+ph+'"'+(pips?' data-pips="'+pips+'"':"")+'>'+stackHTML(side,n,S.sel===q&&n>0&&side===S.turn)+'</div>';
     };
+    const GAP='<i class="tw-gap" aria-hidden="true"></i>';    // الفاصل الرأسي: 6 شمال | 6 يمين
     let top="",bot="";
-    for(let ph=13;ph<=24;ph++)top+=cell(ph);      // فوق: شمال ← يمين
-    for(let ph=12;ph>=1;ph--)bot+=cell(ph);       // تحت: شمال ← يمين
+    for(let ph=13;ph<=24;ph++){top+=cell(ph);if(ph===18)top+=GAP;}      // فوق: شمال ← يمين
+    for(let ph=12;ph>=1;ph--){bot+=cell(ph);if(ph===7)bot+=GAP;}        // تحت: شمال ← يمين
     $("twBoard").innerHTML=
       stripHTML(W,src,dst)+
       '<div class="tw-row top">'+top+'</div>'+
