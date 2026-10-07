@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="css/games.css?v=1">
 <link rel="stylesheet" href="css/dossier.css?v=1">
 <link rel="stylesheet" href="css/account.css?v=1">
-<link rel="stylesheet" href="css/hubx.css?v=7">
+<link rel="stylesheet" href="css/hubx.css?v=8">
 <link rel="stylesheet" href="css/xo.css?v=2">
 <link rel="stylesheet" href="css/ludo.css?v=3">
 <link rel="stylesheet" href="css/tawla.css?v=1">
@@ -298,7 +298,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-wide hx-ludo" onclick="playClickSound();ludoOpen()" aria-label="Ludo">
+    <button type="button" class="hx-card hx-ludo" onclick="playClickSound();ludoOpen()" aria-label="Ludo">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 64 64" width="70" height="70" fill="none">
           <rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/>
@@ -313,16 +313,35 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         </svg>
       </span>
       <span class="hx-body">
-        <small class="hx-en" dir="ltr">BOARD GAME · 2–4 PLAYERS</small>
+        <small class="hx-en" dir="ltr">2–4 PLAYERS</small>
         <b class="hx-ar">Ludo</b>
-        <span class="hx-desc">نرد وحظ وذكاء: وصّل قطعك الأربعة الأول. أوفلاين أو أونلاين مع صحابك.</span>
+        <span class="hx-desc">نرد وحظ وذكاء. أوفلاين أو أونلاين مع صحابك.</span>
+      </span>
+    </button>
+
+    <button type="button" class="hx-card hx-sudoku" onclick="playClickSound();sdOpen()" aria-label="Sudoku - سودوكو">
+      <span class="hx-art" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="70" height="70" fill="none">
+          <rect x="2" y="2" width="60" height="60" rx="7" fill="#f4f0a8"/>
+          <path d="M22 4v56M42 4v56M4 22h56M4 42h56" stroke="#a60043" stroke-width="2.4"/>
+          <path d="M12.7 4v56M31.3 4v56M50.7 4v56M4 12.7h56M4 31.3h56M4 50.7h56" stroke="#a60043" stroke-width="1" opacity=".45"/>
+          <g fill="#a60043" font-family="Anton,Impact,sans-serif" font-size="13" text-anchor="middle">
+            <text x="12.5" y="17">5</text><text x="32" y="17">3</text><text x="51.5" y="36">7</text>
+            <text x="12.5" y="36">6</text><text x="32" y="55">9</text><text x="51.5" y="55">1</text>
+          </g>
+        </svg>
+      </span>
+      <span class="hx-body">
+        <small class="hx-en" dir="ltr">NUMBER PUZZLE</small>
+        <b class="hx-ar">سودوكو</b>
+        <span class="hx-desc">4 أنماط ولغز يومي. أوفلاين أو سباق أونلاين.</span>
       </span>
     </button>
 
     <button type="button" class="hx-card hx-wide hx-tawla" onclick="playClickSound();tawlaOpen()" aria-label="الطاولة">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 96 64" width="96" height="64" fill="none">
-          <rect x="2" y="2" width="92" height="60" rx="8" fill="#4a2c1a" stroke="#6b4326" stroke-width="3"/>
+          <rect x="2" y="2" width="92" height="60" rx="8" fill="#5a3520" stroke="#d1a35a" stroke-width="2.4"/><rect x="6" y="5" width="75" height="54" rx="4" fill="#24150d"/><rect x="78" y="5" width="2" height="54" fill="#d1a35a" opacity=".55"/>
           <path d="M8 6l6 24 6-24zM32 6l6 24 6-24zM56 6l6 24 6-24z" fill="#A8452F"/>
           <path d="M20 6l6 24 6-24zM44 6l6 24 6-24zM68 6l6 24 6-24z" fill="#D9BE8C"/>
           <path d="M8 58l6-24 6 24zM32 58l6-24 6 24zM56 58l6-24 6 24z" fill="#D9BE8C"/>
@@ -338,25 +357,6 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">BACKGAMMON · الفورة من 31</small>
         <b class="hx-ar">الطاولة</b>
         <span class="hx-desc">طاولة مصرية بنردين ودبل: أخرج قشاطاتك الـ15 الأول. ضد صاحبك أو الكمبيوتر.</span>
-      </span>
-    </button>
-
-    <button type="button" class="hx-card hx-wide hx-sudoku" onclick="playClickSound();sdOpen()" aria-label="Sudoku - سودوكو">
-      <span class="hx-art" aria-hidden="true">
-        <svg viewBox="0 0 64 64" width="70" height="70" fill="none">
-          <rect x="2" y="2" width="60" height="60" rx="7" fill="#f4f0a8"/>
-          <path d="M22 4v56M42 4v56M4 22h56M4 42h56" stroke="#a60043" stroke-width="2.4"/>
-          <path d="M12.7 4v56M31.3 4v56M50.7 4v56M4 12.7h56M4 31.3h56M4 50.7h56" stroke="#a60043" stroke-width="1" opacity=".45"/>
-          <g fill="#a60043" font-family="Anton,Impact,sans-serif" font-size="13" text-anchor="middle">
-            <text x="12.5" y="17">5</text><text x="32" y="17">3</text><text x="51.5" y="36">7</text>
-            <text x="12.5" y="36">6</text><text x="32" y="55">9</text><text x="51.5" y="55">1</text>
-          </g>
-        </svg>
-      </span>
-      <span class="hx-body">
-        <small class="hx-en" dir="ltr">NUMBER PUZZLE · ONLINE RACE</small>
-        <b class="hx-ar">سودوكو</b>
-        <span class="hx-desc">4 أنماط ولغز يومي وإنجازات. أوفلاين، أو سباق أونلاين مع صاحبك: الأسرع يكسب 5 / 10 / 15 نقطة.</span>
       </span>
     </button>
   </div>
