@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="css/xo.css?v=2">
 <link rel="stylesheet" href="css/ludo.css?v=1">
 <link rel="stylesheet" href="css/tawla.css?v=1">
+<link rel="stylesheet" href="css/sudoku.css?v=1">
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,6 +147,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <div class="hm-fc hm-fc-x" role="button" tabindex="0" onclick="playClickSound();xoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();xoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">SLATE 3x3</span><span class="hm-fc-art"><svg viewBox="0 0 60 60" width="50" height="50" fill="none" stroke-linecap="round"><path d="M20 4v52M40 4v52M4 20h52M4 40h52" stroke="#E5D4C8" stroke-width="2.6" opacity=".7"/><path d="M5.5 5.5l9 9m0-9l-9 9M25.5 25.5l9 9m0-9l-9 9M45.5 45.5l9 9m0-9l-9 9" stroke="#FF4777" stroke-width="3.2"/><circle cx="30" cy="10" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/><circle cx="10" cy="50" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/></svg></span><span class="hm-fc-cap"><b>XO</b><small>TIC TAC TOE</small></span></div>
 <div class="hm-fc hm-fc-ludo" role="button" tabindex="0" onclick="playClickSound();ludoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();ludoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2-4 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 64 64" width="50" height="50" fill="none"><rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/><rect x="2" y="2" width="25" height="25" rx="6" fill="#E5484D"/><rect x="37" y="2" width="25" height="25" rx="6" fill="#2EAE6B"/><rect x="37" y="37" width="25" height="25" rx="6" fill="#F2B632"/><rect x="2" y="37" width="25" height="25" rx="6" fill="#3B82E0"/><rect x="21" y="21" width="22" height="22" rx="5" fill="#fff" stroke="#1a120d" stroke-width="2" transform="rotate(12 32 32)"/></svg></span><span class="hm-fc-cap"><b>LUDO</b><small>BOARD GAME</small></span></div>
 <div class="hm-fc hm-fc-tawla" role="button" tabindex="0" onclick="playClickSound();tawlaOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();tawlaOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 60 40" width="52" height="35" fill="none"><rect x="1" y="1" width="58" height="38" rx="5" fill="#4a2c1a" stroke="#6b4326" stroke-width="2"/><path d="M5 4l4 14 4-14zM21 4l4 14 4-14zM37 4l4 14 4-14z" fill="#A8452F"/><path d="M13 4l4 14 4-14zM29 4l4 14 4-14zM45 4l4 14 4-14z" fill="#D9BE8C"/><path d="M5 36l4-14 4 14zM21 36l4-14 4 14zM37 36l4-14 4 14z" fill="#D9BE8C"/><path d="M13 36l4-14 4 14zM29 36l4-14 4 14zM45 36l4-14 4 14z" fill="#A8452F"/><circle cx="9" cy="6" r="3" fill="#fffdf6"/><circle cx="41" cy="34" r="3" fill="#2a1d18"/></svg></span><span class="hm-fc-cap"><b>TAWLA</b><small>BACKGAMMON</small></span></div>
+<div class="hm-fc hm-fc-s" role="button" tabindex="0" onclick="playClickSound();sdOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();sdOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">9x9 PUZZLE</span><span class="hm-fc-art"><svg viewBox="0 0 60 60" width="50" height="50" fill="none"><rect x="2" y="2" width="56" height="56" rx="6" fill="#f4f0a8"/><path d="M20.7 4v52M39.3 4v52M4 20.7h52M4 39.3h52" stroke="#a60043" stroke-width="2.2"/><path d="M11.8 4v52M30 4v52M48.2 4v52M4 11.8h52M4 30h52M4 48.2h52" stroke="#a60043" stroke-width=".9" opacity=".45"/><g fill="#a60043" font-family="Anton,Impact,sans-serif" font-size="12" text-anchor="middle"><text x="12" y="17">5</text><text x="30" y="17">3</text><text x="48" y="34">7</text><text x="12" y="34">6</text><text x="30" y="52">9</text></g></svg></span><span class="hm-fc-cap"><b>SUDOKU</b><small>NUMBER PUZZLE</small></span></div>
   </div>
   <div class="hm-fc5w"><button type="button" class="hm-fc5" onclick="playClickSound();show('career')" aria-label="TRANSFERS - CAREER PATH"><i></i>
     <span class="hm-fc5-main">
@@ -336,6 +338,25 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">BACKGAMMON · الفورة من 31</small>
         <b class="hx-ar">الطاولة</b>
         <span class="hx-desc">طاولة مصرية بنردين ودبل: أخرج قشاطاتك الـ15 الأول. ضد صاحبك أو الكمبيوتر.</span>
+      </span>
+    </button>
+
+    <button type="button" class="hx-card hx-wide hx-sudoku" onclick="playClickSound();sdOpen()" aria-label="Sudoku - سودوكو">
+      <span class="hx-art" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="70" height="70" fill="none">
+          <rect x="2" y="2" width="60" height="60" rx="7" fill="#f4f0a8"/>
+          <path d="M22 4v56M42 4v56M4 22h56M4 42h56" stroke="#a60043" stroke-width="2.4"/>
+          <path d="M12.7 4v56M31.3 4v56M50.7 4v56M4 12.7h56M4 31.3h56M4 50.7h56" stroke="#a60043" stroke-width="1" opacity=".45"/>
+          <g fill="#a60043" font-family="Anton,Impact,sans-serif" font-size="13" text-anchor="middle">
+            <text x="12.5" y="17">5</text><text x="32" y="17">3</text><text x="51.5" y="36">7</text>
+            <text x="12.5" y="36">6</text><text x="32" y="55">9</text><text x="51.5" y="55">1</text>
+          </g>
+        </svg>
+      </span>
+      <span class="hx-body">
+        <small class="hx-en" dir="ltr">NUMBER PUZZLE · ONLINE RACE</small>
+        <b class="hx-ar">سودوكو</b>
+        <span class="hx-desc">4 أنماط ولغز يومي وإنجازات. أوفلاين، أو سباق أونلاين مع صاحبك: الأسرع يكسب 5 / 10 / 15 نقطة.</span>
       </span>
     </button>
   </div>
@@ -3221,6 +3242,14 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
   </div>
 </section>
 
+<!-- ========================================================
+     SUDOKU: كرز وفستق. أوفلاين هنا + سباق أونلاين من جوه (js/online-sudoku.js).
+     المنطق: js/sudoku-core.js · الواجهة واللعب الأوفلاين: js/sudoku.js · الشكل: css/sudoku.css
+     الواجهة بتتبني من JS (عربي/English)، فالـ section مجرد حاوية.
+======================================================== -->
+<section id="sudoku" class="hidden sd-app" lang="ar" dir="rtl"><div id="sdRoot"></div></section>
+
+
 <div class="footer">GAME • INVESTIGATION NIGHT</div>
 </div>
 
@@ -3243,6 +3272,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/ludo.js?v=1"></script>
 <script src="js/tawla-engine.js?v=1"></script>
 <script src="js/tawla.js?v=1"></script>
+<script src="js/sudoku-core.js?v=1"></script>
+<script src="js/sudoku.js?v=1"></script>
 <script src="js/flags-data.js"></script>
 <script src="js/flags-historical-data.js"></script>
 <script src="js/flags.js"></script>
