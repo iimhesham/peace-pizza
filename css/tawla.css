@@ -151,13 +151,7 @@ body.mode-tawla #toast{background:#E3B15C!important;color:#1b110b!important}
   padding:6px 5px;
 }
 .tw-row{display:flex;gap:0}
-.tw-mid{
-  height:14px;margin:3px 0;border-radius:4px;
-  background:linear-gradient(180deg,#25150c,#3a2216,#25150c);
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.6);
-  display:flex;align-items:center;justify-content:center;
-  font-size:9.5px;color:rgba(241,228,200,.4);letter-spacing:.12em;
-}
+.tw-mid{position:relative;height:18px;margin:0}
 .tw-pt{
   position:relative;flex:1;min-width:0;height:138px;
   display:flex;align-items:flex-start;justify-content:flex-start;flex-direction:column;
@@ -283,3 +277,15 @@ body.mode-tawla #toast{background:#E3B15C!important;color:#1b110b!important}
 }
 .tw-row.top .tw-pt.dest::after{top:62px}
 .tw-row.bot .tw-pt.dest::after{bottom:62px}
+
+/* فاصل رأسي في نص اللوحة (زي مفصلة الطاولة الحقيقية) */
+.tw-gap,.tw-mid::before{
+  background:linear-gradient(90deg,#1a0f08,#5b3a22 50%,#1a0f08);
+  box-shadow:inset 0 0 0 1px rgba(227,177,92,.18);
+}
+.tw-gap{flex:none;width:14px;margin:0 1px;border-radius:3px}
+.tw-mid::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:14px;margin-left:-7px;border-radius:0}
+.tw-mid::after{
+  content:"";position:absolute;left:50%;top:50%;width:14px;height:6px;margin:-3px 0 0 -7px;
+  background:radial-gradient(circle at 50% 50%,#E3B15C 0 2px,transparent 2.5px);
+}
