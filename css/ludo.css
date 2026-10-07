@@ -112,7 +112,8 @@ body.mode-ludo #toast{background:#F2E6CF!important;color:#1a120d!important}
 .lu-cell{fill:#CDBB96;stroke:#6f5e40;stroke-width:.045}
 .lu-cell.is-start{fill:var(--pc);stroke:var(--pd)}
 .lu-cell.is-final{fill:color-mix(in srgb,var(--pc) 62%,#CDBB96);stroke:var(--pd)}
-.lu-star{fill:#7b6a49}
+.lu-cell.is-safe{fill:#1a1410;stroke:#6f5e40}
+.lu-star{fill:#F2E6CF}
 .lu-star.on-start{fill:rgba(255,255,255,.85)}
 .lu-tri{stroke:#F2E6CF;stroke-width:.06;fill:var(--pc)}
 .lu-hub{fill:#14100c;stroke:#F2E6CF;stroke-width:.05}
