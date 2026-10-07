@@ -125,7 +125,7 @@
         if(user){if(!was)say("Welcome "+((user.displayName||"").split(" ")[0]||"back"));pull();}
       });
       auth.getRedirectResult().catch(function(){});
-      loadScript("js/online.js?v=8").catch(function(){});
+      loadScript("js/online.js?v=9").catch(function(){});
     }).catch(function(){if(chip)chip.style.display="none";});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();

@@ -63,7 +63,7 @@ function tabs(a){if(a)curTab=a;
 function pre(){var u=U();if(!u||Date.now()-preAt<15000)return;preAt=Date.now();
   D().ref("fr/"+u.uid).once("value").then(function(s){var n=s.numChildren();if(n!==NREQ){NREQ=n;var el=document.getElementById("olTabs");if(el)el.outerHTML=tabs();}},function(){});}
 function go(t){curTab=t;if(t==="me")OL.stats();else if(t==="rank")rank();else if(t==="awards")awards();else if(t==="friends")friends();}
-function shell(h,t){I.shell(h,{t:t,g:"base"});pre();}
+function shell(h,t,g){I.shell(h,{t:t,g:g||"base"});pre();}
 function sec(t,sub,extra){return'<div class="ac-h"><b>'+t+'</b>'+(sub?'<em>'+sub+'</em>':'')+(extra||"")+'</div>';}
 
 /* ---------- Account ---------- */
@@ -74,17 +74,32 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
     var R=list("all"),ix=R.map(function(r){return r.id;}).indexOf(u.uid),acc=accOf(t),name=u.displayName||"Player",
         mine=holders().filter(function(x){return x.h&&x.h.id===u.uid;}).map(function(x){return x.t;});
     var h=tabs("me");
-    h+='<section class="ac-hero"><div class="ac-id">'+av(u.photoURL,u.uid,"ac-av",name)+'<div class="ac-who"><b class="ac-name">'+I.nmu(u.uid,name)+'</b><small class="ac-mail" dir="ltr">'+e(I.mail(u))+'</small>'+
-      '<div class="ac-pills">'+(ix>=0?'<span class="ac-pill gold">'+IC("chart",1)+' Rank #'+(ix+1)+'<em>of '+R.length+'</em></span>':'<span class="ac-pill">Unranked</span>')+
-      mine.slice(0,2).map(function(x){return'<span class="ac-pill">'+ico(x.ic)+' '+x.n+'</span>';}).join("")+'</div></div></div>'+
-      '<div class="ac-stats">'+[[t.pts,"Points"],[t.wins,"Wins"],[t.games,"Sessions"],[acc===null?"-":acc+"%","Accuracy"]].map(function(c){return'<div><b>'+c[0]+'</b><small>'+c[1]+'</small></div>';}).join("")+'</div></section>';
-    h+=sec("Games")+'<div class="ac-games">'+GK.map(function(k){var x=v[k],xoG=k==="xo"||k==="ludo"||k==="sudoku",tot=x?(xoG?(x.games||0):(x.right||0)+(x.wrong||0)):0,pc=tot?Math.round((xoG?(x.wins||0):(x.right||0))/tot*100):0;
-      return'<div class="ac-g'+(x?'':' off')+'" style="--gc:'+GC[k]+'"><span class="ac-gi">'+IX(GI[k])+'</span><small>'+GN[k]+'</small><b>'+(x?x.pts:"-")+'</b>'+
-        (x?'<div class="ac-gr">'+(xoG?'<span>'+IC("check")+(x.wins||0)+' wins</span><span>'+(x.games||0)+' games</span>':'<span>'+IC("check")+(x.right||0)+'</span><span>'+IC("x")+(x.wrong||0)+'</span>')+'</div><i class="ol-acc"><i style="width:'+pc+'%"></i></i>':'<em>Not played yet</em>')+'</div>';}).join("")+'</div>';
+    var bk=I.bk(u.uid),BL={gold:"Golden"},bkl=bk?(BL[bk]||bk.charAt(0).toUpperCase()+bk.slice(1)):"";
+    var pad=function(n,l){n=String(n);while(n.length<l)n="0"+n;return n;};
+    var nw=String(name).toUpperCase().replace(/[^A-Z0-9 ]/g," ").trim().split(/\s+/).filter(Boolean);
+    if(!nw.length)nw=["PLAYER"];
+    var mrz1=("P<PZA"+nw[nw.length-1]+"<<"+nw.slice(0,-1).join("<")+"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<").slice(0,36),
+        mrz2=("PZ"+pad(ix>=0?ix+1:0,4)+"<"+pad(t.pts,3)+"<"+pad(t.wins,2)+"<"+pad(t.games,2)+"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<").slice(0,36);
+    h+='<section class="pp-page"><div class="pp-top"><span>Peace Pizza</span><b>Player Passport</b><span class="pp-ty">Type P</span></div>'+
+      '<div class="pp-body"><div class="pp-photo">'+av(u.photoURL,u.uid,"pp-av",name)+(bkl?'<div class="pp-seal" title="'+e(bkl)+'"><i>&#9733;</i><b>'+e(bkl)+'</b><small>Approved</small></div>':'')+'</div>'+
+      '<div class="pp-f"><label>Name</label><b class="pp-name" dir="auto">'+e(name)+'</b><label>E-mail</label><span class="pp-mail" dir="ltr">'+e(I.mail(u))+'</span>'+
+      (mine.length?'<label>Titles</label><span class="pp-tt">'+mine.slice(0,2).map(function(x){return x.n;}).join(" · ")+'</span>':'')+'</div>'+
+      '</div>'+
+      '<div class="pp-k">'+[[t.pts,"Points"],[t.wins,"Wins"],[t.games,"Sessions"],[acc===null?"-":acc+"%","Accuracy"]].map(function(c){return'<div><label>'+c[1]+'</label><b>'+c[0]+'</b></div>';}).join("")+'</div>'+
+      '<div class="pp-strip"><div><label>Rank No.</label><b>'+(ix>=0?'#'+pad(ix+1,4):'UNRANKED')+'</b></div><div><label>Holders</label><b>'+pad(R.length,4)+'</b></div><div><label>Status</label><b>'+(ix>=0?'ACTIVE':'NEW')+'</b></div></div>'+
+      '<div class="pp-mrz"><span>'+e(mrz1)+'</span><span>'+e(mrz2)+'</span></div></section>';
+    h+=sec("Visas")+'<div class="ac-games pp-visas">'+GK.map(function(k,i){var x=v[k],xoG=k==="xo"||k==="ludo"||k==="sudoku",tot=x?(xoG?(x.games||0):(x.right||0)+(x.wrong||0)):0,pc=tot?Math.round((xoG?(x.wins||0):(x.right||0))/tot*100):0;
+      return'<div class="pp-visa'+(x?'':' off')+'" style="--gc:'+GC[k]+'"><div class="pp-vh"><span>Visa</span><i>PZ-'+k.slice(0,3).toUpperCase()+'-'+pad(i+1,3)+'</i></div>'+
+        '<div class="pp-vt"><span class="ac-gi">'+IX(GI[k])+'</span><small>'+GN[k]+'</small></div><b>'+(x?x.pts:"-")+'</b>'+
+        (x?'<div class="ac-gr">'+(xoG?'<span>'+IC("check")+(x.wins||0)+' wins</span><span>'+(x.games||0)+' games</span>':'<span>'+IC("check")+(x.right||0)+'</span><span>'+IC("x")+(x.wrong||0)+'</span>')+'</div><i class="ol-acc"><i style="width:'+pc+'%"></i></i>':'<em>Not issued yet</em>')+'</div>';}).join("")+'</div>';
     var B=I.BADGES,done=B.filter(function(b){return b[2](t,v);}),next=B.filter(function(b){return!b[2](t,v);}).map(function(b){return{b:b,c:Math.min(b[3](t,v),b[4])};}).sort(function(a,c){return c.c/c.b[4]-a.c/a.b[4];})[0];
-    h+=sec("Achievements",done.length+" of "+B.length,'<button type="button" class="ac-more" onclick="OLX.go(\'awards\')">View all</button>')+
-      '<div class="ac-chips">'+(done.length?done.slice(0,8).map(function(b){return'<span class="ac-chip">'+IC("check")+' '+b[0]+'</span>';}).join(""):'<span class="ac-none">Play online games to unlock achievements</span>')+'</div>'+
-      (next?'<div class="ac-next"><b>Next up: '+next.b[0]+'</b><small>'+next.b[1]+'</small><i class="ol-pb"><i style="width:'+Math.round(next.c/next.b[4]*100)+'%"></i></i><em class="ol-of">'+next.c+' / '+next.b[4]+'</em></div>':'');
+    var shown=done.slice(0,9),blank=Math.max(0,3-shown.length);
+    h+=sec("Stamps",done.length+" of "+B.length,'<button type="button" class="ac-more" onclick="OLX.go(\'awards\')">View all</button>')+
+      '<div class="pp-stamps">'+shown.map(function(b,i){var rot=[-7,5,-3,8,-5,3,-9,6,-2][i%9];
+        return'<div class="pp-stamp c'+(i%4)+(i%2?' sq':'')+'" style="--r:'+rot+'deg" title="'+e(b[1])+'"><span class="pp-st">&#9733; &#9733; &#9733;</span><b>'+e(b[0])+'</b><small>'+e(b[1])+'</small></div>';}).join("")+
+        Array(blank+1).join('<div class="pp-stamp blank"><b>?</b><small>Empty page</small></div>')+'</div>'+
+      (done.length?'':'<div class="ac-none pp-none">Play online games to collect stamps</div>')+
+      (next?'<div class="ac-next"><b>Next stamp: '+next.b[0]+'</b><small>'+next.b[1]+'</small><i class="ol-pb"><i style="width:'+Math.round(next.c/next.b[4]*100)+'%"></i></i><em class="ol-of">'+next.c+' / '+next.b[4]+'</em></div>':'');
     h+=sec("Community")+'<button type="button" class="ac-tile" onclick="OL.sug()">'+IX("pencil")+'<span><b>Suggest a Question</b><small>Send your own questions to the admin</small></span></button>';
     if(o.adm){h+=sec("Admin Tools","",'<span class="ac-tag">Admin</span>')+'<div class="ac-grid">'+
       '<button type="button" class="ac-sq" id="acQreq" onclick="OL.queue()">'+IX("send")+'Question Requests</button>'+
@@ -93,7 +108,7 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       '<button type="button" class="ac-sq" onclick="OL.test()">'+IX("shield")+'System Check</button></div>';}
     else if(o.claim)h+='<button type="button" class="ol-b o" onclick="OL.claim()">Make me the admin (one time only)</button>';
     if(!o.inRoom)h+='<button type="button" class="ac-out" onclick="OL.signOut()">'+IX("logout")+' Sign out</button>';
-    shell(h,"Account");
+    shell(h,"Account","passport");
     if(o.adm)D().ref("qreq").once("value").then(function(s){var v2=s.val()||{},n=Object.keys(v2).filter(function(k){return!v2[k].s||v2[k].s==="p";}).length,el=document.getElementById("acQreq");if(el&&n)el.insertAdjacentHTML("beforeend",'<i class="ox-dot">'+n+'</i>');},function(){});
   });}
 
@@ -439,6 +454,84 @@ var css=':root{--x-grid:'+SVG("<path d=\'M9 4v16M15 4v16M4 9h16M4 15h16\'/>")+';
 .bd2 b{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--mu)}.bd2 b .ol-i{width:1em;height:1em}.bd2 small{display:block;font-size:11.5px;margin-top:2px}
 .bd2.on{border-color:rgba(var(--acr),.6);background:rgba(var(--acr),.07)}.bd2.on b{color:var(--ac)}
 .bd2 .ol-pb{margin-top:8px}.bd2 .ol-of{display:block;margin-top:4px}
+
+/* ---- passport theme (Account tab only, dark) ---- */
+#olRoot[data-g="passport"]{--bg:#0b1411;--bgr:11,20,17;--bg0:#08100d;--wash:radial-gradient(ellipse at 50% -10%,rgba(201,162,74,.12),transparent 60%),repeating-linear-gradient(45deg,rgba(255,255,255,.012) 0 2px,transparent 2px 6px);--card:#13211c;--cardr:19,33,28;--card2:#182a24;--h1:#182a24;--h2:#101c18;--ln:rgba(212,182,117,.2);--ln2:rgba(212,182,117,.38);--mu:#a99f86;--mu2:#7d755f;--ink:#f1e6c8;--ink2:#f1e6c8;--ac:#d4b675;--acr:212,182,117;--on:#10201a;--gold:#c9a24a;--red:#e8786b;--navy:#9ec0ea}
+#olRoot[data-g="passport"] .ol-bar{background:#0f1f19;border-bottom:3px double #c9a24a;color:#e9d391}
+#olRoot[data-g="passport"] .ol-ttl{color:#e9d391;font-family:'Playfair Display','Amiri',serif;letter-spacing:.08em;text-transform:uppercase;font-size:16px}
+#olRoot[data-g="passport"] .ol-back{background:rgba(255,255,255,.05);border-color:rgba(233,211,145,.45);color:#e9d391}
+#olRoot[data-g="passport"] .ox-tabs{background:rgba(0,0,0,.35);border:1px solid var(--ln2);border-radius:6px}
+#olRoot[data-g="passport"] .ox-tab{border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+#olRoot[data-g="passport"] .ox-tab.on{background:#d4b675;color:#10201a;box-shadow:inset 0 0 0 1px #f3e3ad}
+#olRoot[data-g="passport"] .ac-h{margin-top:26px;color:var(--ink);gap:10px}
+#olRoot[data-g="passport"] .ac-h:before{display:none}
+#olRoot[data-g="passport"] .ac-h b{font:700 14px 'Playfair Display','Amiri',serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ac)}
+#olRoot[data-g="passport"] .ac-h:after{content:"";order:2;flex:1;height:0;border-top:1px solid var(--ln2);border-bottom:1px solid var(--ln);padding-top:2px}
+#olRoot[data-g="passport"] .ac-h em{order:3;font-family:'IBM Plex Mono',monospace;color:var(--mu)}
+#olRoot[data-g="passport"] .ac-h .ac-more,#olRoot[data-g="passport"] .ac-tag{order:4;margin-inline-start:0;color:var(--ac);border-color:rgba(212,182,117,.5)}
+.pp-page{position:relative;border:1px solid rgba(201,162,74,.65);border-radius:6px;background:linear-gradient(170deg,#1a2e26,#0f1c17);box-shadow:0 0 0 1px rgba(0,0,0,.6),0 12px 26px rgba(0,0,0,.55);overflow:hidden;color:var(--ink)}
+.pp-page:before{content:"";position:absolute;inset:5px;border:1px solid rgba(201,162,74,.5);border-radius:3px;pointer-events:none;z-index:2}
+.pp-page:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 80% 30%,rgba(212,182,117,.05) 0 2px,transparent 2px 7px)}
+.pp-top{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 16px 8px;font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.pp-top b{font:700 12px 'Playfair Display','Amiri',serif;letter-spacing:.2em;color:var(--ac)}
+.pp-body{position:relative;z-index:1;display:flex;gap:14px;padding:6px 16px 14px;align-items:flex-start}
+.pp-photo{flex:none;width:92px;height:116px;padding:4px;background:#e9dcb6;border:1px solid var(--gold);box-shadow:0 3px 8px rgba(0,0,0,.55);position:relative}
+.pp-photo:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,transparent 60%,rgba(201,162,74,.3))}
+#olRoot[data-g="passport"] .pp-photo .ol-av,#olRoot[data-g="passport"] .pp-photo .ol-ph{width:100%;height:100%;border-radius:2px;border:1px solid rgba(0,0,0,.35);box-shadow:none;object-fit:cover;filter:sepia(.2) contrast(1.02);display:grid;place-items:center;background:#cdbd8d;color:#1f3a30;font:700 40px 'Playfair Display',serif}
+.pp-f{min-width:0;flex:1;padding-top:2px}
+.pp-f label,.pp-k label,.pp-strip label{display:block;font:500 9.5px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mu2);margin:0}
+.pp-f label+*{margin-bottom:9px}
+.pp-name{display:block;font:800 25px/1.15 'Playfair Display','Amiri',serif;color:#f6ecd0;overflow-wrap:anywhere;letter-spacing:.01em}
+.pp-mail{display:block;font:500 12px 'IBM Plex Mono',monospace;color:var(--navy);word-break:break-all}
+.pp-tt{display:block;font:600 12px 'IBM Plex Sans Arabic',sans-serif;color:var(--ac)}
+.pp-seal{position:absolute;z-index:3;inset-inline-start:34px;bottom:-26px;width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--red);border:2px solid var(--red);box-shadow:inset 0 0 0 3px #14231d,inset 0 0 0 4.5px var(--red);transform:rotate(-12deg);background:rgba(20,35,29,.88)}
+.pp-seal i{font-style:normal;font-size:10px;line-height:1;letter-spacing:3px;margin-bottom:2px}
+.pp-seal b{font:400 18px/1 Anton,Impact,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.pp-seal small{font:600 7px 'IBM Plex Mono',monospace;letter-spacing:.2em;text-transform:uppercase;margin-top:3px;border-top:1px solid var(--red);padding-top:2px}
+.pp-k{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;margin:0 14px;border-top:1px dashed var(--ln2);border-bottom:1px dashed var(--ln2)}
+.pp-k>div{padding:9px 4px 8px;text-align:center}.pp-k>div+div{border-inline-start:1px solid var(--ln)}
+.pp-k b{display:block;font:400 25px/1.1 Anton,Impact,sans-serif;letter-spacing:.04em;color:#f6ecd0;direction:ltr;margin-top:2px}
+.pp-k>div:first-child b{color:var(--ac);font-size:29px}
+.pp-strip{position:relative;z-index:1;display:grid;grid-template-columns:1.3fr 1fr 1fr;margin:12px 14px 0;background:#c9a24a;border-radius:3px;color:#10201a}
+.pp-strip>div{padding:7px 10px 8px}.pp-strip>div+div{border-inline-start:1px solid rgba(16,32,26,.3)}
+.pp-strip label{color:rgba(16,32,26,.7)}
+.pp-strip b{display:block;font:700 15px 'IBM Plex Mono',monospace;letter-spacing:.08em;direction:ltr;margin-top:1px}
+.pp-mrz{position:relative;z-index:1;margin:10px 14px 14px;padding:7px 8px;border-radius:2px;background:rgba(0,0,0,.4);font:600 12.5px/1.45 'IBM Plex Mono',monospace;letter-spacing:.02em;color:#cdbf94;direction:ltr;text-align:left;overflow:hidden;white-space:nowrap}
+.pp-mrz span{display:block;overflow:hidden}
+.pp-visas{gap:10px}
+.pp-visa{position:relative;padding:9px 11px 11px;background:linear-gradient(160deg,#1a2e26,#101c17);border:1px solid var(--gold);border-radius:4px;box-shadow:0 4px 10px rgba(0,0,0,.45);overflow:hidden;color:var(--ink)}
+.pp-visa:before{content:"";position:absolute;inset:3px;border:1px solid rgba(201,162,74,.4);border-radius:2px;pointer-events:none}
+.pp-visa:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 100% 0,color-mix(in srgb,var(--gc) 35%,transparent) 0 1.5px,transparent 1.5px 6px);opacity:.5;-webkit-mask:linear-gradient(200deg,#000,transparent 55%);mask:linear-gradient(200deg,#000,transparent 55%)}
+.pp-vh{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:6px;font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--ac);padding-bottom:5px;border-bottom:1px solid var(--ln)}
+.pp-vh i{font-style:normal;color:var(--mu);letter-spacing:.06em;font-size:8.5px}
+.pp-vt{position:relative;z-index:1;display:flex;align-items:center;gap:7px;margin-top:8px}
+.pp-visa .ac-gi{background:var(--gc);color:#10201a;border-radius:50%;width:26px;height:26px;box-shadow:0 0 0 2px #14231d,0 0 0 3px var(--gc)}
+.pp-visa .ac-gi .ol-i{width:14px;height:14px}
+.pp-vt small{margin:0;font:700 14px 'Playfair Display','Amiri',serif;color:var(--ink)}
+.pp-visa>b{position:relative;z-index:1;display:block;font:400 32px/1.1 Anton,Impact,sans-serif;letter-spacing:.04em;color:#f6ecd0;margin-top:4px;direction:ltr}
+.pp-visa .ac-gr{position:relative;z-index:1;color:var(--mu)}
+.pp-visa .ol-acc{display:block;width:100%;margin-top:8px;position:relative;z-index:1;background:rgba(255,255,255,.1);height:4px}.pp-visa .ol-acc i{background:var(--gc)}
+.pp-visa.off{background:rgba(255,255,255,.015);border-style:dashed;box-shadow:none}
+.pp-visa.off>b{color:var(--mu2)}.pp-visa.off .ac-gi{background:#2a3a33;color:#6f7a70;box-shadow:0 0 0 2px #14231d,0 0 0 3px #3a4a42}
+.pp-visa em{position:relative;z-index:1;display:inline-block;margin-top:6px;padding:2px 7px;border:1.5px solid var(--mu2);border-radius:3px;color:var(--mu2);font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-4deg)}
+.pp-stamps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 10px;padding:8px 6px 6px}
+.pp-stamp{--c:#9ec0ea;position:relative;justify-self:center;width:100%;max-width:104px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px;border-radius:50%;border:2.5px solid var(--c);color:var(--c);box-shadow:inset 0 0 0 3px #0b1411,inset 0 0 0 4.5px var(--c);transform:rotate(var(--r,0deg));background:radial-gradient(circle,color-mix(in srgb,var(--c) 14%,transparent),transparent 72%)}
+.pp-stamp.sq{border-radius:10px;aspect-ratio:1.1;max-width:104px}
+.pp-stamp.c1{--c:#e8786b}.pp-stamp.c2{--c:#6fd1a0}.pp-stamp.c3{--c:#c79bf0}
+.pp-stamp .pp-st{font-size:7px;letter-spacing:2px;line-height:1;margin-bottom:4px}
+.pp-stamp b{font:400 14.5px/1.05 Anton,Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.pp-stamp small{margin-top:4px;font:600 7.5px/1.2 'IBM Plex Mono',monospace;letter-spacing:.05em;text-transform:uppercase;opacity:.85;border-top:1px solid var(--c);padding-top:3px}
+.pp-stamp.blank{--c:#5d6a60;border-style:dashed;box-shadow:none;background:none;transform:none}
+.pp-stamp.blank b{font-size:22px}
+.pp-none{margin:2px 2px 0;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+#olRoot[data-g="passport"] .ac-next{border:1.5px dashed var(--ln2);background:rgba(0,0,0,.25);border-radius:4px;margin-top:12px}
+#olRoot[data-g="passport"] .ac-next b{font-family:'Playfair Display','Amiri',serif}
+#olRoot[data-g="passport"] .ol-pb{background:rgba(255,255,255,.1)}
+#olRoot[data-g="passport"] .ac-tile,#olRoot[data-g="passport"] .ac-sq{background:linear-gradient(160deg,#1a2e26,#101c17);border:1px solid var(--gold);border-radius:4px;box-shadow:0 3px 8px rgba(0,0,0,.4)}
+#olRoot[data-g="passport"] .ac-tile .ol-i,#olRoot[data-g="passport"] .ac-sq .ol-i{color:var(--ac)}
+#olRoot[data-g="passport"] .ac-out{border:2px solid var(--red);border-radius:4px;color:var(--red);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.14em;font-size:13px;background:transparent}
+#olRoot[data-g="passport"] .ol-b.o{border-color:var(--red);color:var(--red)}
+@media (max-width:360px){.pp-name{font-size:21px}.pp-photo{width:80px;height:102px}.pp-seal{width:56px;height:56px}.pp-seal b{font-size:15px}.pp-mrz{font-size:11px}}
 `;
 var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
