@@ -263,3 +263,19 @@ body.dx-open .credits-toggle,body.dx-open .view-mode-toggle{visibility:hidden}
 .dx .hm-fc-tawla{background:linear-gradient(160deg,#3a2216,#1c110a);border:1px solid rgba(227,177,92,.5);color:#F1E4C8}
 .dx .hm-fc-tawla .hm-fc-tag{color:#E3B15C;opacity:1}
 .dx .hm-fc-tawla .hm-fc-cap b{color:#E3B15C}
+
+/* =========================================================
+   STORIES (ملف قضية) — شكل جديد: أخضر غامق زي شارة اللعبة + نحاسي دافي.
+   قبل: بني طيني + خطوط مسطرة + قرص أحمر. دلوقتي: لون واحد واضح وتاب ورقي.
+========================================================= */
+.hx-case{--c:#e2c27a;--ac:226,194,122;--b1:#1b5240;--b2:#0a1f18;border-color:rgba(226,194,122,.55)}
+.hx-case::before{background:radial-gradient(120% 90% at 0% 0%,rgba(255,255,255,.10),transparent 55%),radial-gradient(90% 80% at 100% 100%,rgba(0,0,0,.35),transparent 60%)}
+.hx-case::after{opacity:.32}
+.hx-case .hx-tab{top:0;left:12px;padding:5px 11px 6px;border:0;border-radius:0 0 9px 9px;background:linear-gradient(180deg,#efd9a1,#d2ad62);color:#2a1d08;opacity:1;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.hx-case .hx-art{background:rgba(0,0,0,.22);border-inline-end:1px solid rgba(226,194,122,.22)}
+.hx-case .hx-art svg{filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+.hx-case .hx-stamp{color:#f2a090;background:rgba(10,31,24,.7);border-color:#f2a090}
+.hx-case .hx-en{color:#e2c27a;opacity:.9}
+.hx-case .hx-ar{color:#fbf4e2}
+.hx-case .hx-desc{color:#b7cbc0}
+.hx-case .hx-mvp{background:rgba(226,194,122,.14);border:1px solid rgba(226,194,122,.4);color:#f1d995;border-radius:10px;padding:2px 10px}
