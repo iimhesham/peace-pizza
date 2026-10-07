@@ -136,8 +136,13 @@ function num(n){
   var i=L.sel;if(L.given[i])return;
   if(L.notesOn){if(L.val[i])return;push(i);L.notes[i]^=C.BIT[n];persist();draw();return;}
   if(L.val[i]===n)return;
+  if(n!==L.sol[i]){
+    /* رقم غلط: ما بيتحطش */
+    try{toast(lang()==="ar"?"الرقم "+n+" غلط في الخانة دي، مش هينفع يتحط.":n+" is wrong for this cell, so it was not placed.");}catch(x){}
+    try{if(navigator.vibrate)navigator.vibrate(60);}catch(x){}
+    return;
+  }
   push(i);L.val[i]=n;L.notes[i]=0;dropNote(i,n);delete L.flag[i];
-  if(n!==L.sol[i])L.flag[i]=1;
   persist();
   if(C.checkWin(L.val,L.sol)){pushProgress(true);draw();return;}
   pushProgress(false);draw();

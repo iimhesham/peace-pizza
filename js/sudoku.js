@@ -27,7 +27,7 @@
       daily_fixed:"صعوبة اللغز اليومي ثابتة: متوسط.",
       daily_date:"لغز يوم {d}",daily_done:"اتحل النهارده · أفضل وقت {t}",daily_todo:"لسه ماتحلش النهارده.",
       start:"ابدأ اللعب",cont:"كمّل اللغز اللي كنت فيه",online:"العب أونلاين",stats:"الإحصائيات",ach:"الإنجازات",
-      time:"الوقت",errors:"الأخطاء",hints:"تلميحات",score:"النقاط",
+      time:"الوقت",errors:"الأخطاء",hints:"تلميحات",score:"النقاط ⓘ",
       undo:"تراجع",erase:"مسح",notes:"ملاحظات",hint:"تلميح",check:"تحقق",
       menu:"القائمة",
       m_new:"لغز جديد",m_new_d:"اللغز الحالي هيتقفل",
@@ -50,7 +50,7 @@
       h_cands:"الخانة اللي في الصف {r} والعمود {c} ممكن تكون: {l}.",
       u_row:"الصف {i}",u_col:"العمود {i}",u_box:"المربع {i}",
       revealed:"كشفنا لك خانة.",mistakes:"الشبكة اتملت بس فيها أخطاء، راجعها.",
-      allGood:"كل اللي كتبته لحد دلوقتي صح.",foundWrong:"لقينا {n} خانة غلط.",
+      allGood:"كل اللي كتبته لحد دلوقتي صح.",wrongNum:"الرقم {n} غلط في الخانة دي، مش هينفع يتحط.",scoreInfo:"النقاط دي اللي هتاخدها لو خلصت دلوقتي. بتنزل مع الوقت (نقطتين كل ثانية)، والتلميح بـ −150 والغلطة بـ −100. من غير تلميحات +200، ومن غير أخطاء +300.",foundWrong:"لقينا {n} خانة غلط.",
       w_title:"برافو، حليتها!",l_title:"الجولة خلصت",l_sub:"وصلت لـ {n} أخطاء.",
       sol_shown:"ده الحل الكامل. الجولة خلصت ومتحسبتش فوز.",
       newbest:"رقم قياسي جديد!",unl:"إنجاز جديد",
@@ -83,7 +83,7 @@
       daily_fixed:"The daily puzzle is always Medium.",
       daily_date:"Puzzle of {d}",daily_done:"Solved today · best time {t}",daily_todo:"Not solved yet today.",
       start:"Start game",cont:"Continue your last puzzle",online:"Play online",stats:"Statistics",ach:"Achievements",
-      time:"Time",errors:"Errors",hints:"Hints",score:"Score",
+      time:"Time",errors:"Errors",hints:"Hints",score:"Score ⓘ",
       undo:"Undo",erase:"Erase",notes:"Notes",hint:"Hint",check:"Check",
       menu:"Menu",
       m_new:"New puzzle",m_new_d:"The current puzzle will be closed",
@@ -106,7 +106,7 @@
       h_cands:"The cell in row {r}, column {c} can be: {l}.",
       u_row:"row {i}",u_col:"column {i}",u_box:"box {i}",
       revealed:"We revealed a cell for you.",mistakes:"The grid is full but has mistakes. Check it.",
-      allGood:"Everything you've entered so far is correct.",foundWrong:"Found {n} wrong cell(s).",
+      allGood:"Everything you've entered so far is correct.",wrongNum:"{n} is wrong for this cell, so it was not placed.",scoreInfo:"This is the score you get if you finish right now. It drops over time (2 points per second); a hint costs 150 and a mistake 100. No hints +200, no mistakes +300.",foundWrong:"Found {n} wrong cell(s).",
       w_title:"Solved!",l_title:"Round over",l_sub:"You reached {n} mistakes.",
       sol_shown:"This is the full solution. The round is over and doesn't count as a win.",
       newbest:"New personal best!",unl:"New achievement",
@@ -335,7 +335,7 @@
     root.innerHTML=h;
   }
 
-  function chip(id,label){return'<div class="sd-chip" id="'+id+'Box"><small>'+label+'</small><b id="'+id+'">0</b></div>';}
+  function chip(id,label){return'<div class="sd-chip" id="'+id+'Box"'+(id==="sdScore"?' data-a="scoreinfo" role="button" tabindex="0" style="cursor:pointer"':'')+'><small>'+label+'</small><b id="'+id+'">0</b></div>';}
   function boardHtml(){
     var h="",i,r,c;
     for(i=0;i<81;i++){
@@ -454,11 +454,26 @@
       pushHist(i);G.notes[i]^=C.BIT[n];save();paint();return;
     }
     if(G.val[i]===n)return;
+    if(m.instant&&n!==G.sol[i]){
+      /* رقم غلط: ما بيتحطش، بنقول إنه غلط وبنعدّ الغلطة (لو الوضع بيعدّ) */
+      if(m.errorsOn)G.errors++;
+      var wm=t("wrongNum",{n:n});G.msg=wm;
+      flashCell(i);
+      setTimeout(function(){if(G&&G.msg===wm){G.msg="";paint();}},2800);
+      save();paint();
+      return;
+    }
     pushHist(i);
     G.val[i]=n;G.notes[i]=0;dropNote(i,n);delete G.flag[i];G.msg="";
-    if(m.instant&&n!==G.sol[i]){G.flag[i]=1;if(m.errorsOn)G.errors++;}
     save();paint();
     afterMove();
+  }
+  function flashCell(i){
+    var b=document.getElementById("sdBoard"),el=b&&b.children[i];
+    if(!el)return;
+    el.classList.remove("shk");void el.offsetWidth;el.classList.add("shk");
+    setTimeout(function(){el.classList.remove("shk");},520);
+    try{if(navigator.vibrate)navigator.vibrate(60);}catch(e){}
   }
   function afterMove(){
     if(!C.isComplete(G.val))return;
@@ -667,6 +682,7 @@
         LANG=LANG==="ar"?"en":"ar";try{localStorage.setItem(K_LANG,LANG);}catch(e){}
         render();if(view==="play")paint();
         break;
+      case"scoreinfo":if(G){G.msg=t("scoreInfo");paint();}break;
       case"mode":PREF.mode=d.v;savePref();snd();renderSetup();break;
       case"diff":PREF.diff=d.v;savePref();snd();renderSetup();break;
       case"start":startGame();break;

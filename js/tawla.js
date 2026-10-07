@@ -75,13 +75,23 @@
     E.movesFor(S.g,S.turn,S.dice).forEach(m=>{set[m.from]=1;});
     return set;
   }
+  /* كل الأماكن اللي القشاطة المختارة توصلها بنرد واحد أو أكتر (مجموع الأرقام)،
+     بشرط إن كل خانة في الطريق تكون مفتوحة. القيمة = تسلسل الحركات. */
   function dests(){
     const map={};
     if(S.phase!=="move"||isCpu(S.turn)||S.sel===null)return map;
-    E.movesFor(S.g,S.turn,S.dice).forEach(m=>{
-      if(m.from!==S.sel)return;
-      if(map[m.to]===undefined||m.die<map[m.to])map[m.to]=m.die;   // OUT: أصغر نرد يكفي
-    });
+    const me=S.turn;
+    (function rec(g,pos,rem,seq){
+      const ds=[...new Set(rem)].sort((a,b)=>a-b);
+      ds.forEach(d=>{
+        E.legalMoves(g,me,d).forEach(m=>{
+          if(m.from!==pos)return;
+          const s2=seq.concat([m]);
+          if(!map[m.to]||map[m.to].length>s2.length)map[m.to]=s2;
+          if(m.to!==OUT)rec(E.applyMove(E.clone(g),me,m),m.to,E.removeDie(rem,d),s2);
+        });
+      });
+    })(S.g,S.sel,S.dice,[]);
     return map;
   }
 
@@ -114,7 +124,8 @@
       const cls=["tw-pt",ph%2?"o":"e"];
       if(src[q]&&S.sel!==q)cls.push("can");
       if(dst[q]!==undefined)cls.push("dest");
-      return '<div class="'+cls.join(" ")+'" data-ph="'+ph+'">'+stackHTML(side,n,S.sel===q&&n>0&&side===S.turn)+'</div>';
+      const pips=dst[q]!==undefined?dst[q].reduce((a,m)=>a+m.die,0):0;
+      return '<div class="'+cls.join(" ")+'" data-ph="'+ph+'"'+(pips?' data-pips="'+pips+'"':"")+'>'+stackHTML(side,n,S.sel===q&&n>0&&side===S.turn)+'</div>';
     };
     let top="",bot="";
     for(let ph=13;ph<=24;ph++)top+=cell(ph);      // فوق: شمال ← يمين
@@ -194,7 +205,7 @@
     let hint="";
     if(S.phase==="move"&&!isCpu(S.turn)){
       if(S.sel===null)hint=me.unlocked?"اختار قشاطة تحركها":"قشاطة واحدة بس تتحرك لحد ما تدخل التجميع";
-      else hint="اختار الخانة اللي هتروحلها (الأخضر)";
+      else hint="الأخضر = أماكن توصلها برقم أو بمجموع الأرقام (والرقم على النقطة = عدد الخطوات)";
     }
     $("twHint").textContent=hint;
   }
@@ -286,22 +297,42 @@
     if(isCpu(S.turn)){S.phase="cpu";later(cpuPlay,700);}
   }
 
-  function doMove(m){
+  function applyOne(m){
     E.applyMove(S.g,S.turn,m);
     S.dice=E.removeDie(S.dice,m.die);
+  }
+  function afterMoves(){
     S.sel=null;
     const w=E.winner(S.g);
-    if(w>-1){renderDice(false);render();later(()=>endGame(w),700);S.phase="over";return;}
+    if(w>-1){S.phase="over";renderDice(false);render();later(()=>endGame(w),700);return;}
     renderDice(false);
     if(!S.dice.length){S.phase="ending";render();later(endTurn,500);return;}
     if(!E.hasMove(S.g,S.turn,S.dice)){
       setStatus("مفيش حركة قانونية للباقي","الدور بيعدّي");
-      render();
       S.phase="ending";
+      render();
       later(endTurn,1300);
       return;
     }
     render();
+  }
+  function doMove(m){applyOne(m);afterMoves();}
+  /* حركة مركّبة (أكتر من نرد بنفس القشاطة): بتتنفذ خطوة خطوة */
+  function doSeq(seq){
+    if(seq.length===1){doMove(seq[0]);return;}
+    const prev=S.phase;
+    S.phase="busy";
+    let i=0;
+    const step=()=>{
+      applyOne(seq[i]);
+      S.sel=seq[i].to===OUT?null:seq[i].to;
+      i++;
+      renderDice(false);render();
+      if(i<seq.length){later(step,230);return;}
+      S.phase=prev;
+      afterMoves();
+    };
+    step();
   }
 
   function endTurn(){
@@ -376,9 +407,7 @@
     const q=t.dataset.out?OUT:(t.dataset.ph?qOf(S.turn,+t.dataset.ph):+t.dataset.q);
     const dst=dests();
     if(S.sel!==null&&dst[q]!==undefined){
-      const d=dst[q];
-      const m=E.legalMoves(S.g,S.turn,d).find(x=>x.from===S.sel&&x.to===q);
-      if(m){click();doMove(m);return;}
+      click();doSeq(dst[q]);return;
     }
     const src=sources();
     if(q!==OUT&&src[q]&&S.sel!==q){click();S.sel=q;render();return;}
