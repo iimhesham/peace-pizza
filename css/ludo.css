@@ -151,11 +151,19 @@ body.mode-ludo #toast{background:#F2E6CF!important;color:#1a120d!important}
 .lu-die.rolling{animation:luRoll .5s linear infinite}
 @keyframes luRoll{0%{transform:rotate(0) scale(1)}25%{transform:rotate(14deg) scale(1.08)}50%{transform:rotate(-10deg) scale(1)}75%{transform:rotate(10deg) scale(1.08)}100%{transform:rotate(0) scale(1)}}
 .lu-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
-.lu-roll{width:100%;min-height:56px;background:var(--pc,#F2E6CF);color:#1a120d;border:0;border-radius:18px;font:inherit;font-size:18px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:transform .1s,opacity .15s}
+.lu-roll{width:100%;min-width:0;min-height:56px;background:var(--pc,#F2E6CF);color:#1a120d;border:0;border-radius:18px;font:inherit;font-size:18px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:transform .1s,opacity .15s}
 .lu-roll:active:not(:disabled){transform:scale(.97)}
 .lu-roll:disabled{opacity:.35;cursor:default}
 .lu-roll.is-go{animation:luGo 1.2s ease-in-out infinite}
 @keyframes luGo{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--pc,#F2E6CF) 35%,transparent)}}
+.lu-rollrow{display:flex;gap:8px;align-items:stretch}
+.lu-rollrow .lu-roll{flex:1}
+.lu-auto{flex:none;width:60px;min-height:56px;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:var(--lu-p1);color:var(--lu-dim);border:1.5px solid var(--lu-line);border-radius:18px;font:inherit;font-size:10.5px;font-weight:800;letter-spacing:.08em;cursor:pointer;transition:background .15s,color .15s,transform .1s}
+.lu-auto svg{width:20px;height:20px}
+.lu-auto:active{transform:scale(.95)}
+.lu-auto.is-on{background:var(--pc,#F2E6CF);color:#1a120d;border-color:transparent}
+.lu-auto.is-on svg{animation:luSpin 2.4s linear infinite}
+@keyframes luSpin{to{transform:rotate(-360deg)}}
 .lu-status{min-height:44px;margin:0;font-size:15px;font-weight:600;line-height:1.35;color:var(--lu-cream)}
 .lu-status b{color:var(--pc,#F2E6CF)}
 .lu-meta{display:flex;justify-content:space-between;gap:8px;width:min(100%,460px);margin:10px auto 0;color:var(--lu-dim);font-size:12.5px}
@@ -198,7 +206,7 @@ body.mode-ludo #toast{background:#F2E6CF!important;color:#1a120d!important}
 }
 @media (prefers-reduced-motion:reduce){
   .lu-tk,.lu-tk.is-fly{transition:none}
-  .lu-tk.is-valid .lu-tk-ring,.lu-die.rolling,.lu-roll.is-go{animation:none}
+  .lu-tk.is-valid .lu-tk-ring,.lu-die.rolling,.lu-roll.is-go,.lu-auto.is-on svg{animation:none}
 }
 
 /* زر "Play Online" جوه صفحة إعدادات لودو */
