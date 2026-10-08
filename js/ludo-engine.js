@@ -31,7 +31,10 @@
     4:{colors:COLORS,start:START,safe:SAFE,len:52,last:50,ff:51,fin:56},
     6:{colors:COLORS6,start:START6,safe:SAFE6,len:78,last:76,ff:77,fin:82}
   };
-  const LY=m=>m===6?LAYOUT[6]:LAYOUT[4];
+  /* لوحة الـ 5 لاعبين: خماسي (5 أذرع) — نفس الألوان من غير الوردي. طول المسار 65 */
+  const START5={red:0,green:13,violet:26,yellow:39,blue:52};
+  LAYOUT[5]={colors:["red","green","violet","yellow","blue"],start:START5,safe:[0,8,13,21,26,34,39,47,52,60],len:65,last:63,ff:64,fin:69};
+  const LY=m=>LAYOUT[m]||LAYOUT[4];
 
   /* ---------- Board Data (شبكة 15×15، [صف, عمود]) ---------- */
   const TRACK=[
@@ -94,7 +97,7 @@
     return{
       players,
       opts:Object.assign({threeSixes:true,fullRanking:false},opts||{}),
-      mode:(opts&&opts.mode===6)?6:4,
+      mode:(opts&&(opts.mode===6||opts.mode===5))?opts.mode:4,
       currentPlayer:Math.max(0,Math.min(players.length-1,first|0)),
       diceValue:null,
       consecutiveSixes:0,

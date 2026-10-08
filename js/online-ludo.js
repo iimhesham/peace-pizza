@@ -1,7 +1,7 @@
 /* =========================================================
    Online Ludo: 2 to 6 players, one room code, host starts the game.
    Classic board = up to 4 players. "6-player board" (host switch in the lobby, opts.six=1) = up to 6 players on a
-   six-arm board with two extra colours (violet, pink). Same rules engine, same replay, just a longer track.
+   six-arm board with two extra colours (violet, pink); exactly 5 players get a five-arm board (S.mode=5). Same rules engine, same replay, just a longer track.
 
    How it works (no game server, only the existing Firebase rooms):
    - Same rules engine as the offline game (js/ludo-engine.js).
@@ -28,7 +28,7 @@ function seatsFor(six,n){return(six?UI.SEAT_LAYOUT6:UI.SEAT_LAYOUT)[Math.max(2,M
 /* ---------- replay ---------- */
 function replay(S){
   var cols=S.cols||{},P=S.players||{},seed=(S.seed|0),gid=+S.gid||0,o=S.opts||{};
-  var mode=o.six?6:4,slotOf={},order=E.LY(mode).colors.filter(function(c){
+  var mode=(+S.mode===5||+S.mode===6)?+S.mode:(o.six?6:4),slotOf={},order=E.LY(mode).colors.filter(function(c){
     var sl=SLOTS.filter(function(s){return cols[s]===c&&P[s];})[0];if(sl)slotOf[c]=sl;return!!sl;});
   if(order.length<2)return null;
   var cfg=order.map(function(c){var p=P[slotOf[c]];return{color:c,type:"human",name:p.name||CN[c],uid:p.uid||""};});
@@ -94,6 +94,8 @@ function start(again){
   var ctx=I.ctx(),S=ctx.S;if(!S||ctx.role!=="host")return;
   var sl=present(S);if(again&&S.cols){}else if(sl.length<2){T("You need at least 2 players");return;}
   var u={status:"play",seed:(Math.random()*2147483647)|0,gid:(+S.gid||0)+1,bots:null};
+  var cnt=(again&&S.cols)?Object.keys(S.cols).length:sl.length;
+  u.mode=isSix(S)?(cnt===5?5:6):4;   // with exactly 5 players the board has 5 arms
   if(!again||!S.cols){var lay=seatsFor(isSix(S),sl.length),cols={};sl.forEach(function(s,i){cols[s]=lay[i];});u.cols=cols;}
   room(ctx.code).update(u);
 }
@@ -140,7 +142,7 @@ function lobby(ctx,S){
     var k=sl.indexOf(s),c=lay[k];
     return'<div class="ol-t ol-ck olu-row c-'+c+'" onclick="OL.prof(\''+e(p.uid)+'\')"><b>'+dot(c)+I.nmu(p.uid,p.name)+(p.uid===S.host?' <small class="olu-tag">HOST</small>':'')+'</b></div>';}).join("");
   var set=host?'<div class="ol-sec">Rules</div>'+
-    '<button type="button" class="ol-sw'+(six?' on':'')+'" onclick="OLLUDO.opt(\'six\')"><span><b>6-player board</b><small>'+(six?'Up to 6 players on the big board. Two extra colours: violet and pink':'Classic board, up to 4 players. Switch on for up to 6 players')+'</small></span><i></i></button>'+
+    '<button type="button" class="ol-sw'+(six?' on':'')+'" onclick="OLLUDO.opt(\'six\')"><span><b>6-player board</b><small>'+(six?'Up to 6 players on the big board. Two extra colours: violet and pink':'Classic board, up to 4 players. Switch on for up to 6 players (5 players get a 5-arm board)')+'</small></span><i></i></button>'+
     '<button type="button" class="ol-sw'+(o.three!==0?' on':'')+'" onclick="OLLUDO.opt(\'three\')"><span><b>Three 6s in a row cancel the turn</b><small>The third 6 is lost and the turn passes</small></span><i></i></button>'+
     '<button type="button" class="ol-sw'+(o.full?' on':'')+'" onclick="OLLUDO.opt(\'full\')"><span><b>Play for every place</b><small>Keep playing after the first winner</small></span><i></i></button>':
     '<div class="olu-rules">'+(six?'6-player board · ':'')+(o.three!==0?'Three 6s in a row cancel the turn':'No limit on 6s')+' · '+(o.full?'Playing for every place':'First home wins')+'</div>';
