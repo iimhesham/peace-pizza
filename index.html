@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="css/account.css?v=1">
 <link rel="stylesheet" href="css/hubx.css?v=8">
 <link rel="stylesheet" href="css/xo.css?v=2">
-<link rel="stylesheet" href="css/ludo.css?v=3">
+<link rel="stylesheet" href="css/ludo.css?v=5">
 <link rel="stylesheet" href="css/tawla.css?v=6">
 <link rel="stylesheet" href="css/sudoku.css?v=2">
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
@@ -3114,8 +3114,10 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
       <div id="luDie" aria-label="Dice"></div>
       <div class="lu-side">
         <p class="lu-status" id="luStatus" role="status" aria-live="polite"></p>
-        <div class="lu-rollrow"><button type="button" class="lu-roll" id="luRoll" onclick="ludoRoll()">Roll Dice</button>
-        <button type="button" class="lu-auto" id="luAuto" onclick="ludoAuto()" aria-pressed="false" aria-label="Auto roll" title="Auto roll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg><span>AUTO</span></button></div>
+        <div class="lu-rollrow">
+          <button type="button" class="lu-roll" id="luRoll" onclick="ludoRoll()">Roll Dice</button>
+          <button type="button" class="lu-auto" id="luAuto" onclick="ludoAuto()" aria-pressed="false" aria-label="Auto roll" title="Auto roll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg><span>AUTO</span></button>
+        </div>
       </div>
     </div>
     <div class="lu-meta"><span id="luMeta"></span><span class="lu-timer" id="luTT"></span><span id="luClock">00:00</span></div>
@@ -3179,13 +3181,6 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <button type="button" data-v="cpu">ضد الكمبيوتر</button>
       </div>
     </div>
-    <div class="tw-panel">
-      <div class="tw-label" id="twSideLbl">هتلعب بأنهي لون؟</div>
-      <div class="tw-seg" id="twSideSeg" role="group" aria-label="اللون">
-        <button type="button" data-v="b">الأسود</button>
-        <button type="button" data-v="w">الأبيض</button>
-      </div>
-    </div>
     <div class="tw-panel hidden" id="twDiffWrap">
       <div class="tw-label">مستوى الكمبيوتر</div>
       <div class="tw-seg" id="twDiffSeg" role="group" aria-label="مستوى الكمبيوتر">
@@ -3197,8 +3192,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
     <div class="tw-panel">
       <div class="tw-label">مكان الخارج</div>
       <div class="tw-seg" id="twTraySeg" role="group" aria-label="مكان الخارج">
-        <button type="button" data-v="r">جنب منطقة التجميع</button>
-        <button type="button" data-v="l">على الناحية التانية</button>
+        <button type="button" data-v="l">شمال اللوحة</button>
+        <button type="button" data-v="r">يمين اللوحة</button>
       </div>
     </div>
     <div class="tw-panel">
@@ -3215,7 +3210,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <li>كل لاعب 15 قشاطة، ونردين. أول واحد يوصل 31 نقطة يكسب المباراة.</li>
         <li>الدبل (نفس الرقم على النردين) بيتلعب 4 مرات.</li>
         <li>اللوحة 24 خانة. القشاط كلها بتبدأ متجمعة على أول خانة. في أول الجيم قشاطة واحدة بس تتحرك لحد ما توصل آخر ربع (18 خطوة)، وبعدها باقي القشاط تتفتح.</li>
-        <li>الأسود بيبدأ من أعلى اليمين وبيخلص أسفل اليمين، والأبيض العكس. الاتنين بيعدّوا على نفس الخانات. اللوحة بتتعرض من ناحية اللون اللي بتلعب بيه، فاللي بيختار الأبيض بيشوفها مقلوبة والنقط على الشمال.</li>
+        <li>الأبيض بيبدأ من أسفل اليمين وبيخلص أعلى اليمين، والأسود العكس. الاتنين بيعدّوا على نفس الخانات.</li>
         <li>قشاطة الخصم في الخانة بتمنعك توصلها، وأول خانة عنده (ستاك البداية) بتقفل عليك آخر خانة عندك لحد ما يتحرك. مفيش ضرب.</li>
         <li>ينفع تجمع النردين على قشاطة واحدة لو الطريق مفتوح.</li>
         <li>الإخراج مش مسموح غير لما كل قشاطاتك تبقى في آخر ربع. النرد الأكبر من بُعد القشاطة بيخرجها لو مفيش قشاطة أبعد منها.</li>
@@ -3286,10 +3281,10 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/career.js"></script>
 <script src="js/hub.js"></script>
 <script src="js/xo.js"></script>
-<script src="js/ludo-engine.js?v=3"></script>
-<script src="js/ludo.js?v=2"></script>
+<script src="js/ludo-engine.js?v=4"></script>
+<script src="js/ludo.js?v=4"></script>
 <script src="js/tawla-engine.js?v=4"></script>
-<script src="js/tawla.js?v=7"></script>
+<script src="js/tawla.js?v=6"></script>
 <script src="js/sudoku-core.js?v=1"></script>
 <script src="js/sudoku.js?v=2"></script>
 <script src="js/flags-data.js"></script>
