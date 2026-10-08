@@ -16,7 +16,7 @@
   const OUT=E.OUT;         // 25 = وجهة الإخراج
 
   const S={
-    view:0,                // مين اللي اللوحة معروضة من ناحيته (0 أبيض / 1 أسود). الأونلاين هيستخدمها.
+    view:1,                // مين اللي اللوحة معروضة من ناحيته = اللون اللي بتلعب بيه (0 أبيض / 1 أسود). الأسود هو الافتراضي.
     tray:"r",              // مكان التجميع بره اللوحة: r يمين / l شمال
     mode:"pvp",            // pvp | cpu
     diff:"mid",            // easy | mid | hard
@@ -37,23 +37,25 @@
       if(j.mode==="pvp"||j.mode==="cpu")S.mode=j.mode;
       if(["easy","mid","hard"].includes(j.diff))S.diff=j.diff;
       if(j.tray==="l"||j.tray==="r")S.tray=j.tray;
+      if(j.side==="w")S.view=W;else if(j.side==="b")S.view=B;
       S.nameW=String(j.nameW||"").slice(0,14);
       S.nameB=String(j.nameB||"").slice(0,14);
     }catch(e){}
   }
   function save(){
-    try{localStorage.setItem(KEY,JSON.stringify({mode:S.mode,diff:S.diff,tray:S.tray,nameW:S.nameW,nameB:S.nameB}));}catch(e){}
+    try{localStorage.setItem(KEY,JSON.stringify({mode:S.mode,diff:S.diff,tray:S.tray,side:S.view===W?"w":"b",nameW:S.nameW,nameB:S.nameB}));}catch(e){}
   }
 
   const later=(fn,ms)=>{const t=setTimeout(fn,ms);S.timers.push(t);return t;};
   const clearTimers=()=>{S.timers.forEach(clearTimeout);S.timers=[];};
   const click=()=>{if(typeof playClickSound==="function")playClickSound();};
 
+  const isCpu=p=>S.mode==="cpu"&&p!==S.view;      // ضد الكمبيوتر: هو اللون التاني غير اللي بتلعب بيه
   const nameOf=p=>{
-    if(p===W)return S.nameW.trim()||(S.mode==="cpu"?"أنت":"الأبيض");
-    return S.mode==="cpu"?"الكمبيوتر":(S.nameB.trim()||"الأسود");
+    if(isCpu(p))return "الكمبيوتر";
+    const n=(p===W?S.nameW:S.nameB).trim();
+    return n||(S.mode==="cpu"?"أنت":(p===W?"الأبيض":"الأسود"));
   };
-  const isCpu=p=>S.mode==="cpu"&&p===B;
 
   /* ---------- العرض ---------- */
   function pieceHTML(side,extra){
@@ -109,7 +111,7 @@
 
   /* الخارج بره اللوحة: نص لكل لاعب جنب الـHOME بتاعه (الأبيض فوق، الأسود تحت لما اللوحة من ناحية الأبيض) */
   function trayHTML(dst){
-    const topP=S.view===W?W:B,botP=1-topP;
+    const topP=1-S.view,botP=S.view;
     const half=p=>{
       const n=S.g.s[p].off;
       const mine=S.turn===p&&S.phase==="move"&&!isCpu(p);
@@ -135,7 +137,8 @@
     const seqA=[],seqB=[];                                      // A: 13→24 · B: 12→1
     for(let ph=13;ph<=24;ph++)seqA.push(ph);
     for(let ph=12;ph>=1;ph--)seqB.push(ph);
-    const topSeq=S.view===W?seqA:seqB,botSeq=S.view===W?seqB:seqA;
+    /* أسود: ستاكه فوق يمين وتجميعه تحت يمين · أبيض: اللوحة متلفّة 180° (ستاكه فوق شمال وتجميعه تحت شمال) */
+    const topSeq=S.view===B?seqA:seqB.slice().reverse(),botSeq=S.view===B?seqB:seqA.slice().reverse();
     const row=(seq,isTop)=>{
       let h="";
       seq.forEach((ph,k)=>{h+=cell(ph,isTop);if(k===5)h+=GAP;});
@@ -147,7 +150,7 @@
         row(topSeq,true)+'<div class="tw-mid" aria-hidden="true"></div>'+row(botSeq,false)+
       '</div>';
     $("twTray").innerHTML=trayHTML(dst);
-    $("twWrap").classList.toggle("tray-l",S.tray==="l");
+    $("twWrap").classList.toggle("tray-l",(S.tray==="l")!==(S.view===W));   // الخارج جنب منطقة التجميع (أو عكسها) في الاتجاهين
   }
 
   function renderPlayer(p,src,dst){
@@ -410,20 +413,22 @@
 
   /* ---------- الإعدادات ---------- */
   function captureNames(){
-    S.nameW=$("twNameW").value;
-    if(S.mode!=="cpu")S.nameB=$("twNameB").value;
+    const w=$("twNameW"),b=$("twNameB");
+    if(!w.disabled)S.nameW=w.value;
+    if(!b.disabled)S.nameB=b.value;
   }
   function syncSetup(){
     root.querySelectorAll("#twModeSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===S.mode));
     root.querySelectorAll("#twTraySeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===S.tray));
     root.querySelectorAll("#twDiffSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===S.diff));
     $("twDiffWrap").classList.toggle("hidden",S.mode!=="cpu");
-    const o=$("twNameB");
-    o.disabled=S.mode==="cpu";
-    o.value=S.mode==="cpu"?"الكمبيوتر":S.nameB;
-    o.placeholder="الأسود";
-    $("twNameW").value=S.nameW;
-    $("twNameW").placeholder=S.mode==="cpu"?"أنت":"الأبيض";
+    root.querySelectorAll("#twSideSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===(S.view===W?"w":"b")));
+    $("twSideLbl").textContent=S.mode==="cpu"?"هتلعب بأنهي لون؟":"اللوحة تتعرض من ناحية أنهي لون؟";
+    const cpuSide=S.mode==="cpu"?1-S.view:-1,iw=$("twNameW"),ib=$("twNameB");
+    iw.disabled=cpuSide===W;iw.value=iw.disabled?"الكمبيوتر":S.nameW;
+    ib.disabled=cpuSide===B;ib.value=ib.disabled?"الكمبيوتر":S.nameB;
+    iw.placeholder=S.mode==="cpu"?"أنت":"الأبيض";
+    ib.placeholder=S.mode==="cpu"?"أنت":"الأسود";
   }
   function seg(id,fn){
     $(id).addEventListener("click",e=>{
@@ -434,6 +439,7 @@
   }
   seg("twModeSeg",v=>{S.mode=v;});
   seg("twTraySeg",v=>{S.tray=v;});
+  seg("twSideSeg",v=>{S.view=v==="w"?W:B;});
   seg("twDiffSeg",v=>{S.diff=v;});
 
   window.tawlaOpen=function(){
