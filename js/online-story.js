@@ -1,6 +1,6 @@
 /* Online crime stories. One GM account runs the room and does not play; every player has their own account, a private secret role and one vote. */
 (function(){
-var GM="modybadr966@gmail.com",NM={niyaba:"Prosecution Files 1",niyaba2:"Prosecution Files 2",mabhouh:"The Mabhouh File",train:"Who Killed Fawaz?",yousef:"Who Killed Yousef Omar?"};
+var GM="modybadr966@gmail.com",NM={niyaba:"Prosecution Files 1",niyaba2:"Prosecution Files 2"};
 var db,code,role,S,R,M,V,vref,vkey,peek=false,offs=[];
 var e=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
 var U=function(){return window.ppUser;},T=function(m){try{toast(m);}catch(x){}};
