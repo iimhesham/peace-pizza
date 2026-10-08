@@ -1,5 +1,7 @@
 /* =========================================================
-   Online Ludo: 2 to 4 players, one room code, host starts the game.
+   Online Ludo: 2 to 6 players, one room code, host starts the game.
+   Classic board = up to 4 players. "6-player board" (host switch in the lobby, opts.six=1) = up to 6 players on a
+   six-arm board with two extra colours (violet, pink). Same rules engine, same replay, just a longer track.
 
    How it works (no game server, only the existing Firebase rooms):
    - Same rules engine as the offline game (js/ludo-engine.js).
@@ -13,21 +15,24 @@
    - Host-only fields: status, cols (slot -> colour), seed, gid, opts, bots.
    - bots/<colour> = n: the host hands a seat that stopped playing to the CPU;
      the player's first n actions stay, then the CPU plays that seat.
-   Every finished game: 1st place +10, 2nd +7, 3rd +5, 4th 0 points in stats.
+   Every finished game: 1st place +10, 2nd +7, 3rd +5, everyone else 0 points in stats.
 ========================================================= */
 (function(){
 if(!window.OL||!OL.i||!window.LudoEngine||!window.LudoUI)return;
 var I=OL.i,e=I.e,U=I.U,T=I.T,IX=I.IX,IC=I.IC,E=LudoEngine,UI=LudoUI;
-var SLOTS=["a","b","c","d"],done={},view=null,CN=UI.CNAME;
+var SLOTS=["a","b","c","d","e","f"],done={},view=null,CN=UI.CNAME;
+function isSix(S){return!!(S&&S.opts&&S.opts.six);}
+function capOf(S){return isSix(S)?6:4;}
+function seatsFor(six,n){return(six?UI.SEAT_LAYOUT6:UI.SEAT_LAYOUT)[Math.max(2,Math.min(n,six?6:4))];}
 
 /* ---------- replay ---------- */
 function replay(S){
   var cols=S.cols||{},P=S.players||{},seed=(S.seed|0),gid=+S.gid||0,o=S.opts||{};
-  var slotOf={},order=E.COLORS.filter(function(c){
+  var mode=o.six?6:4,slotOf={},order=E.LY(mode).colors.filter(function(c){
     var sl=SLOTS.filter(function(s){return cols[s]===c&&P[s];})[0];if(sl)slotOf[c]=sl;return!!sl;});
   if(order.length<2)return null;
   var cfg=order.map(function(c){var p=P[slotOf[c]];return{color:c,type:"human",name:p.name||CN[c],uid:p.uid||""};});
-  var g=E.initializeGame(cfg,{threeSixes:o.three!==0,fullRanking:!!o.full},Math.abs(seed)%order.length);
+  var g=E.initializeGame(cfg,{threeSixes:o.three!==0,fullRanking:!!o.full,mode:mode},Math.abs(seed)%order.length);
   var logs={},bots=S.bots||{},ptr={},k=0,trace=[],guard=0,wait=null;
   order.forEach(function(c){
     var m=String((P[slotOf[c]]||{}).mv||""),i=m.indexOf(":"),L=(i>0&&+m.slice(0,i)===gid)?m.slice(i+1):"";
@@ -89,11 +94,12 @@ function start(again){
   var ctx=I.ctx(),S=ctx.S;if(!S||ctx.role!=="host")return;
   var sl=present(S);if(again&&S.cols){}else if(sl.length<2){T("You need at least 2 players");return;}
   var u={status:"play",seed:(Math.random()*2147483647)|0,gid:(+S.gid||0)+1,bots:null};
-  if(!again||!S.cols){var lay=UI.SEAT_LAYOUT[sl.length],cols={};sl.forEach(function(s,i){cols[s]=lay[i];});u.cols=cols;}
+  if(!again||!S.cols){var lay=seatsFor(isSix(S),sl.length),cols={};sl.forEach(function(s,i){cols[s]=lay[i];});u.cols=cols;}
   room(ctx.code).update(u);
 }
 function opt(k){
   var ctx=I.ctx(),S=ctx.S;if(!S||ctx.role!=="host"||S.status!=="lobby")return;
+  if(k==="six"&&isSix(S)&&present(S).length>4){T("More than 4 players are in the room, so the 6-player board must stay on");return;}
   var o=S.opts||{three:1,full:0};room(ctx.code).child("opts/"+k).set(o[k]===0||!o[k]?1:0);
 }
 function bot(color){
@@ -128,17 +134,18 @@ function dot(c){return'<span class="lu-dot c-'+c+'"></span>';}
 
 function lobby(ctx,S){
   view=null;
-  var host=ctx.role==="host",sl=present(S),P=S.players||{},o=S.opts||{three:1,full:0},n=sl.length,lay=UI.SEAT_LAYOUT[Math.max(2,n)];
-  var rows=SLOTS.map(function(s,i){
+  var host=ctx.role==="host",sl=present(S),P=S.players||{},o=S.opts||{three:1,full:0},n=sl.length,six=isSix(S),cap=capOf(S),lay=seatsFor(six,n);
+  var rows=SLOTS.slice(0,Math.max(cap,n)).map(function(s,i){
     var p=P[s];if(!p)return'<div class="ol-t empty olu-row">Waiting for a player...</div>';
     var k=sl.indexOf(s),c=lay[k];
     return'<div class="ol-t ol-ck olu-row c-'+c+'" onclick="OL.prof(\''+e(p.uid)+'\')"><b>'+dot(c)+I.nmu(p.uid,p.name)+(p.uid===S.host?' <small class="olu-tag">HOST</small>':'')+'</b></div>';}).join("");
   var set=host?'<div class="ol-sec">Rules</div>'+
+    '<button type="button" class="ol-sw'+(six?' on':'')+'" onclick="OLLUDO.opt(\'six\')"><span><b>6-player board</b><small>'+(six?'Up to 6 players on the big board. Two extra colours: violet and pink':'Classic board, up to 4 players. Switch on for up to 6 players')+'</small></span><i></i></button>'+
     '<button type="button" class="ol-sw'+(o.three!==0?' on':'')+'" onclick="OLLUDO.opt(\'three\')"><span><b>Three 6s in a row cancel the turn</b><small>The third 6 is lost and the turn passes</small></span><i></i></button>'+
     '<button type="button" class="ol-sw'+(o.full?' on':'')+'" onclick="OLLUDO.opt(\'full\')"><span><b>Play for every place</b><small>Keep playing after the first winner</small></span><i></i></button>':
-    '<div class="olu-rules">'+(o.three!==0?'Three 6s in a row cancel the turn':'No limit on 6s')+' · '+(o.full?'Playing for every place':'First home wins')+'</div>';
+    '<div class="olu-rules">'+(six?'6-player board · ':'')+(o.three!==0?'Three 6s in a row cancel the turn':'No limit on 6s')+' · '+(o.full?'Playing for every place':'First home wins')+'</div>';
   I.shell('<div class="ol-ticket" onclick="OL.copy()"><small>Room code · tap to share</small><div class="ol-code">'+e(ctx.code)+'</div><span>Send this code to your friends</span></div>'+
-    '<div class="ol-sec">Players ('+n+'/4)</div>'+rows+set+
+    '<div class="ol-sec">Players ('+n+'/'+cap+')</div>'+rows+set+
     (host?'<button type="button" class="ol-b" '+(n<2?'disabled ':'')+'onclick="OLLUDO.start()">'+(n<2?'Waiting for players...':'Start Game')+'</button><button type="button" class="ol-b r" onclick="OL.close()">Close Room</button>'
          :'<div class="ol-w">Waiting for the host to start...</div><button type="button" class="ol-s" onclick="OLLUDO.leave()">Leave Room</button>')+
     '<div class="xo2-rules">Finish 1st for <b>+10</b> points, 2nd for <b>+7</b>, 3rd for <b>+5</b>.</div>',{room:true,t:"LUDO",g:"ludo",c:""});
@@ -157,10 +164,10 @@ function draw(){
   var ctx=I.ctx(),S=ctx.S;if(!S)return;
   if(S.status==="lobby"||!S.cols)return lobby(ctx,S);
   var R=replay(S);if(!R)return lobby(ctx,S);
-  var key=ctx.code+"_"+R.gid,fresh=!view||view.key!==key||!$("oluRoot");
+  var key=ctx.code+"_"+R.gid+"_"+R.g.mode,fresh=!view||view.key!==key||!$("oluRoot");
   if(fresh){
     I.shell(playHTML(),{room:true,t:"LUDO",g:"ludo",playing:!R.over});
-    var board=UI.makeBoard($("oluBoard"),R.order);
+    var board=UI.makeBoard($("oluBoard"),R.order,R.g.mode);
     UI.dieEl($("oluDie"));
     view={key:key,board:board,shown:R.trace.length,R:R,anim:false,lock:0,lastDice:0,dieColor:"",sentAuto:"",over:false};
     for(var i=R.trace.length-1;i>=0;i--)if(R.trace[i].t==="roll"){view.lastDice=R.trace[i].dice;view.dieColor=R.trace[i].color;break;}
@@ -202,11 +209,11 @@ async function step(){
 
 function paintDie(onlyColor){
   var d=$("oluDie"),ctl=$("oluCtl");if(!d||!view)return;
-  ["red","green","yellow","blue"].forEach(function(c){ctl.classList.remove("c-"+c);});
+  E.COLORS6.forEach(function(c){ctl.classList.remove("c-"+c);});
   var cur=view.R.over?"":E.cur(view.R.g).color;
   if(cur)ctl.classList.add("c-"+cur);
   if(!onlyColor){UI.setDie(d,view.lastDice);}
-  else if(view.dieColor){ctl.classList.remove("c-red","c-green","c-yellow","c-blue");ctl.classList.add("c-"+view.dieColor);}
+  else if(view.dieColor){E.COLORS6.forEach(function(c){ctl.classList.remove("c-"+c);});ctl.classList.add("c-"+view.dieColor);}
 }
 
 function controls(){
@@ -214,7 +221,7 @@ function controls(){
   var R=view.R,g=R.g,u=U(),slot=mySeat(S,u.uid),my=R.cols[slot],host=ctx.role==="host",over=R.over;
   var cp=over?null:E.cur(g),w=R.wait;
   // strip
-  var st=$("oluStrip");st.style.setProperty("--n",R.order.length);
+  var st=$("oluStrip");st.style.setProperty("--n",R.order.length);st.classList.toggle("is-six",R.order.length>4);
   st.innerHTML=g.players.map(function(p){
     var isBot=R.bots[p.color]!=null,rk=g.ranking.indexOf(p.color);
     return'<div class="lu-pc c-'+p.color+(!over&&cp&&p===cp?' is-turn':'')+(p.finishedTokens>=4?' is-done':'')+'"><span class="lu-dot"></span><b dir="auto">'+e(p.name)+(p.color===my?' (you)':'')+'</b>'+
@@ -293,7 +300,7 @@ var css=`
 .olu-row{display:flex;align-items:center}
 .olu-row .lu-dot{display:inline-block;vertical-align:middle;width:20px;height:20px;margin-inline-end:10px;box-shadow:inset 0 0 0 3px var(--pd),inset 0 0 0 6px var(--pl)}
 .olu-row.empty{opacity:.45}
-.olu-row.c-red{border-inline-start:4px solid #E5484D}.olu-row.c-green{border-inline-start:4px solid #2EAE6B}.olu-row.c-yellow{border-inline-start:4px solid #F2B632}.olu-row.c-blue{border-inline-start:4px solid #3B82E0}
+.olu-row.c-red{border-inline-start:4px solid #E5484D}.olu-row.c-green{border-inline-start:4px solid #2EAE6B}.olu-row.c-yellow{border-inline-start:4px solid #F2B632}.olu-row.c-blue{border-inline-start:4px solid #3B82E0}.olu-row.c-violet{border-inline-start:4px solid #8B5CF6}.olu-row.c-pink{border-inline-start:4px solid #EC5FA8}
 .olu-tag{margin-inline-start:6px;padding:2px 6px;border-radius:5px;background:#F2E6CF;color:#1a120d;font:700 10px/1 Anton,Impact,sans-serif;letter-spacing:.12em}
 .olu-rules{margin:10px 0;text-align:center;color:#b9a98f;font-size:13px}
 .olu-res.lu-final-card{margin:16px auto 0;width:min(100%,420px);box-shadow:none}

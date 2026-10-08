@@ -30,7 +30,7 @@ var META={
   ic:"<path d='M4 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H4zM20 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z'/>"},
  xo:{n:"XO",d:"Tic-tac-toe against one friend. Win a game and earn 3 points in your stats.",who:"Two players. No host, no judge",
   ic:"<path d='M9 4v16M15 4v16M4 9h16M4 15h16'/>"},
- ludo:{n:"Ludo",d:"Roll, race and capture. Bring all four pieces home first. Finish 1st for 10 points, 2nd for 7, 3rd for 5.",who:"2 to 4 players. The host starts the game",
+ ludo:{n:"Ludo",d:"Roll, race and capture. Bring all four pieces home first. Finish 1st for 10 points, 2nd for 7, 3rd for 5. The host can switch on the big board for up to 6 players.",who:"2 to 6 players. The host starts the game",
   ic:"<rect x='4' y='4' width='16' height='16' rx='3.5'/><circle cx='9' cy='9' r='.9'/><circle cx='15' cy='15' r='.9'/><circle cx='12' cy='12' r='.9'/>"},
  sudoku:{n:"Sudoku",d:"Race a friend on the same puzzle. The fastest solver wins points: 5 for Easy, 10 for Medium, 15 for Hard.",who:"2 players. The host picks the difficulty",
   ic:"<rect x='3' y='3' width='18' height='18' rx='2.5'/><path d='M9 3v18M15 3v18M3 9h18M3 15h18'/>"}
@@ -333,7 +333,7 @@ function sweep(id,keep){var L=[];try{L=JSON.parse(localStorage.getItem("pp_hoste
 function create(k){if(busy)return;var u=U();busy=true;role="host";
   var pay={host:u.uid,hostName:u.displayName||"",game:k,status:"lobby",opts:{neg:1,tg:10},created:Date.now()};
   if(k==="xo")pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",rd:1,mv:"",w:0}};
-  if(k==="ludo"){pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",mv:""}};pay.opts={three:1,full:0};pay.gid=0;}
+  if(k==="ludo"){pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",mv:""}};pay.opts={three:1,full:0,six:0};pay.gid=0;}
   if(k==="sudoku"){pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",w:0,pr:0,pg:0}};pay.diff="easy";pay.rnd=0;}
   mkRoom(pay,function(err,c){
     if(err){var pd=err.code==="PERMISSION_DENIED"||/permission/i.test(err.message||"");return bail(pd?"Not allowed to open a room. Make sure the Rules are published":"No free room code right now, try again");}
@@ -344,7 +344,7 @@ function join(c0){if(busy)return;var u=U(),c=String(c0||(document.getElementById
     if(!r){try{localStorage.removeItem("pp_room");}catch(x){}return bail("Room not found");}
     code=c;role=r.host===u.uid?"host":"player";
     if(role==="host"){busy=false;return listen();}
-    var SL=r.game==="ludo"?["a","b","c","d"]:["a","b"],v=r.players||{},mine=SL.filter(function(x){return v[x]&&v[x].uid===u.uid;})[0];
+    var SL=r.game==="ludo"?(r.opts&&r.opts.six?["a","b","c","d","e","f"]:["a","b","c","d"]):["a","b"],v=r.players||{},mine=(r.game==="ludo"?["a","b","c","d","e","f"]:SL).filter(function(x){return v[x]&&v[x].uid===u.uid;})[0];
     if(mine){busy=false;return listen();}
     if(r.status&&r.status!=="lobby")return bail("The game already started, you cannot join now");
     var me={uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||""};
@@ -412,7 +412,7 @@ window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createE
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("Close the room for everyone?"))db.ref("rooms/"+code).remove();}};
 OL.i={db:function(){return db;},e:e,U:U,T:T,IC:IC,IX:IX,bk:bk,nmu:nmu,loadB:loadB,adm:isAdmin,BADGES:BADGES,G:G,META:META,shell:shell,syncLB:syncLB,mkey:mkey,MO:MO,ctx:function(){return{S:S,code:code,role:role};},sv:function(v){vw=v;},mail:mail};
 var lx=document.createElement("script");lx.src="js/online-social.js?v=3";document.head.appendChild(lx);
-var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=3";document.head.appendChild(ll);var lsd=document.createElement("script");lsd.src="js/online-sudoku.js?v=1";document.head.appendChild(lsd);
+var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=4";document.head.appendChild(ll);var lsd=document.createElement("script");lsd.src="js/online-sudoku.js?v=1";document.head.appendChild(lsd);
 var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
 /* "Play Online" button inside each game as a separate option (no outer button on the hub) */
 function mount(id,k,anchor,mode){var sec=document.getElementById(id);if(!sec||sec.querySelector(".ol-go"))return;

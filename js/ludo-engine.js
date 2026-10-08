@@ -18,6 +18,21 @@
   const SAFE=[0,8,13,21,26,34,39,47];                      // خانات البداية + النجمة اللي بعدها بـ 8
   const TRACK_LEN=52,LAST_MAIN=50,FINISH=56,FINAL_FIRST=51;
 
+  /* ---------- لوحة الـ 6 لاعبين (أونلاين) ----------
+     نفس القواعد بالظبط، بس 6 أذرع بدل 4: المسار 6×13 = 78 خانة، وكل لون بيبدأ عند 13×(رقم ذراعه).
+     وعشان القطعة تلف لحد ذراعها هي: آخر خانة رئيسية = 76، المسار النهائي 77..81، والوصول = 82
+     (في الـ 4 لاعبين: 50 / 51..55 / 56 — يعني طول المسار - 2 / - 1 / + 4).
+     ترتيب الأدوار مع عقارب الساعة. اللونين الجداد: violet (بنفسجي) و pink (وردي).
+     الـ mode بيتخزّن في g.mode (4 أو 6)، والألعاب القديمة اللي من غير mode بتتعامل كـ 4. */
+  const COLORS6=["red","green","violet","yellow","blue","pink"];
+  const START6={red:0,green:13,violet:26,yellow:39,blue:52,pink:65};
+  const SAFE6=[0,8,13,21,26,34,39,47,52,60,65,73];
+  const LAYOUT={
+    4:{colors:COLORS,start:START,safe:SAFE,len:52,last:50,ff:51,fin:56},
+    6:{colors:COLORS6,start:START6,safe:SAFE6,len:78,last:76,ff:77,fin:82}
+  };
+  const LY=m=>m===6?LAYOUT[6]:LAYOUT[4];
+
   /* ---------- Board Data (شبكة 15×15، [صف, عمود]) ---------- */
   const TRACK=[
     [6,1],[6,2],[6,3],[6,4],[6,5],
@@ -49,10 +64,11 @@
   };
 
   /* ---------- Tokens / Players ---------- */
-  function stateOf(pos){
+  function stateOf(pos,mode){
+    const L=LY(mode);
     if(pos<0)return"HOME";
-    if(pos>=FINISH)return"FINISHED";
-    if(pos>=FINAL_FIRST)return"IN_FINAL_PATH";
+    if(pos>=L.fin)return"FINISHED";
+    if(pos>=L.ff)return"IN_FINAL_PATH";
     return"ON_BOARD";
   }
 
@@ -78,6 +94,7 @@
     return{
       players,
       opts:Object.assign({threeSixes:true,fullRanking:false},opts||{}),
+      mode:(opts&&opts.mode===6)?6:4,
       currentPlayer:Math.max(0,Math.min(players.length-1,first|0)),
       diceValue:null,
       consecutiveSixes:0,
@@ -113,11 +130,12 @@
 
   /* ---------- الخانات ---------- */
   // رقم الخانة على المسار الرئيسي (0..51) أو -1 لو القطعة مش على المسار الرئيسي
-  function absCell(color,pos){
-    if(pos<0||pos>LAST_MAIN)return -1;
-    return(START[color]+pos)%TRACK_LEN;
+  function absCell(color,pos,mode){
+    const L=LY(mode);
+    if(pos<0||pos>L.last)return -1;
+    return(L.start[color]+pos)%L.len;
   }
-  function isSafeCell(abs){return abs>=0&&SAFE.indexOf(abs)>=0;}
+  function isSafeCell(abs,mode){return abs>=0&&LY(mode).safe.indexOf(abs)>=0;}
 
   // الإحداثيات [صف, عمود] لأي position (للـ UI فقط)
   function cellOf(color,pos){
@@ -130,7 +148,7 @@
   function tokensOnCell(g,abs){
     const out=[];
     for(const p of g.players)for(const t of p.tokens){
-      if(absCell(p.color,t.position)===abs)out.push(t);
+      if(absCell(p.color,t.position,g.mode)===abs)out.push(t);
     }
     return out;
   }
@@ -143,14 +161,15 @@
   }
 
   /* ---------- الحركة ---------- */
-  function calculateDestination(token,dice){
-    if(token.position>=FINISH)return{ok:false,reason:"finished"};
+  function calculateDestination(token,dice,mode){
+    const FIN=LY(mode).fin;
+    if(token.position>=FIN)return{ok:false,reason:"finished"};
     if(token.position<0){
       if(dice!==6)return{ok:false,reason:"need-six"};
       return{ok:true,pos:0,exit:true};
     }
     const np=token.position+dice;
-    if(np>FINISH)return{ok:false,reason:"exact"};   // لازم الرقم الدقيق
+    if(np>FIN)return{ok:false,reason:"exact"};   // لازم الرقم الدقيق
     return{ok:true,pos:np,exit:false};
   }
 
@@ -160,8 +179,8 @@
   // movingId = القطعة اللي بتتحرك دلوقتي (بنتجاهلها عشان النتيجة تطلع واحدة
   // سواء اتحسبت قبل الحركة (getValidMoves) أو بعدها (moveToken)).
   function checkCapture(g,color,newPos,movingId){
-    const abs=absCell(color,newPos);
-    if(abs<0||isSafeCell(abs))return[];
+    const abs=absCell(color,newPos,g.mode);
+    if(abs<0||isSafeCell(abs,g.mode))return[];
     const byColor={};
     for(const t of tokensOnCell(g,abs)){
       if(movingId&&t.id===movingId)continue;
@@ -179,19 +198,19 @@
 
   function canMoveToken(g,token,dice){
     if(!token||token.finished)return false;
-    return calculateDestination(token,dice).ok;
+    return calculateDestination(token,dice,g.mode).ok;
   }
 
   function getValidMoves(g,dice){
-    const p=cur(g),moves=[];
+    const p=cur(g),moves=[],L=LY(g.mode);
     for(const t of p.tokens){
-      const d=calculateDestination(t,dice);
+      const d=calculateDestination(t,dice,g.mode);
       if(!d.ok)continue;
       const caps=checkCapture(g,p.color,d.pos,t.id);
       moves.push({
         tokenId:t.id,idx:t.idx,from:t.position,to:d.pos,exit:!!d.exit,
         captures:caps.map(x=>x.id),capturesN:caps.length,
-        finishes:d.pos===FINISH,intoFinal:t.position<FINAL_FIRST&&d.pos>=FINAL_FIRST&&d.pos<FINISH
+        finishes:d.pos===L.fin,intoFinal:t.position<L.ff&&d.pos>=L.ff&&d.pos<L.fin
       });
     }
     return moves;
@@ -241,7 +260,7 @@
   }
 
   function checkFinish(g,token){
-    if(token.position===FINISH){token.finished=true;token.state="FINISHED";return true;}
+    if(token.position===LY(g.mode).fin){token.finished=true;token.state="FINISHED";return true;}
     return false;
   }
 
@@ -287,7 +306,7 @@
     if(!mv)return{ok:false,reason:"invalid"};
 
     const from=t.position;
-    t.position=mv.to;t.state=stateOf(mv.to);
+    t.position=mv.to;t.state=stateOf(mv.to,g.mode);
 
     const victims=checkCapture(g,p.color,mv.to,t.id);
     victims.forEach(v=>captureToken(g,v));
@@ -320,16 +339,16 @@
   function isTokenInDanger(g,token,posOverride){
     const color=token.playerId;
     const pos=posOverride==null?token.position:posOverride;
-    const abs=absCell(color,pos);
-    if(abs<0||isSafeCell(abs))return false;
+    const abs=absCell(color,pos,g.mode),LEN=LY(g.mode).len,LM=LY(g.mode).last;
+    if(abs<0||isSafeCell(abs,g.mode))return false;
     if(posOverride==null&&isBlock(g,abs,color))return false;
     for(const o of g.players){
       if(o.color===color)continue;
       for(const ot of o.tokens){
-        if(ot.position<0||ot.position>LAST_MAIN)continue;
-        const oa=absCell(o.color,ot.position);
-        const steps=(abs-oa+TRACK_LEN)%TRACK_LEN;
-        if(steps>=1&&steps<=6&&ot.position+steps<=LAST_MAIN)return true;
+        if(ot.position<0||ot.position>LM)continue;
+        const oa=absCell(o.color,ot.position,g.mode);
+        const steps=(abs-oa+LEN)%LEN;
+        if(steps>=1&&steps<=6&&ot.position+steps<=LM)return true;
       }
     }
     return false;
@@ -345,15 +364,15 @@
     if(level==="mid"){s+=m.to*.2+Math.random()*3;return s;}
 
     // Hard: تقييم المخاطر والحماية والتقدم
-    const abs=absCell(p.color,m.to);
+    const abs=absCell(p.color,m.to,g.mode);
     const wasDanger=isTokenInDanger(g,t);
-    const willDanger=m.to<=LAST_MAIN&&isTokenInDanger(g,t,m.to)&&!m.capturesN;
+    const willDanger=m.to<=LY(g.mode).last&&isTokenInDanger(g,t,m.to)&&!m.capturesN;
     if(m.intoFinal)s+=28;
-    if(abs>=0&&isSafeCell(abs))s+=18;
+    if(abs>=0&&isSafeCell(abs,g.mode))s+=18;
     if(wasDanger&&!willDanger)s+=34;
     if(willDanger)s-=38;
     // تكوين Block
-    if(abs>=0&&p.tokens.some(o=>o.id!==t.id&&absCell(p.color,o.position)===abs))s+=12;
+    if(abs>=0&&p.tokens.some(o=>o.id!==t.id&&absCell(p.color,o.position,g.mode)===abs))s+=12;
     // القطعة اللي قريبة من خصم وراها وبتتحرك مش هتتحمي لو سابت خانتها
     s+=m.to*.35;                       // تقدم
     if(m.from>=0)s+=m.from*.05;        // نفضّل القطعة المتقدمة
@@ -389,10 +408,10 @@
       if(m.finishes)s+=100;
       if(m.capturesN)s+=60*m.capturesN;
       if(m.exit)s+=30;
-      const abs=absCell(p.color,m.to);
-      const was=isTokenInDanger(g,tk),will=m.to<=LAST_MAIN&&isTokenInDanger(g,tk,m.to)&&!m.capturesN;
+      const abs=absCell(p.color,m.to,g.mode);
+      const was=isTokenInDanger(g,tk),will=m.to<=LY(g.mode).last&&isTokenInDanger(g,tk,m.to)&&!m.capturesN;
       if(m.intoFinal)s+=28;
-      if(abs>=0&&isSafeCell(abs))s+=18;
+      if(abs>=0&&isSafeCell(abs,g.mode))s+=18;
       if(was&&!will)s+=34;
       if(will)s-=38;
       s+=m.to*.35+rngFor(seed,k*7+i)*1.5;
@@ -406,6 +425,7 @@
 
   const API={
     COLORS,START,SAFE,TRACK_LEN,LAST_MAIN,FINISH,FINAL_FIRST,TRACK,FINAL_PATH,YARD_ORIGIN,board,
+    COLORS6,START6,SAFE6,LAYOUT,LY,
     stateOf,createTokens,createPlayers,initializeGame,
     rollDice,diceFor,rngFor,
     absCell,isSafeCell,cellOf,tokensOnCell,isBlock,

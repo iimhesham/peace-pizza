@@ -10,7 +10,7 @@
   if(!E)return;
   const $=id=>document.getElementById(id);
   const NS="http://www.w3.org/2000/svg";
-  const CNAME={red:"Red",green:"Green",yellow:"Yellow",blue:"Blue"};
+  const CNAME={red:"Red",green:"Green",yellow:"Yellow",blue:"Blue",violet:"Violet",pink:"Pink"};
   const reduce=()=>{try{return window.matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){return false;}};
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
@@ -38,7 +38,84 @@ function rosette(cx,cy,R,n){
 function arrowPath(cx,cy,rot){
   return'<path class="lu-arrow" transform="rotate('+rot+' '+cx+' '+cy+')" d="M'+(cx-.28)+' '+(cy-.08)+'h.34v-.2l.34.28-.34.28v-.2h-.34z"/>';
 }
-function boardSVG(active){
+/* ---------- لوحة الـ 6 لاعبين: الهندسة ----------
+   6 أذرع (عرض 3 × طول 6 خانات) حوالين مسدس ضلعه 3، والبيوت دواير جوه الفجوات بين الأذرع.
+   كل ذراع i اتجاهها زاوية 180+60i (مع عقارب الساعة). v=-1 حارة الطلوع، v=+1 حارة الرجوع، v=0 المسار النهائي. */
+const GEO6=(function(){
+  const A=3*Math.sqrt(3)/2,CX=9.8,CY=9.8,N=6,LEN=78,RING=E.COLORS6;
+  const rad=d=>d*Math.PI/180,mod=(a,n)=>((a%n)+n)%n;
+  const th=i=>180+60*i;
+  function pt(i,r,v){                       // r: 0 = صف الطرف .. 5 = أقرب صف للمركز
+    const t=rad(th(i)),u=A+(5.5-r);
+    return[CX+Math.cos(t)*u-Math.sin(t)*v,CY+Math.sin(t)*u+Math.cos(t)*v];
+  }
+  const track=new Array(LEN);
+  for(let i=0;i<N;i++){
+    for(let r=5;r>=0;r--)track[mod(13*(i-1)+5+(5-r),LEN)]=pt(i,r,-1).concat(th(i));
+    track[mod(13*(i-1)+11,LEN)]=pt(i,0,0).concat(th(i));
+    for(let r=0;r<=5;r++)track[mod(13*(i-1)+12+r,LEN)]=pt(i,r,1).concat(th(i));
+  }
+  const fin={},yard={},bis={};
+  RING.forEach((c,i)=>{
+    fin[c]=[1,2,3,4,5].map(r=>pt(i,r,0).concat(th(i)));
+    const b=rad(th(i)+30);bis[c]=b;
+    yard[c]=[CX+Math.cos(b)*7.2,CY+Math.sin(b)*7.2];
+  });
+  function cell(c,p){                       // مكان خانة (0..76 رئيسي، 77..81 نهائي)
+    if(p<=76)return track[(E.START6[c]+p)%LEN];
+    return fin[c][p-77];
+  }
+  function spot(c,idx){const y=yard[c];return[y[0]+(idx%2?.8:-.8),y[1]+(idx>1?.8:-.8)];}
+  function done(c,k){                       // القطع اللي وصلت: قدام المثلث بتاع اللون
+    const i=RING.indexOf(c),t=rad(th(i)),off=(k-1.5)*.3;
+    return[CX+Math.cos(t)*1.05-Math.sin(t)*off,CY+Math.sin(t)*1.05+Math.cos(t)*off];
+  }
+  return{A,CX,CY,RING,track,fin,yard,cell,spot,done,th,rad};
+})();
+
+function boardSVG6(active){
+  const G=GEO6,on=c=>active.indexOf(c)>=0,f=n=>n.toFixed(3);
+  let s='<svg viewBox="0 0 19.6 19.6" class="lu-svg" role="img" aria-label="Ludo board for six players" xmlns="'+NS+'">';
+  s+='<rect class="lu-felt" x="0" y="0" width="19.6" height="19.6" rx=".6"/>';
+  // البيوت (دواير)
+  G.RING.forEach(c=>{
+    const y=G.yard[c];
+    s+='<g class="c-'+c+(on(c)?'':' lu-off')+'">';
+    s+='<circle class="lu-yard" cx="'+f(y[0])+'" cy="'+f(y[1])+'" r="1.95" fill="var(--pc)"/>';
+    s+='<circle class="lu-yard-in" cx="'+f(y[0])+'" cy="'+f(y[1])+'" r="1.7"/>';
+    s+=rosette(y[0],y[1],1.5,12);
+    for(let i=0;i<4;i++){const q=G.spot(c,i);s+='<circle class="lu-spot" cx="'+f(q[0])+'" cy="'+f(q[1])+'" r=".5"/>';}
+    s+='</g>';
+  });
+  // المسار الرئيسي
+  const startAt={};G.RING.forEach(c=>startAt[E.START6[c]]=c);
+  G.track.forEach((q,i)=>{
+    const sc=startAt[i],safe=E.isSafeCell(i,6);
+    s+='<g'+(sc?' class="c-'+sc+(on(sc)?'':' lu-off')+'"':'')+'>';
+    s+='<rect class="lu-cell'+(sc?' is-start':safe?' is-safe':'')+'" x="-.47" y="-.47" width=".94" height=".94" rx=".12" transform="translate('+f(q[0])+' '+f(q[1])+') rotate('+q[2]+')"/>';
+    if(sc)s+=arrowPath(q[0],q[1],(q[2]+180)%360);
+    else if(safe)s+='<path class="lu-star" transform="translate('+f(q[0])+' '+f(q[1])+')" d="'+starPath(0,0,.3,.13)+'"/>';
+    s+='</g>';
+  });
+  // المسارات النهائية
+  G.RING.forEach(c=>{
+    s+='<g class="c-'+c+(on(c)?'':' lu-off')+'">';
+    G.fin[c].forEach(q=>{s+='<rect class="lu-cell is-final" x="-.47" y="-.47" width=".94" height=".94" rx=".12" transform="translate('+f(q[0])+' '+f(q[1])+') rotate('+q[2]+')"/><path class="lu-dia" transform="translate('+f(q[0])+' '+f(q[1])+')" d="M0 -.23l.23 .23-.23 .23-.23-.23z"/>';});
+    s+='</g>';
+  });
+  // المركز: مسدس بـ 6 مثلثات
+  const V=a=>[G.CX+Math.cos(G.rad(a))*3,G.CY+Math.sin(G.rad(a))*3];
+  G.RING.forEach((c,i)=>{
+    const a=V(G.th(i)-30),b=V(G.th(i)+30);
+    s+='<polygon class="lu-tri c-'+c+(on(c)?'':' lu-off')+'" points="'+f(G.CX)+','+f(G.CY)+' '+f(a[0])+','+f(a[1])+' '+f(b[0])+','+f(b[1])+'"/>';
+  });
+  s+='<circle class="lu-hub" cx="'+G.CX+'" cy="'+G.CY+'" r=".5"/><text class="lu-hubt" x="'+G.CX+'" y="'+(G.CY+.12)+'" text-anchor="middle">LUDO</text>';
+  s+='<g class="lu-layer"></g></svg>';
+  return s;
+}
+
+function boardSVG(active,mode){
+    if(mode===6)return boardSVG6(active);
     const on=c=>active.indexOf(c)>=0;
     let s='<svg viewBox="0 0 15 15" class="lu-svg" role="img" aria-label="Ludo board" xmlns="'+NS+'">';
     s+='<rect class="lu-felt" x="0" y="0" width="15" height="15" rx=".5"/>';
@@ -87,8 +164,10 @@ function boardSVG(active){
     return[b[0]+b[2]*off,b[1]+b[3]*off];
   }
 
-  function makeBoard(host,active){
-    host.innerHTML=boardSVG(active);
+  function makeBoard(host,active,mode){
+    mode=mode===6?6:4;
+    const LYO=E.LY(mode);
+    host.innerHTML=boardSVG(active,mode);
     const svg=host.querySelector("svg"),layer=svg.querySelector(".lu-layer");
     const tokens={},disp={},colorOf={},idxOf={};
     let pick=null;
@@ -116,8 +195,9 @@ function boardSVG(active){
         const c=colorOf[id],p=disp[id];
         let key;
         if(p<0)key="y-"+id;
-        else if(p>=E.FINISH)key="f-"+c;
-        else{const cell=E.cellOf(c,p);key=cell[0]+"-"+cell[1];}
+        else if(p>=LYO.fin)key="f-"+c;
+        else if(p<=LYO.last)key="m-"+E.absCell(c,p,mode);
+        else key="n-"+c+"-"+p;
         (groups[key]=groups[key]||[]).push(id);
       }
       const O2=[[-.19,-.06],[.19,.06]],O4=[[-.2,-.2],[.2,-.2],[-.2,.2],[.2,.2]];
@@ -126,10 +206,11 @@ function boardSVG(active){
         ids.forEach((id,k)=>{
           const c=colorOf[id],p=disp[id];
           let xy,sc=1;
-          if(p<0){xy=yardXY(c,idxOf[id]);}
-          else if(p>=E.FINISH){xy=finXY(c,k);sc=.52;}
+          if(p<0){xy=mode===6?GEO6.spot(c,idxOf[id]):yardXY(c,idxOf[id]);}
+          else if(p>=LYO.fin){xy=mode===6?GEO6.done(c,k):finXY(c,k);sc=.52;}
           else{
-            const cell=E.cellOf(c,p);xy=[cell[1]+.5,cell[0]+.5];
+            if(mode===6){const q=GEO6.cell(c,p);xy=[q[0],q[1]];}
+            else{const cell=E.cellOf(c,p);xy=[cell[1]+.5,cell[0]+.5];}
             if(n>1){const o=(n===2?O2:O4)[k%4];xy=[xy[0]+o[0],xy[1]+o[1]];sc=n===2?.76:.62;}
           }
           tokens[id].style.transform="translate("+xy[0].toFixed(3)+"px,"+xy[1].toFixed(3)+"px) scale("+sc+")";
@@ -225,6 +306,8 @@ function boardSVG(active){
 
   /* ترتيب الألوان حسب عدد اللاعبين في الأونلاين */
   const SEAT_LAYOUT={2:["red","yellow"],3:["red","green","yellow"],4:["red","green","yellow","blue"]};
+  /* لوحة الـ 6: الأماكن موزّعة بالتساوي حوالين المسدس (ترتيب الأذرع: أحمر · أخضر · بنفسجي · أصفر · أزرق · وردي) */
+  const SEAT_LAYOUT6={2:["red","yellow"],3:["red","violet","blue"],4:["red","green","yellow","blue"],5:["red","green","violet","yellow","blue"],6:["red","green","violet","yellow","blue","pink"]};
 
   /* Auto roll: تفضيل واحد مشترك (أوفلاين + أونلاين) بيتحفظ على الجهاز بس */
   const KEY_AUTO="ludoAutoRoll";
@@ -239,7 +322,7 @@ function boardSVG(active){
     btn.title=autoRoll?"Auto roll: on":"Auto roll: off";
   }
 
-  window.LudoUI={makeBoard,dieEl,setDie,rollAnim,CNAME,SEAT_LAYOUT,sleep,reduce,autoGet,autoSet,autoPaint};
+  window.LudoUI={makeBoard,dieEl,setDie,rollAnim,CNAME,SEAT_LAYOUT,SEAT_LAYOUT6,sleep,reduce,autoGet,autoSet,autoPaint};
 
   /* =======================================================
      3) اللعب الأوفلاين
@@ -461,7 +544,7 @@ function boardSVG(active){
     // اللون الحالي على كل الواجهة
     const ctl=$("luCtl");
     autoPaint($("luAuto"));
-    ["red","green","yellow","blue"].forEach(c=>ctl.classList.remove("c-"+c));
+    E.COLORS6.forEach(c=>ctl.classList.remove("c-"+c));
     if(!over)ctl.classList.add("c-"+cp.color);
     setDie($("luDie"),G.diceValue||lastDie,!G.diceValue);
 
