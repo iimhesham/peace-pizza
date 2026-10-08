@@ -71,6 +71,13 @@ function roll(){
   view.lock=Date.now();try{if(typeof playClickSound==="function")playClickSound();}catch(x){}
   send("r");
 }
+function auto(){
+  UI.autoSet(!UI.autoGet());
+  try{if(typeof playClickSound==="function")playClickSound();}catch(x){}
+  UI.autoPaint($("oluAuto"));
+  T(UI.autoGet()?"Auto roll: on":"Auto roll: off");
+  if(view){view.autoKey="";controls();}
+}
 function pick(id){
   var R=view&&view.R,ctx=I.ctx();if(!R||view.anim||view.lock||!ctx.S)return;
   var my=R.cols[mySeat(ctx.S,U().uid)];
@@ -140,7 +147,8 @@ function lobby(ctx,S){
 function playHTML(){
   return'<div id="oluRoot"><div class="lu-strip" id="oluStrip"></div><div class="lu-boardwrap" id="oluBoard"></div>'+
     '<div class="lu-ctl" id="oluCtl"><div id="oluDie"></div><div class="lu-side"><p class="lu-status" id="oluStatus" role="status" aria-live="polite"></p>'+
-    '<button type="button" class="lu-roll" id="oluRoll" onclick="OLLUDO.roll()">Roll Dice</button></div></div>'+
+    '<div class="lu-rollrow"><button type="button" class="lu-roll" id="oluRoll" onclick="OLLUDO.roll()">Roll Dice</button>'+
+    '<button type="button" class="lu-auto" id="oluAuto" onclick="OLLUDO.auto()" aria-pressed="false" aria-label="Auto roll" title="Auto roll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg><span>AUTO</span></button></div></div></div>'+
     '<div class="lu-meta"><span id="oluMeta"></span></div><div id="oluHost"></div><div id="oluRes"></div>'+
     '<button type="button" class="ol-s olu-leave" onclick="OLLUDO.leave()">Leave Room</button></div>';
 }
@@ -219,6 +227,20 @@ function controls(){
   rb.disabled=!(mine&&w.need==="roll"&&!view.lock);
   rb.classList.toggle("is-go",!rb.disabled);
   rb.textContent=!rb.disabled?"Roll Dice":(mine&&w.need==="move"?"Pick a piece":(over?"Game over":"Waiting..."));
+  UI.autoPaint($("oluAuto"));
+  // Auto roll: if it is my turn to roll and auto is on, roll after a short pause
+  if(!rb.disabled&&UI.autoGet()&&!view.anim&&!over){
+    var ak=view.key+"_"+R.trace.length;
+    if(view.autoKey!==ak){
+      view.autoKey=ak;var va=view;
+      setTimeout(function(){
+        if(view!==va)return;
+        var W=va.R.wait;
+        if(UI.autoGet()&&!va.anim&&!va.lock&&W&&W.need==="roll"&&W.color===my)roll();
+        else va.autoKey="";
+      },UI.reduce()?80:650);
+    }
+  }
   // valid pieces
   if(mine&&w.need==="move"&&!view.lock){
     view.board.setValid(g.valid.map(function(m){return m.tokenId;}),pick);
@@ -281,6 +303,6 @@ var css=`
 `;
 var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
-window.OLLUDO={draw:draw,roll:roll,start:function(){start(false);},again:function(){start(true);},opt:opt,bot:bot,leave:leave,
+window.OLLUDO={draw:draw,roll:roll,auto:auto,start:function(){start(false);},again:function(){start(true);},opt:opt,bot:bot,leave:leave,
   _replay:replay};
 })();

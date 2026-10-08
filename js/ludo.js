@@ -226,7 +226,20 @@ function boardSVG(active){
   /* ترتيب الألوان حسب عدد اللاعبين في الأونلاين */
   const SEAT_LAYOUT={2:["red","yellow"],3:["red","green","yellow"],4:["red","green","yellow","blue"]};
 
-  window.LudoUI={makeBoard,dieEl,setDie,rollAnim,CNAME,SEAT_LAYOUT,sleep,reduce};
+  /* Auto roll: تفضيل واحد مشترك (أوفلاين + أونلاين) بيتحفظ على الجهاز بس */
+  const KEY_AUTO="ludoAutoRoll";
+  let autoRoll=false;
+  try{autoRoll=localStorage.getItem(KEY_AUTO)==="1";}catch(e){}
+  const autoGet=()=>autoRoll;
+  function autoSet(v){autoRoll=!!v;try{localStorage.setItem(KEY_AUTO,autoRoll?"1":"0");}catch(e){}return autoRoll;}
+  function autoPaint(btn){
+    if(!btn)return;
+    btn.classList.toggle("is-on",autoRoll);
+    btn.setAttribute("aria-pressed",autoRoll?"true":"false");
+    btn.title=autoRoll?"Auto roll: on":"Auto roll: off";
+  }
+
+  window.LudoUI={makeBoard,dieEl,setDie,rollAnim,CNAME,SEAT_LAYOUT,sleep,reduce,autoGet,autoSet,autoPaint};
 
   /* =======================================================
      3) اللعب الأوفلاين
@@ -447,6 +460,7 @@ function boardSVG(active){
     });
     // اللون الحالي على كل الواجهة
     const ctl=$("luCtl");
+    autoPaint($("luAuto"));
     ["red","green","yellow","blue"].forEach(c=>ctl.classList.remove("c-"+c));
     if(!over)ctl.classList.add("c-"+cp.color);
     setDie($("luDie"),G.diceValue||lastDie,!G.diceValue);
@@ -491,7 +505,18 @@ function boardSVG(active){
     }else{
       busy=false;render();
       if(G.phase==="move")autoPickIfSingle(my);
+      else scheduleAutoRoll(my);
     }
+  }
+
+  /* Auto roll: لو مفعّل، دور أي لاعب (إنسان) بيترمي النرد لوحده بعد لحظة */
+  function scheduleAutoRoll(my){
+    if(!autoRoll||!G||G.phase!=="roll")return;
+    setTimeout(()=>{
+      if(my!==gen||!isOpen()||!autoRoll||busy||!G||G.phase!=="roll")return;
+      if($("luPlay").classList.contains("hidden")||E.cur(G).type!=="human")return;
+      doRoll();
+    },reduce()?150:650);
   }
 
   function autoPickIfSingle(my){
@@ -657,6 +682,12 @@ function boardSVG(active){
     G=sv.g;elapsed=sv.elapsed||0;humanColor=sv.human||(G.players.find(p=>p.type==="human")||{}).color||null;
     G.statsDone=false;
     enterPlay();
+  };
+  window.ludoAuto=function(){
+    autoSet(!autoRoll);sfx("click");
+    autoPaint($("luAuto"));
+    toast_(autoRoll?"Auto roll: on":"Auto roll: off");
+    if(autoRoll&&G&&!busy)scheduleAutoRoll(gen);   // لو الدور على الرمي دلوقتي يرمي فورًا
   };
   window.ludoRoll=function(){if(!busy&&G&&G.phase==="roll"&&E.cur(G).type==="human")doRoll();};
   window.ludoAgain=function(){
