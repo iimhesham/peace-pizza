@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="css/hubx.css?v=8">
 <link rel="stylesheet" href="css/xo.css?v=2">
 <link rel="stylesheet" href="css/ludo.css?v=3">
-<link rel="stylesheet" href="css/tawla.css?v=4">
+<link rel="stylesheet" href="css/tawla.css?v=5">
 <link rel="stylesheet" href="css/sudoku.css?v=2">
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
 
@@ -3187,6 +3187,13 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
       </div>
     </div>
     <div class="tw-panel">
+      <div class="tw-label">مكان التجميع</div>
+      <div class="tw-seg" id="twTraySeg" role="group" aria-label="مكان التجميع">
+        <button type="button" data-v="l">شمال اللوحة</button>
+        <button type="button" data-v="r">يمين اللوحة</button>
+      </div>
+    </div>
+    <div class="tw-panel">
       <div class="tw-label">الأسامي</div>
       <div class="tw-names">
         <label class="tw-name"><span class="tw-pc w" style="width:26px;height:26px" aria-hidden="true"></span><input id="twNameW" maxlength="14" autocomplete="off" placeholder="الأبيض"></label>
@@ -3199,8 +3206,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
       <ul>
         <li>كل لاعب 15 قشاطة، ونردين. أول واحد يوصل 31 نقطة يكسب المباراة.</li>
         <li>الدبل (نفس الرقم على النردين) بيتلعب 4 مرات.</li>
-        <li>في أول الجيم قشاطة واحدة بس تتحرك لحد ما تدخل منطقة التجميع، وبعدها باقي القشاطات تتفتح.</li>
-        <li>الأبيض بيبدأ من أسفل اليمين وبيخلص أعلى اليمين، والأسود العكس. الاتنين بيعدّوا على نفس الخانات.</li>
+        <li>القشاط كلها بتبدأ متجمعة على أول خانة، والعدّ بيبدأ من الخانة اللي بعدها. في أول الجيم قشاطة واحدة بس تتحرك لحد ما تدخل التجميع، وبعدها باقي القشاط تتفتح.</li>
+        <li>الأبيض بيبدأ من أسفل اليمين وبيخلص أعلى اليمين، والأسود العكس. الاتنين بيعدّوا على نفس الخانات. التجميع بره اللوحة بجنبها.</li>
         <li>قشاطة الخصم في الخانة بتمنعك توصلها. مفيش ضرب ولا رجوع للبداية.</li>
         <li>في التجميع: النرد اللي على رقم فيه قشاطة بياكلها، ولو الخانة فاضية بتنزّل قشاطة من خانة أعلى.</li>
         <li>نقاط الجيم = 15 − القشاطات اللي الخصم أكلها.</li>
@@ -3214,12 +3221,14 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
       <div class="tw-chips"></div>
     </div>
 
-    <div class="tw-board-wrap"><div class="tw-board" id="twBoard" aria-label="لوحة الطاولة"></div></div>
+    <div class="tw-board-wrap" id="twWrap">
+      <div class="tw-board" id="twBoard" aria-label="لوحة الطاولة"></div>
+      <div class="tw-tray" id="twTray" aria-label="التجميع"></div>
+    </div>
 
     <p class="tw-status" id="twStatus" role="status" aria-live="polite"></p>
     <div class="tw-dice-row" id="twDice"></div>
     <button type="button" class="tw-roll hidden" id="twRoll" onclick="tawlaRoll()">ارمِ النرد 🎲</button>
-    <p class="tw-hint" id="twHint"></p>
 
     <div class="tw-pl is-turn" id="twPlW">
       <div class="tw-pl-top"><span class="tw-pc w"></span><span class="tw-pl-name"></span><span class="tw-pl-pts"></span></div>
@@ -3270,8 +3279,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/xo.js"></script>
 <script src="js/ludo-engine.js?v=3"></script>
 <script src="js/ludo.js?v=2"></script>
-<script src="js/tawla-engine.js?v=2"></script>
-<script src="js/tawla.js?v=4"></script>
+<script src="js/tawla-engine.js?v=3"></script>
+<script src="js/tawla.js?v=5"></script>
 <script src="js/sudoku-core.js?v=1"></script>
 <script src="js/sudoku.js?v=2"></script>
 <script src="js/flags-data.js"></script>
