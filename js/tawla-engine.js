@@ -3,7 +3,6 @@
    قواعد بس. مفيش DOM هنا، فتتختبر لوحدها وتتشارك أونلاين بعدين.
 
    المواضع (q) لكل لاعب:
-     0        = لسه ما بدأش (START)
      1..24    = المسار الرئيسي (TRACK) — كل لاعب يمشي في اتجاه عكس التاني على نفس
                 الـ24 خانة: خانة الأبيض k هي نفسها خانة الأسود (25-k)
      25..30   = منطقة التجميع (HOME) — الخانة = 31 - q
@@ -23,7 +22,7 @@
 
   function newSide(){
     var c=[];for(var i=0;i<=OUT;i++)c.push(0);
-    c[0]=PIECES;
+    c[1]=PIECES;     /* كل القشاط متجمعة على أول خانة، والعدّ بيبدأ من التانية (نرد 1 ← خانة 2) */
     return {c:c,eaten:0,unlocked:false};
   }
   function newGame(){return {s:[newSide(),newSide()],turn:0};}
@@ -31,7 +30,6 @@
   function clone(g){return {s:[cloneSide(g.s[0]),cloneSide(g.s[1])],turn:g.turn};}
 
   function allHome(side){
-    if(side.c[0]>0)return false;
     for(var i=1;i<=TRACK;i++)if(side.c[i]>0)return false;
     return true;
   }
@@ -52,15 +50,15 @@
     /* قبل فتح القشاطات: قشاطة واحدة بس تتحرك */
     var only=-1;
     if(!me.unlocked){
-      for(i=1;i<=TRACK;i++)if(c[i]>0)only=i;
-      if(only<0)only=0;
+      for(i=2;i<=TRACK;i++)if(c[i]>0)only=i;   /* القشاطة اللي خرجت من التجميعة */
+      if(only<0)only=1;                        /* لسه كلهم على أول خانة: واحدة بس تطلع */
     }
 
     /* أعلى خانة تجميع فيها قشاطة (أصغر q) */
     var hi=-1;
     for(i=25;i<=30;i++)if(c[i]>0){hi=i;break;}
 
-    for(q=0;q<=30;q++){
+    for(q=1;q<=30;q++){
       if(!c[q])continue;
       if(only>=0&&q!==only)continue;
 
@@ -147,7 +145,7 @@
   /* ---------- تقييم للكمبيوتر ---------- */
   function pips(side){
     var s=0;
-    for(var q=0;q<=30;q++)s+=side.c[q]*(31-q);
+    for(var q=1;q<=30;q++)s+=side.c[q]*(31-q);
     return s;
   }
   function blockScore(me,op){

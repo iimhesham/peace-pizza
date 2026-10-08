@@ -16,6 +16,8 @@
   const OUT=E.OUT;
 
   const S={
+    view:0,                // مين اللي اللوحة معروضة من ناحيته (0 أبيض / 1 أسود). الأونلاين هيستخدمها.
+    tray:"r",              // مكان التجميع بره اللوحة: r يمين / l شمال
     mode:"pvp",            // pvp | cpu
     diff:"mid",            // easy | mid | hard
     nameW:"",nameB:"",
@@ -34,12 +36,13 @@
       if(!j)return;
       if(j.mode==="pvp"||j.mode==="cpu")S.mode=j.mode;
       if(["easy","mid","hard"].includes(j.diff))S.diff=j.diff;
+      if(j.tray==="l"||j.tray==="r")S.tray=j.tray;
       S.nameW=String(j.nameW||"").slice(0,14);
       S.nameB=String(j.nameB||"").slice(0,14);
     }catch(e){}
   }
   function save(){
-    try{localStorage.setItem(KEY,JSON.stringify({mode:S.mode,diff:S.diff,nameW:S.nameW,nameB:S.nameB}));}catch(e){}
+    try{localStorage.setItem(KEY,JSON.stringify({mode:S.mode,diff:S.diff,tray:S.tray,nameW:S.nameW,nameB:S.nameB}));}catch(e){}
   }
 
   const later=(fn,ms)=>{const t=setTimeout(fn,ms);S.timers.push(t);return t;};
@@ -99,25 +102,44 @@
      الأبيض: q=ph · الأسود: q=25-ph. الصف اللي تحت: ph 12←1 (شمال ← يمين)، اللي فوق: ph 13→24 */
   const qOf=(p,ph)=>p===W?ph:25-ph;
 
-  function stripHTML(p,src,dst){
+  /* نقش ذهبي في نص كل نص من اللوحة (زي الطاولات الخشب الحقيقية) */
+  const MANDALA=(function(){
+    let h='<svg viewBox="-50 -50 100 100" class="tw-mand" aria-hidden="true"><g fill="none" stroke="#c9a15a" stroke-width="1.1" stroke-linecap="round">';
+    h+='<circle r="47"/><circle r="41"/><circle r="23"/><circle r="9"/>';
+    for(let i=0;i<12;i++)h+='<path transform="rotate('+i*30+')" d="M0 -23C9 -29 9 -36 0 -41C-9 -36 -9 -29 0 -23Z"/>';
+    for(let i=0;i<12;i++)h+='<circle transform="rotate('+(i*30+15)+') translate(0 -44)" r="1.9"/>';
+    for(let i=0;i<8;i++)h+='<path transform="rotate('+i*45+')" d="M0 -9C5 -13 5 -18 0 -23C-5 -18 -5 -13 0 -9Z"/>';
+    return h+'</g></svg>';
+  })();
+
+  const TRI_TOP='<svg class="tw-tri" viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 10,0 5,100" vector-effect="non-scaling-stroke"/></svg>';
+  const TRI_BOT='<svg class="tw-tri" viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="5,0 10,100 0,100" vector-effect="non-scaling-stroke"/></svg>';
+
+  function slotHTML(p,slot,src,dst){
+    const q=31-slot,n=S.g.s[p].c[q];
     const mine=S.turn===p&&S.phase==="move"&&!isCpu(p);
-    const c=S.g.s[p].c;
-    let h="";
-    for(let slot=6;slot>=1;slot--){          // شمال ← يمين = 6..1
-      const q=31-slot,n=c[q];
-      const cls=["tw-slot"];
-      if(mine&&src[q]&&S.sel!==q)cls.push("can");
-      if(mine&&S.sel===q)cls.push("sel");
-      if(mine&&dst[q]!==undefined)cls.push("dest");
-      h+='<div class="'+cls.join(" ")+'" data-q="'+q+'" data-side="'+p+'"><i>'+slot+'</i>'+(n>0?pieceHTML(p,S.sel===q&&mine?" sel":"")+(n>1?'<em>×'+n+'</em>':""):"")+'</div>';
-    }
-    const lbl=p===W?"تجميع الأبيض · بداية الأسود":"تجميع الأسود · بداية الأبيض";
-    return '<div class="tw-strip"><span class="tw-strip-l">'+lbl+'</span><div class="tw-slots">'+h+'</div></div>';
+    const cls=["tw-slot"];
+    if(mine&&src[q]&&S.sel!==q)cls.push("can");
+    if(mine&&S.sel===q)cls.push("sel");
+    if(mine&&dst[q]!==undefined)cls.push("dest");
+    return '<div class="'+cls.join(" ")+'" data-q="'+q+'" data-side="'+p+'">'+
+      (n>0?'<span class="tw-pc '+(p===W?"w":"b")+(S.sel===q&&mine?" sel":"")+'">'+(n>1?'<em>'+n+'</em>':"")+'</span>':"")+'</div>';
+  }
+  /* التجميع بره اللوحة: نص لكل لاعب، الخانات 6..1 بترتيب المسار */
+  function trayHTML(src,dst){
+    const topP=S.view===W?W:B,botP=1-topP;
+    const half=(p,order)=>{
+      const mine=S.turn===p&&S.phase==="move"&&!isCpu(p);
+      let h="";
+      order.forEach(slot=>{h+=slotHTML(p,slot,src,dst);});
+      return '<div class="tw-tray-half'+(mine&&dst[OUT]!==undefined?" dest":"")+'" data-out="1" data-side="'+p+'">'+h+'</div>';
+    };
+    return half(topP,[6,5,4,3,2,1])+half(botP,[1,2,3,4,5,6]);
   }
 
   function renderBoard(src,dst){
     const g=S.g;
-    const cell=ph=>{
+    const cell=(ph,isTop)=>{
       const w=g.s[W].c[ph],b=g.s[B].c[25-ph];
       const side=w>0?W:B,n=w>0?w:b;
       const q=qOf(S.turn,ph);
@@ -125,38 +147,39 @@
       if(src[q]&&S.sel!==q)cls.push("can");
       if(dst[q]!==undefined)cls.push("dest");
       const pips=dst[q]!==undefined?dst[q].reduce((a,m)=>a+m.die,0):0;
-      return '<div class="'+cls.join(" ")+'" data-ph="'+ph+'"'+(pips?' data-pips="'+pips+'"':"")+'>'+stackHTML(side,n,S.sel===q&&n>0&&side===S.turn)+'</div>';
+      return '<div class="'+cls.join(" ")+'" data-ph="'+ph+'"'+(pips?' data-pips="'+pips+'"':"")+'>'+(isTop?TRI_TOP:TRI_BOT)+stackHTML(side,n,S.sel===q&&n>0&&side===S.turn)+'</div>';
     };
     const GAP='<i class="tw-gap" aria-hidden="true"></i>';    // الفاصل الرأسي: 6 شمال | 6 يمين
-    let top="",bot="";
-    for(let ph=13;ph<=24;ph++){top+=cell(ph);if(ph===18)top+=GAP;}      // فوق: شمال ← يمين
-    for(let ph=12;ph>=1;ph--){bot+=cell(ph);if(ph===7)bot+=GAP;}        // تحت: شمال ← يمين
+    const seqA=[],seqB=[];                                      // A: 13→24 · B: 12→1
+    for(let ph=13;ph<=24;ph++)seqA.push(ph);
+    for(let ph=12;ph>=1;ph--)seqB.push(ph);
+    const topSeq=S.view===W?seqA:seqB,botSeq=S.view===W?seqB:seqA;
+    const row=(seq,isTop)=>{
+      let h="";
+      seq.forEach((ph,k)=>{h+=cell(ph,isTop);if(k===5)h+=GAP;});
+      return '<div class="tw-row '+(isTop?"top":"bot")+'">'+h+'</div>';
+    };
     $("twBoard").innerHTML=
-      stripHTML(W,src,dst)+
-      '<div class="tw-row top">'+top+'</div>'+
-      '<div class="tw-mid" aria-hidden="true"></div>'+
-      '<div class="tw-row bot">'+bot+'</div>'+
-      stripHTML(B,src,dst);
+      '<div class="tw-field">'+
+        '<div class="tw-mandwrap" aria-hidden="true">'+MANDALA+MANDALA+'</div>'+
+        row(topSeq,true)+'<div class="tw-mid" aria-hidden="true"></div>'+row(botSeq,false)+
+      '</div>';
+    $("twTray").innerHTML=trayHTML(src,dst);
+    $("twWrap").classList.toggle("tray-l",S.tray==="l");
   }
 
   function renderPlayer(p,src,dst){
-    const s=S.g.s[p],c=s.c;
+    const s=S.g.s[p];
     const el=$(p===W?"twPlW":"twPlB");
+    el.style.order=((p===W)===(S.view===W))?4:1;               // اللي بيتفرج من ناحيته تحت
     el.classList.toggle("is-turn",S.turn===p&&S.phase!=="over"&&S.phase!=="idle");
     el.querySelector(".tw-pl-name").textContent=nameOf(p)+(isCpu(p)?" 🤖":"");
     el.querySelector(".tw-pl-pts").innerHTML=S.pts[p]+'<small> / 31</small>';
-
     const mine=S.turn===p&&S.phase==="move"&&!isCpu(p);
-    const startCan=mine&&src[0]&&S.sel!==0;
-    const startSel=mine&&S.sel===0;
     const outDst=mine&&dst[OUT]!==undefined;
-    const chips=
-      '<button type="button" class="tw-chip'+(startCan?" can":"")+(startSel?" sel":"")+'" data-q="0" data-side="'+p+'"><b>'+c[0]+'</b><span>في البداية</span></button>'+
-      '<button type="button" class="tw-chip" tabindex="-1"><b>'+E.onTrack(s)+'</b><span>على اللوحة</span></button>'+
+    el.querySelector(".tw-chips").innerHTML=
       '<button type="button" class="tw-chip" tabindex="-1"><b>'+E.inHome(s)+'</b><span>في التجميع</span></button>'+
       '<button type="button" class="tw-chip'+(outDst?" dest":"")+'" data-out="1" data-side="'+p+'"><b>'+s.eaten+'<small style="font-size:11px;opacity:.7">/15</small></b><span>اتاكلت</span></button>';
-    el.querySelector(".tw-chips").innerHTML=chips;
-
   }
 
   function dieHTML(v,used,rolling,side){
@@ -202,13 +225,6 @@
     const canRoll=S.phase==="roll"&&!isCpu(S.turn);
     rb.classList.toggle("hidden",!canRoll);
     if(canRoll)rb.textContent="ارمِ النرد 🎲";
-    const me=S.g.s[S.turn];
-    let hint="";
-    if(S.phase==="move"&&!isCpu(S.turn)){
-      if(S.sel===null)hint=me.unlocked?"اختار قشاطة تحركها":"قشاطة واحدة بس تتحرك لحد ما تدخل التجميع";
-      else hint="الأخضر = أماكن توصلها برقم أو بمجموع الأرقام (والرقم على النقطة = عدد الخطوات)";
-    }
-    $("twHint").textContent=hint;
   }
 
   /* ---------- سير اللعب ---------- */
@@ -217,6 +233,7 @@
     $("twPlay").classList.toggle("hidden",which!=="play");
     $("twGear").classList.toggle("is-off",which!=="play");
     $("twFinal").classList.add("hidden");
+    document.body.classList.toggle("tw-playing",which==="play");
   }
 
   function startMatch(){
@@ -423,6 +440,7 @@
   }
   function syncSetup(){
     root.querySelectorAll("#twModeSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===S.mode));
+    root.querySelectorAll("#twTraySeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===S.tray));
     root.querySelectorAll("#twDiffSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===S.diff));
     $("twDiffWrap").classList.toggle("hidden",S.mode!=="cpu");
     const o=$("twNameB");
@@ -440,6 +458,7 @@
     });
   }
   seg("twModeSeg",v=>{S.mode=v;});
+  seg("twTraySeg",v=>{S.tray=v;});
   seg("twDiffSeg",v=>{S.diff=v;});
 
   window.tawlaOpen=function(){
@@ -451,13 +470,15 @@
     click();clearTimers();S.phase="idle";
     syncSetup();showView("setup");
   };
+  /* الأونلاين: كل لاعب يشوف اللوحة من ناحيته (لاعبه تحت) — tawlaSetView(0|1) */
+  window.tawlaSetView=function(p){S.view=p===B?B:W;if(S.g)render();};
   window.tawlaStart=function(){
     click();captureNames();save();
     showView("play");
     startMatch();
   };
   window.tawlaHome=function(){
-    click();clearTimers();S.phase="idle";
+    click();clearTimers();S.phase="idle";document.body.classList.remove("tw-playing");
     show("hub");
   };
 
