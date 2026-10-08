@@ -1,40 +1,56 @@
 /* =========================================================
    TAWLA ENGINE — الطاولة المصرية (الفورة من 31)
    قواعد بس. مفيش DOM هنا، فتتختبر لوحدها وتتشارك أونلاين بعدين.
+   المرجع الوحيد للقواعد: ملف ساهر (tawla31.Saher).
 
-   المواضع (q) لكل لاعب:
-     1..24    = المسار الرئيسي (TRACK) — كل لاعب يمشي في اتجاه عكس التاني على نفس
-                الـ24 خانة: خانة الأبيض k هي نفسها خانة الأسود (25-k)
-     25..30   = منطقة التجميع (HOME) — الخانة = 31 - q
-                (q=25 ← خانة 6 … q=30 ← خانة 1)
-     31 (OUT) = اتاكلت/خرجت نهائيًا
+   اللوحة: 24 خانة بس. كل لاعب بيعدّ خاناته من ناحيته (q = 1..24):
+     q=1   = خانة البداية (الستاك: 15 قشاطة)
+     q=24  = آخر خانة في مساره
+     19..24 = الـHOME (آخر ربع) — جوه اللوحة نفسها مش بره
+   خانة الأبيض k هي نفسها خانة الأسود (25-k): الاتنين على نفس الخانات
+   ومتعاكسين. ستاك الخصم قاعد جوه الـHOME بتاعك (خانة 24) لحد ما يتحرك.
 
    الحالة: { s:[أبيض, أسود], turn:0|1 }
-   كل لاعب: { c:[عدد القشاطات في كل موضع 0..31], eaten, unlocked }
+   كل لاعب: { c:[عدد القشاطات في كل خانة 1..24], off, unlocked }
+   (off = اللي خرج من اللوحة · OUT = وجهة الإخراج)
 ========================================================= */
 (function(root){
   "use strict";
 
-  var PIECES=15, TRACK=24, OUT=31, WIN_AT=31;
-  /* لو true: ما ينفعش تاكل قشاطة غير لما كل قشاطاتك تبقى في التجميع (زي الطاولة العادية).
-     لو عايزها تتاكل في أي وقت بعد دخول أول قشاطة، خليها false. */
-  var REQUIRE_ALL_HOME=true;
+  var PIECES=15, TRACK=24, OUT=25, WIN_AT=31;
+  var HOME_START=19;      /* أول خانة في الـHOME (آخر ربع) */
+  var UNLOCK_AT=19;       /* القشاطة الأولى لازم توصل الـHOME (18 خطوة) عشان الباقي يتفتح */
 
   function newSide(){
-    var c=[];for(var i=0;i<=OUT;i++)c.push(0);
-    c[1]=PIECES;     /* كل القشاط متجمعة على أول خانة، والعدّ بيبدأ من التانية (نرد 1 ← خانة 2) */
-    return {c:c,eaten:0,unlocked:false};
+    var c=[];for(var i=0;i<=TRACK;i++)c.push(0);
+    c[1]=PIECES;
+    return {c:c,off:0,unlocked:false};
   }
   function newGame(){return {s:[newSide(),newSide()],turn:0};}
-  function cloneSide(x){return {c:x.c.slice(),eaten:x.eaten,unlocked:x.unlocked};}
+  function cloneSide(x){return {c:x.c.slice(),off:x.off,unlocked:x.unlocked};}
   function clone(g){return {s:[cloneSide(g.s[0]),cloneSide(g.s[1])],turn:g.turn};}
 
-  function allHome(side){
-    for(var i=1;i<=TRACK;i++)if(side.c[i]>0)return false;
+  /* الإخراج مسموح بس لما كل القشاطات اللي لسه على اللوحة تبقى في الـHOME */
+  function canBearOff(side){
+    for(var i=1;i<HOME_START;i++)if(side.c[i]>0)return false;
     return true;
   }
-  function onTrack(side){var n=0;for(var i=1;i<=TRACK;i++)n+=side.c[i];return n;}
-  function inHome(side){var n=0;for(var i=25;i<=30;i++)n+=side.c[i];return n;}
+  /* مفيش قشاطة ورا q جوه الـHOME (أبعد عن الخروج) */
+  function noHigher(side,q){
+    for(var j=HOME_START;j<q;j++)if(side.c[j]>0)return false;
+    return true;
+  }
+  function inHome(side){var n=0;for(var i=HOME_START;i<=TRACK;i++)n+=side.c[i];return n;}
+  function onBoard(side){var n=0;for(var i=1;i<=TRACK;i++)n+=side.c[i];return n;}
+
+  /* الستاك مقفول لو القشاطة الأولى لسه ما فتحتش، وفيه قشاطة تانية بره الستاك */
+  function stackLocked(side){
+    return !side.unlocked && (onBoard(side)-side.c[1])>0;
+  }
+  /* الخانة q (بإحداثياتي) فاضية من قشاط الخصم؟ */
+  function canLand(g,who,q){
+    return q>=1&&q<=TRACK&&g.s[1-who].c[25-q]===0;
+  }
 
   function die(rng){return 1+Math.floor((rng||Math.random)()*6);}
   function rollDice(rng){
@@ -44,99 +60,117 @@
 
   /* كل الحركات القانونية بنرد واحد */
   function legalMoves(g,who,d){
-    var me=g.s[who],op=g.s[1-who],c=me.c,res=[],i,q,t;
-    var home=REQUIRE_ALL_HOME?allHome(me):true;
-
-    /* قبل فتح القشاطات: قشاطة واحدة بس تتحرك */
-    var only=-1;
-    if(!me.unlocked){
-      for(i=2;i<=TRACK;i++)if(c[i]>0)only=i;   /* القشاطة اللي خرجت من التجميعة */
-      if(only<0)only=1;                        /* لسه كلهم على أول خانة: واحدة بس تطلع */
-    }
-
-    /* أعلى خانة تجميع فيها قشاطة (أصغر q) */
-    var hi=-1;
-    for(i=25;i<=30;i++)if(c[i]>0){hi=i;break;}
-
-    for(q=1;q<=30;q++){
+    var me=g.s[who],c=me.c,res=[],q,t;
+    var locked=stackLocked(me),bear=canBearOff(me);
+    for(q=1;q<=TRACK;q++){
       if(!c[q])continue;
-      if(only>=0&&q!==only)continue;
+      if(q===1&&locked)continue;
+      t=q+d;
+      if(t<=TRACK){
+        if(canLand(g,who,t))res.push({from:q,to:t,die:d});
+      }else if(bear){
+        var dist=TRACK+1-q;
+        if(d===dist||(d>dist&&noHigher(me,q)))res.push({from:q,to:OUT,die:d});
+      }
+    }
+    return res;
+  }
 
-      if(q<=TRACK){
-        t=q+d;
-        if(t<=TRACK&&op.c[25-t]>0)continue;        /* حاجز: قشاطة الخصم في نفس الخانة الفعلية */
-        res.push({from:q,to:t,die:d});            /* t>24 ← دخول التجميع */
-      }else{
-        var slot=31-q;
-        if(slot>d){
-          if(home&&c[31-d]>0)continue;            /* أولوية رقم النرد: القشاطة اللي على الرقم بتتاكل الأول */
-          res.push({from:q,to:q+d,die:d});
-        }else if(slot===d){
-          if(home)res.push({from:q,to:OUT,die:d});
-        }else{
-          if(home&&q===hi)res.push({from:q,to:OUT,die:d});   /* النرد أكبر من أعلى خانة: بتتاكل الأعلى */
+  /* حركة مدموجة: النردين مع بعض على نفس القشاطة (مش في الدبل) —
+     لازم الخانة الأخيرة تكون مفتوحة، ولازم واحدة من الخانتين اللي في النص مفتوحة */
+  function combinedMoves(g,who,a,b){
+    var me=g.s[who],c=me.c,res=[],q,t,S=a+b;
+    var locked=stackLocked(me),bear=canBearOff(me);
+    for(q=1;q<=TRACK;q++){
+      if(!c[q])continue;
+      if(q===1&&locked)continue;
+      var m1=q+a,m2=q+b;
+      var mid=(m1<=TRACK&&canLand(g,who,m1))||(m2<=TRACK&&canLand(g,who,m2));
+      if(!mid)continue;
+      t=q+S;
+      if(t<=TRACK){
+        if(canLand(g,who,t))res.push({from:q,to:t,die:S,combined:true,die1:a,die2:b});
+      }else if(bear){
+        var dist=TRACK+1-q;
+        if(S===dist||(S>dist&&noHigher(me,q))){
+          /* لو نرد واحد لوحده كان يخرجها، مفيش داعي تحرق النردين */
+          var single=(a===dist||(a>dist&&noHigher(me,q)))||(b===dist||(b>dist&&noHigher(me,q)));
+          if(!single)res.push({from:q,to:OUT,die:S,combined:true,die1:a,die2:b});
         }
       }
     }
     return res;
   }
 
-  function movesFor(g,who,dice){
-    var seen={},res=[];
-    for(var i=0;i<dice.length;i++){
-      var d=dice[i];
-      if(seen[d])continue;seen[d]=1;
-      var m=legalMoves(g,who,d);
-      for(var j=0;j<m.length;j++)res.push(m[j]);
+  /* النردين اللي حركة بتستهلكهم */
+  function diceOf(m){return m.combined?[m.die1,m.die2]:[m.die];}
+
+  /* كل الحركات المتاحة بالنرد المتبقي (rem): فردي + مدموج (لو النردين لسه متاخدوش ومختلفين) */
+  function movesFor(g,who,rem){
+    var seen={},res=[],i,j,ds=[];
+    for(i=0;i<rem.length;i++)if(!seen[rem[i]]){seen[rem[i]]=1;ds.push(rem[i]);}
+    ds.sort(function(x,y){return x-y;});
+    for(i=0;i<ds.length;i++){
+      var m=legalMoves(g,who,ds[i]);
+      for(j=0;j<m.length;j++)res.push(m[j]);
+    }
+    if(rem.length===2&&rem[0]!==rem[1]){
+      var cm=combinedMoves(g,who,rem[0],rem[1]);
+      for(j=0;j<cm.length;j++)res.push(cm[j]);
     }
     return res;
   }
-  function hasMove(g,who,dice){return movesFor(g,who,dice).length>0;}
+  function hasMove(g,who,rem){return movesFor(g,who,rem).length>0;}
 
   function applyMove(g,who,m){
     var me=g.s[who];
     me.c[m.from]--;
-    if(m.to===OUT)me.eaten++;
-    else{me.c[m.to]++;if(m.to>=25)me.unlocked=true;}
+    if(m.to===OUT)me.off++;
+    else{
+      me.c[m.to]++;
+      if(m.to>=UNLOCK_AT)me.unlocked=true;
+    }
     return g;
   }
   function winner(g){
-    if(g.s[0].eaten>=PIECES)return 0;
-    if(g.s[1].eaten>=PIECES)return 1;
+    if(g.s[0].off>=PIECES)return 0;
+    if(g.s[1].off>=PIECES)return 1;
     return -1;
   }
-  /* نقاط الجيم = 15 - اللي الخصم أكلهم */
-  function gamePoints(g,w){return PIECES-g.s[1-w].eaten;}
+  /* نقاط الجيم = 15 - اللي الخصم أخرجه */
+  function gamePoints(g,w){return PIECES-g.s[1-w].off;}
 
   function removeDie(list,d){
     var r=list.slice(),i=r.indexOf(d);
     if(i>-1)r.splice(i,1);
     return r;
   }
+  /* شيل من النرد المتبقي اللي حركة استهلكته */
+  function consume(list,m){
+    var r=list,ds=diceOf(m);
+    for(var i=0;i<ds.length;i++)r=removeDie(r,ds[i]);
+    return r;
+  }
 
-  function key(g){return g.s[0].c.join(",")+"|"+g.s[1].c.join(",")+"|"+g.s[0].eaten+","+g.s[1].eaten+"|"+(g.s[0].unlocked?1:0)+(g.s[1].unlocked?1:0);}
+  function key(g){return g.s[0].c.join(",")+"|"+g.s[1].c.join(",")+"|"+g.s[0].off+","+g.s[1].off+"|"+(g.s[0].unlocked?1:0)+(g.s[1].unlocked?1:0);}
 
   /* كل الأدوار الممكنة: [{g,moves}] — بتتستخدم في الكمبيوتر */
   function enumerateTurns(g0,who,dice){
     var out=[],seen={},cap=4000;
     (function rec(g,rem,moves){
       if(out.length>=cap)return;
-      if(winner(g)>-1||!rem.length||!hasMove(g,who,rem)){
+      var ms=(winner(g)>-1||!rem.length)?[]:movesFor(g,who,rem);
+      if(!ms.length){
         var k=key(g);
         if(!seen[k]){seen[k]=1;out.push({g:g,moves:moves});}
         return;
       }
-      var tried={};
-      for(var i=0;i<rem.length;i++){
-        var d=rem[i];
-        if(tried[d])continue;tried[d]=1;
-        var ms=legalMoves(g,who,d);
-        for(var j=0;j<ms.length;j++){
-          var g2=applyMove(clone(g),who,ms[j]);
-          var vk=key(g2)+"#"+removeDie(rem,d).join("");
-          if(seen[vk])continue;seen[vk]=1;
-          rec(g2,removeDie(rem,d),moves.concat([ms[j]]));
-        }
+      for(var j=0;j<ms.length;j++){
+        var g2=applyMove(clone(g),who,ms[j]);
+        var r2=consume(rem,ms[j]);
+        var vk=key(g2)+"#"+r2.join("");
+        if(seen[vk])continue;seen[vk]=1;
+        rec(g2,r2,moves.concat([ms[j]]));
       }
     })(g0,dice.slice(),[]);
     return out;
@@ -145,7 +179,7 @@
   /* ---------- تقييم للكمبيوتر ---------- */
   function pips(side){
     var s=0;
-    for(var q=1;q<=30;q++)s+=side.c[q]*(31-q);
+    for(var q=1;q<=TRACK;q++)s+=side.c[q]*(TRACK+1-q);
     return s;
   }
   function blockScore(me,op){
@@ -157,19 +191,19 @@
         run++;
         if(run>best){best=run;bestStart=start;}
         var tgt=25-t,behind=0;
-        for(o=Math.max(0,tgt-6);o<tgt;o++)if(op.c[o]>0)behind++;
+        for(o=Math.max(1,tgt-6);o<tgt;o++)if(op.c[o]>0)behind++;
         sc+=behind;
       }else run=0;
     }
     var low=25-(bestStart+best-1),behindRun=0;
-    for(o=Math.max(0,low-6);o<low;o++)if(op.c[o]>0)behindRun++;
+    for(o=Math.max(1,low-6);o<low;o++)if(op.c[o]>0)behindRun++;
     return {spread:sc,run:best,runThreat:behindRun};
   }
   function evaluate(g,who){
     var me=g.s[who],op=g.s[1-who];
     var b=blockScore(me,op);
     var v=(pips(op)-pips(me));
-    v+=7*(me.eaten-op.eaten);
+    v+=7*(me.off-op.off);
     v+=2.2*b.spread;
     if(b.run>=3&&b.runThreat>0)v+=b.run*b.run*1.6;
     if(me.unlocked)v+=6;
@@ -177,12 +211,13 @@
   }
 
   root.TawlaEngine={
-    PIECES:PIECES,TRACK:TRACK,OUT:OUT,WIN_AT:WIN_AT,
+    PIECES:PIECES,TRACK:TRACK,OUT:OUT,WIN_AT:WIN_AT,HOME_START:HOME_START,UNLOCK_AT:UNLOCK_AT,
     newGame:newGame,clone:clone,rollDice:rollDice,
-    legalMoves:legalMoves,movesFor:movesFor,hasMove:hasMove,applyMove:applyMove,
+    legalMoves:legalMoves,combinedMoves:combinedMoves,movesFor:movesFor,hasMove:hasMove,
+    applyMove:applyMove,diceOf:diceOf,consume:consume,
     winner:winner,gamePoints:gamePoints,removeDie:removeDie,
     enumerateTurns:enumerateTurns,evaluate:evaluate,
-    allHome:allHome,onTrack:onTrack,inHome:inHome,pips:pips
+    canBearOff:canBearOff,stackLocked:stackLocked,onBoard:onBoard,inHome:inHome,pips:pips
   };
   if(typeof module!=="undefined"&&module.exports)module.exports=root.TawlaEngine;
 })(typeof window!=="undefined"?window:globalThis);

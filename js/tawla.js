@@ -2,7 +2,7 @@
    TAWLA — واجهة اللعب (أوفلاين على جهاز واحد).
    لاعبين اتنين، أو ضد الكمبيوتر (سهل / متوسط / صعب).
    القواعد كلها في js/tawla-engine.js — هنا عرض وتحكم بس.
-   اللعب أونلاين مرحلة جاية: الحالة (g) متفصلة عن الواجهة عشان كده.
+   المرجع: قواعد ملف ساهر. اللعب أونلاين مرحلة جاية: الحالة (g) متفصلة عن الواجهة عشان كده.
 ========================================================= */
 
 (function(){
@@ -13,7 +13,7 @@
 
   const KEY="tawlaSettings";
   const W=0,B=1;           // 0 = الأبيض (تحت) · 1 = الأسود (فوق)
-  const OUT=E.OUT;
+  const OUT=E.OUT;         // 25 = وجهة الإخراج
 
   const S={
     view:0,                // مين اللي اللوحة معروضة من ناحيته (0 أبيض / 1 أسود). الأونلاين هيستخدمها.
@@ -22,7 +22,7 @@
     diff:"mid",            // easy | mid | hard
     nameW:"",nameB:"",
     g:null,turn:W,
-    pts:[0,0],game:1,hist:[],
+    pts:[0,0],game:1,hist:[],last:null,   // last = كاسب الجيم اللي فات (هو اللي يبدأ اللي بعده)
     dice:[],shown:null,    // dice = اللي لسه متاح · shown = [a,b] المعروض
     phase:"idle",          // idle | start | roll | move | cpu | over
     sel:null,
@@ -78,23 +78,15 @@
     E.movesFor(S.g,S.turn,S.dice).forEach(m=>{set[m.from]=1;});
     return set;
   }
-  /* كل الأماكن اللي القشاطة المختارة توصلها بنرد واحد أو أكتر (مجموع الأرقام)،
-     بشرط إن كل خانة في الطريق تكون مفتوحة. القيمة = تسلسل الحركات. */
+  /* الأماكن اللي القشاطة المختارة توصلها: نرد فردي، أو النردين مع بعض (مدموج) لو الطريق مفتوح.
+     القيمة = [الحركة]. لو أكتر من نرد يوصل لنفس المكان (الإخراج) بناخد الأصغر الأول. */
   function dests(){
     const map={};
     if(S.phase!=="move"||isCpu(S.turn)||S.sel===null)return map;
-    const me=S.turn;
-    (function rec(g,pos,rem,seq){
-      const ds=[...new Set(rem)].sort((a,b)=>a-b);
-      ds.forEach(d=>{
-        E.legalMoves(g,me,d).forEach(m=>{
-          if(m.from!==pos)return;
-          const s2=seq.concat([m]);
-          if(!map[m.to]||map[m.to].length>s2.length)map[m.to]=s2;
-          if(m.to!==OUT)rec(E.applyMove(E.clone(g),me,m),m.to,E.removeDie(rem,d),s2);
-        });
-      });
-    })(S.g,S.sel,S.dice,[]);
+    E.movesFor(S.g,S.turn,S.dice).forEach(m=>{
+      if(m.from!==S.sel)return;
+      if(map[m.to]===undefined)map[m.to]=[m];
+    });
     return map;
   }
 
@@ -115,26 +107,16 @@
   const TRI_TOP='<svg class="tw-tri" viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 10,0 5,100" vector-effect="non-scaling-stroke"/></svg>';
   const TRI_BOT='<svg class="tw-tri" viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="5,0 10,100 0,100" vector-effect="non-scaling-stroke"/></svg>';
 
-  function slotHTML(p,slot,src,dst){
-    const q=31-slot,n=S.g.s[p].c[q];
-    const mine=S.turn===p&&S.phase==="move"&&!isCpu(p);
-    const cls=["tw-slot"];
-    if(mine&&src[q]&&S.sel!==q)cls.push("can");
-    if(mine&&S.sel===q)cls.push("sel");
-    if(mine&&dst[q]!==undefined)cls.push("dest");
-    return '<div class="'+cls.join(" ")+'" data-q="'+q+'" data-side="'+p+'">'+
-      (n>0?'<span class="tw-pc '+(p===W?"w":"b")+(S.sel===q&&mine?" sel":"")+'">'+(n>1?'<em>'+n+'</em>':"")+'</span>':"")+'</div>';
-  }
-  /* التجميع بره اللوحة: نص لكل لاعب، الخانات 6..1 بترتيب المسار */
-  function trayHTML(src,dst){
+  /* الخارج بره اللوحة: نص لكل لاعب جنب الـHOME بتاعه (الأبيض فوق، الأسود تحت لما اللوحة من ناحية الأبيض) */
+  function trayHTML(dst){
     const topP=S.view===W?W:B,botP=1-topP;
-    const half=(p,order)=>{
+    const half=p=>{
+      const n=S.g.s[p].off;
       const mine=S.turn===p&&S.phase==="move"&&!isCpu(p);
-      let h="";
-      order.forEach(slot=>{h+=slotHTML(p,slot,src,dst);});
-      return '<div class="tw-tray-half'+(mine&&dst[OUT]!==undefined?" dest":"")+'" data-out="1" data-side="'+p+'">'+h+'</div>';
+      return '<div class="tw-tray-half'+(mine&&dst[OUT]!==undefined?" dest":"")+'" data-out="1" data-side="'+p+'">'+
+        (n>0?'<div class="tw-slot"><span class="tw-pc '+(p===W?"w":"b")+'"><em>'+n+'</em></span></div>':"")+'</div>';
     };
-    return half(topP,[6,5,4,3,2,1])+half(botP,[1,2,3,4,5,6]);
+    return half(topP)+half(botP);
   }
 
   function renderBoard(src,dst){
@@ -164,7 +146,7 @@
         '<div class="tw-mandwrap" aria-hidden="true">'+MANDALA+MANDALA+'</div>'+
         row(topSeq,true)+'<div class="tw-mid" aria-hidden="true"></div>'+row(botSeq,false)+
       '</div>';
-    $("twTray").innerHTML=trayHTML(src,dst);
+    $("twTray").innerHTML=trayHTML(dst);
     $("twWrap").classList.toggle("tray-l",S.tray==="l");
   }
 
@@ -179,7 +161,7 @@
     const outDst=mine&&dst[OUT]!==undefined;
     el.querySelector(".tw-chips").innerHTML=
       '<button type="button" class="tw-chip" tabindex="-1"><b>'+E.inHome(s)+'</b><span>في التجميع</span></button>'+
-      '<button type="button" class="tw-chip'+(outDst?" dest":"")+'" data-out="1" data-side="'+p+'"><b>'+s.eaten+'<small style="font-size:11px;opacity:.7">/15</small></b><span>اتاكلت</span></button>';
+      '<button type="button" class="tw-chip'+(outDst?" dest":"")+'" data-out="1" data-side="'+p+'"><b>'+s.off+'<small style="font-size:11px;opacity:.7">/15</small></b><span>خارج</span></button>';
   }
 
   function dieHTML(v,used,rolling,side){
@@ -238,18 +220,24 @@
 
   function startMatch(){
     clearTimers();
-    S.pts=[0,0];S.game=1;S.hist=[];
+    S.pts=[0,0];S.game=1;S.hist=[];S.last=null;
     newGame();
   }
 
+  /* أول جيم في المباراة: رمية بداية. بعد كده اللي كسب الجيم اللي فات هو اللي يبدأ. */
   function newGame(){
     clearTimers();
     S.g=E.newGame();S.sel=null;S.dice=[];S.shown=null;
-    S.phase="start";
     $("twFinal").classList.add("hidden");
-    setStatus("رمية البداية","اللي رقمه أعلى يبدأ الجيم "+S.game);
-    render();
-    openingRoll();
+    if(S.last===null){
+      S.phase="start";
+      setStatus("رمية البداية","اللي رقمه أعلى يبدأ الجيم "+S.game);
+      render();
+      openingRoll();
+    }else{
+      S.turn=S.last;
+      beginTurn();
+    }
   }
 
   function openingRoll(){
@@ -302,6 +290,8 @@
   }
   window.tawlaRoll=doRoll;
 
+  const lockNote=p=>S.g.s[p].unlocked?"":"لسه قشاطة واحدة بس تتحرك — وصّلها آخر ربع (18 خطوة) وباقي القشاط يتفتح";
+
   function afterRoll(r){
     if(!E.hasMove(S.g,S.turn,S.dice)){
       setStatus("مفيش حركة قانونية لـ"+nameOf(S.turn),"الدور بيعدّي");
@@ -310,14 +300,16 @@
       return;
     }
     const dbl=r.a===r.b;
-    setStatus("دور "+nameOf(S.turn)+(dbl?" — دبل! 4 حركات":""),isCpu(S.turn)?"الكمبيوتر بيلعب…":"");
+    setStatus("دور "+nameOf(S.turn)+(dbl?" — دبل! 4 حركات":""),isCpu(S.turn)?"الكمبيوتر بيلعب…":lockNote(S.turn));
     render();
     if(isCpu(S.turn)){S.phase="cpu";later(cpuPlay,700);}
   }
 
   function applyOne(m){
+    const was=S.g.s[S.turn].unlocked;
     E.applyMove(S.g,S.turn,m);
-    S.dice=E.removeDie(S.dice,m.die);
+    S.dice=E.consume(S.dice,m);
+    if(!was&&S.g.s[S.turn].unlocked)setStatus("اتفتح اللعب ✨","دلوقتي حرّك أي قشاطة، حتى من أول خانة");
   }
   function afterMoves(){
     S.sel=null;
@@ -335,23 +327,6 @@
     render();
   }
   function doMove(m){applyOne(m);afterMoves();}
-  /* حركة مركّبة (أكتر من نرد بنفس القشاطة): بتتنفذ خطوة خطوة */
-  function doSeq(seq){
-    if(seq.length===1){doMove(seq[0]);return;}
-    const prev=S.phase;
-    S.phase="busy";
-    let i=0;
-    const step=()=>{
-      applyOne(seq[i]);
-      S.sel=seq[i].to===OUT?null:seq[i].to;
-      i++;
-      renderDice(false);render();
-      if(i<seq.length){later(step,230);return;}
-      S.phase=prev;
-      afterMoves();
-    };
-    step();
-  }
 
   function endTurn(){
     if(S.phase==="over")return;
@@ -384,7 +359,7 @@
       S.sel=m.from;render();
       later(()=>{
         // الحركة لسه قانونية (نفس التسلسل)
-        const ok=E.legalMoves(S.g,S.turn,m.die).some(x=>x.from===m.from&&x.to===m.to);
+        const ok=E.movesFor(S.g,S.turn,S.dice).some(x=>x.from===m.from&&x.to===m.to&&x.die===m.die&&!!x.combined===!!m.combined);
         if(!ok){endTurn();return;}
         doMove(m);
         if(S.phase==="cpu"&&seq.length)later(step,520);
@@ -397,7 +372,7 @@
   function endGame(w){
     S.phase="over";
     const pts=E.gamePoints(S.g,w);
-    S.pts[w]+=pts;
+    S.pts[w]+=pts;S.last=w;
     S.hist.push({g:S.game,w:w,pts:pts});
     const done=S.pts[w]>=E.WIN_AT;
     const hist=S.hist.map(h=>'<div>جيم '+h.g+': '+nameOf(h.w)+' +'+h.pts+'</div>').join("");
@@ -405,7 +380,7 @@
     $("twFinalTitle").textContent=done?"🏆 "+nameOf(w)+" كسب المباراة":nameOf(w)+" كسب الجيم "+S.game;
     $("twFinalSub").textContent=done
       ?"وصل "+S.pts[w]+" نقطة"
-      :"+"+pts+" نقطة (15 − "+S.g.s[1-w].eaten+" اتاكلوا من الخصم)";
+      :"+"+pts+" نقطة (15 − "+S.g.s[1-w].off+" خرجوا من الخصم)";
     $("twFinalScore").textContent=S.pts[W]+" : "+S.pts[B];
     $("twHist").innerHTML=hist;
     $("twAgain").textContent=done?"مباراة جديدة":"الجيم التالي";
@@ -419,13 +394,13 @@
   /* ---------- لمس اللوحة ---------- */
   function onTap(e){
     if(S.phase!=="move"||isCpu(S.turn))return;
-    const t=e.target.closest("[data-q],[data-out],[data-ph]");
+    const t=e.target.closest("[data-out],[data-ph]");
     if(!t)return;
     if(t.dataset.side!==undefined&&+t.dataset.side!==S.turn)return;
-    const q=t.dataset.out?OUT:(t.dataset.ph?qOf(S.turn,+t.dataset.ph):+t.dataset.q);
+    const q=t.dataset.out?OUT:qOf(S.turn,+t.dataset.ph);
     const dst=dests();
     if(S.sel!==null&&dst[q]!==undefined){
-      click();doSeq(dst[q]);return;
+      click();doMove(dst[q][0]);return;
     }
     const src=sources();
     if(q!==OUT&&src[q]&&S.sel!==q){click();S.sel=q;render();return;}
