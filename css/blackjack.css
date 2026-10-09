@@ -316,3 +316,75 @@ body.mode-blackjack #toast{background:#4F9DFF!important;color:#031226!important}
 .bj-players .bj-hand{border-color:transparent;background:transparent}
 .bj-players .bj-hand.act{border-color:var(--bj-ocean);background:rgba(79,157,255,.06)}
 .bj-pz .bj-hand{min-width:170px}
+
+/* ---------- زرار التدوير + الوضع الأفقي ---------- */
+.bj-rotbtn.on{background:rgba(79,157,255,.25);border-color:var(--bj-ocean);color:#FBF9E4}
+html.bj-rot,html.bj-rot body{overflow:hidden;height:100%}
+html.bj-rot body{position:fixed;top:0;left:100vw;left:100dvw;width:100vh;width:100dvh;height:100vw;height:100dvw;transform:rotate(90deg);transform-origin:0 0;overflow:auto}
+html.bj-land .bj-app{min-height:0;padding-bottom:12px}
+html.bj-land .bj-top{padding:6px 12px}
+html.bj-land .bj-back,html.bj-land .wl-ico.sm{width:34px;height:34px}
+html.bj-land .bj-wrap{max-width:none;padding:8px 16px 0}
+html.bj-land .bj-note,html.bj-land .bj-hero{display:none}
+html.bj-land .bj-modes{grid-template-columns:1fr 1fr;margin-top:6px}
+html.bj-land .bj-felt{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);column-gap:18px;padding:10px 16px 14px;border-radius:22px}
+html.bj-land .bj-felt>.bj-status{grid-column:1/-1;margin-bottom:2px}
+html.bj-land .bj-felt>.bj-warn{grid-column:1/-1}
+html.bj-land .bj-dz{grid-column:1;padding:2px 0 0}
+html.bj-land .bj-dz .bj-cards{min-height:70px}
+html.bj-land .bj-arc{grid-column:1;margin:0}
+html.bj-land .bj-arc svg{height:26px}
+html.bj-land .bj-pz,html.bj-land .bj-players{grid-column:1;margin-top:0}
+html.bj-land .bj-felt>.bj-note{grid-column:1}
+html.bj-land .bj-msg{grid-column:2;grid-row:2;align-self:end;margin:0 0 4px}
+html.bj-land .bj-ctl{grid-column:2;grid-row:3/6;align-self:start;margin-top:0}
+html.bj-land .bj-felt .bj-card{width:46px;height:66px;margin-left:-19px}
+html.bj-land .bj-felt .bj-card:first-child{margin-left:0}
+html.bj-land .bj-felt .bj-card .rk{font-size:15px}
+html.bj-land .bj-felt .bj-card .st{width:20px;height:20px}
+html.bj-land .bj-felt .bj-card .st2{width:10px;height:10px;top:20px}
+html.bj-land .bj-players{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
+html.bj-land .bj-players:not(.n1) .bj-card{width:36px;height:52px;margin-left:-16px}
+html.bj-land .bj-players:not(.n1) .bj-card:first-child{margin-left:0}
+html.bj-land .bj-players>.bj-zone:last-child:nth-child(odd):not(:only-child){grid-column:auto}
+html.bj-land .bj-btn{padding:9px 6px}
+html.bj-land .bj-acts{grid-template-columns:repeat(2,1fr)}
+html.bj-land .bj-bets{gap:6px}
+html.bj-land .bj-bet-show{font-size:18px}
+html.bj-land .wl-app .bj-wrap{padding-top:6px}
+
+html.bj-rot body{max-width:none!important;min-width:0!important;margin:0!important;padding:0!important;border:0!important}
+html.bj-land .bj-top{padding:4px 12px;gap:8px}
+html.bj-land .bj-back,html.bj-land .wl-ico.sm{width:32px;height:32px}
+html.bj-land .bj-wrap{padding:6px 12px 0}
+html.bj-land .bj-felt{padding:6px 14px 10px;border-radius:18px;box-shadow:var(--bj-glow),inset 0 0 0 4px rgba(4,7,12,.55),inset 0 0 0 5px rgba(79,157,255,.2)}
+html.bj-land .bj-status{margin:0 0 2px}
+html.bj-land .bj-phase{padding:2px 9px}
+html.bj-land .bj-arc{display:none}
+html.bj-land .bj-lab{margin-bottom:3px}
+html.bj-land .bj-pz .bj-lab em{display:none}
+html.bj-land .bj-dz .bj-cards{min-height:60px}
+html.bj-land .bj-felt .bj-card{width:40px;height:58px;margin-left:-17px;border-radius:6px}
+html.bj-land .bj-felt .bj-card .rk{font-size:13px;top:3px;left:4px}
+html.bj-land .bj-felt .bj-card .st{width:17px;height:17px;bottom:3px;right:3px}
+html.bj-land .bj-felt .bj-card .st2{width:9px;height:9px;top:17px;left:3px}
+html.bj-land .bj-hand{padding:4px 8px}
+html.bj-land .bj-hinfo{margin-top:3px}
+html.bj-land .bj-zone{padding:3px 0}
+html.bj-land .bj-pz .bj-hand{min-width:0}
+html.bj-land .bj-players:not(.n1) .bj-card{width:32px;height:46px;margin-left:-14px}
+html.bj-land .bj-players:not(.n1) .bj-cards{min-height:46px}
+html.bj-land .bj-ctl{gap:6px}
+html.bj-land .bj-bet-show{font-size:16px}
+html.bj-land .bj-bet-show small{font-size:9px}
+html.bj-land .bj-betin{padding:6px!important}
+html.bj-land .bj-btn.sm{padding:6px 10px}
+html.bj-land .bj-msg{font-size:13px;min-height:0}
+
+html.bj-rot{background:#04070C}
+html.bj-rot body{height:100vw!important;width:100vh!important;top:0!important;left:100vw!important;background:#04070C;transform:rotate(90deg)!important;transform-origin:0 0!important;position:fixed!important;overflow:auto!important}
+@supports (height:100dvw){html.bj-rot body{height:100dvw!important;width:100dvh!important;left:100dvw!important}}
+html.bj-rot body{min-height:0!important;max-height:none!important;box-sizing:border-box}
+html.bj-rot .app>.footer{display:none!important}
+html.bj-rot .app{min-height:0!important;padding-bottom:0!important}
+html.bj-rot #blackjack{min-height:100%}
