@@ -11,7 +11,7 @@ declare const firebase: any;
 
 namespace SHK {
   export const START_BALANCE = 10000;
-  export const POINT_RATE = 10;                 // 1 نقطة = 10 شنكلولو
+  export const POINT_RATE = 30;                 // 1 نقطة = 30 شنكلولو
   export const LOAN_LIMIT_RATIO = 0.5;          // 50% من أعلى رصيد في التاريخ
   export const LOANS_PER_MONTH = 2;
   export const LOAN_TERM_DAYS = 30;
@@ -19,7 +19,7 @@ namespace SHK {
   export const FRIEND_LOAN_MAX = 50000;
   export const MIN_LOAN = 10;
   const DAY = 86400000;
-  const MAX_CLAIM = 100000;                     // سقف أمان لأي تحويل وارد
+  const MAX_CLAIM = 1000000000;                     // سقف أمان لأي تحويل وارد
 
   export interface Wallet { i: number; b: number; h: number; ap: { [id: string]: number }; t0: number; }
   export interface TxIn { id?: string; delta: number; reason?: string; }
@@ -48,7 +48,7 @@ namespace SHK {
     if (id) w.ap[id] = now;
     const keys = Object.keys(w.ap);
     if (keys.length > 400) {
-      keys.filter(k => k !== "start").sort((a, b) => w.ap[a] - w.ap[b]).slice(0, keys.length - 300).forEach(k => { delete w.ap[k]; });
+      keys.filter(k => k !== "start" && k !== "conv30").sort((a, b) => w.ap[a] - w.ap[b]).slice(0, keys.length - 300).forEach(k => { delete w.ap[k]; });
     }
     return { w: w, status: "ok", created: created };
   }
@@ -197,7 +197,7 @@ namespace SHK {
       let first = true;
       wref.on("value", (s: any) => {
         W = s.val() || null; fire();
-        if (first) { first = false; ensure().then(() => { claimInbox(); refreshLoans(); flushPending(); resolve(); }, () => resolve()); }
+        if (first) { first = false; ensure().then(() => convertPoints()).then(() => { claimInbox(); refreshLoans(); flushPending(); resolve(); }, () => resolve()); }
       }, () => { if (first) { first = false; resolve(); } });
     });
     db.ref("inbox/" + uid).on("child_added", () => { claimInbox(); });
@@ -295,6 +295,17 @@ namespace SHK {
 
   /* ---------- النقاط ← شنكلولو (1 نقطة = 10) ---------- */
   /* بتتنادى لحظة ما اللاعب بياخد نقاط جديدة بس (مش على إجمالي النقاط القديم). refId بيمنع التكرار. */
+  export function convertPoints(): Promise<any> {
+    if (!db || !uid) return Promise.resolve();
+    return db.ref("users/" + uid + "/stats").once("value").then((s: any) => {
+      const st = s.val() || {};
+      let pts = 0;
+      Object.keys(st).forEach(k => { pts += Math.max(0, Math.floor((st[k] && st[k].pts) || 0)); });
+      const amt = pts * POINT_RATE;
+      return applyTx(amt > 0 ? { id: "conv30", delta: amt, reason: "points_conversion" } : { id: "conv30", delta: 0 });
+    }).catch(() => { });
+  }
+
   export function points(pts: number, refId: string): Promise<TxResult> {
     const amount = pointsToShk(pts);
     if (!(amount > 0)) return Promise.resolve({ ok: true });

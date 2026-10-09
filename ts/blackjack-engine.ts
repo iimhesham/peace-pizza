@@ -19,9 +19,9 @@ namespace BJE {
     DECKS: 6,
     RESHUFFLE_BELOW: 52,   // قبل أي جولة جديدة بس
     MAX_HANDS: 4,
-    MIN_BET: 10,
-    MAX_BET: 500,
-    BET_STEP: 10,
+    MIN_BET: 1,
+    MAX_BET: 1000000000,
+    BET_STEP: 1,
     INSURANCE_PAY: 2       // 2:1
   };
   export const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
@@ -205,7 +205,7 @@ namespace BJE {
       hit: !h.splitAces && !h.doubled && ev.total < 21,
       stand: true,
       double: two && !h.splitAces && !h.doubled && bal >= h.bet,   // ورقتين = محصلش Hit قبل كده
-      split: two && !h.splitAces && rankOf(h.cards[0]) === rankOf(h.cards[1]) && nHands < RULES.MAX_HANDS && bal >= h.bet,
+      split: two && !h.splitAces && cardValue(h.cards[0]) === cardValue(h.cards[1]) && nHands < RULES.MAX_HANDS && bal >= h.bet,
       surrender: two && nHands === 1 && !h.fromSplit && !h.doubled && !h.splitAces && !natural
     };
   }
