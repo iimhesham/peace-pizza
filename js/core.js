@@ -15,6 +15,7 @@ const CAREER_SCREENS=["career","career-game"];  // «الانتقالات» has 
 const LUDO_SCREENS=["ludo"];  // «لودو» طاولة خشب جوز + لوح كريمي
 const SUDOKU_SCREENS=["sudoku"];  // «سودوكو» كرز وفستق
 const TAWLA_SCREENS=["tawla"];  // «الطاولة» خشب جوز + عاج وأبنوس
+const BLACKJACK_SCREENS=["blackjack"];  // «Blackjack» ميدنايت / لؤلؤي / أوشن
 const XO_SCREENS=["xo"];  // «XO» لوح إردواز: وردي / إردواز / رملي
 const START_SCREEN="hub";
 
@@ -73,11 +74,12 @@ function show(id,opts){
   document.body.classList.toggle("mode-story",STORY_SCREENS.includes(id));
   document.body.classList.toggle("mode-career",CAREER_SCREENS.includes(id));
   document.body.classList.toggle("mode-xo",XO_SCREENS.includes(id));
+  document.body.classList.toggle("mode-blackjack",BLACKJACK_SCREENS.includes(id));
   document.body.classList.toggle("mode-ludo",LUDO_SCREENS.includes(id));
   document.body.classList.toggle("mode-tawla",TAWLA_SCREENS.includes(id));
   document.body.classList.toggle("mode-sudoku",SUDOKU_SCREENS.includes(id));
   const tc=document.querySelector('meta[name="theme-color"]');
-  if(tc){if(!tc.dataset.def)tc.dataset.def=tc.content;tc.content=CAREER_SCREENS.includes(id)?"#003566":XO_SCREENS.includes(id)?"#000000":LUDO_SCREENS.includes(id)?"#120d0a":TAWLA_SCREENS.includes(id)?"#140c08":SUDOKU_SCREENS.includes(id)?"#a60043":tc.dataset.def;}
+  if(tc){if(!tc.dataset.def)tc.dataset.def=tc.content;tc.content=BLACKJACK_SCREENS.includes(id)?"#0E141C":CAREER_SCREENS.includes(id)?"#003566":XO_SCREENS.includes(id)?"#000000":LUDO_SCREENS.includes(id)?"#120d0a":TAWLA_SCREENS.includes(id)?"#140c08":SUDOKU_SCREENS.includes(id)?"#a60043":tc.dataset.def;}
   document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id)||TRAIN_SCREENS.includes(id));
   document.body.classList.toggle("mode-flags",FLAGS_SCREENS.includes(id));
   const creditsBtn=document.getElementById("creditsToggle");

@@ -125,6 +125,7 @@ function record(R,ctx){
   if(done[key])return;done[key]=1;
   try{if(localStorage.getItem(key))return;localStorage.setItem(key,"1");}catch(x){}
   var win=R.g.winner===my,pts=PTS[R.g.ranking.indexOf(my)]||0,d=db();
+  if(pts&&window.SHK)SHK.points(pts,key);   /* 1 نقطة = 10 شنكلولو */
   d.ref("users/"+u.uid+"/stats/ludo").transaction(function(s){s=s||{pts:0,right:0,wrong:0,games:0,wins:0};s.pts+=pts;s.games+=1;if(win)s.wins+=1;return s;},function(err){
     if(err)return;
     I.syncLB(function(){if(pts)d.ref("lb/"+u.uid+"/m/"+I.mkey()).transaction(function(v){return(v||0)+pts;});});});

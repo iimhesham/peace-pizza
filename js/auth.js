@@ -115,6 +115,21 @@
   }
 
   /* ---------- تشغيل ---------- */
+  /* شنكلولو: المحفظة بتتجهز بعد تسجيل الدخول (المنحة الابتدائية مرة واحدة بس، محفوظة على السيرفر) */
+  function walletSync(u){
+    var go=function(){
+      if(!window.SHK)return;
+      if(!u){SHK.detach();return;}
+      var run=function(){SHK.attach(firebase.database(),u).then(function(){try{if(window.bjRefresh)bjRefresh();}catch(x){}});};
+      if(firebase.database)return run();
+      loadScript(SDK+"firebase-database-compat.js").then(run).catch(function(){});
+    };
+    var hook=function(){SHK.onChange(function(){try{if(window.bjRefresh)bjRefresh();}catch(x){}});};
+    if(window.SHK)return go();
+    if(window.__shkP){var n=0;(function w(){if(window.SHK){hook();go();}else if(++n<80)setTimeout(w,150);})();return;}
+    window.__shkP=1;
+    loadScript("js/shankalolo.js?v=1").then(function(){hook();go();}).catch(function(){});
+  }
   function start(){
     build();
     Promise.all([loadScript(SDK+"firebase-app-compat.js"),loadScript(SDK+"firebase-auth-compat.js")]).then(function(){
@@ -123,6 +138,7 @@
       auth.onAuthStateChanged(function(u){
         var was=user;user=u||null;render();window.ppUser=user;
         if(user){if(!was)say("Welcome "+((user.displayName||"").split(" ")[0]||"back"));pull();}
+        walletSync(user);
       });
       auth.getRedirectResult().catch(function(){});
       loadScript("js/online.js?v=13").catch(function(){});

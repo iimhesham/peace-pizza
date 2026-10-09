@@ -84,6 +84,7 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       '<div class="pp-k">'+[[t.pts,"Points"],[t.wins,"Wins"],[t.games,"Sessions"],[acc===null?"-":acc+"%","Accuracy"]].map(function(c){return'<div><label>'+c[1]+'</label><b>'+c[0]+'</b></div>';}).join("")+'</div>'+
       '<div class="pp-strip"><div><label>Rank No.</label><b>'+(ix>=0?'#'+pad(ix+1,4):'NONE')+'</b></div><div><label>Players</label><b>'+pad(R.length,4)+'</b></div><div><label>Status</label><b>'+(ix>=0?'ACTIVE':'NEW')+'</b></div></div>'+
       '</section>';
+    h+=window.SHKUI?SHKUI.mini():'';
     if(o.adm){h+=sec("Admin Tools","",'<span class="ac-tag">Admin</span>')+'<div class="ac-grid pp-adm">'+
       '<button type="button" class="ac-sq" id="acQreq" onclick="OL.queue()">'+IX("send")+'<span>Question Requests</span></button>'+
       '<button type="button" class="ac-sq" onclick="OL.users()">'+IX("users")+'<span>Users and Badges</span></button>'+

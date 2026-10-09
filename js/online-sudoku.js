@@ -112,6 +112,7 @@ function record(c,ctx){
   if(done[key])return;done[key]=1;
   try{if(localStorage.getItem(key))return;localStorage.setItem(key,"1");}catch(x){}
   var db=I.db(),win=!!(c.w&&c.w.p.uid===u.uid),pts=win?C.onlinePoints(c.diff):0;
+  if(pts&&window.SHK)SHK.points(pts,key);   /* 1 نقطة = 10 شنكلولو */
   db.ref("users/"+u.uid+"/stats/sudoku").transaction(function(s){
     s=s||{pts:0,right:0,wrong:0,games:0,wins:0};s.pts=(s.pts||0)+pts;s.games=(s.games||0)+1;if(win)s.wins=(s.wins||0)+1;return s;
   },function(err){
