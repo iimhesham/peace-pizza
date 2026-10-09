@@ -1,0 +1,152 @@
+/* =========================================================
+   Blackjack — الألوان: Midnight #122C4F · Pearl #FBF9E4 · Ocean #5B88B2
+   + Chinese Black #0E141C · Police Blue #314B6E · Rackley #607EA2 · Weldon #8197AC · Silver Pink #BDB3A3
+   الخط: Sorean Bold (عناوين وأرقام وأزرار). كله إنجليزي LTR.
+   الكلاسات كلها بتبدأ بـ bj- عشان ما تتعارضش مع أي لعبة تانية.
+========================================================= */
+@font-face{font-family:"Sorean";src:url(../fonts/Sorean-Bold.otf) format("opentype");font-weight:700;font-display:swap}
+
+:root{
+  --bj-midnight:#122C4F;--bj-pearl:#FBF9E4;--bj-noir:#000;--bj-ocean:#5B88B2;
+  --bj-chinese:#0E141C;--bj-police:#314B6E;--bj-rackley:#607EA2;--bj-weldon:#8197AC;--bj-silver:#BDB3A3;
+  --bj-red:#C2412D;--bj-good:#7FD1A0;--bj-bad:#E58A7B;
+  --bj-font:"Sorean","Trebuchet MS",Georgia,serif;
+}
+
+/* ---------- الصفحة ---------- */
+.bj-app{min-height:100vh;background:var(--bj-chinese);color:var(--bj-pearl);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 0 40px;direction:ltr;text-align:left}
+body.mode-blackjack{background:var(--bj-chinese)}
+.bj-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(14,20,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(129,151,172,.25)}
+.bj-back{width:38px;height:38px;border-radius:12px;border:1.5px solid var(--bj-rackley);background:transparent;color:var(--bj-pearl);display:grid;place-items:center;cursor:pointer;flex:none}
+.bj-back svg{width:18px;height:18px}
+.bj-title{font-family:var(--bj-font);font-size:20px;letter-spacing:.5px;flex:1}
+.bj-wal{display:flex;align-items:center;gap:6px;background:var(--bj-midnight);border:1.5px solid var(--bj-ocean);border-radius:999px;padding:5px 12px 5px 6px;font-family:var(--bj-font);font-size:15px;color:var(--bj-pearl);cursor:pointer}
+.bj-wal small{font-family:system-ui,sans-serif;font-size:10px;color:var(--bj-weldon);letter-spacing:.6px;margin-left:2px}
+.bj-coin{width:22px;height:22px;flex:none;vertical-align:middle}
+.bj-wrap{max-width:560px;margin:0 auto;padding:14px 14px 0}
+
+/* ---------- شاشة البداية ---------- */
+.bj-hero{background:var(--bj-midnight);border:2px solid var(--bj-pearl);border-radius:22px;overflow:hidden;box-shadow:6px 6px 0 var(--bj-ocean)}
+.bj-hero svg{display:block;width:100%;height:auto}
+.bj-hero text{font-family:var(--bj-font)}
+.bj-modes{display:grid;gap:12px;margin-top:20px}
+.bj-mode{display:flex;align-items:center;gap:14px;text-align:left;border:2px solid var(--bj-pearl);background:var(--bj-police);color:var(--bj-pearl);border-radius:18px;padding:14px 16px;cursor:pointer;font:inherit;box-shadow:4px 4px 0 var(--bj-noir);transition:transform .12s}
+.bj-mode:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--bj-noir)}
+.bj-mode b{display:block;font-family:var(--bj-font);font-size:19px;letter-spacing:.3px}
+.bj-mode small{display:block;color:var(--bj-silver);font-size:12.5px;line-height:1.4;margin-top:2px}
+.bj-mode i{flex:none;width:44px;height:44px;border-radius:12px;background:var(--bj-pearl);color:var(--bj-midnight);display:grid;place-items:center;font-style:normal}
+.bj-mode i svg{width:26px;height:26px}
+.bj-mode.on{background:var(--bj-ocean);color:var(--bj-noir)}
+.bj-mode.on small{color:var(--bj-midnight)}
+.bj-link{display:block;margin:16px auto 0;background:none;border:0;color:var(--bj-weldon);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
+.bj-note{margin:14px 0 0;text-align:center;color:var(--bj-weldon);font-size:12px;line-height:1.5}
+
+/* ---------- الطاولة ---------- */
+.bj-felt{background:radial-gradient(120% 90% at 50% 0%,var(--bj-police) 0%,var(--bj-midnight) 70%);border:2px solid var(--bj-pearl);border-radius:22px;padding:14px 12px 16px;box-shadow:5px 5px 0 var(--bj-noir)}
+.bj-status{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:12px;color:var(--bj-weldon)}
+.bj-phase{font-family:var(--bj-font);font-size:13px;letter-spacing:.8px;text-transform:uppercase;background:var(--bj-noir);color:var(--bj-pearl);padding:4px 10px;border-radius:999px}
+.bj-msg{min-height:20px;text-align:center;font-family:var(--bj-font);font-size:16px;margin:8px 0}
+.bj-zone{padding:8px 0}
+.bj-zone + .bj-zone{border-top:1px dashed rgba(129,151,172,.35)}
+.bj-lab{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;font-family:var(--bj-font);font-size:14px;letter-spacing:.6px;color:var(--bj-silver);text-transform:uppercase}
+.bj-lab em{font-style:normal;color:var(--bj-pearl)}
+.bj-tot{font-family:var(--bj-font);background:var(--bj-pearl);color:var(--bj-midnight);border-radius:8px;padding:1px 8px;font-size:14px}
+.bj-tot.bust{background:var(--bj-bad)}
+.bj-tot.bjk{background:var(--bj-ocean);color:var(--bj-noir)}
+.bj-hands{display:flex;flex-wrap:wrap;gap:10px}
+.bj-hand{flex:1 1 150px;min-width:130px;border:1.5px solid rgba(251,249,228,.22);border-radius:14px;padding:8px;background:rgba(14,20,28,.35);position:relative}
+.bj-hand.act{border-color:var(--bj-ocean);box-shadow:0 0 0 2px var(--bj-ocean)}
+.bj-hand.done{opacity:.92}
+.bj-cards{display:flex;min-height:72px;padding-left:2px}
+.bj-hinfo{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:12px;color:var(--bj-silver)}
+.bj-chip{display:inline-flex;align-items:center;gap:4px;font-family:var(--bj-font);font-size:13px;color:var(--bj-pearl)}
+.bj-chip .bj-coin{width:16px;height:16px}
+.bj-res{font-family:var(--bj-font);font-size:12px;letter-spacing:.5px;padding:2px 8px;border-radius:999px;background:var(--bj-pearl);color:var(--bj-midnight)}
+.bj-res.win,.bj-res.blackjack{background:var(--bj-good);color:#0b2a18}
+.bj-res.loss{background:var(--bj-bad);color:#3a120b}
+.bj-res.push,.bj-res.surrender{background:var(--bj-weldon);color:var(--bj-noir)}
+
+/* ---------- الورق ---------- */
+.bj-card{position:relative;width:46px;height:66px;margin-left:-14px;border-radius:7px;background:var(--bj-pearl);border:1.5px solid var(--bj-noir);color:var(--bj-noir);box-shadow:2px 2px 0 rgba(0,0,0,.35);font-family:var(--bj-font);flex:none;animation:bjDeal .22s ease-out both}
+.bj-card:first-child{margin-left:0}
+.bj-card.r{color:var(--bj-red)}
+.bj-card .rk{position:absolute;top:3px;left:4px;font-size:15px;line-height:1}
+.bj-card .st{position:absolute;bottom:3px;right:3px;width:20px;height:20px}
+.bj-card .st2{position:absolute;top:19px;left:3px;width:11px;height:11px}
+.bj-card.back{background:repeating-linear-gradient(45deg,var(--bj-midnight) 0 6px,var(--bj-police) 6px 12px);border-color:var(--bj-pearl)}
+.bj-card.back::after{content:"";position:absolute;inset:6px;border:1.5px solid var(--bj-pearl);border-radius:4px}
+.bj-suit{fill:currentColor}
+@keyframes bjDeal{from{opacity:0;transform:translateY(-10px) scale(.92)}to{opacity:1;transform:none}}
+
+/* ---------- التحكم ---------- */
+.bj-ctl{margin-top:12px;display:grid;gap:10px}
+.bj-bets{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.bj-btn{font-family:var(--bj-font);font-size:16px;letter-spacing:.4px;border:2px solid var(--bj-pearl);background:var(--bj-pearl);color:var(--bj-midnight);border-radius:14px;padding:11px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--bj-noir);min-width:84px}
+.bj-btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--bj-noir)}
+.bj-btn:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+.bj-btn.pri{background:var(--bj-ocean);border-color:var(--bj-pearl);color:var(--bj-noir)}
+.bj-btn.dim{background:transparent;color:var(--bj-pearl);border-color:var(--bj-rackley)}
+.bj-btn.sm{padding:7px 12px;font-size:14px;min-width:0}
+.bj-acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bj-acts .bj-btn{min-width:0;padding:12px 6px}
+.bj-bet-show{text-align:center;font-family:var(--bj-font);font-size:22px}
+.bj-bet-show small{display:block;font-family:system-ui,sans-serif;font-size:11px;color:var(--bj-weldon);letter-spacing:.5px}
+.bj-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.bj-warn{background:var(--bj-noir);border:1px dashed var(--bj-silver);color:var(--bj-silver);border-radius:12px;padding:8px 12px;font-size:12px;text-align:center;line-height:1.5}
+.bj-timer{height:5px;border-radius:3px;background:rgba(251,249,228,.15);overflow:hidden}
+.bj-timer i{display:block;height:100%;background:var(--bj-ocean);transform-origin:left;animation:bjT linear forwards}
+@keyframes bjT{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+/* ---------- كراسي الأونلاين ---------- */
+.bj-seats{display:grid;gap:8px;margin:8px 0}
+.bj-seat{display:flex;align-items:center;gap:10px;border:1.5px solid rgba(251,249,228,.25);border-radius:12px;padding:8px 10px;background:rgba(14,20,28,.4)}
+.bj-seat.me{border-color:var(--bj-ocean)}
+.bj-seat.empty{border-style:dashed;color:var(--bj-weldon)}
+.bj-seat img{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bj-pearl);object-fit:cover}
+.bj-seat b{font-family:var(--bj-font);font-weight:700;font-size:15px}
+.bj-seat small{display:block;color:var(--bj-weldon);font-size:11px}
+.bj-seat .sp{flex:1}
+.bj-badge{font-family:var(--bj-font);font-size:11px;background:var(--bj-pearl);color:var(--bj-midnight);border-radius:999px;padding:2px 8px}
+.bj-badge.d{background:var(--bj-silver)}
+
+/* ---------- المحفظة / القروض ---------- */
+.bj-card2{background:var(--bj-police);border:2px solid var(--bj-pearl);border-radius:18px;padding:14px;margin:12px 0;box-shadow:4px 4px 0 var(--bj-noir);color:var(--bj-pearl);text-align:left;direction:ltr;font-family:system-ui,sans-serif}
+.bj-card2 h3{font-family:var(--bj-font);font-size:18px;margin:0 0 8px;font-weight:700}
+.bj-big{font-family:var(--bj-font);font-size:30px;display:flex;align-items:center;gap:8px}
+.bj-big .bj-coin{width:30px;height:30px}
+.bj-kv{display:grid;grid-template-columns:1fr auto;gap:5px 12px;font-size:13px;margin-top:8px}
+.bj-kv span{color:var(--bj-silver)}
+.bj-kv b{font-family:var(--bj-font);font-weight:700;text-align:right}
+.bj-li{border-top:1px dashed rgba(251,249,228,.25);padding:10px 0;font-size:13px}
+.bj-li:first-of-type{border-top:0}
+.bj-li .l{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.bj-li .l b{font-family:var(--bj-font);font-weight:700}
+.bj-li small{display:block;color:var(--bj-silver);margin-top:2px}
+.bj-in{width:100%;box-sizing:border-box;background:var(--bj-chinese);border:1.5px solid var(--bj-rackley);color:var(--bj-pearl);border-radius:10px;padding:10px;font:inherit;font-family:var(--bj-font);font-size:16px}
+.bj-ach{display:grid;gap:6px}
+.bj-ach div{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 10px;border-radius:10px;background:rgba(14,20,28,.45);font-size:13px}
+.bj-ach div.got{background:var(--bj-ocean);color:var(--bj-noir)}
+.bj-ach b{font-family:var(--bj-font);font-weight:700;font-size:14px}
+.bj-ach small{opacity:.85}
+.bj-rules{line-height:1.6;font-size:13.5px;color:var(--bj-pearl)}
+.bj-rules h4{font-family:var(--bj-font);font-weight:700;font-size:15px;margin:12px 0 4px;color:var(--bj-ocean)}
+.bj-rules ul{margin:0;padding-left:18px}
+
+/* داخل نافذة الأونلاين (overlay) */
+.ol-c .bj-app{min-height:0;background:transparent;padding:0}
+.ol-c .bj-wrap{padding:6px 0 0}
+
+/* ---------- كارت اللعبة في الصفحة الرئيسية ---------- */
+.hx-bj{--c:#FBF9E4;--ac:91,136,178;--b1:#314B6E;--b2:#0E141C;--rad:22px}
+.hx-bj .hx-en{color:#5B88B2;opacity:1;letter-spacing:.14em}
+.hx-bj .hx-ar{font-family:"Sorean","Trebuchet MS",serif;font-weight:700;font-size:24px;color:#FBF9E4;direction:ltr}
+.hx-bj .hx-desc{color:#BDB3A3;opacity:1;direction:ltr;text-align:left}
+.hx-bj .hx-body{background:rgba(0,0,0,.28)}
+.dx .hm-fc-bj{background:linear-gradient(160deg,#314B6E,#0E141C);border:1px solid rgba(91,136,178,.6);color:#FBF9E4}
+.dx .hm-fc-bj .hm-fc-tag{color:#5B88B2;opacity:1}
+.dx .hm-fc-bj .hm-fc-cap b{color:#FBF9E4;font-family:"Sorean","Trebuchet MS",serif}
+
+/* ---------- نافذة الأونلاين بألوان البلاك جاك ---------- */
+#olRoot[data-g="blackjack"]{--bg:#0E141C;--bgr:14,20,28;--bg0:#0a0f15;--wash:radial-gradient(ellipse at 50% -8%,rgba(49,75,110,.7),transparent 62%);--card:#122C4F;--cardr:18,44,79;--card2:#314B6E;--h1:#314B6E;--h2:#122C4F;--ln:rgba(129,151,172,.35);--ln2:rgba(129,151,172,.55);--mu:#8197AC;--mu2:#607EA2;--ink:#FBF9E4;--ink2:#FBF9E4;--ac:#5B88B2;--acr:91,136,178;--acl:rgba(91,136,178,.5);--on:#000;--gr:#BDB3A3;--gon:#000}
+body.mode-blackjack #toast{background:#5B88B2!important;color:#000!important}
+body.mode-blackjack .moon,body.mode-blackjack .fog{display:none}
