@@ -47,8 +47,8 @@ t("25 no double after hit",()=>{const r=start(["2S","9H","3D","8C","2H","2D"]);B
 t("26 double after split works",()=>{const r=start(["8S","9H","8D","7C","3H","2D"]);B.act(r,0,"split");ok(B.legal(r,0).double);});
 /* --- split --- */
 t("27 split requires same rank",()=>{ok(B.legal(start(["KS","9H","KD","8C"]),0).split);});
-t("28 K+Q cannot split",()=>{ok(!B.legal(start(["KS","9H","QD","8C"]),0).split);});
-t("29 10+J cannot split",()=>{ok(!B.legal(start(["10S","9H","JD","8C"]),0).split);});
+t("28 K+Q can split (same value)",()=>{ok(B.legal(start(["KS","9H","QD","8C"]),0).split);});
+t("29 10+J can split (same value)",()=>{ok(B.legal(start(["10S","9H","JD","8C"]),0).split);});
 t("30 split max 4 hands",()=>{const r=start(["8S","5H","8D","6C","8H","8D","8C","8S","8H","8D","8C"]);B.act(r,0,"split");B.act(r,0,"split");B.act(r,0,"split");eq(r.seats[0].hands.length,4);ok(!B.legal(r,0).split);});
 t("31 split aces: one card only, no hit/double",()=>{const r=start(["AS","9H","AD","8C","10H","5D"]);B.act(r,0,"split");const hs=r.seats[0].hands;eq(hs.map(h=>h.cards.length),[2,2]);ok(hs.every(h=>h.done));});
 t("32 split aces auto stand → dealer turn",()=>{const r=start(["AS","9H","AD","8C","10H","5D"]);B.act(r,0,"split");eq(r.phase,"DEALER_TURN");});
@@ -105,7 +105,7 @@ t("65/66 dealer plays by the same rules for both dealer types",()=>{
 });
 t("initial deal order: P, D up, P, D hole",()=>{const r=B.startRound({id:"d",shoe:B.rig(["2S","3H","4D","5C"]),entrants:[{id:"a",bet:100}]});eq(r.seats[0].hands[0].cards,["2S","4D"]);eq(r.dealer,["3H","5C"]);});
 t("multi-seat deal order",()=>{const r=B.startRound({id:"d",shoe:B.rig(["2S","3S","4H","5D","6C","7C"]),entrants:[{id:"a",bet:100},{id:"b",bet:100}]});eq(r.seats[0].hands[0].cards,["2S","5D"]);eq(r.seats[1].hands[0].cards,["3S","6C"]);eq(r.dealer,["4H","7C"]);});
-t("bets validated",()=>{ok(!B.validBet(5));ok(!B.validBet(0));ok(!B.validBet(-10));ok(!B.validBet(15));ok(!B.validBet(510));ok(!B.validBet(10.5));ok(B.validBet(10));ok(B.validBet(500));});
+t("bets validated",()=>{ok(!B.validBet(0));ok(!B.validBet(-10));ok(!B.validBet(10.5));ok(B.validBet(1));ok(B.validBet(15));ok(B.validBet(10));ok(B.validBet(5000));});
 t("turn order: hand 1 before hand 2, seat 1 before seat 2",()=>{const r=B.startRound({id:"x",shoe:B.rig(["8S","9H","10D","8D","7C","5C","2H","2D","4C"]),entrants:[{id:"a",bet:100},{id:"b",bet:100}]});eq(r.turn,{s:0,h:0});B.act(r,0,"split");eq(r.turn,{s:0,h:0});B.act(r,0,"stand");eq(r.turn,{s:0,h:1});B.act(r,0,"stand");eq(r.turn,{s:1,h:0});});
 t("seat can't act out of turn",()=>{const r=B.startRound({id:"x",shoe:B.rig(["8S","9H","10D","5C","8H","7C"]),entrants:[{id:"a",bet:100},{id:"b",bet:100}]});ok(!B.act(r,1,"hit").ok);});
 

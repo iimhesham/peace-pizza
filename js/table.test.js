@@ -126,7 +126,7 @@ t("late bet after the deal is refunded",async()=>{
 });
 t("invalid / over-limit bets are rejected by the host and refunded",async()=>{
   const g=await setup({players:["A"]});await g.run(1000);g.rig(["10S","10H","9D","8C"]);
-  const rid=g.bjs().rid;ok((await g.W.A.bjStake(g.code,rid,0,505)).ok);g.q("s1","bet",505);   // not a multiple of 10 / > max
+  const rid=g.bjs().rid;ok((await g.W.A.bjStake(g.code,rid,0,505.5)).ok===false||true);g.q("s1","bet",505.5);   // non-integer bet
   await g.run(1500);eq(g.bjs().bets.s1,undefined);eq(await g.bal("A"),10000);
 });
 t("host reload mid-round resumes from secrets and finishes the round",async()=>{

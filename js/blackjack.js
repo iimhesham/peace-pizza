@@ -28,6 +28,9 @@ function sprite(){
 }
 var COIN='<svg class="bj-coin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#C9A24B"/><circle cx="12" cy="12" r="8.6" fill="#0E7A52" stroke="#8A6A22" stroke-width="1"/><path d="M15.6 8.6H10.2Q8.6 8.6 8.6 10.2V11.2Q8.6 12.6 10.2 12.6H13.8Q15.4 12.6 15.4 14V14.8Q15.4 16.4 13.8 16.4H8.4" fill="none" stroke="#F6E3A1" stroke-width="2" stroke-linejoin="round"/></svg>';
 
+var COIN_V=COIN.replace("#0E7A52","#5B3DB8").replace("#C9A24B","#CDB8FF").replace("#8A6A22","#2E1A73").replace("#F6E3A1","#F3EBFF");
+var COIN_R=COIN.replace("#0E7A52","#B3261E").replace("#C9A24B","#FFD36B").replace("#8A6A22","#5A0F0A").replace("#F6E3A1","#FFF1C2");
+function coin(n){n=Number(n)||0;return n>=1000000?COIN_R:n>=100000?COIN_V:COIN;}
 function cardHtml(c,small){
   if(!c)return'<div class="bj-card back"></div>';
   var r=E.rankOf(c),s=E.suitOf(c),red=(s==="H"||s==="D");
@@ -47,13 +50,17 @@ function resTag(r){
 function handHtml(h,o){
   o=o||{};
   return'<div class="bj-hand'+(o.active?" act":"")+(h.done?" done":"")+'"><div class="bj-cards">'+h.cards.map(function(c){return cardHtml(c);}).join("")+'</div>'+
-    '<div class="bj-hinfo">'+totTag(h.label,h.total,h.bust,h.natural)+'<span class="bj-chip">'+COIN+fmt(h.bet)+'</span>'+(h.doubled?'<span class="bj-res">DOUBLED</span>':"")+(h.splitAces?'<span class="bj-res">ACES</span>':"")+resTag(o.res)+'</div></div>';
+    '<div class="bj-hinfo">'+totTag(h.label,h.total,h.bust,h.natural)+'<span class="bj-chip">'+coin(h.bet)+fmt(h.bet)+'</span>'+(h.doubled?'<span class="bj-res">DOUBLED</span>':"")+(h.splitAces?'<span class="bj-res">ACES</span>':"")+resTag(o.res)+'</div></div>';
 }
+var flipDone=false;
 function dealerHtml(p){
-  var cards=p.dealer.map(function(c){return cardHtml(c);}).join("");
+  var doFlip=false;
+  if(!p.holeShown)flipDone=false;else if(!flipDone&&p.dealer.length>=2){flipDone=true;doFlip=true;}
+  var cards=p.dealer.map(function(c,i){var h=cardHtml(c);return(doFlip&&i===1)?h.replace('class="bj-card','class="bj-card flip'):h;}).join("");
   var tot="";
   if(p.holeShown)tot=totTag(p.dealerLabel,p.dealerTotal,p.dealerTotal>21,p.dealer.length===2&&p.dealerTotal===21);
   else if(p.dealer[0]){var v=E.cardValue(E.rankOf(p.dealer[0]));tot='<span class="bj-tot">'+(v===11?"A":v)+' + ?</span>';}
+  if(doFlip)tot=tot.replace('class="bj-tot','class="bj-tot pop');
   return'<div class="bj-zone"><div class="bj-lab"><span>Dealer</span>'+tot+'</div><div class="bj-cards">'+cards+'</div></div>';
 }
 function phaseName(p){
@@ -61,8 +68,9 @@ function phaseName(p){
 }
 function betChips(cur,max,fn){
   var h='<div class="bj-bets">';
-  [10,50,100,500].forEach(function(v){h+='<button type="button" class="bj-btn sm" '+(cur+v>max?"disabled ":"")+'onclick="'+fn+'('+(cur+v)+')">+'+v+'</button>';});
+  [10,100,1000,10000].forEach(function(v){h+='<button type="button" class="bj-btn sm" '+(cur+v>max?"disabled ":"")+'onclick="'+fn+'('+(cur+v)+')">+'+fmt(v)+'</button>';});
   h+='<button type="button" class="bj-btn sm dim" onclick="'+fn+'('+E.RULES.MIN_BET+')">Min</button><button type="button" class="bj-btn sm dim" onclick="'+fn+'('+max+')">Max</button></div>';
+  h+='<div class="bj-row"><input class="bj-in bj-betin" inputmode="numeric" autocomplete="off" placeholder="Type any amount" value="" onchange="var v=parseInt(this.value.replace(/[^0-9]/g,\'\'),10);'+fn+'(isNaN(v)?'+E.RULES.MIN_BET+':v)"></div>';
   return h;
 }
 function heroSvg(){
@@ -88,7 +96,7 @@ function heroSvg(){
     '<text x="200" y="312" font-size="10" text-anchor="middle" fill="#8197AC"> </text>'+chk+'</svg>';
 }
 
-window.BJUI={esc:esc,fmt:fmt,COIN:COIN,sprite:sprite,card:cardHtml,hand:handHtml,dealer:dealerHtml,phase:phaseName,res:resTag,tot:totTag,betChips:betChips,hero:heroSvg,click:click,say:say};
+window.BJUI={esc:esc,fmt:fmt,COIN:COIN,coin:coin,sprite:sprite,card:cardHtml,hand:handHtml,dealer:dealerHtml,phase:phaseName,res:resTag,tot:totTag,betChips:betChips,hero:heroSvg,click:click,say:say};
 
 /* =========================================================
    الأوفلاين: تمرين ضد دلر CPU برصيد تمرين منفصل
@@ -102,8 +110,8 @@ function icoBack(){return'<svg viewBox="0 0 24 24" fill="none" stroke="currentCo
 function walChip(){
   var real=window.SHK&&SHK.wallet&&SHK.wallet();
   var wb='<button type="button" class="wl-ico sm" onclick="bjWallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button>';
-  if(view==="table")return'<button type="button" class="bj-wal" onclick="bjPracticeInfo()">'+COIN+fmt(P.bank)+'<small>PRACTICE</small></button>'+wb;
-  return'<button type="button" class="bj-wal" onclick="bjWallet()">'+COIN+(real?fmt(real.b):"—")+'<small>WALLET</small></button>';
+  if(view==="table")return'<button type="button" class="bj-wal" onclick="bjPracticeInfo()">'+coin(P.bank)+fmt(P.bank)+'<small>PRACTICE</small></button>'+wb;
+  return'<button type="button" class="bj-wal" onclick="bjWallet()">'+coin(real?real.b:0)+(real?fmt(real.b):"—")+'<small>WALLET</small></button>';
 }
 var view="start";
 function shellTop(){return'<div class="bj-top"><button type="button" class="bj-back" onclick="bjBack()" aria-label="Back">'+icoBack()+'</button><div class="bj-title">Blackjack</div>'+walChip()+'</div>';}
@@ -121,15 +129,15 @@ function drawHelp(){
   var s=$("blackjack");view="help";
   s.innerHTML=shellTop()+'<div class="bj-wrap"><div class="bj-card2 bj-rules"><h3>House rules</h3>'+
   '<h4>Goal</h4><ul><li>Beat the dealer without going over 21. Aces count 1 or 11. Face cards count 10.</li><li>A Blackjack is an Ace plus a 10-value card on your first two cards. It pays 3:2.</li></ul>'+
-  '<h4>Table</h4><ul><li>6 decks (312 cards). A new shoe is shuffled before a round when fewer than 52 cards remain.</li><li>Bets: 10 to 500, in steps of 10.</li></ul>'+
+  '<h4>Table</h4><ul><li>6 decks (312 cards). A new shoe is shuffled before a round when fewer than 52 cards remain.</li><li>No bet limit: bet any amount up to your balance.</li></ul>'+
   '<h4>Dealer</h4><ul><li>Draws on 16 or less and stands on all 17s, including soft 17.</li><li>With a 10-value card or an Ace showing, the dealer checks for Blackjack first.</li></ul>'+
-  '<h4>Your options</h4><ul><li><b>Hit / Stand</b>.</li><li><b>Double</b>: double the bet, take exactly one card. Allowed after a split.</li><li><b>Split</b>: two cards of the same rank, up to 4 hands. Split Aces get one card each and cannot be resplit. A+10 after a split is a normal 21.</li><li><b>Surrender</b>: first two cards only, get half your bet back.</li><li><b>Insurance</b>: only when the dealer shows an Ace. Up to half your bet, pays 2:1.</li></ul>'+
+  '<h4>Your options</h4><ul><li><b>Hit / Stand</b>.</li><li><b>Double</b>: double the bet, take exactly one card. Allowed after a split.</li><li><b>Split</b>: two cards of the same value (any two 10-value cards like K and Q work), up to 4 hands. Split Aces get one card each and cannot be resplit. A+10 after a split is a normal 21.</li><li><b>Surrender</b>: first two cards only, get half your bet back.</li><li><b>Insurance</b>: only when the dealer shows an Ace. Up to half your bet, pays 2:1.</li></ul>'+
   '<h4>Payouts</h4><ul><li>Win 1:1 · Blackjack 3:2 · Push returns your bet.</li></ul></div>'+
   '<button type="button" class="bj-btn" style="width:100%" onclick="bjHome()">Back</button></div>';
 }
 
 /* ---------- الأوفلاين ---------- */
-function setBet(v){bet=Math.max(E.RULES.MIN_BET,Math.min(E.RULES.MAX_BET,Math.floor(v/10)*10));if(bet>P.bank)bet=Math.floor(P.bank/10)*10;draw();}
+function setBet(v){bet=Math.max(E.RULES.MIN_BET,Math.min(E.RULES.MAX_BET,Math.floor(v)));if(bet>P.bank)bet=Math.floor(P.bank);draw();}
 function drawTable(){
   var s=$("blackjack");if(!s)return;view="table";
   var pub=round?E.publicView(round):null,h="";
@@ -150,8 +158,8 @@ function controls(pub){
   var ph=round?round.phase:"BETTING";
   if(!round||ph==="SETTLEMENT"||ph==="ROUND_COMPLETE"){
     if(P.bank<E.RULES.MIN_BET)return'<div class="bj-ctl"><div class="bj-warn">You are out of practice chips.</div><button type="button" class="bj-btn pri" onclick="bjPracticeReset()">Reset practice bankroll to 10,000</button></div>';
-    var max=Math.min(E.RULES.MAX_BET,Math.floor(P.bank/10)*10);if(bet>max)bet=max;if(bet<10)bet=10;
-    return'<div class="bj-ctl"><div class="bj-bet-show">'+COIN+' '+fmt(bet)+'<small>YOUR BET (10 – 500)</small></div>'+betChips(bet,max,"bjBet")+'<button type="button" class="bj-btn pri" onclick="bjDeal()">'+(round?"Deal next hand":"Deal")+'</button></div>';
+    var max=Math.min(E.RULES.MAX_BET,Math.floor(P.bank));if(bet>max)bet=max;if(bet<E.RULES.MIN_BET)bet=E.RULES.MIN_BET;
+    return'<div class="bj-ctl"><div class="bj-bet-show">'+coin(bet)+' '+fmt(bet)+'<small>YOUR BET · NO LIMIT · BALANCE '+fmt(P.bank)+'</small></div>'+betChips(bet,max,"bjBet")+'<button type="button" class="bj-btn pri" onclick="bjDeal()">'+(round?"Deal next hand":"Deal")+'</button></div>';
   }
   if(busy||ph==="DEALER_TURN")return'<div class="bj-ctl"><div class="bj-warn">Dealer is playing...</div></div>';
   if(ph==="INSURANCE"){var mx=E.insuranceMax(round.seats[0].hands[0].bet);

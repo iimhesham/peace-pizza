@@ -32,7 +32,7 @@ var META={
   ic:"<path d='M9 4v16M15 4v16M4 9h16M4 15h16'/>"},
  ludo:{n:"Ludo",d:"Roll, race and capture. Bring all four pieces home first. Finish 1st for 10 points, 2nd for 7, 3rd for 5. The host can switch on the big board for up to 6 players.",who:"2 to 6 players. The host starts the game",
   ic:"<rect x='4' y='4' width='16' height='16' rx='3.5'/><circle cx='9' cy='9' r='.9'/><circle cx='15' cy='15' r='.9'/><circle cx='12' cy='12' r='.9'/>"},
- blackjack:{n:"Blackjack",d:"Beat the dealer to 21 with real Shankalolo. Bets 10 to 500. Blackjack pays 3:2. Double, split, surrender and insurance are all in.",who:"Up to 5 players per table. Pick a CPU dealer, or sit in the dealer seat yourself",
+ blackjack:{n:"Blackjack",d:"Beat the dealer to 21 with real Shankalolo. No bet limit. Blackjack pays 3:2. Double, split, surrender and insurance are all in.",who:"Up to 5 players per table. Pick a CPU dealer, or sit in the dealer seat yourself",
   ic:"<rect x='4' y='3' width='11' height='16' rx='2'/><path d='M9 21h8a2 2 0 0 0 2-2V8'/><path d='M9.5 9.5l1.5 2.2a1.2 1.2 0 1 1-1.8.9l.3 1.4h-1l.3-1.4a1.2 1.2 0 1 1-1.8-.9z'/>"},
  sudoku:{n:"Sudoku",d:"Race a friend on the same puzzle. The fastest solver wins points: 5 for Easy, 10 for Medium, 15 for Hard.",who:"2 players. The host picks the difficulty",
   ic:"<rect x='3' y='3' width='18' height='18' rx='2.5'/><path d='M9 3v18M15 3v18M3 9h18M3 15h18'/>"}
@@ -235,6 +235,9 @@ function bdg(id){var k=bk(id);return k?'<i class="ol-bdg t-'+k+'">&#9733; '+BD[k
 function nmu(id,name){var k=bk(id);return'<span class="ol-nm'+(k?' t-'+k:'')+'" dir="auto">'+e(name)+'</span>'+bdg(id);}
 function nm(p){return nmu(p.uid,p.name);}
 function loadB(){return db.ref("badges").once("value").then(function(s){BDG=s.val()||{};},function(){});}
+function grantCoins(id){if(!isAdmin())return;var el=document.getElementById("gc_"+id),n=el?Math.floor(Number((el.value||"").replace(/[^\d]/g,""))):0;
+  if(!(n>0)||n>1000000000){T("Enter a valid amount");return;}
+  var me=U();db.ref("inbox/"+id+"/adm_"+Date.now()+"_"+Math.floor(Math.random()*1e6)).set({a:n,r:"admin_grant",f:me.uid,t:Date.now()}).then(function(){T(n.toLocaleString("en-US")+" coins sent");if(el)el.value="";}).catch(function(){T("No permission. Publish the new Firebase Rules");});}
 function setBadge(id,k){var on=k&&BD[k];db.ref("badges/"+id).set(on?k:null).then(function(){if(on)BDG[id]=k;else delete BDG[id];T(on?BD[k]+" badge given":"Badge removed");users();}).catch(function(){T("Couldn't change the badge. Make sure the Rules are published");});}
 function pl(){var P=S.players||{};return Object.keys(P).map(function(k){return P[k];});}
 function ids(){return pl().map(function(p){return p.uid;});}
@@ -318,10 +321,10 @@ function syncAll(){if(!isAdmin())return;var b=document.getElementById("olSyncB")
   }).catch(function(){T("Couldn't sync. Make sure the Rules are published");}).then(function(){if(b)b.disabled=false;});}
 function users(){if(!isAdmin())return;vw="users";
   loadB().then(function(){return db.ref("users").once("value");}).then(function(s){var v=s.val()||{};
-    var L=Object.keys(v).map(function(id){var x=v[id]||{};return{id:id,p:x.profile||{},st:x.stats||{}};}).sort(function(a,b){return(b.p.updated||0)-(a.p.updated||0);});
+    var L=Object.keys(v).map(function(id){var x=v[id]||{};return{id:id,p:x.profile||{},st:x.stats||{},w:x.wallet||null};}).sort(function(a,b){return(b.p.updated||0)-(a.p.updated||0);});
     shell('<div class="ol-w">'+L.length+' users</div>'+L.map(function(u){var gg=0,pt=0;Object.keys(u.st).forEach(function(k){gg+=u.st[k].games||0;pt+=u.st[k].pts||0;});
       var d=u.p.updated?new Date(u.p.updated).toLocaleDateString("en-GB"):"—";
-      return'<div class="ol-me">'+(u.p.photo?'<img class="'+(bk(u.id)?'r-'+bk(u.id):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.p.photo)+'">':'')+'<div><b>'+nmu(u.id,u.p.name||"No name")+'</b>'+(u.p.email?'<small>'+e(u.p.email)+'</small>':'')+'<small dir="ltr">ID: '+e(u.id.slice(0,10))+'…</small><small class="ol-ust"><span>Last seen: '+d+'</span><span>Online sessions: '+gg+'</span><span>Points: '+pt+'</span></small><div class="ol-mrow">'+BK.map(function(k){return'<button type="button" class="ol-mini t-'+k+(bk(u.id)===k?' on':'')+'" onclick="OL.badge(\''+e(u.id)+'\',\''+(bk(u.id)===k?'':k)+'\')">'+BD[k]+'</button>';}).join("")+'</div></div></div>';}).join(""),{t:"Users"});
+      return'<div class="ol-me">'+(u.p.photo?'<img class="'+(bk(u.id)?'r-'+bk(u.id):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.p.photo)+'">':'')+'<div><b>'+nmu(u.id,u.p.name||"No name")+'</b>'+(u.p.email?'<small>'+e(u.p.email)+'</small>':'')+'<small dir="ltr">ID: '+e(u.id.slice(0,10))+'…</small><small class="ol-ust"><span>Coins: '+(u.w&&typeof u.w.b==="number"?u.w.b.toLocaleString("en-US"):"—")+'</span><span>Last seen: '+d+'</span><span>Online sessions: '+gg+'</span><span>Points: '+pt+'</span></small><div class="ol-mrow">'+BK.map(function(k){return'<button type="button" class="ol-mini t-'+k+(bk(u.id)===k?' on':'')+'" onclick="OL.badge(\''+e(u.id)+'\',\''+(bk(u.id)===k?'':k)+'\')">'+BD[k]+'</button>';}).join("")+'</div><div class="ol-mrow" style="margin-top:8px"><input id="gc_'+e(u.id)+'" inputmode="numeric" autocomplete="off" placeholder="Coins to add" style="flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid rgba(var(--acr),.4);background:rgba(0,0,0,.25);color:inherit;font:inherit"><button type="button" class="ol-mini on" onclick="OL.grant(\''+e(u.id)+'\')">+ Add coins</button></div></div></div>';}).join(""),{t:"Users"});
   }).catch(function(){T("No permission. Make sure the Rules are published");});}
 function push(u){db.ref("rooms/"+code).update(u);}
 function listen(){try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}var r=db.ref("rooms/"+code),f=r.on("value",function(s){S=s.val();draw();});off=function(){r.off("value",f);};}
@@ -410,7 +413,7 @@ function ensure(go){
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
 function account(){mk=null;ensure(stats);}
-window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=2";s.onload=function(){OLT.run();};s.onerror=function(){T("Could not load the system check");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,shell:shell,users:users,syncAll:syncAll,claim:claim,open:open,account:account,wallet:function(){ensure(function(){loadWallet(function(){SHKUI.render();});});},create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,opt:opt,shuffle:shuffle,fin:endNow,
+window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=2";s.onload=function(){OLT.run();};s.onerror=function(){T("Could not load the system check");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,grant:grantCoins,shell:shell,users:users,syncAll:syncAll,claim:claim,open:open,account:account,wallet:function(){ensure(function(){loadWallet(function(){SHKUI.render();});});},create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,opt:opt,shuffle:shuffle,fin:endNow,
   prof:function(id,fb){if(!fb&&S){var P=S.players||{};Object.keys(P).forEach(function(k){if(P[k].uid===id)fb={name:P[k].name,photo:P[k].photo};});}if(window.OLX)OLX.prof(id,fb);},rank:function(){if(window.OLX)OLX.go("rank");},queue:function(){if(window.OLX)OLX.queue();},
   sug:function(k){if(!U()){T("Sign in with Google first");return;}if(window.OLX)OLX.sug(k,k?function(){OL.open(k);}:null);},
   rejoin:function(c){ensure(function(){OL.join(c);});},
@@ -418,10 +421,10 @@ window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createE
 OL.i={db:function(){return db;},e:e,U:U,T:T,IC:IC,IX:IX,bk:bk,nmu:nmu,loadB:loadB,adm:isAdmin,BADGES:BADGES,G:G,META:META,shell:shell,syncLB:syncLB,mkey:mkey,MO:MO,ctx:function(){return{S:S,code:code,role:role};},sv:function(v){vw=v;},mail:mail};
 var lx=document.createElement("script");lx.src="js/online-social.js?v=4";document.head.appendChild(lx);
 var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=5";document.head.appendChild(ll);var lsd=document.createElement("script");lsd.src="js/online-sudoku.js?v=1";document.head.appendChild(lsd);
-var lbh=document.createElement("script");lbh.src="js/blackjack-host.js?v=1";lbh.onload=function(){var lbo=document.createElement("script");lbo.src="js/online-blackjack.js?v=2";document.head.appendChild(lbo);};document.head.appendChild(lbh);
+var lbh=document.createElement("script");lbh.src="js/blackjack-host.js?v=1";lbh.onload=function(){var lbo=document.createElement("script");lbo.src="js/online-blackjack.js?v=4";document.head.appendChild(lbo);};document.head.appendChild(lbh);
 /* المحفظة (شنكلولو): بنحمّلها مرة واحدة بس، حتى لو auth.js سبقنا */
-function loadWallet(cb){if(window.SHKUI)return cb&&cb();var n=0;(function w(){if(window.SHK){if(!window.__shkuiP){window.__shkuiP=1;var s=document.createElement("script");s.src="js/shk-ui.js?v=2";s.onload=function(){if(cb)cb();};document.head.appendChild(s);}else if(++n<80)setTimeout(w,150);return;}
-  if(!window.__shkP){window.__shkP=1;var s0=document.createElement("script");s0.src="js/shankalolo.js?v=1";document.head.appendChild(s0);}if(++n<80)setTimeout(w,150);})();}
+function loadWallet(cb){if(window.SHKUI)return cb&&cb();var n=0;(function w(){if(window.SHK){if(!window.__shkuiP){window.__shkuiP=1;var s=document.createElement("script");s.src="js/shk-ui.js?v=3";s.onload=function(){if(cb)cb();};document.head.appendChild(s);}else if(++n<80)setTimeout(w,150);return;}
+  if(!window.__shkP){window.__shkP=1;var s0=document.createElement("script");s0.src="js/shankalolo.js?v=2";document.head.appendChild(s0);}if(++n<80)setTimeout(w,150);})();}
 loadWallet();
 var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
 /* "Play Online" button inside each game as a separate option (no outer button on the hub) */

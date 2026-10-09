@@ -38,7 +38,7 @@ var qLocal={};function myQ(slot){return qLocal[slot]||0;}
 function placeBet(){
   var c=ctx(),S=c.S,B=S&&S.bjs;if(!B||B.ph!=="BETTING"||placing)return;
   if(!window.SHK){T("Wallet is loading, try again");return;}
-  if(!E.validBet(bet)){T("Bet must be 10 to 500, in steps of 10");return;}
+  if(!E.validBet(bet)){T("Enter a valid bet");return;}
   if(bal()<bet){T("Not enough Shankalolo");return;}
   placing=true;UI.click();
   SHK.bjStake(c.code,B.rid,0,bet).then(function(r){
@@ -90,7 +90,7 @@ function tableHtml(S,B,me,isHost,hv){
   var h="";
   if(B&&B.pub){
     var pub=B.pub;
-    if(isHost&&hv&&hv.round&&!pub.holeShown){ // صاحب الطاولة (الدلر البشري) بيشوف الورقة المخفية
+    if(isHost&&modeOf(S)==="human"&&hv&&hv.round&&!pub.holeShown){ // صاحب الطاولة (الدلر البشري) بيشوف الورقة المخفية
       var full=Object.assign({},pub,{dealer:hv.dealer});
       h+=UI.dealer(full).replace('<div class="bj-cards">','<div class="bj-cards" title="Only you can see the hole card">');
       h+='<div class="bj-note" style="margin:0">Only the dealer sees the hole card</div>';
@@ -124,9 +124,9 @@ function controls(S,B,slot,isHost,hv){
   if(ph==="WAITING")return h+'<div class="bj-ctl"><div class="bj-warn">Waiting for the next round...</div></div>';
   if(ph==="BETTING"){
     if(mine||placedFor===B.rid)return h+'<div class="bj-ctl"><div class="bj-warn">Bet placed: '+UI.fmt(mine||bet)+'. Waiting for the others...</div>'+timerBar(B)+'</div>';
-    var max=Math.min(E.RULES.MAX_BET,Math.floor(bal()/10)*10);if(bet>max)bet=Math.max(10,max);
-    return h+'<div class="bj-ctl"><div class="bj-bet-show">'+UI.COIN+' '+UI.fmt(bet)+'<small>YOUR BET (10 – 500) · BALANCE '+UI.fmt(bal())+'</small></div>'+UI.betChips(bet,max,"OLBJ.bet")+
-      '<button type="button" class="bj-btn pri" '+(bal()<10||placing?"disabled ":"")+'onclick="OLBJ.place()">Place bet</button>'+timerBar(B)+'</div>';
+    var max=Math.min(E.RULES.MAX_BET,Math.floor(bal()));if(bet>max)bet=Math.max(E.RULES.MIN_BET,max);
+    return h+'<div class="bj-ctl"><div class="bj-bet-show">'+UI.coin(bet)+' '+UI.fmt(bet)+'<small>YOUR BET · NO LIMIT · BALANCE '+UI.fmt(bal())+'</small></div>'+UI.betChips(bet,max,"OLBJ.bet")+
+      '<button type="button" class="bj-btn pri" '+(bal()<E.RULES.MIN_BET||placing?"disabled ":"")+'onclick="OLBJ.place()">Place bet</button>'+timerBar(B)+'</div>';
   }
   if(!inRound)return h+'<div class="bj-ctl"><div class="bj-warn">You are sitting this round out.</div></div>';
   var i=seatIndex(B,slot),seat=B.pub.seats[i];
@@ -162,7 +162,7 @@ function draw(){
   var stale=B&&B.hb&&!isHost&&Math.abs(Date.now()-B.hb)>40000&&Date.now()-seenAt>40000;
   var mode=modeOf(S);
   var head='<div class="bj-status"><span class="bj-phase">'+UI.phase(B?B.ph:"WAITING")+'</span><span>'+(mode==="human"?"Human dealer: "+e(S.hostName||"Dealer"):"CPU dealer")+(B&&B.pub?' · '+B.pub.shoeLeft+' cards left':'')+'</span></div>';
-  var wal='<div class="bj-row" style="margin:0 0 8px">'+'<button type="button" class="bj-wal" onclick="OLBJ.wallet()" aria-label="Wallet">'+UI.COIN+UI.fmt(bal())+'<small>WALLET</small></button><button type="button" class="wl-ico sm" onclick="OLBJ.wallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button></div>';
+  var wal='<div class="bj-row" style="margin:0 0 8px">'+'<button type="button" class="bj-wal" onclick="OLBJ.wallet()" aria-label="Wallet">'+UI.coin(bal())+UI.fmt(bal())+'<small>WALLET</small></button><button type="button" class="wl-ico sm" onclick="OLBJ.wallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button></div>';
   var html='<div class="bj-app"><div class="bj-wrap">'+wal+'<div class="bj-felt">'+head+(stale?'<div class="bj-warn">The dealer connection looks lost. You can leave the table.</div>':"")+
     tableHtml(S,B,me,isHost,hv)+(B&&B.msg?'<div class="bj-msg">'+e(B.msg)+'</div>':'<div class="bj-msg"></div>')+controls(S,B,slot,isHost,hv)+'</div>'+
     '<div class="bj-card2" style="margin-top:12px"><h3>Seats</h3>'+seatsHtml(S,B,me)+'<div class="bj-row"><button type="button" class="bj-btn sm dim" onclick="OLBJ.wallet()">Wallet &amp; loans</button>'+(isHost?'<button type="button" class="bj-btn sm dim" onclick="OL.close()">Close table</button>':'<button type="button" class="bj-btn sm dim" onclick="OL.up()">Leave table</button>')+'</div></div></div></div>';
@@ -193,7 +193,7 @@ function leave(code,role,S){
   }catch(x){}
 }
 
-window.OLBJ={draw:draw,bet:function(v){bet=v;draw();},place:placeBet,act:act,ins:insure,leave:leave,
+window.OLBJ={draw:draw,bet:function(v){bet=Math.max(E.RULES.MIN_BET,Math.min(Math.floor(v)||E.RULES.MIN_BET,Math.max(E.RULES.MIN_BET,Math.floor(bal()))));draw();},place:placeBet,act:act,ins:insure,leave:leave,
   deal:function(){if(host)host.deal();},dealerGo:function(){if(host)host.dealerGo();},
   wallet:function(){if(window.SHKUI)SHKUI.open();else T("Wallet is loading");}};
 })();

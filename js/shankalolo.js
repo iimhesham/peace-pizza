@@ -2,7 +2,7 @@
 var SHK;
 (function (SHK) {
     SHK.START_BALANCE = 10000;
-    SHK.POINT_RATE = 10;
+    SHK.POINT_RATE = 30;
     SHK.LOAN_LIMIT_RATIO = 0.5;
     SHK.LOANS_PER_MONTH = 2;
     SHK.LOAN_TERM_DAYS = 30;
@@ -10,7 +10,7 @@ var SHK;
     SHK.FRIEND_LOAN_MAX = 50000;
     SHK.MIN_LOAN = 10;
     const DAY = 86400000;
-    const MAX_CLAIM = 100000;
+    const MAX_CLAIM = 1000000000;
     function safeKey(s) { return String(s).replace(/[.#$\[\]\/\s]/g, "_"); }
     SHK.safeKey = safeKey;
     function pointsToShk(points) { return Math.max(0, Math.floor(points)) * SHK.POINT_RATE; }
@@ -45,7 +45,7 @@ var SHK;
             w.ap[id] = now;
         const keys = Object.keys(w.ap);
         if (keys.length > 400) {
-            keys.filter(k => k !== "start").sort((a, b) => w.ap[a] - w.ap[b]).slice(0, keys.length - 300).forEach(k => { delete w.ap[k]; });
+            keys.filter(k => k !== "start" && k !== "conv30").sort((a, b) => w.ap[a] - w.ap[b]).slice(0, keys.length - 300).forEach(k => { delete w.ap[k]; });
         }
         return { w: w, status: "ok", created: created };
     }
@@ -252,7 +252,7 @@ var SHK;
                 fire();
                 if (first) {
                     first = false;
-                    ensure().then(() => { claimInbox(); refreshLoans(); flushPending(); resolve(); }, () => resolve());
+                    ensure().then(() => convertPoints()).then(() => { claimInbox(); refreshLoans(); flushPending(); resolve(); }, () => resolve());
                 }
             }, () => { if (first) {
                 first = false;
@@ -405,6 +405,19 @@ var SHK;
             });
         }).catch(() => { });
     }
+
+    function convertPoints() {
+        if (!db || !uid)
+            return Promise.resolve();
+        return db.ref("users/" + uid + "/stats").once("value").then((s) => {
+            const st = s.val() || {};
+            let pts = 0;
+            Object.keys(st).forEach(k => { pts += Math.max(0, Math.floor((st[k] && st[k].pts) || 0)); });
+            const amt = pts * SHK.POINT_RATE;
+            return applyTx(amt > 0 ? { id: "conv30", delta: amt, reason: "points_conversion" } : { id: "conv30", delta: 0 });
+        }).catch(() => { });
+    }
+    SHK.convertPoints = convertPoints;
     function points(pts, refId) {
         const amount = pointsToShk(pts);
         if (!(amount > 0))

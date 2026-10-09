@@ -128,7 +128,7 @@
     if(window.SHK)return go();
     if(window.__shkP){var n=0;(function w(){if(window.SHK){hook();go();}else if(++n<80)setTimeout(w,150);})();return;}
     window.__shkP=1;
-    loadScript("js/shankalolo.js?v=1").then(function(){hook();go();}).catch(function(){});
+    loadScript("js/shankalolo.js?v=2").then(function(){hook();go();}).catch(function(){});
   }
   function start(){
     build();
@@ -141,7 +141,7 @@
         walletSync(user);
       });
       auth.getRedirectResult().catch(function(){});
-      loadScript("js/online.js?v=13").catch(function(){});
+      loadScript("js/online.js?v=14").catch(function(){});
     }).catch(function(){if(chip)chip.style.display="none";});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();

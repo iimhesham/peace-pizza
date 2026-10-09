@@ -5,13 +5,13 @@
 ========================================================= */
 (function(){
 if(!window.OL||!OL.i||!window.SHK)return;
-var I=OL.i,e=I.e,U=I.U,T=I.T,S=SHK,UI=window.BJUI||{fmt:function(n){return Number(n||0).toLocaleString("en-US");},COIN:""};
+var I=OL.i,e=I.e,U=I.U,T=I.T,S=SHK,UI=window.BJUI||{fmt:function(n){return Number(n||0).toLocaleString("en-US");},COIN:"",coin:function(){return"";}};
 var fmt=UI.fmt,COIN=UI.COIN;
 function D(){return I.db();}
 function dt(ts){return new Date(ts).toLocaleDateString("en-GB");}
 function card(t,inner,tag){return'<div class="bj-card2"><h3>'+t+(tag||"")+'</h3>'+inner+'</div>';}
 function kv(rows){return'<div class="bj-kv">'+rows.map(function(r){return'<span>'+r[0]+'</span><b>'+r[1]+'</b>';}).join("")+'</div>';}
-var REASON={starting_balance:"Starting balance",points_reward:"Points reward",blackjack_bet:"Blackjack bet",blackjack_win:"Blackjack win",blackjack_blackjack:"Blackjack 3:2",blackjack_loss:"Blackjack loss",blackjack_push:"Blackjack push",blackjack_achievement:"Achievement",blackjack_refund:"Blackjack refund",loan_received:"Loan received",loan_repaid:"Loan repaid",friend_loan_sent:"Friend loan sent",friend_loan_received:"Friend loan received",friend_loan_repaid:"Friend loan repaid",friend_loan_received_back:"Friend repaid you",admin_adjustment:"Adjustment"};
+var REASON={starting_balance:"Starting balance",points_reward:"Points reward",points_conversion:"Points converted to coins",admin_grant:"Admin gift",blackjack_bet:"Blackjack bet",blackjack_win:"Blackjack win",blackjack_blackjack:"Blackjack 3:2",blackjack_loss:"Blackjack loss",blackjack_push:"Blackjack push",blackjack_achievement:"Achievement",blackjack_refund:"Blackjack refund",loan_received:"Loan received",loan_repaid:"Loan repaid",friend_loan_sent:"Friend loan sent",friend_loan_received:"Friend loan received",friend_loan_repaid:"Friend loan repaid",friend_loan_received_back:"Friend repaid you",admin_adjustment:"Adjustment"};
 var curTab="loans";
 var LST={req:"Waiting for the lender",pay:"Processing",act:"Active",paid:"Paid",rej:"Rejected",can:"Cancelled"};
 
@@ -41,9 +41,9 @@ function render(){
 }
 function paint(L,FL,st,ach,hist,friends){
   var w=S.wallet()||{b:0,h:0},info=L.info,me=U().uid,h="";
-  h+='<div class="wl-hero"><div class="wl-hl"><span class="wl-dot"></span>SHANKALOLO WALLET</div><div class="wl-bal">'+COIN+'<span>'+fmt(w.b)+'</span></div>'+
+  h+='<div class="wl-hero"><div class="wl-hl"><span class="wl-dot"></span>SHANKALOLO WALLET</div><div class="wl-bal">'+UI.coin(w.b)+'<span>'+fmt(w.b)+'</span></div>'+
     '<div class="wl-tiles"><div><label>All-time high</label><b>'+fmt(w.h)+'</b></div><div><label>Max formal loan</label><b>'+fmt(info.limit)+'</b></div><div><label>Owed</label><b>'+fmt(info.outstanding)+'</b></div></div>'+
-    '<p class="wl-fine">Virtual coin, no cash value. 1 Point = 10 Shankalolo. Practice chips are separate and never touch this balance.</p></div>';
+    '<p class="wl-fine">Virtual coin, no cash value. 1 Point = 30 Shankalolo. Practice chips are separate and never touch this balance.</p></div>';
   h+='@@TABS@@';
   h+='<div class="wl-pane" data-p="loans">';
   /* قروض رسمية */

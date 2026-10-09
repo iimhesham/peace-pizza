@@ -24,24 +24,24 @@ t("49 starting 10,000 granted once (refresh / re-login / relog)",async()=>{
 });
 t("49b existing user with stats gets the grant once and keeps old data",async()=>{
   const S=load(),db=createDb();db.set("users/u9/stats/xo",{pts:120,games:7,wins:4,right:0,wrong:0});
-  await S.attach(db,U("u9"));eq(S.balance(),10000,"historical points are NOT converted");
+  await S.attach(db,U("u9"));eq(S.balance(),13600,"historical points are converted once at 30/point");
   eq(db.get("users/u9/stats/xo/pts"),120,"stats untouched");
   const hist=Object.values(db.get("users/u9/wtx")||{});ok(hist.some(h=>h.r==="starting_balance"),"history has starting_balance");
 });
-t("50 3 points = 30 Shankalolo",async()=>{
+t("50 3 points = 90 Shankalolo",async()=>{
   const S=load(),db=createDb();await S.attach(db,U("p1"));
-  await S.points(3,"xo_room1");eq(S.balance(),10030);
-  eq(S.pointsToShk(3),30);eq(S.pointsToShk(0),0);
+  await S.points(3,"xo_room1");eq(S.balance(),10090);
+  eq(S.pointsToShk(3),90);eq(S.pointsToShk(0),0);
 });
 t("51 same points award is never converted twice",async()=>{
   const S=load(),db=createDb();await S.attach(db,U("p1"));
-  await S.points(3,"xo_room1");await S.points(3,"xo_room1");await S.points(3,"xo_room1");eq(S.balance(),10030);
-  await S.points(3,"xo_room2");eq(S.balance(),10060);
+  await S.points(3,"xo_room1");await S.points(3,"xo_room1");await S.points(3,"xo_room1");eq(S.balance(),10090);
+  await S.points(3,"xo_room2");eq(S.balance(),10180);
 });
 t("points earned before the wallet is ready are queued and applied once",async()=>{
   const S=load(),db=createDb();await S.points(4,"q1");await S.points(4,"q1");eq(JSON.parse(LS.pp_shk_pend).length,1);
-  await S.attach(db,U("pq"));await sleep(60);eq(S.balance(),10040);eq(JSON.parse(LS.pp_shk_pend).length,0);
-  await S.flushPending();eq(S.balance(),10040);
+  await S.attach(db,U("pq"));await sleep(60);eq(S.balance(),10120);eq(JSON.parse(LS.pp_shk_pend).length,0);
+  await S.flushPending();eq(S.balance(),10120);
 });
 t("52 all-time high never decreases",async()=>{
   const S=load(),db=createDb();await S.attach(db,U("h1"));
