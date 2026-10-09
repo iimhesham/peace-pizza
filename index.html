@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="css/xo.css?v=2">
 <link rel="stylesheet" href="css/ludo.css?v=5">
 <link rel="stylesheet" href="css/tawla.css?v=6">
+<link rel="stylesheet" href="css/blackjack.css?v=1">
 <link rel="stylesheet" href="css/sudoku.css?v=2">
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
 
@@ -147,6 +148,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <div class="hm-fc hm-fc-x" role="button" tabindex="0" onclick="playClickSound();xoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();xoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">SLATE 3x3</span><span class="hm-fc-art"><svg viewBox="0 0 60 60" width="50" height="50" fill="none" stroke-linecap="round"><path d="M20 4v52M40 4v52M4 20h52M4 40h52" stroke="#E5D4C8" stroke-width="2.6" opacity=".7"/><path d="M5.5 5.5l9 9m0-9l-9 9M25.5 25.5l9 9m0-9l-9 9M45.5 45.5l9 9m0-9l-9 9" stroke="#FF4777" stroke-width="3.2"/><circle cx="30" cy="10" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/><circle cx="10" cy="50" r="5.2" stroke="#E5D4C8" stroke-width="3.2"/></svg></span><span class="hm-fc-cap"><b>XO</b><small>TIC TAC TOE</small></span></div>
 <div class="hm-fc hm-fc-ludo" role="button" tabindex="0" onclick="playClickSound();ludoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();ludoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2-4 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 64 64" width="50" height="50" fill="none"><rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/><rect x="2" y="2" width="25" height="25" rx="6" fill="#E5484D"/><rect x="37" y="2" width="25" height="25" rx="6" fill="#2EAE6B"/><rect x="37" y="37" width="25" height="25" rx="6" fill="#F2B632"/><rect x="2" y="37" width="25" height="25" rx="6" fill="#3B82E0"/><rect x="21" y="21" width="22" height="22" rx="5" fill="#fff" stroke="#1a120d" stroke-width="2" transform="rotate(12 32 32)"/></svg></span><span class="hm-fc-cap"><b>LUDO</b><small>BOARD GAME</small></span></div>
 <div class="hm-fc hm-fc-tawla" role="button" tabindex="0" onclick="playClickSound();tawlaOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();tawlaOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 60 40" width="52" height="35" fill="none"><rect x="1" y="1" width="58" height="38" rx="5" fill="#4a2c1a" stroke="#6b4326" stroke-width="2"/><path d="M5 4l4 14 4-14zM21 4l4 14 4-14zM37 4l4 14 4-14z" fill="#A8452F"/><path d="M13 4l4 14 4-14zM29 4l4 14 4-14zM45 4l4 14 4-14z" fill="#D9BE8C"/><path d="M5 36l4-14 4 14zM21 36l4-14 4 14zM37 36l4-14 4 14z" fill="#D9BE8C"/><path d="M13 36l4-14 4 14zM29 36l4-14 4 14zM45 36l4-14 4 14z" fill="#A8452F"/><circle cx="9" cy="6" r="3" fill="#fffdf6"/><circle cx="41" cy="34" r="3" fill="#2a1d18"/></svg></span><span class="hm-fc-cap"><b>TAWLA</b><small>BACKGAMMON</small></span></div>
+<div class="hm-fc hm-fc-bj" role="button" tabindex="0" onclick="playClickSound();bjOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();bjOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">1 – 5 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 60 40" width="52" height="35" fill="none"><rect x="12" y="4" width="22" height="30" rx="3" fill="#FBF9E4" stroke="#5B88B2" stroke-width="2" transform="rotate(-14 23 19)"/><rect x="26" y="4" width="22" height="30" rx="3" fill="#FBF9E4" stroke="#5B88B2" stroke-width="2" transform="rotate(10 37 19)"/><path d="M37 12l5 6a3 3 0 1 1-4.6 2.6L38 26h-2l.7-5.4A3 3 0 1 1 32 18z" fill="#122C4F"/></svg></span><span class="hm-fc-cap"><b>BLACKJACK</b><small>21 · SHANKALOLO</small></span></div>
 <div class="hm-fc hm-fc-s" role="button" tabindex="0" onclick="playClickSound();sdOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();sdOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">9x9 PUZZLE</span><span class="hm-fc-art"><svg viewBox="0 0 60 60" width="50" height="50" fill="none"><rect x="2" y="2" width="56" height="56" rx="6" fill="#f4f0a8"/><path d="M20.7 4v52M39.3 4v52M4 20.7h52M4 39.3h52" stroke="#a60043" stroke-width="2.2"/><path d="M11.8 4v52M30 4v52M48.2 4v52M4 11.8h52M4 30h52M4 48.2h52" stroke="#a60043" stroke-width=".9" opacity=".45"/><g fill="#a60043" font-family="Anton,Impact,sans-serif" font-size="12" text-anchor="middle"><text x="12" y="17">5</text><text x="30" y="17">3</text><text x="48" y="34">7</text><text x="12" y="34">6</text><text x="30" y="52">9</text></g></svg></span><span class="hm-fc-cap"><b>SUDOKU</b><small>NUMBER PUZZLE</small></span></div>
   </div>
   <div class="hm-fc5w"><button type="button" class="hm-fc5" onclick="playClickSound();show('career')" aria-label="TRANSFERS - CAREER PATH"><i></i>
@@ -359,8 +361,27 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <span class="hx-desc">طاولة مصرية بنردين ودبل: أخرج قشاطاتك الـ15 الأول. ضد صاحبك أو الكمبيوتر.</span>
       </span>
     </button>
+
+    <button type="button" class="hx-card hx-wide hx-bj" onclick="playClickSound();bjOpen()" aria-label="Blackjack">
+      <span class="hx-art" aria-hidden="true">
+        <svg viewBox="0 0 96 64" width="96" height="64" fill="none">
+          <rect x="2" y="2" width="92" height="60" rx="8" fill="#122C4F" stroke="#FBF9E4" stroke-width="2.4"/>
+          <g transform="rotate(-16 36 34)"><rect x="18" y="12" width="30" height="42" rx="4" fill="#FBF9E4" stroke="#5B88B2" stroke-width="2"/><text x="22" y="26" font-size="11" font-weight="700" fill="#122C4F" font-family="serif">A</text></g>
+          <g transform="rotate(12 60 34)"><rect x="46" y="10" width="30" height="42" rx="4" fill="#FBF9E4" stroke="#5B88B2" stroke-width="2"/><text x="50" y="24" font-size="11" font-weight="700" fill="#122C4F" font-family="serif">K</text><path d="M61 30l6 7a3.5 3.5 0 1 1-5.4 3L62.4 46h-2.8l.8-6A3.5 3.5 0 1 1 55 37z" fill="#122C4F"/></g>
+          <circle cx="82" cy="50" r="8" fill="#0E7A52" stroke="#C9A24B" stroke-width="2.4"/>
+        </svg>
+      </span>
+      <span class="hx-body">
+        <small class="hx-en" dir="ltr">21 · ONLINE + OFFLINE</small>
+        <b class="hx-ar">Blackjack</b>
+        <span class="hx-desc">Beat the dealer. Practice offline or play real tables with Shankalolo.</span>
+      </span>
+    </button>
   </div>
 </section>
+
+<!-- BLACKJACK: الواجهة بتتبني من js/blackjack.js -->
+<section id="blackjack" class="hidden bj-app" lang="en" dir="ltr"></section>
 
 <!-- GAME SELECT (STORIES) -->
 <section id="games" class="home hidden">
@@ -2363,13 +2384,6 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <button type="button" data-v="cpu">ضد الكمبيوتر</button>
       </div>
     </div>
-    <div class="tw-panel">
-      <div class="tw-label" id="twSideLbl">هتلعب بأنهي لون؟</div>
-      <div class="tw-seg" id="twSideSeg" role="group" aria-label="لون اللاعب">
-        <button type="button" data-v="w">الأبيض</button>
-        <button type="button" data-v="b">الأسود</button>
-      </div>
-    </div>
     <div class="tw-panel hidden" id="twDiffWrap">
       <div class="tw-label">مستوى الكمبيوتر</div>
       <div class="tw-seg" id="twDiffSeg" role="group" aria-label="مستوى الكمبيوتر">
@@ -2479,6 +2493,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/niyaba-data.js"></script>
 <script src="js/niyaba2-data.js"></script>
 <script src="js/dossier.js"></script>
+<script src="js/blackjack-engine.js?v=1"></script>
+<script src="js/blackjack.js?v=1"></script>
 <script src="js/firebase-config.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/init.js"></script>
