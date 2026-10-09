@@ -101,7 +101,8 @@ function save(){try{localStorage.setItem(LS,JSON.stringify(P));}catch(x){}}
 function icoBack(){return'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';}
 function walChip(){
   var real=window.SHK&&SHK.wallet&&SHK.wallet();
-  if(view==="table")return'<button type="button" class="bj-wal" onclick="bjPracticeInfo()">'+COIN+fmt(P.bank)+'<small>PRACTICE</small></button>';
+  var wb='<button type="button" class="wl-ico sm" onclick="bjWallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button>';
+  if(view==="table")return'<button type="button" class="bj-wal" onclick="bjPracticeInfo()">'+COIN+fmt(P.bank)+'<small>PRACTICE</small></button>'+wb;
   return'<button type="button" class="bj-wal" onclick="bjWallet()">'+COIN+(real?fmt(real.b):"—")+'<small>WALLET</small></button>';
 }
 var view="start";

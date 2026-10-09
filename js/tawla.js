@@ -423,7 +423,7 @@
     root.querySelectorAll("#twDiffSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===S.diff));
     $("twDiffWrap").classList.toggle("hidden",S.mode!=="cpu");
     root.querySelectorAll("#twSideSeg button").forEach(b=>b.classList.toggle("is-on",b.dataset.v===(S.view===W?"w":"b")));
-    $("twSideLbl").textContent=S.mode==="cpu"?"هتلعب بأنهي لون؟":"اللوحة تتعرض من ناحية أنهي لون؟";
+    if($("twSideLbl"))$("twSideLbl").textContent=S.mode==="cpu"?"هتلعب بأنهي لون؟":"اللوحة تتعرض من ناحية أنهي لون؟";
     const cpuSide=S.mode==="cpu"?1-S.view:-1,iw=$("twNameW"),ib=$("twNameB");
     iw.disabled=cpuSide===W;iw.value=iw.disabled?"الكمبيوتر":S.nameW;
     ib.disabled=cpuSide===B;ib.value=ib.disabled?"الكمبيوتر":S.nameB;
@@ -431,6 +431,7 @@
     ib.placeholder=S.mode==="cpu"?"أنت":"الأسود";
   }
   function seg(id,fn){
+    if(!$(id))return;
     $(id).addEventListener("click",e=>{
       const b=e.target.closest("button[data-v]");
       if(!b)return;

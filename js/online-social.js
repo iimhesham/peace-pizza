@@ -77,14 +77,13 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
     var bk=I.bk(u.uid),BL={gold:"Golden"},bkl=bk?(BL[bk]||bk.charAt(0).toUpperCase()+bk.slice(1)):"";
     var pad=function(n,l){n=String(n);while(n.length<l)n="0"+n;return n;};
     var mail=I.mail(u);
-    h+='<section class="pp-page"><div class="pp-top"><b>Player Passport</b></div>'+
+    h+='<section class="pp-page"><button type="button" class="wl-ico sm" onclick="OL.wallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button><div class="pp-top"><b>Player Passport</b></div>'+
       '<div class="pp-body"><div class="pp-photo">'+av(u.photoURL,u.uid,"pp-av",name)+(bkl?'<div class="pp-seal" title="'+e(bkl)+'">&#9733; '+e(bkl)+'</div>':'')+'</div>'+
       '<div class="pp-f"><label>Name</label><b class="pp-name" dir="auto">'+e(name)+'</b>'+(mail?'<label>E-mail</label><span class="pp-mail" dir="ltr">'+e(mail)+'</span>':'')+
       (mine.length?'<label>Titles</label><span class="pp-tt">'+mine.slice(0,2).map(function(x){return e(x.n);}).join(" + ")+'</span>':'')+'</div></div>'+
       '<div class="pp-k">'+[[t.pts,"Points"],[t.wins,"Wins"],[t.games,"Sessions"],[acc===null?"-":acc+"%","Accuracy"]].map(function(c){return'<div><label>'+c[1]+'</label><b>'+c[0]+'</b></div>';}).join("")+'</div>'+
       '<div class="pp-strip"><div><label>Rank No.</label><b>'+(ix>=0?'#'+pad(ix+1,4):'NONE')+'</b></div><div><label>Players</label><b>'+pad(R.length,4)+'</b></div><div><label>Status</label><b>'+(ix>=0?'ACTIVE':'NEW')+'</b></div></div>'+
       '</section>';
-    h+=window.SHKUI?SHKUI.mini():'';
     if(o.adm){h+=sec("Admin Tools","",'<span class="ac-tag">Admin</span>')+'<div class="ac-grid pp-adm">'+
       '<button type="button" class="ac-sq" id="acQreq" onclick="OL.queue()">'+IX("send")+'<span>Question Requests</span></button>'+
       '<button type="button" class="ac-sq" onclick="OL.users()">'+IX("users")+'<span>Users and Badges</span></button>'+
