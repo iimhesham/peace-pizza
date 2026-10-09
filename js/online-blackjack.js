@@ -96,12 +96,14 @@ function tableHtml(S,B,me,isHost,hv){
       h+='<div class="bj-note" style="margin:0">Only the dealer sees the hole card</div>';
     }else h+=UI.dealer(pub);
     var res=pub.result;
+    h+=UI.arc()+'<div class="bj-players n'+Math.min(pub.seats.length,5)+'">';
     pub.seats.forEach(function(s,i){
       var sr=res&&res.seats[i],mine=s.uid===me;
-      h+='<div class="bj-zone"><div class="bj-lab"><span>'+e(s.name||"Player")+(mine?" (you)":"")+'</span>'+(sr?'<em>'+(sr.net>0?"+"+UI.fmt(sr.net):sr.net<0?"−"+UI.fmt(-sr.net):"Push")+'</em>':"")+'</div><div class="bj-hands">'+
+      h+='<div class="bj-zone bj-seatz'+(mine?" me":"")+'"><div class="bj-lab"><span>'+e(s.name||"Player")+(mine?" (you)":"")+'</span>'+(sr?'<em>'+(sr.net>0?"+"+UI.fmt(sr.net):sr.net<0?"−"+UI.fmt(-sr.net):"Push")+'</em>':"")+'</div><div class="bj-hands">'+
         s.hands.map(function(x,j){return UI.hand(x,{active:pub.turn&&pub.turn.s===i&&pub.turn.h===j&&B.ph==="PLAYER_TURNS",res:sr&&sr.hands[j]});}).join("")+'</div>'+
         (s.insurance?'<div class="bj-hinfo">Insurance <span class="bj-chip">'+UI.COIN+UI.fmt(s.insurance)+'</span>'+(sr?(sr.ins.won?'<span class="bj-res win">PAID 2:1</span>':'<span class="bj-res loss">LOST</span>'):"")+'</div>':"")+'</div>';
     });
+    h+='</div>';
   }else{
     h+='<div class="bj-zone"><div class="bj-lab"><span>Dealer</span><em>'+e(dealerName(S))+'</em></div><div class="bj-cards"></div></div>';
   }

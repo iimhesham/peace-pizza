@@ -61,8 +61,9 @@ function dealerHtml(p){
   if(p.holeShown)tot=totTag(p.dealerLabel,p.dealerTotal,p.dealerTotal>21,p.dealer.length===2&&p.dealerTotal===21);
   else if(p.dealer[0]){var v=E.cardValue(E.rankOf(p.dealer[0]));tot='<span class="bj-tot">'+(v===11?"A":v)+' + ?</span>';}
   if(doFlip)tot=tot.replace('class="bj-tot','class="bj-tot pop');
-  return'<div class="bj-zone"><div class="bj-lab"><span>Dealer</span>'+tot+'</div><div class="bj-cards">'+cards+'</div></div>';
+  return'<div class="bj-zone bj-dz"><div class="bj-lab"><span>Dealer</span>'+tot+'</div><div class="bj-cards">'+cards+'</div></div>';
 }
+function arcHtml(){return'<div class="bj-arc" aria-hidden="true"><svg viewBox="0 0 320 40" preserveAspectRatio="xMidYMid meet"><path id="bjArcP" d="M10 8Q160 46 310 8" fill="none" stroke="rgba(79,157,255,.5)" stroke-width="1.2"/><text font-size="9" letter-spacing="3" fill="#7C93B3" text-anchor="middle"><textPath href="#bjArcP" startOffset="50%">BLACKJACK PAYS 3 TO 2</textPath></text></svg></div>';}
 function phaseName(p){
   return({BETTING:"Place your bet",DEALING:"Dealing",INITIAL_CHECK:"Dealer checks",INSURANCE:"Insurance",PLAYER_TURNS:"Your turn",DEALER_TURN:"Dealer plays",SETTLEMENT:"Result",ROUND_COMPLETE:"Round over",WAITING_FOR_PLAYERS:"Waiting for players"})[p]||p;
 }
@@ -96,7 +97,7 @@ function heroSvg(){
     '<text x="200" y="312" font-size="10" text-anchor="middle" fill="#8197AC"> </text>'+chk+'</svg>';
 }
 
-window.BJUI={esc:esc,fmt:fmt,COIN:COIN,coin:coin,sprite:sprite,card:cardHtml,hand:handHtml,dealer:dealerHtml,phase:phaseName,res:resTag,tot:totTag,betChips:betChips,hero:heroSvg,click:click,say:say};
+window.BJUI={esc:esc,fmt:fmt,COIN:COIN,coin:coin,sprite:sprite,card:cardHtml,hand:handHtml,dealer:dealerHtml,phase:phaseName,res:resTag,tot:totTag,betChips:betChips,arc:arcHtml,hero:heroSvg,click:click,say:say};
 
 /* =========================================================
    الأوفلاين: تمرين ضد دلر CPU برصيد تمرين منفصل
@@ -143,12 +144,12 @@ function drawTable(){
   var pub=round?E.publicView(round):null,h="";
   h+='<div class="bj-felt"><div class="bj-status"><span class="bj-phase">'+phaseName(round?round.phase:"BETTING")+'</span><span>Practice · not real Shankalolo</span></div>';
   if(pub){
-    h+=dealerHtml(pub);
+    h+=dealerHtml(pub)+arcHtml();
     var seat=pub.seats[0],res=pub.result?pub.result.seats[0]:null;
-    h+='<div class="bj-zone"><div class="bj-lab"><span>You</span><em>'+(pub.reshuffled?"New shoe shuffled · ":"")+pub.shoeLeft+' cards left</em></div><div class="bj-hands">'+
+    h+='<div class="bj-zone bj-pz"><div class="bj-lab"><span>You</span><em>'+(pub.reshuffled?"New shoe shuffled · ":"")+pub.shoeLeft+' cards left</em></div><div class="bj-hands">'+
       seat.hands.map(function(x,i){return handHtml(x,{active:pub.turn&&pub.turn.h===i&&pub.phase==="PLAYER_TURNS",res:res&&res.hands[i]});}).join("")+'</div>'+
       (seat.insurance?'<div class="bj-hinfo">Insurance: <span class="bj-chip">'+COIN+fmt(seat.insurance)+'</span>'+(res?(res.ins.won?'<span class="bj-res win">PAID 2:1</span>':'<span class="bj-res loss">LOST</span>'):"")+'</div>':"")+'</div>';
-  }else h+='<div class="bj-zone"><div class="bj-lab"><span>Dealer</span></div><div class="bj-cards"></div></div><div class="bj-zone"><div class="bj-lab"><span>You</span></div><div class="bj-cards"></div></div>';
+  }else h+='<div class="bj-zone bj-dz"><div class="bj-lab"><span>Dealer</span></div><div class="bj-cards"></div></div>'+arcHtml()+'<div class="bj-zone bj-pz"><div class="bj-lab"><span>You</span></div><div class="bj-cards"></div></div>';
   h+='<div class="bj-msg">'+esc(lastMsg)+'</div>';
   h+=controls(pub)+'</div>';
   h+='<p class="bj-note">Practice hands '+P.hands+' · wins '+P.wins+' · losses '+P.losses+' · pushes '+P.pushes+'</p>';
