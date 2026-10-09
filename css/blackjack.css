@@ -256,3 +256,11 @@ body.mode-blackjack #toast{background:#4F9DFF!important;color:#031226!important}
 .pp-page .pp-f{padding-right:54px}
 .bj-in{font-size:14px!important;letter-spacing:0!important;text-align:left;color:var(--bj-pearl)}
 .bj-in::placeholder{color:#4d6485;letter-spacing:0}
+
+/* ---------- كشف ورقة الديلر ---------- */
+.bj-card.flip{animation:bjFlip .55s cubic-bezier(.2,.85,.25,1) both;z-index:2}
+@keyframes bjFlip{0%{transform:perspective(500px) rotateY(-100deg) translateY(-6px) scale(.92);filter:brightness(2.2) drop-shadow(0 0 12px #4F9DFF)}55%{transform:perspective(500px) rotateY(10deg) scale(1.1);filter:brightness(1.35) drop-shadow(0 0 14px #4F9DFF)}100%{transform:none;filter:none}}
+.bj-tot.pop{animation:bjPop .45s ease-out .2s both}
+@keyframes bjPop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.18);opacity:1}100%{transform:none}}
+.bj-betin{text-align:center!important;max-width:240px}
+.bj-bets{max-width:100%}
