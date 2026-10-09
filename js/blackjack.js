@@ -111,7 +111,7 @@ function icoBack(){return'<svg viewBox="0 0 24 24" fill="none" stroke="currentCo
 function walChip(){
   var real=window.SHK&&SHK.wallet&&SHK.wallet();
   var wb='<button type="button" class="wl-ico sm" onclick="bjWallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button>';
-  if(view==="table")return'<button type="button" class="bj-wal" onclick="bjPracticeInfo()">'+coin(P.bank)+fmt(P.bank)+'<small>PRACTICE</small></button>'+wb;
+  if(view==="table")return'<button type="button" class="bj-wal" onclick="bjPracticeInfo()">'+coin(P.bank)+fmt(P.bank)+'<small>PRACTICE</small></button>'+wb+'<button type="button" class="wl-ico sm bj-rotbtn" onclick="bjRotate()" aria-label="Rotate screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2" transform="rotate(0)"/><path d="M4 9a8 8 0 0 1 3-4M20 15a8 8 0 0 1-3 4"/><path d="M4 5v4h4M20 19v-4h-4"/></svg></button>';
   return'<button type="button" class="bj-wal" onclick="bjWallet()">'+coin(real?real.b:0)+(real?fmt(real.b):"—")+'<small>WALLET</small></button>';
 }
 var view="start";
