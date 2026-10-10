@@ -29,8 +29,9 @@
 <link rel="stylesheet" href="css/hubx.css?v=8">
 <link rel="stylesheet" href="css/xo.css?v=2">
 <link rel="stylesheet" href="css/ludo.css?v=5">
-<link rel="stylesheet" href="css/tawla.css?v=6">
+<link rel="stylesheet" href="css/tawla.css?v=7">
 <link rel="stylesheet" href="css/blackjack.css?v=13">
+<link rel="stylesheet" href="css/hubtop.css?v=1">
 <link rel="stylesheet" href="css/sudoku.css?v=2">
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
 
@@ -202,16 +203,38 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
     <rect x="62" y="276" width="116" height="2" rx="1" fill="#f5e6b8" opacity=".5"/>
     <text x="120" y="305" text-anchor="middle" font-family="'Anton','Impact','Arial Black',sans-serif" font-size="25" fill="url(#lgWg)" textLength="132" lengthAdjust="spacing">PLAYER ONE</text>
   </svg>
-    <h1 class="hm-brand" dir="ltr">GAME</h1>
-    <p class="hm-sub">تحب تلعب إيه؟</p>
+    <div class="hm-id">
+      <h1 class="hm-brand" dir="ltr">GAME</h1>
+      <p class="hm-sub">تحب تلعب إيه؟</p>
+    </div>
+    <button type="button" class="hm-wallet hidden" id="hmWallet" aria-label="المحفظة - شنكلولو">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="#e8c873" stroke="#a9812a" stroke-width="1.4"/><circle cx="12" cy="12" r="6.2" fill="none" stroke="#a9812a" stroke-width="1.1"/><path d="M12 8.2l1.1 2.4 2.6.3-1.9 1.8.5 2.6L12 14l-2.3 1.3.5-2.6-1.9-1.8 2.6-.3z" fill="#a9812a"/></svg>
+      <b id="hmWalletNum">0</b>
+    </button>
   </header>
+
+  <!-- الإجراءات السريعة: غرفة بكود + كمّل من آخر لعبة -->
+  <div class="hx-top one" id="hxTop">
+    <button type="button" class="hx-act hx-resume hidden" id="hxResume">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.85l10-6.5a1 1 0 0 0 0-1.7l-10-6.5A1 1 0 0 0 8 5.5z"/></svg>
+      <span><small>كمّل من حيث وقفت</small><b id="hxResumeName"></b></span>
+    </button>
+    <button type="button" class="hx-act" id="hxJoinBtn" aria-expanded="false" aria-controls="hxJoinBox">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></svg>
+      <span><small>معاك كود؟</small><b>ادخل غرفة</b></span>
+    </button>
+  </div>
+  <form class="hx-join hidden" id="hxJoinBox" autocomplete="off">
+    <input id="hxCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0000" aria-label="كود الغرفة" dir="ltr">
+    <button type="submit" class="hx-act pri">ادخل</button>
+  </form>
 
   
 
   <!-- تحقيق -->
   <h2 class="hx-h g-case"><span>تحقيق</span></h2>
   <div class="hx-grid">
-    <button type="button" class="hx-card hx-wide hx-case" onclick="playClickSound();show('games')" aria-label="القصص - ألعاب تحقيق وغموض">
+    <button type="button" class="hx-card hx-wide hx-case" data-g="crime" data-name="القصص" onclick="playClickSound();show('games')" aria-label="القصص - ألعاب تحقيق وغموض">
       <span class="hx-tab" dir="ltr">FILE 0221</span>
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 26 26" width="58" height="58"><g stroke="#0c1411" stroke-width=".6" stroke-linejoin="round"><rect x="5" y="2" width="16" height="4.2" rx=".9" fill="#d9727e"/><rect x="4" y="6.6" width="17" height="4.2" rx=".9" fill="#3f7fa0"/><rect x="3" y="11.2" width="19" height="4.2" rx=".9" fill="#7fb8cf"/><rect x="4" y="15.8" width="17" height="4.2" rx=".9" fill="#c79a6b"/><rect x="3" y="20.4" width="19" height="4.2" rx=".9" fill="#efd7a3"/></g><g stroke="#e9b44c" stroke-width=".9"><path d="M7.5 2.3v3.6M9 2.3v3.6M7 6.9v3.6M8.5 6.9v3.6"/></g></svg>
@@ -222,6 +245,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <b class="hx-ar">القصص</b>
         <span class="hx-desc">ألعاب تحقيق وغموض، بأدوار وأدلة.</span>
         <span class="hx-mvp"><span>★ اللاعب المثالي: دانيال أشرف</span><span>(اول مكرر- سامح)</span></span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i></span>
       </span>
     </button>
   </div>
@@ -229,7 +253,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
   <!-- كورة -->
   <h2 class="hx-h g-ball"><span>كورة</span></h2>
   <div class="hx-grid">
-    <button type="button" class="hx-card hx-pass" onclick="playClickSound();show('password')" aria-label="باسورد - لعبة كلمة السر بأسامي لاعبين الكورة">
+    <button type="button" class="hx-card hx-pass" data-g="password" data-name="باسورد" onclick="playClickSound();show('password')" aria-label="باسورد - لعبة كلمة السر بأسامي لاعبين الكورة">
       <span class="hx-slot" aria-hidden="true"></span>
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="50" height="50" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><circle cx="12" cy="12" r="10.4"/><polygon points="12.00,2.40 13.53,9.90 21.13,9.03 14.47,12.80 17.64,19.77 12.00,14.60 6.36,19.77 9.53,12.80 2.87,9.03 10.47,9.90" fill="currentColor" stroke-width=".8"/><polygon points="15.17,7.63 14.48,5.51 16.29,4.19 18.10,5.51 17.41,7.63" stroke-width="1"/><polygon points="17.14,13.67 18.94,12.36 20.75,13.67 20.06,15.79 17.83,15.79" stroke-width="1"/><polygon points="12.00,17.40 13.81,18.71 13.12,20.84 10.88,20.84 10.19,18.71" stroke-width="1"/><polygon points="6.86,13.67 6.17,15.79 3.94,15.79 3.25,13.67 5.06,12.36" stroke-width="1"/><polygon points="8.83,7.63 6.59,7.63 5.90,5.51 7.71,4.19 9.52,5.51" stroke-width="1"/></svg>
@@ -239,10 +263,11 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">PASSWORD</small>
         <b class="hx-ar">باسورد</b>
         <span class="hx-desc">كلمة السر بأسامي لاعبين الكورة.</span>
+        <span class="hx-tags"><i>أوفلاين</i></span>
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-who" onclick="playClickSound();show('story')" aria-label="قصة لاعب - أنا مين">
+    <button type="button" class="hx-card hx-who" data-g="story" data-name="أنا مين" onclick="playClickSound();show('story')" aria-label="قصة لاعب - أنا مين">
       <span class="hx-hazard" aria-hidden="true"></span>
       <span class="hx-tab" dir="ltr">SUSPECT</span>
       <span class="hx-art" aria-hidden="true">
@@ -253,10 +278,11 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">WHO AM I?</small>
         <b class="hx-ar">قصة لاعب - أنا مين</b>
         <span class="hx-desc">أدلة من الأصعب للأسهل، خمّنوا مين هو.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i></span>
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-wide hx-career" onclick="playClickSound();show('career')" aria-label="الانتقالات - مسيرة لاعب أو مدرب">
+    <button type="button" class="hx-card hx-wide hx-career" data-g="career" data-name="الانتقالات" onclick="playClickSound();show('career')" aria-label="الانتقالات - مسيرة لاعب أو مدرب">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor" style="transform:rotate(45deg)"><path d="M21 15.5v-1.6l-8-5V4.5a1.5 1.5 0 0 0-3 0v4.4l-8 5v1.6l8-2.3v4.3l-2 1.5V22l3.5-1 3.5 1v-1.5l-2-1.5v-4.3z"/></svg>
         <span class="hx-stamp" dir="ltr">DONE<br>DEAL</span>
@@ -265,14 +291,15 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">TRANSFER CONTRACT</small>
         <b class="hx-ar">الانتقالات</b>
         <span class="hx-desc">محطات ناقصة من مسيرة لاعب أو مدرب، تتكشف واحدة واحدة. خمّنوا مين هو.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i></span>
       </span>
     </button>
   </div>
 
   <!-- ألعاب سريعة -->
-  <h2 class="hx-h g-fun"><span>ألعاب سريعة</span></h2>
+  <h2 class="hx-h g-fun"><span>ألعاب</span></h2>
   <div class="hx-grid">
-    <button type="button" class="hx-card hx-flags" onclick="playClickSound();show('flags');flagsInit()" aria-label="خمّن العلم">
+    <button type="button" class="hx-card hx-flags" data-g="flags" data-name="خمّن العلم" onclick="playClickSound();show('flags');flagsInit()" aria-label="خمّن العلم">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 80 62" width="72" height="56" fill="none" stroke="currentColor"><g transform="rotate(-12 34 30)"><circle cx="34" cy="30" r="25" stroke-width="1.7"/><circle cx="34" cy="30" r="20" stroke-width=".8"/><text x="34" y="33" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="9" letter-spacing=".6" fill="currentColor" stroke="none">ARRIVED</text><text x="34" y="43" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="5.5" letter-spacing="1.4" fill="currentColor" stroke="none">2026</text><path d="M22 22h24" stroke-width=".8"/></g><g transform="rotate(9 60 50)" opacity=".65"><rect x="46" y="42" width="31" height="17" rx="2" stroke-width="1.2" stroke-dasharray="3 1.6"/><text x="61.5" y="54" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="8" letter-spacing="1" fill="currentColor" stroke="none">ENTRY</text></g></svg>
       </span>
@@ -280,10 +307,11 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">FLAGS</small>
         <b class="hx-ar">خمّن العلم</b>
         <span class="hx-desc"><b>197</b> علم، واحد يطلعها والباقي يخمّنوا.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i></span>
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-xo" onclick="playClickSound();xoOpen()" aria-label="XO - إكس أو">
+    <button type="button" class="hx-card hx-xo" data-g="xo" data-name="إكس أو" onclick="playClickSound();xoOpen()" aria-label="XO - إكس أو">
       <span class="hx-tab" dir="ltr">SLATE 3×3</span>
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 60 60" width="62" height="62" fill="none" stroke-linecap="round">
@@ -297,10 +325,11 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">XO</small>
         <b class="hx-ar">إكس أو</b>
         <span class="hx-desc">على اللوح، ضد صاحبك أو الكمبيوتر.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i><i>كمبيوتر</i></span>
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-ludo" onclick="playClickSound();ludoOpen()" aria-label="Ludo">
+    <button type="button" class="hx-card hx-ludo" data-g="ludo" data-name="Ludo" onclick="playClickSound();ludoOpen()" aria-label="Ludo">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 64 64" width="70" height="70" fill="none">
           <rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/>
@@ -318,10 +347,11 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">2–4 PLAYERS</small>
         <b class="hx-ar">Ludo</b>
         <span class="hx-desc">نرد وحظ وذكاء. أوفلاين أو أونلاين مع صحابك.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i><i>كمبيوتر</i></span>
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-sudoku" onclick="playClickSound();sdOpen()" aria-label="Sudoku - سودوكو">
+    <button type="button" class="hx-card hx-sudoku" data-g="sudoku" data-name="سودوكو" onclick="playClickSound();sdOpen()" aria-label="Sudoku - سودوكو">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 64 64" width="70" height="70" fill="none">
           <rect x="2" y="2" width="60" height="60" rx="7" fill="#f4f0a8"/>
@@ -337,10 +367,11 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <small class="hx-en" dir="ltr">NUMBER PUZZLE</small>
         <b class="hx-ar">سودوكو</b>
         <span class="hx-desc">4 أنماط ولغز يومي. أوفلاين أو سباق أونلاين.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i></span>
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-wide hx-tawla" onclick="playClickSound();tawlaOpen()" aria-label="الطاولة">
+    <button type="button" class="hx-card hx-tawla" data-g="tawla" data-name="الطاولة" onclick="playClickSound();tawlaOpen()" aria-label="الطاولة">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 96 64" width="96" height="64" fill="none">
           <rect x="2" y="2" width="92" height="60" rx="8" fill="#5a3520" stroke="#d1a35a" stroke-width="2.4"/><rect x="6" y="5" width="75" height="54" rx="4" fill="#24150d"/><rect x="78" y="5" width="2" height="54" fill="#d1a35a" opacity=".55"/>
@@ -356,13 +387,14 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         </svg>
       </span>
       <span class="hx-body">
-        <small class="hx-en" dir="ltr">BACKGAMMON · الفورة من 31</small>
+        <small class="hx-en" dir="ltr">BACKGAMMON · 31</small>
         <b class="hx-ar">الطاولة</b>
-        <span class="hx-desc">طاولة مصرية بنردين ودبل: أخرج قشاطاتك الـ15 الأول. ضد صاحبك أو الكمبيوتر.</span>
+        <span class="hx-desc">طاولة مصرية بنردين ودبل. أخرج قشاطاتك الـ15 الأول.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i><i>كمبيوتر</i></span>
       </span>
     </button>
 
-    <button type="button" class="hx-card hx-wide hx-bj" onclick="playClickSound();bjOpen()" aria-label="Blackjack">
+    <button type="button" class="hx-card hx-bj" data-g="blackjack" data-name="Blackjack" onclick="playClickSound();bjOpen()" aria-label="Blackjack">
       <span class="hx-art" aria-hidden="true">
         <svg viewBox="0 0 96 64" width="96" height="64" fill="none">
           <rect x="2" y="2" width="92" height="60" rx="8" fill="#122C4F" stroke="#FBF9E4" stroke-width="2.4"/>
@@ -372,9 +404,10 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         </svg>
       </span>
       <span class="hx-body">
-        <small class="hx-en" dir="ltr">21 · ONLINE + OFFLINE</small>
+        <small class="hx-en" dir="ltr">CARDS · 21</small>
         <b class="hx-ar">Blackjack</b>
-        <span class="hx-desc">Beat the dealer. Practice offline or play real tables with Shankalolo.</span>
+        <span class="hx-desc">Beat the dealer. Real tables, real Shankalolo.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i></span>
       </span>
     </button>
   </div>
@@ -2363,7 +2396,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 
 <!-- ========================================================
      TAWLA — الطاولة المصرية (الفورة من 31). أوفلاين: جهاز واحد أو ضد الكمبيوتر.
-     القواعد: js/tawla-engine.js · الواجهة واللعب: js/tawla.js · الشكل: css/tawla.css
+     القواعد: js/tawla-engine.js · الرسم المشترك: js/tawla-ui.js · الواجهة واللعب: js/tawla.js · الأونلاين: js/online-tawla.js · الشكل: css/tawla.css
 ======================================================== -->
 <section id="tawla" class="hidden tw-app" lang="ar" dir="rtl">
   <header class="tw-bar">
@@ -2395,8 +2428,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
     <div class="tw-panel">
       <div class="tw-label">مكان الخارج</div>
       <div class="tw-seg" id="twTraySeg" role="group" aria-label="مكان الخارج">
-        <button type="button" data-v="l">شمال اللوحة</button>
-        <button type="button" data-v="r">يمين اللوحة</button>
+        <button type="button" data-v="r">جنب منطقة التجميع</button>
+        <button type="button" data-v="l">على الناحية التانية</button>
       </div>
     </div>
     <div class="tw-panel">
@@ -2414,13 +2447,17 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
       </div>
     </div>
     <button type="button" class="tw-start" onclick="tawlaStart()">ابدأ المباراة</button>
+    <button type="button" class="tw-online-btn" onclick="tawlaOnline()">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.9 5.7 3.9 9s-1.3 6.3-3.9 9c-2.6-2.7-3.9-5.7-3.9-9S9.4 5.7 12 3z"/></svg>
+      <span>العب أونلاين مع صاحبك</span>
+    </button>
     <details class="tw-rules">
       <summary>القواعد باختصار</summary>
       <ul>
         <li>كل لاعب 15 قشاطة، ونردين. أول واحد يوصل 31 نقطة يكسب المباراة.</li>
         <li>الدبل (نفس الرقم على النردين) بيتلعب 4 مرات.</li>
         <li>اللوحة 24 خانة. القشاط كلها بتبدأ متجمعة على أول خانة. في أول الجيم قشاطة واحدة بس تتحرك لحد ما توصل آخر ربع (18 خطوة)، وبعدها باقي القشاط تتفتح.</li>
-        <li>الأبيض بيبدأ من أسفل اليمين وبيخلص أعلى اليمين، والأسود العكس. الاتنين بيعدّوا على نفس الخانات.</li>
+        <li>الأسود بيبدأ من أعلى اليمين وبيخلص أسفل اليمين، والأبيض العكس. الاتنين بيعدّوا على نفس الخانات. اللوحة بتتعرض من ناحية اللون اللي بتلعب بيه، فاللي بيختار الأبيض بيشوفها مقلوبة والنقط على الشمال.</li>
         <li>قشاطة الخصم في الخانة بتمنعك توصلها، وأول خانة عنده (ستاك البداية) بتقفل عليك آخر خانة عندك لحد ما يتحرك. مفيش ضرب.</li>
         <li>ينفع تجمع النردين على قشاطة واحدة لو الطريق مفتوح.</li>
         <li>الإخراج مش مسموح غير لما كل قشاطاتك تبقى في آخر ربع. النرد الأكبر من بُعد القشاطة بيخرجها لو مفيش قشاطة أبعد منها.</li>
@@ -2442,7 +2479,7 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 
     <p class="tw-status" id="twStatus" role="status" aria-live="polite"></p>
     <div class="tw-dice-row" id="twDice"></div>
-    <button type="button" class="tw-roll hidden" id="twRoll" onclick="tawlaRoll()">ارمِ النرد 🎲</button>
+    <button type="button" class="tw-roll hidden" id="twRoll" onclick="tawlaRoll()"><svg class="tw-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="8.6" cy="8.6" r="1.1" fill="currentColor" stroke="none"/><circle cx="15.4" cy="15.4" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg>ارمِ النرد</button>
 
     <div class="tw-pl is-turn" id="twPlW">
       <div class="tw-pl-top"><span class="tw-pc w"></span><span class="tw-pl-name"></span><span class="tw-pl-pts"></span></div>
@@ -2490,8 +2527,9 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/xo.js"></script>
 <script src="js/ludo-engine.js?v=5"></script>
 <script src="js/ludo.js?v=5"></script>
-<script src="js/tawla-engine.js?v=4"></script>
-<script src="js/tawla.js?v=7"></script>
+<script src="js/tawla-engine.js?v=5"></script>
+<script src="js/tawla-ui.js?v=1"></script>
+<script src="js/tawla.js?v=8"></script>
 <script src="js/sudoku-core.js?v=1"></script>
 <script src="js/sudoku.js?v=2"></script>
 <script src="js/flags-data.js"></script>
