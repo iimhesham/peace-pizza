@@ -141,7 +141,7 @@
         walletSync(user);
       });
       auth.getRedirectResult().catch(function(){});
-      loadScript("js/online.js?v=14").catch(function(){});
+      loadScript("js/online.js?v=15").catch(function(){});
     }).catch(function(){if(chip)chip.style.display="none";});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();

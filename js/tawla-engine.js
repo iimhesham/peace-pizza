@@ -58,6 +58,17 @@
     return {a:a,b:b,list:a===b?[a,a,a,a]:[a,b]};
   }
 
+  /* نرد ثابت من (seed, رقم الجيم, رقم الرمية): كل الأجهزة بتطلع بنفس الرمية، فمحدش يعيد الرمي — الأونلاين بيستخدمه */
+  function mix(a,b,c){
+    var x=(a|0)^Math.imul((b|0)+0x9e3779b9|0,0x85ebca6b)^Math.imul((c|0)+0x7f4a7c15|0,0xc2b2ae35);
+    x^=x>>>16;x=Math.imul(x,0x7feb352d);x^=x>>>15;x=Math.imul(x,0x846ca68b);x^=x>>>16;
+    return x>>>0;
+  }
+  function seedDice(seed,gid,k){
+    var a=1+mix(seed,gid,2*k)%6,b=1+mix(seed,gid,2*k+1)%6;
+    return {a:a,b:b,list:a===b?[a,a,a,a]:[a,b]};
+  }
+
   /* كل الحركات القانونية بنرد واحد */
   function legalMoves(g,who,d){
     var me=g.s[who],c=me.c,res=[],q,t;
@@ -212,7 +223,7 @@
 
   root.TawlaEngine={
     PIECES:PIECES,TRACK:TRACK,OUT:OUT,WIN_AT:WIN_AT,HOME_START:HOME_START,UNLOCK_AT:UNLOCK_AT,
-    newGame:newGame,clone:clone,rollDice:rollDice,
+    newGame:newGame,clone:clone,rollDice:rollDice,seedDice:seedDice,
     legalMoves:legalMoves,combinedMoves:combinedMoves,movesFor:movesFor,hasMove:hasMove,
     applyMove:applyMove,diceOf:diceOf,consume:consume,
     winner:winner,gamePoints:gamePoints,removeDie:removeDie,

@@ -7,11 +7,11 @@
 if(!window.OL||!OL.i)return;
 var I=OL.i,e=I.e,U=I.U,T=I.T,IC=I.IC,IX=I.IX;
 var D=function(){return I.db();};
-var GK=["flags","story","career","xo","ludo","sudoku"];
-var GN={flags:"Flags",story:"Who Am I",career:"Transfers",xo:"XO",ludo:"Ludo",sudoku:"Sudoku",crime:"Crime Story"};
-var GS={flags:"Flags",story:"Who",career:"Transfers",xo:"XO",ludo:"Ludo",sudoku:"Sudoku"};
-var GI={flags:"flag",story:"who",career:"move",xo:"grid",ludo:"dice",sudoku:"grid"};
-var GC={flags:"#7ccb9b",story:"#74a5be",career:"#d4b675",xo:"#FF4777",ludo:"#F2B632",sudoku:"#f4f0a8"};
+var GK=["flags","story","career","xo","ludo","sudoku","tawla"];
+var GN={flags:"Flags",story:"Who Am I",career:"Transfers",xo:"XO",ludo:"Ludo",sudoku:"Sudoku",tawla:"Tawla",crime:"Crime Story"};
+var GS={flags:"Flags",story:"Who",career:"Transfers",xo:"XO",ludo:"Ludo",sudoku:"Sudoku",tawla:"Tawla"};
+var GI={flags:"flag",story:"who",career:"move",xo:"grid",ludo:"dice",sudoku:"grid",tawla:"dice"};
+var GC={flags:"#7ccb9b",story:"#74a5be",career:"#d4b675",xo:"#FF4777",ludo:"#F2B632",sudoku:"#f4f0a8",tawla:"#E3B15C"};
 var LB=null,NREQ=0,preAt=0,ret=null,curTab="me",rf="all",F={g:"career"},QL=[],profId=null,fq="",FB={},FLC={};
 
 /* ---------- helpers ---------- */
@@ -46,6 +46,7 @@ var TT=[
  {k:"xo",n:"XO Champion",d:"Most points in XO",ic:"x:grid",u:"pts",f:function(r){return gp(r.x,"xo");}},
  {k:"ludo",n:"Ludo Champion",d:"Most points in Ludo",ic:"x:dice",u:"pts",f:function(r){return gp(r.x,"ludo");}},
   {k:"sudoku",n:"Sudoku Champion",d:"Most points in Sudoku",ic:"x:grid",u:"pts",f:function(r){return gp(r.x,"sudoku");}},
+  {k:"tawla",n:"Tawla Champion",d:"Most points in Tawla",ic:"x:dice",u:"pts",f:function(r){return gp(r.x,"tawla");}},
  {k:"active",n:"Marathoner",d:"Most sessions played",ic:"x:bolt",u:"sessions",f:function(r){return r.a.games;}}
 ];
 function holders(){var R=list("all");return TT.map(function(t){var best=null;R.forEach(function(r){var v=t.f(r);if(v>0&&(!best||v>best.v))best={id:r.id,v:v,n:r.n,p:r.p};});return{t:t,h:best};});}
@@ -89,7 +90,7 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       '<button type="button" class="ac-sq" onclick="OL.users()">'+IX("users")+'<span>Users and Badges</span></button>'+
       '<button type="button" class="ac-sq" id="olSyncB" onclick="OL.syncAll()">'+IX("sync")+'<span>Sync Ranking</span></button>'+
       '<button type="button" class="ac-sq" onclick="OL.test()">'+IX("shield")+'<span>System Check</span></button></div>';}
-    h+=sec("Games")+'<div class="pp-visas">'+GK.map(function(k,i){var x=v[k],xoG=k==="xo"||k==="ludo"||k==="sudoku",tot=x?(xoG?(x.games||0):(x.right||0)+(x.wrong||0)):0,pc=tot?Math.round((xoG?(x.wins||0):(x.right||0))/tot*100):0;
+    h+=sec("Games")+'<div class="pp-visas">'+GK.map(function(k,i){var x=v[k],xoG=k==="xo"||k==="ludo"||k==="sudoku"||k==="tawla",tot=x?(xoG?(x.games||0):(x.right||0)+(x.wrong||0)):0,pc=tot?Math.round((xoG?(x.wins||0):(x.right||0))/tot*100):0;
       return'<div class="pp-visa'+(x?'':' off')+'" style="--gc:'+GC[k]+'">'+
         '<div class="pp-vr"><span class="ac-gi">'+IX(GI[k])+'</span><b>'+(x?x.pts:"-")+'</b></div><small>'+GN[k]+'</small>'+
         (x?'<i class="ol-acc"><i style="width:'+pc+'%"></i></i><span class="pp-vs">'+(xoG?(x.wins||0)+'W '+(x.games||0)+'G':(x.right||0)+'&#10003; '+(x.wrong||0)+'&#10007;')+'</span>':'<em>Not played yet</em>')+'</div>';}).join("")+'</div>';
@@ -108,12 +109,12 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
   });}
 
 /* ---------- Ranking ---------- */
-function row(r,rk,mid){var s=r.x.s||{},z=s[rf]||{},sub=rf==="all"?GK.map(function(k){return GS[k]+" "+gp(r.x,k);}).join(" · "):((rf==="xo"||rf==="ludo"||rf==="sudoku")?"Wins "+(z.wins||0)+" · Games "+(z.games||0):"Right "+(z.right||0)+" · Wrong "+(z.wrong||0)+" · Sessions "+(z.games||0));
+function row(r,rk,mid){var s=r.x.s||{},z=s[rf]||{},sub=rf==="all"?GK.map(function(k){return GS[k]+" "+gp(r.x,k);}).join(" · "):((rf==="xo"||rf==="ludo"||rf==="sudoku"||rf==="tawla")?"Wins "+(z.wins||0)+" · Games "+(z.games||0):"Right "+(z.right||0)+" · Wrong "+(z.wrong||0)+" · Sessions "+(z.games||0));
   return'<div class="ox-row'+(r.id===mid?' me':'')+'" onclick="OLX.prof(\''+e(r.id)+'\')"><span class="ox-rk">'+rk+'</span>'+av(r.p,r.id,"",r.n)+'<div class="ox-rw"><b>'+I.nmu(r.id,r.n)+'</b><small>'+e(sub)+'</small></div><span class="ox-pts">'+r.v+'</span></div>';}
 function pod(r,rk){var c=["","g","s","b"][rk];return'<div class="ox-pc '+c+'" onclick="OLX.prof(\''+e(r.id)+'\')">'+(rk===1?'<i class="ox-cr">'+IX("crown")+'</i>':'')+av(r.p,r.id,"",r.n)+'<span class="ox-pn">'+I.nmu(r.id,r.n)+'</span><b class="ox-pv">'+r.v+'</b><div class="ox-pl"><span>'+rk+'</span></div></div>';}
 function rank(f){if(f)rf=f;I.sv("stats");curTab="rank";
   load(function(){if(!alive())return;var R=list(rf),mid=U().uid,h=tabs("rank");
-    h+='<div class="ox-chips">'+[["all","All"],["flags","Flags"],["story","Who"],["career","Moves"],["xo","XO"],["ludo","Ludo"],["sudoku","Sudoku"]].map(function(c){return'<button type="button" class="ox-chip'+(rf===c[0]?' on':'')+'" onclick="OLX.rf(\''+c[0]+'\')">'+c[1]+'</button>';}).join("")+'</div>';
+    h+='<div class="ox-chips">'+[["all","All"],["flags","Flags"],["story","Who"],["career","Moves"],["xo","XO"],["ludo","Ludo"],["sudoku","Sudoku"],["tawla","Tawla"]].map(function(c){return'<button type="button" class="ox-chip'+(rf===c[0]?' on':'')+'" onclick="OLX.rf(\''+c[0]+'\')">'+c[1]+'</button>';}).join("")+'</div>';
     if(!R.length)h+='<div class="ox-none">Nobody has played online yet. The first player to finish a game shows up here.</div>';
     else{var top3=R.length>=3;if(top3)h+='<div class="ox-pod">'+pod(R[1],2)+pod(R[0],1)+pod(R[2],3)+'</div>';
       h+='<div class="ox-list">'+R.slice(top3?3:0).map(function(r,i){return row(r,i+(top3?4:1),mid);}).join("")+'</div>';
