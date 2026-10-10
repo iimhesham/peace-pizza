@@ -38,13 +38,14 @@ var qLocal={};function myQ(slot){return qLocal[slot]||0;}
 function placeBet(){
   var c=ctx(),S=c.S,B=S&&S.bjs;if(!B||B.ph!=="BETTING"||placing)return;
   if(!window.SHK){T("Wallet is loading, try again");return;}
-  if(!E.validBet(bet)){T("Enter a valid bet");return;}
-  if(bal()<bet){T("Not enough Shankalolo");return;}
+  var amount=Math.max(E.RULES.MIN_BET,Math.min(Math.floor(bet),Math.floor(bal())));   // الرهان بيتثبت لحظة الضغط
+  if(!E.validBet(amount)){T("Enter a valid bet");return;}
+  if(bal()<amount){T("Not enough Shankalolo");return;}
   placing=true;UI.click();
-  SHK.bjStake(c.code,B.rid,0,bet).then(function(r){
+  SHK.bjStake(c.code,B.rid,0,amount).then(function(r){
     placing=false;
     if(!r.ok){T(r.err==="insufficient"?"Not enough Shankalolo":"Could not place the bet");return;}
-    placedFor=B.rid;sendQ("bet",bet);draw();
+    placedFor=B.rid;sendQ("bet",amount);draw();
   });
 }
 function extraStake(amount,then){
@@ -126,8 +127,8 @@ function controls(S,B,slot,isHost,hv){
   if(ph==="WAITING")return h+'<div class="bj-ctl"><div class="bj-warn">Waiting for the next round...</div></div>';
   if(ph==="BETTING"){
     if(mine||placedFor===B.rid)return h+'<div class="bj-ctl"><div class="bj-warn">Bet placed: '+UI.fmt(mine||bet)+'. Waiting for the others...</div>'+timerBar(B)+'</div>';
-    var max=Math.min(E.RULES.MAX_BET,Math.floor(bal()));if(bet>max)bet=Math.max(E.RULES.MIN_BET,max);
-    return h+'<div class="bj-ctl"><div class="bj-bet-show">'+UI.coin(bet)+' '+UI.fmt(bet)+'<small>YOUR BET · NO LIMIT · BALANCE '+UI.fmt(bal())+'</small></div>'+UI.betChips(bet,max,"OLBJ.bet")+
+    var max=Math.min(E.RULES.MAX_BET,Math.floor(bal()));var shown=Math.max(E.RULES.MIN_BET,Math.min(bet,max));
+    return h+'<div class="bj-ctl"><div class="bj-bet-show">'+UI.coin(shown)+' '+UI.fmt(shown)+'<small>YOUR BET · NO LIMIT · BALANCE '+UI.fmt(bal())+'</small></div>'+UI.betChips(shown,max,"OLBJ.bet")+
       '<button type="button" class="bj-btn pri" '+(bal()<E.RULES.MIN_BET||placing?"disabled ":"")+'onclick="OLBJ.place()">Place bet</button>'+timerBar(B)+'</div>';
   }
   if(!inRound)return h+'<div class="bj-ctl"><div class="bj-warn">You are sitting this round out.</div></div>';
@@ -195,7 +196,7 @@ function leave(code,role,S){
   }catch(x){}
 }
 
-window.OLBJ={draw:draw,bet:function(v){bet=Math.max(E.RULES.MIN_BET,Math.min(Math.floor(v)||E.RULES.MIN_BET,Math.max(E.RULES.MIN_BET,Math.floor(bal()))));draw();},place:placeBet,act:act,ins:insure,leave:leave,
+window.OLBJ={draw:draw,bet:function(v){var b=Math.max(E.RULES.MIN_BET,Math.floor(bal()));if(v==='max')v=b;else if(v==='min')v=E.RULES.MIN_BET;v=Math.floor(Number(v));if(!isFinite(v)||v<1)return;bet=Math.max(E.RULES.MIN_BET,Math.min(v,b));draw();},place:placeBet,act:act,ins:insure,leave:leave,
   deal:function(){if(host)host.deal();},dealerGo:function(){if(host)host.dealerGo();},
   wallet:function(){if(window.SHKUI)SHKUI.open();else T("Wallet is loading");}};
 })();

@@ -35,9 +35,7 @@ var META={
  blackjack:{n:"Blackjack",d:"Beat the dealer to 21 with real Shankalolo. No bet limit. Blackjack pays 3:2. Double, split, surrender and insurance are all in.",who:"Up to 5 players per table. Pick a CPU dealer, or sit in the dealer seat yourself",
   ic:"<rect x='4' y='3' width='11' height='16' rx='2'/><path d='M9 21h8a2 2 0 0 0 2-2V8'/><path d='M9.5 9.5l1.5 2.2a1.2 1.2 0 1 1-1.8.9l.3 1.4h-1l.3-1.4a1.2 1.2 0 1 1-1.8-.9z'/>"},
  sudoku:{n:"Sudoku",d:"Race a friend on the same puzzle. The fastest solver wins points: 5 for Easy, 10 for Medium, 15 for Hard.",who:"2 players. The host picks the difficulty",
-  ic:"<rect x='3' y='3' width='18' height='18' rx='2.5'/><path d='M9 3v18M15 3v18M3 9h18M3 15h18'/>"},
- tawla:{n:"Tawla",d:"Egyptian Tawla 31 against a friend. First to 31 points wins the match. A game win is worth 10 points, a match win 30.",who:"2 players. The host picks the colors and starts the game",
-  ic:"<rect x='3' y='5' width='18' height='14' rx='2.5'/><path d='M6.5 5l1.6 6 1.6-6M14.3 19l1.6-6 1.6 6'/>"}
+  ic:"<rect x='3' y='3' width='18' height='18' rx='2.5'/><path d='M9 3v18M15 3v18M3 9h18M3 15h18'/>"}
 };
 function RW(s){var r=0,w=0;Object.keys(s||{}).forEach(function(k){r+=(s[k]||{}).right||0;w+=(s[k]||{}).wrong||0;});return[r,w];}
 function GP(s,k){return((s||{})[k]||{}).pts||0;}
@@ -60,8 +58,6 @@ var BADGES=[
  ["Ludo Ace","Win 10 Ludo games",function(t,s){return((s||{}).ludo||{}).wins>=10;},function(t,s){return((s||{}).ludo||{}).wins||0;},10],
  ["Sudoku Rookie","Win 1 Sudoku race",function(t,s){return((s||{}).sudoku||{}).wins>=1;},function(t,s){return((s||{}).sudoku||{}).wins||0;},1],
  ["Sudoku Ace","Win 10 Sudoku races",function(t,s){return((s||{}).sudoku||{}).wins>=10;},function(t,s){return((s||{}).sudoku||{}).wins||0;},10],
- ["Tawla Rookie","Win 1 Tawla game",function(t,s){return((s||{}).tawla||{}).wins>=1;},function(t,s){return((s||{}).tawla||{}).wins||0;},1],
- ["Tawla Ace","Win 10 Tawla games",function(t,s){return((s||{}).tawla||{}).wins>=10;},function(t,s){return((s||{}).tawla||{}).wins||0;},10],
  ["All-Rounder","Score in Flags, Who Am I and Transfers",function(t,s){return GP(s,"flags")>0&&GP(s,"story")>0&&GP(s,"career")>0;},function(t,s){return(GP(s,"flags")>0)+(GP(s,"story")>0)+(GP(s,"career")>0);},3]
 ];
 var CSS=':root{--o-bell:'+SV("<path d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9'/><path d='M10.3 21a1.9 1.9 0 0 0 3.4 0'/>")+';--o-trophy:'+SV("<path d='M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z'/><path d='M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3'/>")+';--o-chart:'+SV("<path d='M4 20V10M10 20V4M16 20v-7M22 20H2'/>")+';--o-copy:'+SV("<rect x='9' y='9' width='11' height='11' rx='2'/><path d='M5 15V6a2 2 0 0 1 2-2h8'/>")+'}'+
@@ -231,8 +227,8 @@ function shell(h,o){o=o||{};root();var top=ov.scrollTop;ov.setAttribute("data-g"
   ov.innerHTML='<div class="ol-c"><div class="ol-bar"><button type="button" class="ol-back" onclick="OL.up()" aria-label="Back">'+CHEV+'</button><div class="ol-ttl">'+e(o.t||"Online")+'</div>'+(c?'<div class="ol-pill" dir="ltr">'+e(c)+'</div>':'')+'</div>'+h+'</div>';
   ov.scrollTop=(lastT===o.t)?top:0;lastT=o.t;}
 function menu(k){if(k)mk=k;k=mk||"flags";vw="menu";var m=META[k],crime=k==="crime";
-  shell('<div class="ol-pass"><div class="ol-pass-top"><span class="ol-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+m.ic+'</svg></span><div><b>'+e(m.n)+'</b><small>'+e(m.d)+'</small></div></div><div class="ol-perf"></div><div class="ol-pass-bot"><button type="button" class="ol-b" onclick="'+(crime?'OLS.open()':k==="blackjack"?'OL.create(\'blackjack\',\'cpu\')':'OL.create(\''+k+'\')')+'">'+(crime?'Pick a story and open the room':k==="blackjack"?'Open a table: CPU dealer':'Open a new room')+'</button>'+(k==="blackjack"?'<button type="button" class="ol-b g" style="margin-top:8px" onclick="OL.create(\'blackjack\',\'human\')">Open a table: I am the dealer</button>':'')+'<p class="ol-hint">'+e(m.who)+((k==="xo"||k==="ludo"||k==="sudoku"||k==="blackjack"||k==="tawla")?'.':'. You run the room.')+'</p></div></div>'+
-   '<div class="ol-join"><label for="olCode">Have a room code?</label><div class="ol-join-row"><input id="olCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0000" autocomplete="off" onkeydown="if(event.key===\'Enter\')OL.join()"><button type="button" class="ol-b g" onclick="OL.join()">Join</button></div></div>'+((k==="xo"||k==="ludo"||k==="sudoku"||k==="blackjack"||k==="tawla")?'':'<button type="button" class="ol-s" onclick="OL.sug(\''+k+'\')">'+IX('pencil')+' Suggest a question for this game</button>'),{t:m.n+" Online",g:k});}
+  shell('<div class="ol-pass"><div class="ol-pass-top"><span class="ol-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+m.ic+'</svg></span><div><b>'+e(m.n)+'</b><small>'+e(m.d)+'</small></div></div><div class="ol-perf"></div><div class="ol-pass-bot"><button type="button" class="ol-b" onclick="'+(crime?'OLS.open()':k==="blackjack"?'OL.create(\'blackjack\',\'cpu\')':'OL.create(\''+k+'\')')+'">'+(crime?'Pick a story and open the room':k==="blackjack"?'Open a table: CPU dealer':'Open a new room')+'</button>'+(k==="blackjack"?'<button type="button" class="ol-b g" style="margin-top:8px" onclick="OL.create(\'blackjack\',\'human\')">Open a table: I am the dealer</button>':'')+'<p class="ol-hint">'+e(m.who)+((k==="xo"||k==="ludo"||k==="sudoku"||k==="blackjack")?'.':'. You run the room.')+'</p></div></div>'+
+   '<div class="ol-join"><label for="olCode">Have a room code?</label><div class="ol-join-row"><input id="olCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0000" autocomplete="off" onkeydown="if(event.key===\'Enter\')OL.join()"><button type="button" class="ol-b g" onclick="OL.join()">Join</button></div></div>'+((k==="xo"||k==="ludo"||k==="sudoku"||k==="blackjack")?'':'<button type="button" class="ol-s" onclick="OL.sug(\''+k+'\')">'+IX('pencil')+' Suggest a question for this game</button>'),{t:m.n+" Online",g:k});}
 var BD={gold:"Golden",silver:"Silver",premium:"Premium",master:"Master",elite:"Elite",king:"King",legend:"Legend",phantom:"Phantom",savage:"Savage"},BK=["premium","silver","gold","master","elite","king","legend","phantom","savage"];
 function bk(id){return BD[BDG[id]]?BDG[id]:"";}
 function bdg(id){var k=bk(id);return k?'<i class="ol-bdg t-'+k+'">&#9733; '+BD[k]+'</i>':"";}
@@ -267,7 +263,6 @@ function draw(){
   if(S.game==="ludo"){if(window.OLLUDO)return OLLUDO.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"LUDO",g:"ludo"});setTimeout(draw,300);return;}
   if(S.game==="blackjack"){if(window.OLBJ)return OLBJ.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"Blackjack",g:"blackjack"});setTimeout(draw,300);return;}
   if(S.game==="sudoku"){if(window.OLSD)return OLSD.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"Sudoku",g:"sudoku"});setTimeout(draw,300);return;}
-  if(S.game==="tawla"){if(window.OLTW)return OLTW.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"Tawla",g:"tawla"});setTimeout(draw,300);return;}
   var host=role==="host",me=U().uid,b=S.buzz,gm=g(),st=S.step||0,op=opts(),o={room:true,t:gm.n+" Room"};vw="room";
   if(S.status==="lobby"){
     var ps=pl(),rows=ps.map(function(p){return'<div class="ol-t ol-ck" onclick="OL.prof(\''+e(p.uid)+'\')"><b>'+av(p)+nm(p)+'</b>'+IX('user')+'</div>';}).join("")+(ps.length<2?'<div class="ol-t empty">Waiting for a player...</div>':"");
@@ -348,7 +343,6 @@ function create(k,opt){if(busy)return;var u=U();busy=true;role="host";
   if(k==="ludo"){pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",mv:""}};pay.opts={three:1,full:0,six:0};pay.gid=0;}
   if(k==="blackjack"){var hum=opt==="human";pay.bj={dealer:hum?"human":"cpu",max:5};pay.opts={};if(!hum)pay.players={s1:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||""}};}
   if(k==="sudoku"){pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",w:0,pr:0,pg:0}};pay.diff="easy";pay.rnd=0;}
-  if(k==="tawla"){pay.players={a:{uid:u.uid,name:u.displayName||"Player",photo:u.photoURL||"",rd:1,mv:"",gr:""}};pay.hc="b";}
   mkRoom(pay,function(err,c){
     if(err){var pd=err.code==="PERMISSION_DENIED"||/permission/i.test(err.message||"");return bail(pd?"Not allowed to open a room. Make sure the Rules are published":"No free room code right now, try again");}
     busy=false;code=c;listen();});}
@@ -425,9 +419,9 @@ window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createE
   rejoin:function(c){ensure(function(){OL.join(c);});},
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("Close the room for everyone?"))db.ref("rooms/"+code).remove();}};
 OL.i={db:function(){return db;},e:e,U:U,T:T,IC:IC,IX:IX,bk:bk,nmu:nmu,loadB:loadB,adm:isAdmin,BADGES:BADGES,G:G,META:META,shell:shell,syncLB:syncLB,mkey:mkey,MO:MO,ctx:function(){return{S:S,code:code,role:role};},sv:function(v){vw=v;},mail:mail};
-var lx=document.createElement("script");lx.src="js/online-social.js?v=5";document.head.appendChild(lx);
-var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=5";document.head.appendChild(ll);var lsd=document.createElement("script");lsd.src="js/online-sudoku.js?v=1";document.head.appendChild(lsd);var ltw=document.createElement("script");ltw.src="js/online-tawla.js?v=1";document.head.appendChild(ltw);
-var lbh=document.createElement("script");lbh.src="js/blackjack-host.js?v=1";lbh.onload=function(){var lbo=document.createElement("script");lbo.src="js/online-blackjack.js?v=6";document.head.appendChild(lbo);};document.head.appendChild(lbh);
+var lx=document.createElement("script");lx.src="js/online-social.js?v=4";document.head.appendChild(lx);
+var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=5";document.head.appendChild(ll);var lsd=document.createElement("script");lsd.src="js/online-sudoku.js?v=1";document.head.appendChild(lsd);
+var lbh=document.createElement("script");lbh.src="js/blackjack-host.js?v=1";lbh.onload=function(){var lbo=document.createElement("script");lbo.src="js/online-blackjack.js?v=7";document.head.appendChild(lbo);};document.head.appendChild(lbh);
 /* المحفظة (شنكلولو): بنحمّلها مرة واحدة بس، حتى لو auth.js سبقنا */
 function loadWallet(cb){if(window.SHKUI)return cb&&cb();var n=0;(function w(){if(window.SHK){if(!window.__shkuiP){window.__shkuiP=1;var s=document.createElement("script");s.src="js/shk-ui.js?v=3";s.onload=function(){if(cb)cb();};document.head.appendChild(s);}else if(++n<80)setTimeout(w,150);return;}
   if(!window.__shkP){window.__shkP=1;var s0=document.createElement("script");s0.src="js/shankalolo.js?v=2";document.head.appendChild(s0);}if(++n<80)setTimeout(w,150);})();}

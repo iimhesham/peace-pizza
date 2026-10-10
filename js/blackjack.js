@@ -70,8 +70,8 @@ function phaseName(p){
 function betChips(cur,max,fn){
   var h='<div class="bj-bets">';
   [10,100,1000,10000].forEach(function(v){h+='<button type="button" class="bj-btn sm" '+(cur+v>max?"disabled ":"")+'onclick="'+fn+'('+(cur+v)+')">+'+fmt(v)+'</button>';});
-  h+='<button type="button" class="bj-btn sm dim" onclick="'+fn+'('+E.RULES.MIN_BET+')">Min</button><button type="button" class="bj-btn sm dim" onclick="'+fn+'('+max+')">Max</button></div>';
-  h+='<div class="bj-row"><input class="bj-in bj-betin" inputmode="numeric" autocomplete="off" placeholder="Type any amount" value="" onchange="var v=parseInt(this.value.replace(/[^0-9]/g,\'\'),10);'+fn+'(isNaN(v)?'+E.RULES.MIN_BET+':v)"></div>';
+  h+='<button type="button" class="bj-btn sm dim" onclick="'+fn+'(\'min\')">Min</button><button type="button" class="bj-btn sm dim" onclick="'+fn+'(\'max\')">Max</button></div>';
+  h+='<div class="bj-row"><input class="bj-in bj-betin" inputmode="numeric" autocomplete="off" placeholder="Type any amount" value="" onchange="var t=this.value.replace(/[\\u0660-\\u0669]/g,function(d){return d.charCodeAt(0)-1632}).replace(/[^0-9]/g,\'\');if(t)'+fn+'(parseInt(t,10))"></div>';
   return h;
 }
 function heroSvg(){
@@ -138,7 +138,7 @@ function drawHelp(){
 }
 
 /* ---------- الأوفلاين ---------- */
-function setBet(v){bet=Math.max(E.RULES.MIN_BET,Math.min(E.RULES.MAX_BET,Math.floor(v)));if(bet>P.bank)bet=Math.floor(P.bank);draw();}
+function setBet(v){if(v==='max')v=P.bank;else if(v==='min')v=E.RULES.MIN_BET;v=Math.floor(Number(v));if(!isFinite(v)||v<1)return;bet=Math.max(E.RULES.MIN_BET,Math.min(E.RULES.MAX_BET,v));if(bet>P.bank)bet=Math.floor(P.bank);draw();}
 function drawTable(){
   var s=$("blackjack");if(!s)return;view="table";
   var pub=round?E.publicView(round):null,h="";
