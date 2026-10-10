@@ -1,0 +1,104 @@
+/* =========================================================
+   HUBTOP — تنظيم الشاشة الرئيسية:
+   1) شريط علوي مضغوط (لوجو + GAME + المحفظة + الحساب) بدل الهيدر الكبير
+   2) إجراءات سريعة: «كمّل من حيث وقفت» + «ادخل غرفة بكود»
+   3) شارات موحدة على كل كارت (أونلاين / أوفلاين / كمبيوتر)
+   4) الطاولة والبلاك جاك كروت عادية زي باقي الألعاب
+   بيتحمّل بعد hubx.css و blackjack.css.
+========================================================= */
+
+/* ---------- الشريط العلوي ---------- */
+#hub .hm-head.hm-head-c{
+  flex-direction:row;justify-content:center;align-items:center;gap:10px;
+  min-height:74px;padding:12px 142px 4px 72px;text-align:start;position:relative;
+}
+#hub .hm-head-c .hm-badge{width:42px;height:auto;flex:none;filter:drop-shadow(0 3px 0 rgba(0,0,0,.5))}
+.hm-id{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+#hub .hm-head-c .hm-brand{font-size:28px;margin:0;line-height:1;text-shadow:2px 2px 0 #7a6130}
+#hub .hm-head-c .hm-sub{margin:4px 0 0;font-size:12px;line-height:1.2;text-align:start;white-space:nowrap}
+
+/* المحفظة (شنكلولو): جنب شريحة الحساب */
+.hm-wallet{
+  position:absolute;top:13px;right:56px;z-index:5;
+  display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 11px 0 9px;border-radius:999px;
+  background:rgba(255,250,240,.06);border:1.5px solid rgba(245,230,184,.4);color:#f5e6b8;
+  font:800 13px 'IBM Plex Sans','Tajawal',sans-serif;direction:ltr;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:background .12s,transform .12s;
+}
+.hm-wallet:active{transform:scale(.95);background:rgba(255,250,240,.14)}
+.hm-wallet.hidden{display:none}
+
+/* ---------- الإجراءات السريعة ---------- */
+.hx-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 0}
+.hx-top.one{grid-template-columns:1fr}
+.hx-act{
+  display:flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:6px 12px;
+  border-radius:14px;border:1.5px solid rgba(212,182,117,.45);
+  background:rgba(212,182,117,.07);color:#e8d7a6;
+  font:700 14px/1.25 'IBM Plex Sans Arabic','Tajawal',sans-serif;text-align:start;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:background .12s,transform .1s;
+}
+.hx-act:active{transform:scale(.97);background:rgba(212,182,117,.16)}
+.hx-act:focus-visible{outline:2px solid #d4b675;outline-offset:2px}
+.hx-act svg{flex:none}
+.hx-act span{display:flex;flex-direction:column;min-width:0}
+.hx-act small{font-size:10.5px;font-weight:600;opacity:.75}
+.hx-act b{font-size:15px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hx-act.hx-resume{
+  background:linear-gradient(180deg,#e6cb8a,#c9a45c);border-color:#efd9a2;color:#1a1405;
+  box-shadow:0 4px 0 #8c6a2a,0 8px 16px rgba(0,0,0,.35);
+}
+.hx-act.hx-resume:active{transform:translateY(3px);box-shadow:0 1px 0 #8c6a2a}
+.hx-act.pri{background:#d4b675;color:#1a1405;border-color:#d4b675;min-width:92px;font-size:15px;font-weight:800}
+.hx-top .hidden,.hx-join.hidden{display:none}
+.hx-join{display:flex;gap:8px;margin:8px 0 0}
+.hx-join input{
+  flex:1;min-width:0;min-height:50px;padding:0 14px;border-radius:12px;
+  border:1.5px solid rgba(212,182,117,.55);background:rgba(0,0,0,.35);color:#f5e6b8;
+  font:800 24px 'IBM Plex Mono','Courier New',monospace;letter-spacing:.5em;text-align:center;
+}
+.hx-join input::placeholder{color:rgba(245,230,184,.25)}
+.hx-join input:focus{outline:2px solid #d4b675;outline-offset:1px}
+
+/* ---------- الشارات الموحدة (سطر واحد، نص بسيط مش أزرار) ---------- */
+.hx-tags{display:flex;flex-wrap:wrap;align-items:center;gap:3px 9px;margin-top:9px;
+  font:700 10px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;direction:rtl}
+.hx-tags i{font-style:normal;opacity:.62;white-space:nowrap}
+.hx-tags i.on{opacity:1}
+.hx-tags i.on::before{
+  content:"";display:inline-block;width:6px;height:6px;margin-inline-end:4px;border-radius:50%;
+  background:#46d68c;vertical-align:0;box-shadow:0 0 6px rgba(70,214,140,.75);
+}
+
+/* مقبض الاختصارات على الحافة: تحت صف الإجراءات مش فوقه (وتحت خانة الكود لو مفتوحة) */
+#hub .dx-handle{top:150px}
+#hub:has(#hxJoinBox:not(.hidden)) .dx-handle{top:216px}
+
+/* الديسكتوب: نفس الشريط المضغوط (بيغلب قواعد الهيدر الكبير بتاعة hubx.css) */
+@media (min-width:901px){
+  body:not(.force-mobile-view) #hub .hm-head.hm-head-c{
+    flex-direction:row;justify-content:center;align-items:center;gap:12px;
+    padding:12px 150px 4px 80px;text-align:start;
+  }
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-badge{width:44px}
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-brand{font-size:30px;text-align:start}
+  body:not(.force-mobile-view) #hub .hm-head-c .hm-sub{text-align:start}
+}
+
+/* ---------- الطاولة والبلاك جاك: كروت عادية ---------- */
+.hx-tawla .hx-art svg,.hx-bj .hx-art svg{max-width:100%}
+.hx-bj .hx-body{align-items:flex-start}
+.hx-bj .hx-tags{direction:rtl}
+
+/* موبايل صغير (360 وأقل): الشريط يفضل سطر واحد من غير ما اللوجو يركب على الاسم */
+@media (max-width:400px){
+  #hub .hm-head.hm-head-c{padding:12px 142px 4px 70px;gap:8px}
+  #hub .hm-head-c .hm-badge{width:34px}
+  #hub .hm-head-c .hm-brand{font-size:23px;letter-spacing:.05em}
+  #hub .hm-head-c .hm-sub{font-size:11px}
+  .hx-act b{font-size:14px}
+}
+@media (max-width:340px){
+  #hub .hm-head.hm-head-c{padding-right:128px;padding-left:62px}
+  .hm-wallet{right:52px;padding:0 8px 0 7px}
+}
