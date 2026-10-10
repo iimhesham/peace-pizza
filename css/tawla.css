@@ -203,23 +203,56 @@ body.mode-tawla #toast{background:#E3B15C!important;color:#1b110b!important}
   font-size:14.5px;font-weight:700;color:var(--tw-cream);line-height:1.5;
 }
 .tw-status small{display:block;font-size:12.5px;font-weight:400;color:var(--tw-dim)}
-.tw-dice-row{display:flex;align-items:center;justify-content:center;gap:12px;min-height:70px;direction:ltr}
-.tw-die{
-  width:56px;height:56px;position:relative;flex:none;
-  background:linear-gradient(145deg,#fffdf4,#e3d6b6);
-  border-radius:13px;border:1.5px solid #9a8a62;
-  box-shadow:0 4px 8px rgba(0,0,0,.5),inset 0 -3px 4px rgba(0,0,0,.14);
-  display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:7px;gap:1px;
-  transition:opacity .15s,transform .15s,filter .15s;
+/* ---------- النرد: عاج وأبنوس على صينية جلد مقعّرة ---------- */
+.tw-dice-row{
+  display:flex;align-items:center;justify-content:center;gap:14px;direction:ltr;
+  min-height:92px;width:fit-content;min-width:208px;max-width:100%;margin:2px auto;padding:12px 18px;
+  border-radius:22px;
+  background:radial-gradient(ellipse at 50% 30%,rgba(227,177,92,.08),transparent 70%),linear-gradient(180deg,#150c06,#22140b);
+  border:1px solid rgba(227,177,92,.2);
+  box-shadow:inset 0 3px 12px rgba(0,0,0,.7),inset 0 -1px 0 rgba(255,255,255,.05),0 1px 0 rgba(255,255,255,.04);
 }
-.tw-die i{display:block;width:100%;height:100%;border-radius:50%}
-.tw-die i.p{background:#2a1a10;transform:scale(.72)}
-.tw-die.used{opacity:.28;filter:grayscale(.6);transform:scale(.88)}
-.tw-die.rolling{animation:twShake .12s linear infinite}
-.tw-die.wd{border-color:#ffffff}
-.tw-die.bd{background:linear-gradient(145deg,#4a3a32,#1b1210);border-color:#6e5330}
-.tw-die.bd i.p{background:#F1E4C8}
-@keyframes twShake{0%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(7deg) translateY(-3px)}100%{transform:rotate(-8deg) translateY(0)}}
+.tw-die{
+  --s:58px;width:var(--s);height:var(--s);position:relative;flex:none;
+  display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:8px;
+  border-radius:16px;border:1px solid #b9a46e;
+  background:linear-gradient(145deg,#fffef8 0%,#f4e9ce 52%,#dccb9f 100%);
+  box-shadow:0 8px 10px -4px rgba(0,0,0,.7),0 2px 0 #b09a62,inset 0 2px 1px rgba(255,255,255,.95),inset 0 -5px 7px rgba(120,90,30,.24);
+  transition:opacity .2s,transform .2s,filter .2s;
+}
+.tw-die i{
+  display:block;margin:11%;border-radius:50%;opacity:0;
+  background:radial-gradient(circle at 35% 30%,#5d4332,#1b110b 72%);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.85),0 1px 0 rgba(255,255,255,.6);
+}
+.tw-die[data-v="1"] i:nth-child(5),
+.tw-die[data-v="2"] i:is(:nth-child(1),:nth-child(9)),
+.tw-die[data-v="3"] i:is(:nth-child(1),:nth-child(5),:nth-child(9)),
+.tw-die[data-v="4"] i:is(:nth-child(1),:nth-child(3),:nth-child(7),:nth-child(9)),
+.tw-die[data-v="5"] i:is(:nth-child(1),:nth-child(3),:nth-child(5),:nth-child(7),:nth-child(9)),
+.tw-die[data-v="6"] i:is(:nth-child(1),:nth-child(3),:nth-child(4),:nth-child(6),:nth-child(7),:nth-child(9)){opacity:1}
+.tw-die.bd{
+  border-color:#6e5330;
+  background:linear-gradient(145deg,#4d3c33 0%,#291b15 58%,#150d09 100%);
+  box-shadow:0 8px 10px -4px rgba(0,0,0,.8),0 2px 0 #0d0705,inset 0 2px 1px rgba(255,255,255,.14),inset 0 -5px 7px rgba(0,0,0,.45);
+}
+.tw-die.bd i{
+  background:radial-gradient(circle at 35% 30%,#fff3cc,#e3b15c 58%,#a9792b);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.35),0 0 5px rgba(227,177,92,.4);
+}
+.tw-die.used{opacity:.3;filter:grayscale(.55);transform:scale(.84)}
+/* الرمية: النردة بتيجي من فوق وبتتدحرج وترتد وتثبت */
+.tw-die.toss{animation:twToss .76s cubic-bezier(.25,.7,.3,1) both;animation-delay:var(--dl,0s)}
+@keyframes twToss{
+  0%{transform:translate(var(--fx),-74px) rotate(var(--r0)) scale(1.35);opacity:0;filter:blur(1.5px)}
+  12%{opacity:1;filter:none}
+  42%{transform:translate(calc(var(--fx)*.2),5px) rotate(calc(var(--r0)*.35)) scale(1)}
+  58%{transform:translate(calc(var(--fx)*-.08),-17px) rotate(calc(var(--r0)*.12)) scale(1.05)}
+  74%{transform:translate(0,3px) rotate(calc(var(--r0)*-.04))}
+  87%{transform:translate(0,-5px) rotate(2deg)}
+  100%{transform:none;opacity:1}
+}
+@media (prefers-reduced-motion:reduce){.tw-die.toss{animation:none}}
 .tw-die-x{font-size:12px;font-weight:800;color:var(--tw-gold);direction:ltr}
 .tw-roll{
   display:block;margin:6px auto 0;min-width:190px;min-height:50px;padding:0 24px;
@@ -228,6 +261,7 @@ body.mode-tawla #toast{background:#E3B15C!important;color:#1b110b!important}
   box-shadow:0 5px 0 #8c6628;transition:transform .1s,box-shadow .1s,opacity .15s;
 }
 .tw-roll:active{transform:translateY(3px);box-shadow:0 2px 0 #8c6628}
+.tw-roll .tw-ico{width:22px;height:22px;vertical-align:-5px;margin-inline-end:9px}
 .tw-roll.hidden{display:none}
 .tw-hint{margin:8px 4px 0;text-align:center;font-size:12.5px;color:var(--tw-dim);min-height:19px}
 
@@ -259,7 +293,8 @@ body.mode-tawla #toast{background:#E3B15C!important;color:#1b110b!important}
 
 @media (max-width:360px){
   .tw-pt{height:124px}
-  .tw-die{width:50px;height:50px}
+  .tw-die{--s:50px;padding:6px}
+  .tw-dice-row{gap:10px;padding:10px 14px;min-height:80px}
 }
 
 /* النص اللي على السجادة */
@@ -377,3 +412,11 @@ body.mode-tawla.tw-playing{background:#120d0a!important}
 #twPlay>.tw-status,#twPlay>.tw-dice-row,#twPlay>.tw-roll{order:3}
 #twPlay>.tw-pl:last-of-type{order:4}
 #twPlay>.tw-final{order:5}
+
+/* زرار الأونلاين في الإعدادات */
+.tw-online-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:50px;margin-top:10px;
+  background:transparent;color:var(--tw-gold);border:1.5px solid rgba(227,177,92,.5);border-radius:15px;
+  font-size:16px;font-weight:800;cursor:pointer;transition:background .12s,transform .1s;
+}
+.tw-online-btn:active{background:rgba(227,177,92,.12);transform:translateY(2px)}
