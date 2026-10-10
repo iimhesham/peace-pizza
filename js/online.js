@@ -227,8 +227,35 @@ CSS+=`
 `;
 var CHEV='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
 function root(){if(!ov){ov=document.getElementById("olRoot")||document.createElement("div");ov.id="olRoot";document.body.appendChild(ov);}return ov;}
+/* تحديث ذكي للشاشة: بدل ما نمسح كل حاجة ونبنيها من الأول مع كل تغيير في الغرفة،
+   بنقارن الجديد بالموجود ونعدّل الجزء اللي اتغيّر بس (الأزرار والصور والأنيميشن اللي ماتغيّرتش بتفضل زي ما هي). */
+var lastHTML="",tplEl=null;
+function patchAttrs(a,b){var i,n,v;
+  for(i=a.attributes.length-1;i>=0;i--){n=a.attributes[i].name;if(!b.hasAttribute(n))a.removeAttribute(n);}
+  for(i=0;i<b.attributes.length;i++){n=b.attributes[i].name;v=b.attributes[i].value;if(a.getAttribute(n)!==v)a.setAttribute(n,v);}}
+function patchKids(a,b){var bc=b.childNodes,i=0,x,y;
+  for(;i<bc.length;i++){x=a.childNodes[i];y=bc[i];
+    if(!x){a.appendChild(y.cloneNode(true));continue;}
+    if(x.nodeType!==y.nodeType||x.nodeName!==y.nodeName){a.replaceChild(y.cloneNode(true),x);continue;}
+    if(y.nodeType!==1){if(x.nodeValue!==y.nodeValue)x.nodeValue=y.nodeValue;continue;}
+    /* نردة لسه بتترمي ونفس النتيجة: نسيبها تكمّل من غير ما نرجّعها من الأول */
+    if(x.classList.contains("toss")&&y.classList.contains("toss")&&x.getAttribute("aria-label")===y.getAttribute("aria-label"))continue;
+    var tossNew=y.classList.contains("toss")&&x.classList.contains("toss");
+    var oldVal=(x.nodeName==="INPUT"||x.nodeName==="TEXTAREA"||x.nodeName==="SELECT")?x.getAttribute("value"):null;
+    patchAttrs(x,y);
+    if(tossNew){x.style.animation="none";void x.offsetWidth;x.style.animation="";}
+    if(x.nodeName==="INPUT"){if(oldVal!==y.getAttribute("value")&&x.type!=="checkbox"&&x.type!=="radio")x.value=y.getAttribute("value")||"";}
+    else if(x.nodeName==="TEXTAREA"){if(x.defaultValue!==y.textContent){x.defaultValue=y.textContent;x.value=y.textContent;}continue;}
+    patchKids(x,y);}
+  while(a.childNodes.length>bc.length)a.removeChild(a.lastChild);}
 function shell(h,o){o=o||{};root();var top=ov.scrollTop;ov.setAttribute("data-g",o.g||(o.room&&S&&G[S.game||"flags"]?(S.game||"flags"):(vw==="menu"&&mk?mk:"base")));if(o.c)ov.setAttribute("data-c",o.c);else ov.removeAttribute("data-c");inRoom=!!o.room;playing=!!o.playing;var c=o.code||(o.room?code:"");
-  ov.innerHTML='<div class="ol-c"><div class="ol-bar"><button type="button" class="ol-back" onclick="OL.up()" aria-label="Back">'+CHEV+'</button><div class="ol-ttl">'+e(o.t||"Online")+'</div>'+(c?'<div class="ol-pill" dir="ltr">'+e(c)+'</div>':'')+'</div>'+h+'</div>';
+  var html='<div class="ol-c"><div class="ol-bar"><button type="button" class="ol-back" onclick="OL.up()" aria-label="Back">'+CHEV+'</button><div class="ol-ttl">'+e(o.t||"Online")+'</div>'+(c?'<div class="ol-pill" dir="ltr">'+e(c)+'</div>':'')+'</div>'+h+'</div>';
+  var heavy=o.g==="tawla"||o.g==="blackjack";
+  /* الطاولة والبلاك جاك: لو الشاشة هي هي بالحرف، مفيش داعي نعمل أي حاجة */
+  if(heavy&&html===lastHTML&&ov.firstChild&&lastT===o.t)return;
+  lastHTML=html;
+  if(!ov.firstChild||lastT!==o.t||!("content" in document.createElement("template"))){ov.innerHTML=html;}
+  else{if(!tplEl)tplEl=document.createElement("template");tplEl.innerHTML=html;patchKids(ov,tplEl.content);}
   ov.scrollTop=(lastT===o.t)?top:0;lastT=o.t;}
 function menu(k){if(k)mk=k;k=mk||"flags";vw="menu";var m=META[k],crime=k==="crime";
   shell('<div class="ol-pass"><div class="ol-pass-top"><span class="ol-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+m.ic+'</svg></span><div><b>'+e(m.n)+'</b><small>'+e(m.d)+'</small></div></div><div class="ol-perf"></div><div class="ol-pass-bot"><button type="button" class="ol-b" onclick="'+(crime?'OLS.open()':k==="blackjack"?'OL.create(\'blackjack\',\'cpu\')':'OL.create(\''+k+'\')')+'">'+(crime?'Pick a story and open the room':k==="blackjack"?'Open a table: CPU dealer':'Open a new room')+'</button>'+(k==="blackjack"?'<button type="button" class="ol-b g" style="margin-top:8px" onclick="OL.create(\'blackjack\',\'human\')">Open a table: I am the dealer</button>':'')+'<p class="ol-hint">'+e(m.who)+((k==="xo"||k==="ludo"||k==="sudoku"||k==="blackjack"||k==="tawla")?'.':'. You run the room.')+'</p></div></div>'+
@@ -332,7 +359,7 @@ function users(){if(!isAdmin())return;vw="users";
       return'<div class="ol-me">'+(u.p.photo?'<img class="'+(bk(u.id)?'r-'+bk(u.id):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.p.photo)+'">':'')+'<div><b>'+nmu(u.id,u.p.name||"No name")+'</b>'+(u.p.email?'<small>'+e(u.p.email)+'</small>':'')+'<small dir="ltr">ID: '+e(u.id.slice(0,10))+'…</small><small class="ol-ust"><span>Coins: '+(u.w&&typeof u.w.b==="number"?u.w.b.toLocaleString("en-US"):"—")+'</span><span>Last seen: '+d+'</span><span>Online sessions: '+gg+'</span><span>Points: '+pt+'</span></small><div class="ol-mrow">'+BK.map(function(k){return'<button type="button" class="ol-mini t-'+k+(bk(u.id)===k?' on':'')+'" onclick="OL.badge(\''+e(u.id)+'\',\''+(bk(u.id)===k?'':k)+'\')">'+BD[k]+'</button>';}).join("")+'</div><div class="ol-mrow" style="margin-top:8px"><input id="gc_'+e(u.id)+'" inputmode="numeric" autocomplete="off" placeholder="Coins to add" style="flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid rgba(var(--acr),.4);background:rgba(0,0,0,.25);color:inherit;font:inherit"><button type="button" class="ol-mini on" onclick="OL.grant(\''+e(u.id)+'\')">+ Add coins</button></div></div></div>';}).join(""),{t:"Users"});
   }).catch(function(){T("No permission. Make sure the Rules are published");});}
 function push(u){db.ref("rooms/"+code).update(u);}
-function listen(){try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}var r=db.ref("rooms/"+code),f=r.on("value",function(s){S=s.val();draw();});off=function(){r.off("value",f);};}
+function listen(){try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}var r=db.ref("rooms/"+code),raf=0,f=r.on("value",function(s){S=s.val();if(raf)return;var go=function(){raf=0;draw();};raf=window.requestAnimationFrame?requestAnimationFrame(go):setTimeout(go,16);});off=function(){r.off("value",f);if(raf&&window.cancelAnimationFrame)cancelAnimationFrame(raf);raf=0;};}
 function bail(m){busy=false;code=role=null;T(m);if(!vw)OL.exit();}
 function mkRoom(pay,cb,ns){var u=U(),n=0;(function go(){var c=String(1000+Math.floor(Math.random()*9000));
   db.ref("rooms/"+c).transaction(function(x){if(x&&Date.now()-(x.created||0)<43200000)return;return pay;},function(err,ok){
