@@ -27,6 +27,9 @@
 }
 .hm-wallet:active{transform:scale(.95);background:rgba(255,250,240,.14)}
 .hm-wallet.hidden{display:none}
+/* الرصيد مش بيتكتب فوق: أيقونة المحفظة بس (الرقم بيتشاف جوا صفحة المحفظة) */
+.hm-wallet{width:36px;padding:0;justify-content:center}
+.hm-wallet b{display:none}
 
 /* ---------- الإجراءات السريعة ---------- */
 .hx-top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 0}
@@ -100,5 +103,5 @@
 }
 @media (max-width:340px){
   #hub .hm-head.hm-head-c{padding-right:128px;padding-left:62px}
-  .hm-wallet{right:52px;padding:0 8px 0 7px}
+  .hm-wallet{right:52px}
 }

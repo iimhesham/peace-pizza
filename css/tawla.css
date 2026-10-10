@@ -130,7 +130,9 @@ body.mode-tawla #toast{background:#E3B15C!important;color:#1b110b!important}
 .tw-slot.can{border-color:var(--tw-gold);cursor:pointer;animation:twPulse 1.2s ease-in-out infinite}
 .tw-slot.sel{background:#7a5230;border-color:var(--tw-gold)}
 .tw-slot.dest{border-color:#7fe08a;cursor:pointer;animation:twPulse 1s ease-in-out infinite}
-@keyframes twPulse{0%,100%{box-shadow:0 0 0 0 rgba(227,177,92,.0)}50%{box-shadow:0 0 0 3px rgba(227,177,92,.35)}}
+/* نبض بالشفافية بس (أخف بكتير على الموبايل من تحريك الظل) + حلقة ثابتة بدل الظل المتحرك */
+@keyframes twPulse{0%,100%{opacity:1}50%{opacity:.6}}
+.tw-chip.can,.tw-slot.can{box-shadow:0 0 0 2px rgba(227,177,92,.3)}
 
 /* ---------- القشاطة ---------- */
 .tw-pc{
@@ -268,7 +270,7 @@ body.mode-tawla #toast{background:#E3B15C!important;color:#1b110b!important}
 /* ---------- نهاية الجيم / المباراة ---------- */
 .tw-final{
   position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;
-  background:rgba(8,4,2,.8);backdrop-filter:blur(3px);
+  background:rgba(8,4,2,.88);
 }
 .tw-final.hidden{display:none}
 .tw-final-card{
