@@ -75,14 +75,15 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
     var R=list("all"),ix=R.map(function(r){return r.id;}).indexOf(u.uid),acc=accOf(t),name=u.displayName||"Player",
         mine=holders().filter(function(x){return x.h&&x.h.id===u.uid;}).map(function(x){return x.t;});
     var h=tabs("me");
-    var bk=I.bk(u.uid),BL={gold:"Golden"},bkl=bk?(BL[bk]||bk.charAt(0).toUpperCase()+bk.slice(1)):"";
+    var bk=I.bk(u.uid);
     var pad=function(n,l){n=String(n);while(n.length<l)n="0"+n;return n;};
     var mail=I.mail(u);
     h+='<section class="pp-page"><button type="button" class="wl-ico sm" onclick="OL.wallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button><div class="pp-top"><b>Player Passport</b></div>'+
-      '<div class="pp-body"><div class="pp-photo">'+av(u.photoURL,u.uid,"pp-av",name)+(bkl?'<div class="pp-seal" title="'+e(bkl)+'">&#9733; '+e(bkl)+'</div>':'')+'</div>'+
+      '<div class="pp-body"><div class="pp-photo">'+av(u.photoURL,u.uid,"pp-av",name)+PPB.seal(bk)+'</div>'+
       '<div class="pp-f"><label>Name</label><b class="pp-name" dir="auto">'+e(name)+'</b>'+(mail?'<label>E-mail</label><span class="pp-mail" dir="ltr">'+e(mail)+'</span>':'')+
       (mine.length?'<label>Titles</label><span class="pp-tt">'+mine.slice(0,2).map(function(x){return e(x.n);}).join(" + ")+'</span>':'')+'</div></div>'+
       '<div class="pp-k">'+[[t.pts,"Points"],[t.wins,"Wins"],[t.games,"Sessions"],[acc===null?"-":acc+"%","Accuracy"]].map(function(c){return'<div><label>'+c[1]+'</label><b>'+c[0]+'</b></div>';}).join("")+'</div>'+
+      (function(){var L=PPB.level(t.pts,t.games);return'<div class="pp-lv"><span class="pp-lv-b"><small>LV</small><b>'+L.lv+'</b></span><div class="pp-lv-t"><div class="pp-lv-r"><b>'+L.rank+'</b><em>'+L.xp+' / '+L.hi+' XP</em></div><i class="ol-pb"><i style="width:'+L.pc+'%"></i></i></div></div>';})()+
       '<div class="pp-strip"><div><label>Rank No.</label><b>'+(ix>=0?'#'+pad(ix+1,4):'NONE')+'</b></div><div><label>Players</label><b>'+pad(R.length,4)+'</b></div><div><label>Status</label><b>'+(ix>=0?'ACTIVE':'NEW')+'</b></div></div>'+
       '</section>';
     if(o.adm){h+=sec("Admin Tools","",'<span class="ac-tag">Admin</span>')+'<div class="ac-grid pp-adm">'+
@@ -94,13 +95,17 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       return'<div class="pp-visa'+(x?'':' off')+'" style="--gc:'+GC[k]+'">'+
         '<div class="pp-vr"><span class="ac-gi">'+IX(GI[k])+'</span><b>'+(x?x.pts:"-")+'</b></div><small>'+GN[k]+'</small>'+
         (x?'<i class="ol-acc"><i style="width:'+pc+'%"></i></i><span class="pp-vs">'+(xoG?(x.wins||0)+'W '+(x.games||0)+'G':(x.right||0)+'&#10003; '+(x.wrong||0)+'&#10007;')+'</span>':'<em>Not played yet</em>')+'</div>';}).join("")+'</div>';
-    var B=I.BADGES,done=B.filter(function(b){return b[2](t,v);}),next=B.filter(function(b){return!b[2](t,v);}).map(function(b){return{b:b,c:Math.min(b[3](t,v),b[4])};}).sort(function(a,c){return c.c/c.b[4]-a.c/a.b[4];})[0];
-    var shown=done.slice(0,8);
-    h+=sec("Achievements",done.length+" of "+B.length,'<button type="button" class="ac-more" onclick="OLX.go(\'awards\')">View all</button>')+
-      '<div class="pp-stamps">'+shown.map(function(b,i){var rot=[-4,3,-2,4,-3,2][i%6];
-        return'<div class="pp-stamp c'+(i%4)+'" style="--r:'+rot+'deg" title="'+e(b[1])+'"><b>'+e(b[0])+'</b></div>';}).join("")+'</div>'+
-      (done.length?'':'<div class="ac-none pp-none">Play online games to unlock achievements</div>')+
-      (next?'<div class="ac-next"><b>Next up: '+e(next.b[0])+'</b><small>'+e(next.b[1])+'</small><i class="ol-pb"><i style="width:'+Math.round(next.c/next.b[4]*100)+'%"></i></i><em class="ol-of">'+next.c+' / '+next.b[4]+'</em></div>':'');
+    var ST=PPB.state(t,v),done=ST.filter(function(x){return x.on;}),next=ST.filter(function(x){return!x.on;}).sort(function(a,c){return c.c/c.b[4]-a.c/a.b[4];}).slice(0,2),show=PPB.top(ST,3);
+    var best=GK.map(function(k){return{k:k,p:gp({s:v},k)};}).sort(function(a,c){return c.p-a.p;})[0],A0=awardsOf(u.uid),md=A0.medals,wr=t.games?Math.round(t.wins/t.games*100)+"%":"-";
+    var since="";try{since=u.metadata&&u.metadata.creationTime?dstr(u.metadata.creationTime):"";}catch(x){}
+    h+=sec("Highlights")+'<div class="pp-hl">'+
+      '<div><span class="hl-i">'+IX(GI[best.k])+'</span><span class="hl-t"><label>Best game</label><b>'+(best.p>0?GN[best.k]:"-")+'</b></span></div>'+
+      '<div><span class="hl-i">'+PPB.ic("percent")+'</span><span class="hl-t"><label>Win rate</label><b>'+wr+'</b></span></div>'+
+      '<div><span class="hl-i">'+PPB.ic("medal")+'</span><span class="hl-t"><label>Medals</label><span class="pp-med"><span class="g"><i></i>'+md.g+'</span><span class="s"><i></i>'+md.s+'</span><span class="b"><i></i>'+md.b+'</span></span></span></div>'+
+      '<div><span class="hl-i">'+PPB.ic(since?"clock":"trophy")+'</span><span class="hl-t"><label>'+(since?"Member since":"Titles")+'</label><b>'+(since||mine.length)+'</b></span></div></div>';
+    h+=sec("Achievements",done.length+" of "+ST.length,'<button type="button" class="ac-more" onclick="OLX.go(\'awards\')">View all</button>')+
+      (show.length?'<div class="ach-show">'+show.map(PPB.tile).join("")+'</div>':'<div class="ac-none pp-none">Play online games to unlock achievements</div>')+
+      next.map(function(x){return'<div class="ac-next"><b>Next up: '+e(x.b[0])+'</b><small>'+e(x.b[1])+'</small><i class="ol-pb"><i style="width:'+Math.round(x.c/x.b[4]*100)+'%"></i></i><em class="ol-of">'+x.c+' / '+x.b[4]+'</em></div>';}).join("");
     h+=sec("Community")+'<button type="button" class="ac-tile" onclick="OL.sug()">'+IX("pencil")+'<span><b>Suggest a Question</b><small>Send your own questions to the admin</small></span></button>';
     if(!o.adm&&o.claim)h+='<button type="button" class="ol-b o" onclick="OL.claim()">Make me the admin (one time only)</button>';
     if(!o.inRoom)h+='<button type="button" class="ac-out" onclick="OL.signOut()">'+IX("logout")+' Sign out</button>';
@@ -122,6 +127,15 @@ function rank(f){if(f)rf=f;I.sv("stats");curTab="rank";
     shell(h,"Ranking");});}
 
 /* ---------- Awards ---------- */
+var AST=[],achF="all";
+function achBox(){var on=AST.filter(function(x){return x.on;}).length,tot=AST.length;
+  var rar=[1,2,3,4].map(function(r){var a=AST.filter(function(x){return x.b[5].tr===r;}),o=a.filter(function(x){return x.on;}).length;return'<div style="--rc:'+PPB.RAR[r].rgb+'"><b>'+o+'/'+a.length+'</b><small>'+PPB.RAR[r].n+'</small></div>';}).join("");
+  var chips='<div class="ach-chips">'+[["all","All"],["done","Unlocked"],["todo","Locked"]].concat(PPB.GROUPS.slice(0)).map(function(c){var n=c[0]==="all"?tot:c[0]==="done"?on:c[0]==="todo"?tot-on:AST.filter(function(x){return x.b[5].g===c[0];}).length;
+    return'<button type="button" class="ach-f'+(achF===c[0]?' on':'')+'" onclick="OLX.af(\''+c[0]+'\')">'+c[1]+'<em>'+n+'</em></button>';}).join("")+'</div>';
+  var L=AST.filter(function(x){return achF==="all"||(achF==="done"?x.on:achF==="todo"?!x.on:x.b[5].g===achF);});
+  L.sort(function(a,b){return(b.on-a.on)||(b.on?b.b[5].tr-a.b[5].tr:(b.c/b.b[4])-(a.c/a.b[4]));});
+  return'<div class="ach-sum"><div class="ach-sum-t"><b>'+on+'<small>/ '+tot+'</small></b><span>achievements unlocked</span></div><i class="ol-pb"><i style="width:'+Math.round(on/tot*100)+'%"></i></i><div class="ach-rar">'+rar+'</div></div>'+chips+(L.map(PPB.card).join("")||'<div class="ox-none sm">Nothing here yet</div>');}
+function af(g){achF=g;var el=document.getElementById("achBox");if(el)el.innerHTML=achBox();}
 function awards(){I.sv("stats");curTab="awards";
   load(function(){if(!alive())return;var W=winners(),top=W.now[0],h=tabs("awards"),mid=U().uid;
     var nm=function(r){var x=LB[r.id]||{};return{n:x.n||"Player",p:x.p||""};};
@@ -135,9 +149,8 @@ function awards(){I.sv("stats");curTab="awards";
     h+=sec("Hall of Fame","Past months");
     h+=W.past.length?W.past.map(function(p){var x=nm(p.w);return'<div class="hf"><div class="hf-h">'+IC("trophy",1)+' '+mlabel(p.k)+'</div><div class="hf-w" onclick="OLX.prof(\''+e(p.w.id)+'\')">'+av(x.p,p.w.id,"",x.n)+'<div class="ox-rw"><b>'+I.nmu(p.w.id,x.n)+'</b><small>Player of the Month</small></div><span class="ox-pts">'+p.w.v+'</span></div>'+
       (p.top.length>1?'<div class="hf-pod">'+p.top.slice(1).map(function(r,i){var y=nm(r);return'<span class="'+(i?'b':'s')+'" onclick="OLX.prof(\''+e(r.id)+'\')"><i></i>'+(i?'3rd':'2nd')+' <b dir="auto">'+e(y.n)+'</b> '+r.v+'</span>';}).join("")+'</div>':'')+'</div>';}).join(""):'<div class="ox-none">No month has finished yet. The first champion is crowned at the start of next month.</div>';
-    var a=agg(LB[mid]),s=(LB[mid]||{}).s||{},B=I.BADGES;
-    h+=sec("My Achievements",B.filter(function(b){return b[2](a,s);}).length+" of "+B.length)+'<div class="bd2-grid">'+B.map(function(b){var on=b[2](a,s),c=Math.min(b[3](a,s),b[4]);
-      return'<div class="bd2'+(on?' on':'')+'"><b><span class="bd2-i">'+(on?IC("check"):IC("lock"))+'</span>'+b[0]+'</b><small>'+b[1]+'</small>'+(on?'':'<i class="ol-pb"><i style="width:'+Math.round(c/b[4]*100)+'%"></i></i><em class="ol-of">'+c+' / '+b[4]+'</em>')+'</div>';}).join("")+'</div>';
+    AST=PPB.state(agg(LB[mid]),(LB[mid]||{}).s||{});achF=achF||"all";
+    h+=sec("My Achievements")+'<div id="achBox">'+achBox()+'</div>';
     shell(h,"Awards");});}
 
 /* ---------- Profile (sheet over any screen) ---------- */
@@ -159,7 +172,9 @@ function pview(id,fb,st){var x=LB[id]||null,u=U(),mine=id===u.uid,n=(x&&x.n)||(f
   if(A.titles.length)aw+='<div class="ox-achs">'+A.titles.map(function(t){return'<span class="ox-ttl">'+ico(t.ic)+' '+t.n+'</span>';}).join("")+'</div>';
   var md=A.medals;if(md.g+md.s+md.b)aw+='<div class="pv-medals">'+[["g","Gold"],["s","Silver"],["b","Bronze"]].map(function(m){return'<div class="pv-m '+m[0]+'">'+IX("medal")+'<b>'+md[m[0]]+'</b><small>'+m[1]+'</small></div>';}).join("")+'</div>';
   if(!aw)aw='<div class="ox-none sm">'+(mine?"You have no awards yet":"No awards yet")+'</div>';
-  var ach=I.BADGES.filter(function(b){return b[2](a,s);}).map(function(b){return'<span class="ox-ach">'+IC("check")+' '+b[0]+'</span>';}).join("");
+  var PS=PPB.state(a,s),pdone=PS.filter(function(x){return x.on;}).sort(function(p1,p2){return p2.b[5].tr-p1.b[5].tr;}),
+    ach=pdone.slice(0,12).map(PPB.chip).join("")+(pdone.length>12?'<span class="ach-chip" style="--rc:141,157,149">+'+(pdone.length-12)+' more</span>':""),
+    LV=PPB.level(a.pts,a.games),bst=GK.map(function(k){return{k:k,p:gp(x,k)};}).sort(function(p1,p2){return p2.p-p1.p;})[0],wrt=a.games?Math.round(a.wins/a.games*100)+"%":"-";
   var act="";
   if(!mine){if(st.err)act='<div class="ox-none sm">Could not load friend status. Make sure the Rules are published</div>';
     else if(st.fr)act='<div class="ox-fr ok">'+IX("users")+' Friends</div><button type="button" class="ol-s" onclick="OLX.funf(\''+e(id)+'\')">Remove Friend</button>';
@@ -170,6 +185,8 @@ function pview(id,fb,st){var x=LB[id]||null,u=U(),mine=id===u.uid,n=(x&&x.n)||(f
     '<div class="ox-ph">'+av(p,id,"ox-big",n)+'<b class="ox-nn">'+I.nmu(id,n)+'</b><div class="ac-pills">'+(ri>=0?'<span class="ac-pill gold">'+IC("chart",1)+' Rank #'+(ri+1)+'<em>of '+R.length+'</em></span>':'<span class="ac-pill">Unranked</span>')+(mine?'<span class="ac-pill">This is you</span>':'')+'</div></div>'+
     (act?'<div class="ox-act top">'+act+'</div>':'')+
     '<div class="ox-kp"><div class="m"><b>'+a.pts+'</b><small>Total Points</small></div><div><b>'+a.wins+'</b><small>Wins</small></div><div><b>'+a.games+'</b><small>Sessions</small></div><div><b>'+(ac===null?"-":ac+"%")+'</b><small>Accuracy</small></div></div>'+
+    '<div class="ox-lv"><span class="pp-lv-b"><small>LV</small><b>'+LV.lv+'</b></span><div class="pp-lv-t"><div class="pp-lv-r"><b>'+LV.rank+'</b><em>'+LV.xp+' / '+LV.hi+' XP</em></div><i class="ol-pb"><i style="width:'+LV.pc+'%"></i></i></div></div>'+
+    '<div class="ox-hl"><div><small>Best game</small><b>'+(bst.p>0?GN[bst.k]:"-")+'</b></div><div><small>Win rate</small><b>'+wrt+'</b></div><div><small>Unlocked</small><b>'+pdone.length+' / '+PS.length+'</b></div></div>'+
     '<div class="ox-sec">Points by Game</div><div class="ox-grs">'+gr+'</div>'+
     '<div class="ox-sec">Awards</div>'+aw+
     (ach?'<div class="ox-sec">Achievements</div><div class="ox-achs">'+ach+'</div>':'')+'</div>');}
@@ -496,5 +513,5 @@ var st=document.createElement("style");st.textContent=css;document.head.appendCh
 
 window.OLX={tabs:tabs,pre:pre,go:go,me:me,rank:rank,rf:function(f){rank(f);},awards:awards,friends:friends,prof:prof,close:close,
   fadd:fadd,facc:facc,fdec:fdec,fcan:fcan,funf:funf,srch:srch,sug:sug,back:back,fg:fg,fp:fp,rm:rm,addc:addc,adds:adds,seg:seg,send:send,
-  queue:queue,qdec:qdec,qcopy:qcopy};
+  queue:queue,qdec:qdec,qcopy:qcopy,af:af};
 })();

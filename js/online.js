@@ -42,28 +42,7 @@ var META={
 function RW(s){var r=0,w=0;Object.keys(s||{}).forEach(function(k){r+=(s[k]||{}).right||0;w+=(s[k]||{}).wrong||0;});return[r,w];}
 function GP(s,k){return((s||{})[k]||{}).pts||0;}
 function RT(s,k){return((s||{})[k]||{}).right||0;}
-var BADGES=[
- ["First Win","Win 1 session",function(t){return t.wins>=1;},function(t){return t.wins;},1],
- ["Regular","Play 5 sessions",function(t){return t.games>=5;},function(t){return t.games;},5],
- ["Veteran","Play 25 sessions",function(t){return t.games>=25;},function(t){return t.games;},25],
- ["Marathoner","Play 50 sessions",function(t){return t.games>=50;},function(t){return t.games;},50],
- ["Point Collector","Score 50 points",function(t){return t.pts>=50;},function(t){return t.pts;},50],
- ["Century","Score 100 points",function(t){return t.pts>=100;},function(t){return t.pts;},100],
- ["Champion","Win 5 sessions",function(t){return t.wins>=5;},function(t){return t.wins;},5],
- ["Flag Expert","10 correct flags",function(t,s){return RT(s,"flags")>=10;},function(t,s){return RT(s,"flags");},10],
- ["Detective","5 correct players",function(t,s){return RT(s,"story")>=5;},function(t,s){return RT(s,"story");},5],
- ["Transfer Guru","5 correct transfers",function(t,s){return RT(s,"career")>=5;},function(t,s){return RT(s,"career");},5],
- ["Sharpshooter","80% accuracy, 20+ answers",function(t,s){var a=RW(s),n=a[0]+a[1];return n>=20&&a[0]/n>=.8;},function(t,s){var a=RW(s);return a[0]+a[1];},20],
- ["XO Rookie","Win 1 XO game",function(t,s){return((s||{}).xo||{}).wins>=1;},function(t,s){return((s||{}).xo||{}).wins||0;},1],
- ["XO Ace","Win 10 XO games",function(t,s){return((s||{}).xo||{}).wins>=10;},function(t,s){return((s||{}).xo||{}).wins||0;},10],
- ["Ludo Rookie","Win 1 Ludo game",function(t,s){return((s||{}).ludo||{}).wins>=1;},function(t,s){return((s||{}).ludo||{}).wins||0;},1],
- ["Ludo Ace","Win 10 Ludo games",function(t,s){return((s||{}).ludo||{}).wins>=10;},function(t,s){return((s||{}).ludo||{}).wins||0;},10],
- ["Sudoku Rookie","Win 1 Sudoku race",function(t,s){return((s||{}).sudoku||{}).wins>=1;},function(t,s){return((s||{}).sudoku||{}).wins||0;},1],
- ["Sudoku Ace","Win 10 Sudoku races",function(t,s){return((s||{}).sudoku||{}).wins>=10;},function(t,s){return((s||{}).sudoku||{}).wins||0;},10],
- ["Tawla Rookie","Win 1 Tawla game",function(t,s){return((s||{}).tawla||{}).wins>=1;},function(t,s){return((s||{}).tawla||{}).wins||0;},1],
- ["Tawla Ace","Win 10 Tawla games",function(t,s){return((s||{}).tawla||{}).wins>=10;},function(t,s){return((s||{}).tawla||{}).wins||0;},10],
- ["All-Rounder","Score in Flags, Who Am I and Transfers",function(t,s){return GP(s,"flags")>0&&GP(s,"story")>0&&GP(s,"career")>0;},function(t,s){return(GP(s,"flags")>0)+(GP(s,"story")>0)+(GP(s,"career")>0);},3]
-];
+var BADGES=window.PPB.ACH;
 var CSS=':root{--o-bell:'+SV("<path d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9'/><path d='M10.3 21a1.9 1.9 0 0 0 3.4 0'/>")+';--o-trophy:'+SV("<path d='M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z'/><path d='M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3'/>")+';--o-chart:'+SV("<path d='M4 20V10M10 20V4M16 20v-7M22 20H2'/>")+';--o-copy:'+SV("<rect x='9' y='9' width='11' height='11' rx='2'/><path d='M5 15V6a2 2 0 0 1 2-2h8'/>")+'}'+
 /* الأساس */
 '#olRoot{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9990;height:100vh;height:100dvh;background:var(--wash),var(--bg);color:var(--ink);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif;line-height:1.6;direction:ltr;text-align:left}'+
@@ -111,11 +90,7 @@ var CSS=':root{--o-bell:'+SV("<path d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9
 '.ol-st{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px;margin:8px 0}.ol-st b{color:var(--ac)}'+
 '.ol-me{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px;margin:8px 0}.ol-me img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #10b981;flex:none}.ol-me b{display:block;color:#fff}.ol-me small{display:block;color:var(--mu);direction:ltr;text-align:left;word-break:break-all}'+
 '.ol-bdg{display:inline-flex;align-items:center;gap:4px;margin-inline-start:7px;padding:2px 9px 0;border-radius:999px;font:400 12px/1.5 Anton,Impact,sans-serif;letter-spacing:1.5px;color:#1c1604;white-space:nowrap;font-style:normal;vertical-align:middle}'+
-'.ol-bdg.t-gold{background:linear-gradient(135deg,#f6e3a1,#c9992f)}.ol-bdg.t-silver{background:linear-gradient(135deg,#f1f4f7,#9aa7b3)}.ol-bdg.t-premium{background:linear-gradient(135deg,#e4c6ff,#9a6bd6);color:#240a3d}.ol-bdg.t-master{background:linear-gradient(135deg,#6fe6ee,#00bcc8);color:#032a2e}.ol-bdg.t-elite{background:linear-gradient(135deg,#e9ff6e,#d0ff00);color:#1e2800}.ol-bdg.t-king{background:linear-gradient(120deg,#047857,#10b981 42%,#f0bfae 72%,#b76e79);color:#04251b}.ol-bdg.t-legend{background:linear-gradient(135deg,#5b7bc4,#1b2f6b);color:#fff}.ol-bdg.t-phantom{background:linear-gradient(135deg,#ff8a8a,#d4142a);color:#fff}.ol-bdg.t-savage{background:linear-gradient(135deg,#ff9ee8,#e0199f);color:#fff}'+
-'.ol-nm.t-gold,.ol-nm.t-silver,.ol-nm.t-premium,.ol-nm.t-master,.ol-nm.t-elite,.ol-nm.t-king,.ol-nm.t-legend,.ol-nm.t-phantom,.ol-nm.t-savage{-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:800}'+
-'.ol-nm.t-gold{background-image:linear-gradient(100deg,#fff1b8,#e0ac35 45%,#b9831f)}.ol-nm.t-silver{background-image:linear-gradient(100deg,#ffffff,#b9c4cf 50%,#8895a2)}.ol-nm.t-premium{background-image:linear-gradient(100deg,#f1dcff,#b98cf0 50%,#8a5bc9)}.ol-nm.t-master{background-image:linear-gradient(100deg,#b4f5fa,#00bcc8 50%,#00909a)}.ol-nm.t-elite{background-image:linear-gradient(100deg,#f6ffb4,#d0ff00 50%,#a3c900)}.ol-nm.t-king{background-image:linear-gradient(100deg,#34d399,#10b981 35%,#f0bfae 70%,#c27d8a)}.ol-nm.t-legend{background-image:linear-gradient(100deg,#a9bdf0,#4a6bc9 50%,#2b4590)}.ol-nm.t-phantom{background-image:linear-gradient(100deg,#ffb3b3,#ff3b3b 50%,#c4122a)}.ol-nm.t-savage{background-image:linear-gradient(100deg,#ffc2f0,#ff4fd8 50%,#c2189b)}'+
-'.ol-av.r-gold,.ol-me img.r-gold{border-color:#e6c25a;box-shadow:0 0 0 2px rgba(230,194,90,.35)}.ol-av.r-silver,.ol-me img.r-silver{border-color:#c3ccd5;box-shadow:0 0 0 2px rgba(195,204,213,.3)}.ol-av.r-premium,.ol-me img.r-premium{border-color:#b98cf0;box-shadow:0 0 0 2px rgba(185,140,240,.35)}.ol-av.r-master,.ol-me img.r-master{border-color:#00bcc8;box-shadow:0 0 0 2px rgba(0,188,200,.35)}.ol-av.r-elite,.ol-me img.r-elite{border-color:#d0ff00;box-shadow:0 0 0 2px rgba(208,255,0,.3)}.ol-av.r-king,.ol-me img.r-king{border-color:#10b981;box-shadow:0 0 0 2px rgba(183,110,121,.5)}.ol-av.r-legend,.ol-me img.r-legend{border-color:#3d5fc0;box-shadow:0 0 0 2px rgba(43,69,144,.5)}.ol-av.r-phantom,.ol-me img.r-phantom{border-color:#ff3b3b;box-shadow:0 0 0 2px rgba(255,59,59,.35)}.ol-av.r-savage,.ol-me img.r-savage{border-color:#ff4fd8;box-shadow:0 0 0 2px rgba(255,79,216,.35)}'+
-'.ol-mrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;direction:ltr}.ol-mini{padding:7px 4px;border-radius:999px;border:1px solid var(--ln2);background:var(--card2);color:var(--mu);font:600 13px "IBM Plex Sans Arabic",sans-serif;cursor:pointer}.ol-mini.on{color:#241a04;background:var(--ac);border-color:var(--ac)}.ol-mini.on.t-silver{background:#c3ccd5;border-color:#c3ccd5}.ol-mini.on.t-premium{background:#b98cf0;border-color:#b98cf0}.ol-mini.on.t-master{background:#00bcc8;border-color:#00bcc8;color:#032a2e}.ol-mini.on.t-elite{background:#d0ff00;border-color:#d0ff00;color:#1e2800}.ol-mini.on.t-king{background:linear-gradient(120deg,#047857,#10b981 42%,#f0bfae 72%,#b76e79);border-color:#10b981;color:#04251b}.ol-mini.on.t-legend{background:#1e3a8a;border-color:#3d5fc0;color:#fff}.ol-mini.on.t-phantom{background:#ff3b3b;border-color:#ff3b3b;color:#fff}.ol-mini.on.t-savage{background:#ff4fd8;border-color:#ff4fd8;color:#fff}.ol-me .ol-ust{display:flex;flex-wrap:wrap;gap:2px 12px;direction:ltr}.ol-ust span{white-space:nowrap}'+
+'.ol-mrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;direction:ltr}.ol-mini{padding:7px 4px;border-radius:999px;border:1px solid var(--ln2);background:var(--card2);color:var(--mu);font:600 13px "IBM Plex Sans Arabic",sans-serif;cursor:pointer}.ol-mini.on{color:#241a04;background:var(--ac);border-color:var(--ac)}.ol-me .ol-ust{display:flex;flex-wrap:wrap;gap:2px 12px;direction:ltr}.ol-ust span{white-space:nowrap}'+
 '.ol-c h2{color:var(--ac);margin:16px 0 8px;font-weight:700;font-size:20px}'+
 /* قصص الجرايم */
 '.ol-p{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px;margin:8px 0;line-height:1.7}.ol-p h3{margin:0 0 6px;color:var(--ac);font-size:16px}.ol-p small{color:var(--mu)}'+
@@ -260,16 +235,16 @@ function shell(h,o){o=o||{};root();var top=ov.scrollTop;ov.setAttribute("data-g"
 function menu(k){if(k)mk=k;k=mk||"flags";vw="menu";var m=META[k],crime=k==="crime";
   shell('<div class="ol-pass"><div class="ol-pass-top"><span class="ol-glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+m.ic+'</svg></span><div><b>'+e(m.n)+'</b><small>'+e(m.d)+'</small></div></div><div class="ol-perf"></div><div class="ol-pass-bot"><button type="button" class="ol-b" onclick="'+(crime?'OLS.open()':k==="blackjack"?'OL.create(\'blackjack\',\'cpu\')':'OL.create(\''+k+'\')')+'">'+(crime?'Pick a story and open the room':k==="blackjack"?'Open a table: CPU dealer':'Open a new room')+'</button>'+(k==="blackjack"?'<button type="button" class="ol-b g" style="margin-top:8px" onclick="OL.create(\'blackjack\',\'human\')">Open a table: I am the dealer</button>':'')+'<p class="ol-hint">'+e(m.who)+((k==="xo"||k==="ludo"||k==="sudoku"||k==="blackjack"||k==="tawla")?'.':'. You run the room.')+'</p></div></div>'+
    '<div class="ol-join"><label for="olCode">Have a room code?</label><div class="ol-join-row"><input id="olCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="0000" autocomplete="off" onkeydown="if(event.key===\'Enter\')OL.join()"><button type="button" class="ol-b g" onclick="OL.join()">Join</button></div></div>'+((k==="xo"||k==="ludo"||k==="sudoku"||k==="blackjack"||k==="tawla")?'':'<button type="button" class="ol-s" onclick="OL.sug(\''+k+'\')">'+IX('pencil')+' Suggest a question for this game</button>'),{t:m.n+" Online",g:k});}
-var BD={gold:"Golden",silver:"Silver",premium:"Premium",master:"Master",elite:"Elite",king:"King",legend:"Legend",phantom:"Phantom",savage:"Savage"},BK=["premium","silver","gold","master","elite","king","legend","phantom","savage"];
+var BD={},BK=[];window.PPB.TIERS.forEach(function(t){BD[t.k]=t.n;BK.push(t.k);});
 function bk(id){return BD[BDG[id]]?BDG[id]:"";}
-function bdg(id){var k=bk(id);return k?'<i class="ol-bdg t-'+k+'">&#9733; '+BD[k]+'</i>':"";}
+function bdg(id){var k=bk(id);return k?window.PPB.pill(k):"";}
 function nmu(id,name){var k=bk(id);return'<span class="ol-nm'+(k?' t-'+k:'')+'" dir="auto">'+e(name)+'</span>'+bdg(id);}
 function nm(p){return nmu(p.uid,p.name);}
 function loadB(){return db.ref("badges").once("value").then(function(s){BDG=s.val()||{};},function(){});}
 function grantCoins(id){if(!isAdmin())return;var el=document.getElementById("gc_"+id),n=el?Math.floor(Number((el.value||"").replace(/[^\d]/g,""))):0;
   if(!(n>0)||n>1000000000){T("Enter a valid amount");return;}
   var me=U();db.ref("inbox/"+id+"/adm_"+Date.now()+"_"+Math.floor(Math.random()*1e6)).set({a:n,r:"admin_grant",f:me.uid,t:Date.now()}).then(function(){T(n.toLocaleString("en-US")+" coins sent");if(el)el.value="";}).catch(function(){T("No permission. Publish the new Firebase Rules");});}
-function setBadge(id,k){var on=k&&BD[k];db.ref("badges/"+id).set(on?k:null).then(function(){if(on)BDG[id]=k;else delete BDG[id];T(on?BD[k]+" badge given":"Badge removed");users();}).catch(function(){T("Couldn't change the badge. Make sure the Rules are published");});}
+function setBadge(id,k){var on=k&&BD[k];db.ref("badges/"+id).set(on?k:null).then(function(){if(on)BDG[id]=k;else delete BDG[id];T(on?BD[k]+" badge given":"Badge removed");if(vw==="users"&&UD)uDraw();else users();}).catch(function(){T("Couldn't change the badge. Make sure the Rules are published");});}
 function pl(){var P=S.players||{};return Object.keys(P).map(function(k){return P[k];});}
 function ids(){return pl().map(function(p){return p.uid;});}
 function av(p){return p.photo?'<img class="ol-av'+(bk(p.uid)?' r-'+bk(p.uid):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(p.photo)+'">':'<span class="ol-ph"></span>';}
@@ -351,13 +326,38 @@ function syncAll(){if(!isAdmin())return;var b=document.getElementById("olSyncB")
     if(!n){T("No players need syncing");return;}
     return db.ref().update(d).then(function(){T("Synced "+n+" player"+(n===1?"":"s"));});
   }).catch(function(){T("Couldn't sync. Make sure the Rules are published");}).then(function(){if(b)b.disabled=false;});}
+var UD=null,uq="",us="recent",uf="all",ut="",uo=null,un=30;
 function users(){if(!isAdmin())return;vw="users";
   loadB().then(function(){return db.ref("users").once("value");}).then(function(s){var v=s.val()||{};
-    var L=Object.keys(v).map(function(id){var x=v[id]||{};return{id:id,p:x.profile||{},st:x.stats||{},w:x.wallet||null};}).sort(function(a,b){return(b.p.updated||0)-(a.p.updated||0);});
-    shell('<div class="ol-w">'+L.length+' users</div>'+L.map(function(u){var gg=0,pt=0;Object.keys(u.st).forEach(function(k){gg+=u.st[k].games||0;pt+=u.st[k].pts||0;});
-      var d=u.p.updated?new Date(u.p.updated).toLocaleDateString("en-GB"):"—";
-      return'<div class="ol-me">'+(u.p.photo?'<img class="'+(bk(u.id)?'r-'+bk(u.id):'')+'" referrerpolicy="no-referrer" alt="" src="'+e(u.p.photo)+'">':'')+'<div><b>'+nmu(u.id,u.p.name||"No name")+'</b>'+(u.p.email?'<small>'+e(u.p.email)+'</small>':'')+'<small dir="ltr">ID: '+e(u.id.slice(0,10))+'…</small><small class="ol-ust"><span>Coins: '+(u.w&&typeof u.w.b==="number"?u.w.b.toLocaleString("en-US"):"—")+'</span><span>Last seen: '+d+'</span><span>Online sessions: '+gg+'</span><span>Points: '+pt+'</span></small><div class="ol-mrow">'+BK.map(function(k){return'<button type="button" class="ol-mini t-'+k+(bk(u.id)===k?' on':'')+'" onclick="OL.badge(\''+e(u.id)+'\',\''+(bk(u.id)===k?'':k)+'\')">'+BD[k]+'</button>';}).join("")+'</div><div class="ol-mrow" style="margin-top:8px"><input id="gc_'+e(u.id)+'" inputmode="numeric" autocomplete="off" placeholder="Coins to add" style="flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid rgba(var(--acr),.4);background:rgba(0,0,0,.25);color:inherit;font:inherit"><button type="button" class="ol-mini on" onclick="OL.grant(\''+e(u.id)+'\')">+ Add coins</button></div></div></div>';}).join(""),{t:"Users"});
+    UD=Object.keys(v).map(function(id){var x=v[id]||{},p=x.profile||{},st=x.stats||{},gg=0,pt=0;
+      Object.keys(st).forEach(function(k){var y=st[k]||{};gg+=y.games||0;pt+=y.pts||0;});
+      return{id:id,name:p.name||"No name",email:p.email||"",photo:p.photo||"",pts:pt,games:gg,coins:(x.wallet&&typeof x.wallet.b==="number")?x.wallet.b:null,seen:p.updated||0};});
+    uq="";us="recent";uf="all";ut="";uo=null;un=30;uDraw(true);
   }).catch(function(){T("No permission. Make sure the Rules are published");});}
+function uRows(){var L=UD.map(function(u){u.tier=bk(u.id);return u;});return{L:L,r:PPB.usersView(L,{q:uq,sort:us,flt:uf,tier:ut})};}
+function uCard(u){var k=u.tier,open=uo===u.id,id=e(u.id),d=u.seen?new Date(u.seen).toLocaleDateString("en-GB",{day:"numeric",month:"short"}):"—",ring=k?" r-"+k:"";
+  var h='<div class="us-c'+(open?' open':'')+'" id="us_'+id+'"><div class="us-r" onclick="OL.uo(\''+id+'\')">'+
+    (u.photo?'<img class="ol-av us-av'+ring+'" referrerpolicy="no-referrer" alt="" src="'+e(u.photo)+'">':'<span class="ol-ph us-av'+ring+'">'+e(String(u.name).trim().charAt(0).toUpperCase()||"?")+'</span>')+
+    '<div class="us-i"><div class="us-n">'+nmu(u.id,u.name)+'</div>'+(u.email?'<small class="us-e" dir="ltr">'+e(u.email)+'</small>':'')+
+    '<div class="us-m"><span>Pts <b>'+u.pts+'</b></span><span>Sessions <b>'+u.games+'</b></span><span>Coins <b>'+(u.coins==null?"—":u.coins.toLocaleString("en-US"))+'</b></span><span>Seen <b>'+d+'</b></span></div></div>'+
+    '<i class="ol-i us-ch" style="--ic:var(--x-chev)"></i></div>';
+  if(open){h+='<div class="us-p"><div class="us-l">Badge</div><div class="tp-grid">'+PPB.TIERS.map(function(t){return'<button type="button" class="tp-opt t-'+t.k+(k===t.k?' on':'')+'" onclick="OL.badge(\''+id+'\',\''+(k===t.k?'':t.k)+'\')">'+PPB.ic(t.ic)+'<span>'+t.n+'</span></button>';}).join("")+'</div>'+
+    (k?'<button type="button" class="us-rm" onclick="OL.badge(\''+id+'\',\'\')">Remove badge</button>':'')+
+    '<div class="us-l">Add coins</div><div class="us-cn"><input class="us-coin" id="gc_'+id+'" inputmode="numeric" autocomplete="off" placeholder="Amount"><button type="button" class="ol-mini on" onclick="OL.grant(\''+id+'\')">+ Add</button></div>'+
+    '<div class="us-ps">'+[100,500,1000,5000].map(function(n){return'<button type="button" class="ol-mini" onclick="OL.gp(\''+id+'\','+n+')">+'+n.toLocaleString("en-US")+'</button>';}).join("")+'</div>'+
+    '<div class="us-id"><span>ID: '+id+'</span><button type="button" onclick="OL.ucp(\''+id+'\')">'+IC("copy",1)+' Copy</button></div></div>';}
+  return h+'</div>';}
+function uDraw(full){if(vw!=="users"||!UD)return;var R=uRows(),L=R.L,r=R.r,st=PPB.usersStats(L);
+  var sum='<div class="us-sum"><div><b>'+st.n+'</b><small>Users</small></div><div><b>'+st.active+'</b><small>Active</small></div><div><b>'+st.badged+'</b><small>Badged</small></div><div><b>'+(st.coins>=1e6?(st.coins/1e6).toFixed(1)+"M":st.coins>=1e4?Math.round(st.coins/1e3)+"K":st.coins)+'</b><small>Coins</small></div></div>';
+  var cnt={};L.forEach(function(u){if(u.tier)cnt[u.tier]=(cnt[u.tier]||0)+1;});
+  var chips='<div class="us-chips">'+PPB.UFLT.map(function(c){return'<button type="button" class="us-chip'+(uf===c[0]?' on':'')+'" onclick="OL.uf(\''+c[0]+'\')">'+c[1]+'</button>';}).join("")+
+    '<select class="us-sel'+(ut?' on':'')+'" onchange="OL.ut(this.value)"><option value="">Any badge</option>'+PPB.TIERS.map(function(t){return'<option value="'+t.k+'"'+(ut===t.k?' selected':'')+'>'+t.n+(cnt[t.k]?' ('+cnt[t.k]+')':'')+'</option>';}).join("")+'</select></div>'+
+    '<div class="us-chips">'+PPB.USORT.map(function(c){return'<button type="button" class="us-chip s'+(us===c[0]?' on':'')+'" onclick="OL.us(\''+c[0]+'\')">'+c[1]+'</button>';}).join("")+'</div>';
+  var list=r.rows.slice(0,un).map(uCard).join("")||'<div class="ol-w">No users match</div>';
+  if(r.rows.length>un)list+='<button type="button" class="ol-s" onclick="OL.um()">Show more ('+(r.rows.length-un)+' left)</button>';
+  var c='Showing '+Math.min(un,r.rows.length)+' of '+r.rows.length+(r.rows.length!==r.total?' (filtered from '+r.total+')':'');
+  if(!full&&document.getElementById("usL")){document.getElementById("usS").innerHTML=sum;document.getElementById("usF").innerHTML=chips;document.getElementById("usC").textContent=c;document.getElementById("usL").innerHTML=list;return;}
+  shell('<div class="us-top"><div class="us-sr">'+PPB.ic("search")+'<input class="us-q" type="search" id="usQ" placeholder="Search name, email or ID" autocomplete="off" value="'+e(uq)+'" oninput="OL.uq(this.value)"></div><div id="usF">'+chips+'</div></div><div id="usS">'+sum+'</div><div class="us-cnt" id="usC">'+c+'</div><div id="usL">'+list+'</div>',{t:"Users"});}
 function push(u){db.ref("rooms/"+code).update(u);}
 function listen(){try{localStorage.setItem("pp_room",JSON.stringify({c:code,t:Date.now()}));}catch(x){}var r=db.ref("rooms/"+code),raf=0,f=r.on("value",function(s){S=s.val();if(raf)return;var go=function(){raf=0;draw();};raf=window.requestAnimationFrame?requestAnimationFrame(go):setTimeout(go,16);});off=function(){r.off("value",f);if(raf&&window.cancelAnimationFrame)cancelAnimationFrame(raf);raf=0;};}
 function bail(m){busy=false;code=role=null;T(m);if(!vw)OL.exit();}
@@ -446,19 +446,20 @@ function ensure(go){
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
 function account(){mk=null;ensure(stats);}
-window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=2";s.onload=function(){OLT.run();};s.onerror=function(){T("Could not load the system check");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,grant:grantCoins,shell:shell,users:users,syncAll:syncAll,claim:claim,open:open,account:account,wallet:function(){ensure(function(){loadWallet(function(){SHKUI.render();});});},create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,opt:opt,shuffle:shuffle,fin:endNow,
+window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=2";s.onload=function(){OLT.run();};s.onerror=function(){T("Could not load the system check");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,uq:function(v){uq=v;un=30;uDraw();},us:function(v){us=v;un=30;uDraw();},uf:function(v){uf=v;un=30;uDraw();},ut:function(v){ut=v;un=30;uDraw();},um:function(){un+=30;uDraw();},uo:function(id){uo=(uo===id?null:id);uDraw();var el=document.getElementById("us_"+id);if(uo&&el&&el.scrollIntoView)el.scrollIntoView({block:"nearest",behavior:"smooth"});},gp:function(id,n){var el=document.getElementById("gc_"+id);if(el)el.value=n;grantCoins(id);},ucp:function(id){try{navigator.clipboard.writeText(id).then(function(){T("ID copied");});}catch(x){T(id);}},grant:grantCoins,shell:shell,users:users,syncAll:syncAll,claim:claim,open:open,account:account,wallet:function(){ensure(function(){loadWallet(function(){SHKUI.render();});});},create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,opt:opt,shuffle:shuffle,fin:endNow,
   prof:function(id,fb){if(!fb&&S){var P=S.players||{};Object.keys(P).forEach(function(k){if(P[k].uid===id)fb={name:P[k].name,photo:P[k].photo};});}if(window.OLX)OLX.prof(id,fb);},rank:function(){if(window.OLX)OLX.go("rank");},queue:function(){if(window.OLX)OLX.queue();},
   sug:function(k){if(!U()){T("Sign in with Google first");return;}if(window.OLX)OLX.sug(k,k?function(){OL.open(k);}:null);},
   rejoin:function(c){ensure(function(){OL.join(c);});},
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("Close the room for everyone?"))db.ref("rooms/"+code).remove();}};
 OL.i={db:function(){return db;},e:e,U:U,T:T,IC:IC,IX:IX,bk:bk,nmu:nmu,loadB:loadB,adm:isAdmin,BADGES:BADGES,G:G,META:META,shell:shell,syncLB:syncLB,mkey:mkey,MO:MO,ctx:function(){return{S:S,code:code,role:role};},sv:function(v){vw=v;},mail:mail};
-var lx=document.createElement("script");lx.src="js/online-social.js?v=5";document.head.appendChild(lx);
+var lx=document.createElement("script");lx.src="js/online-social.js?v=6";document.head.appendChild(lx);
 var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=5";document.head.appendChild(ll);var lsd=document.createElement("script");lsd.src="js/online-sudoku.js?v=1";document.head.appendChild(lsd);var ltw=document.createElement("script");ltw.src="js/online-tawla.js?v=1";document.head.appendChild(ltw);
 var lbh=document.createElement("script");lbh.src="js/blackjack-host.js?v=1";lbh.onload=function(){var lbo=document.createElement("script");lbo.src="js/online-blackjack.js?v=7";document.head.appendChild(lbo);};document.head.appendChild(lbh);
 /* المحفظة (شنكلولو): بنحمّلها مرة واحدة بس، حتى لو auth.js سبقنا */
 function loadWallet(cb){if(window.SHKUI)return cb&&cb();var n=0;(function w(){if(window.SHK){if(!window.__shkuiP){window.__shkuiP=1;var s=document.createElement("script");s.src="js/shk-ui.js?v=3";s.onload=function(){if(cb)cb();};document.head.appendChild(s);}else if(++n<80)setTimeout(w,150);return;}
   if(!window.__shkP){window.__shkP=1;var s0=document.createElement("script");s0.src="js/shankalolo.js?v=2";document.head.appendChild(s0);}if(++n<80)setTimeout(w,150);})();}
 loadWallet();
+CSS+=window.PPB.css();
 var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
 /* "Play Online" button inside each game as a separate option (no outer button on the hub) */
 function mount(id,k,anchor,mode){var sec=document.getElementById(id);if(!sec||sec.querySelector(".ol-go"))return;
