@@ -112,3 +112,11 @@
     });
   }
 })();
+
+/* ---------- القصص مغلقة مؤقتاً ----------
+   الكارت (#hxOff) والاختصار اللي في الدُرج بينادوا الدالة دي بدل ما يفتحوا الصفحة.
+   لما القصص ترجع: ارجع الكارت الأصلي في index.html وشيل الدالة والـ CSS بتاع .hx-off / .hm-fc-off */
+window.hxOff=function(){
+  if(typeof playClickSound==="function")playClickSound();
+  if(typeof toast==="function")toast("القصص مغلقة مؤقتاً — مفيش قصص متاحة دلوقتي");
+};
