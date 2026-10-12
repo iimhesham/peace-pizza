@@ -153,6 +153,13 @@ body.mode-home .footer::before,
 body.mode-home .footer::after{content:"";flex:none;width:56px;height:12px;opacity:.45;
   background:repeating-linear-gradient(90deg,currentColor 0 1px,transparent 1px 3px,currentColor 3px 5px,transparent 5px 6px)}
 
+/* ---------- التوقيع: فوق الفوتر في الرئيسية بس ---------- */
+.hm-signature{display:none}
+body.mode-home .hm-signature{display:block;text-align:center;margin:36px auto 0;padding:0 16px}
+body.mode-home .hm-signature img{width:150px;max-width:44%;height:auto;opacity:.82;transform:rotate(-3deg);
+  filter:drop-shadow(0 1px 6px rgba(0,0,0,.45));pointer-events:none;user-select:none}
+body.mode-home .hm-signature + .footer{margin-top:0;padding-top:14px}
+
 /* ---------- 4) الأختام بتتخبط مرة واحدة بعد ما الكروت تنزل ---------- */
 @keyframes plStamp{
   from{opacity:0;transform:rotate(-14deg) scale(2.4)}
