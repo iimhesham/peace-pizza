@@ -1,0 +1,69 @@
+/* =========================================================
+   خطوط صفحة الحساب (Account / Ranking / Awards / Friends + بروفايل اللاعب)
+   كل جزء ليه خط مناسب. عايز تغيّر خط؟ غيّر المتغيرات اللي تحت بس.
+
+   --f-display : الأسماء والعناوين            → Bricolage Grotesque (شخصية ومودرن)
+   --f-num     : الأرقام والـ ID والبادجات     → Chakra Petch (شكل كارت لاعب / تقني)
+   --f-ui      : باقي النصوص والأزرار والتابات → Plus Jakarta Sans (نضيف ومقروء)
+   الحروف العربي بترجع تلقائي لـ IBM Plex Sans Arabic لأن الخطوط دي مفيهاش عربي.
+========================================================= */
+:root{
+  --f-display:"Bricolage Grotesque","IBM Plex Sans Arabic","Tajawal",sans-serif;
+  --f-num:"Chakra Petch","IBM Plex Sans Arabic","Tajawal",sans-serif;
+  --f-ui:"Plus Jakarta Sans","IBM Plex Sans Arabic","Tajawal",sans-serif;
+}
+
+/* ---------- عنوان الصفحة والتابات ---------- */
+#olRoot .ol-t>span{font-family:var(--f-display);font-weight:800;letter-spacing:-.01em}
+:is(#olRoot,#olSheet) .ox-tab{font-family:var(--f-ui);font-weight:600;letter-spacing:.01em}
+
+/* ---------- الأسماء ---------- */
+:is(#olRoot,#olSheet) :is(.pp-name,.ac-name,.ox-wn){font-family:var(--f-display);font-weight:800;letter-spacing:-.015em;line-height:1.2}
+:is(#olRoot,#olSheet) .pp-name{font-size:21px}
+:is(#olRoot,#olSheet) :is(.ox-pn,.ox-rw b,.ox-aw b,.us-n,.ac-tile b,.ox-note b){font-family:var(--f-display);font-weight:700;letter-spacing:-.005em}
+
+/* ---------- الألقاب والإيميل ---------- */
+:is(#olRoot,#olSheet) :is(.pp-tt,.ox-ttl){font-family:var(--f-ui);font-weight:600;letter-spacing:.01em}
+:is(#olRoot,#olSheet) :is(.pp-mail,.ac-mail,.us-e){font-family:var(--f-ui);font-weight:500}
+
+/* ---------- الأرقام الكبيرة (نقط / فوز / سيشنز / رتبة ...) ---------- */
+:is(#olRoot,#olSheet) :is(.pp-k b,.ac-stats b,.ox-kp b,.ox-pv,.ox-pl,.ox-rk,.ox-pts,.ox-gr b,.ac-g b,.pp-visa b,.ox-wp,.ach-sum-t b,.ach-rar b,.pp-med span,.pp-lv-b b,.us-sum b,.ox-ini){
+  font-family:var(--f-num);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+:is(#olRoot,#olSheet) :is(.pp-k,.ac-stats)>div:first-child b{font-size:30px}
+:is(#olRoot,#olSheet) :is(.pp-k b,.ac-stats b){font-size:25px}
+:is(#olRoot,#olSheet) .pp-k>div:first-child b,:is(#olRoot,#olSheet) .ac-stats>div:first-child b{font-size:30px}
+:is(#olRoot,#olSheet) .pp-lv-b b{font-size:21px}
+
+/* ---------- العناوين الصغيرة فوق الأرقام (Points / Wins / Rank No. ...) ---------- */
+:is(#olRoot,#olSheet) :is(.pp-k label,.ac-stats small,.ox-kp small,.pp-strip label,.pp-hl label,.ox-hl small,.us-sum small,.ach-rar small,.pp-visa small,.pp-vs){
+  font-family:var(--f-ui);font-weight:700;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase}
+
+/* ---------- الصف التحتاني (Rank No. / Players / Status) ---------- */
+:is(#olRoot,#olSheet) .pp-strip b{font-family:var(--f-num);font-weight:700;font-size:15px;letter-spacing:.05em}
+
+/* ---------- المستوى (Level) ---------- */
+:is(#olRoot,#olSheet) .pp-lv-r b{font-family:var(--f-display);font-weight:800;font-size:16px;letter-spacing:-.005em}
+:is(#olRoot,#olSheet) .pp-lv-r em{font-family:var(--f-num);font-weight:600;font-size:12px;letter-spacing:.02em}
+:is(#olRoot,#olSheet) .pp-lv-b small{font-family:var(--f-num);font-weight:700;letter-spacing:.14em}
+
+/* ---------- Highlights ---------- */
+:is(#olRoot,#olSheet) :is(.pp-hl b,.ox-hl b){font-family:var(--f-display);font-weight:700;letter-spacing:-.005em}
+
+/* ---------- عناوين الأقسام (Admin Tools / Highlights / Achievements ...) ---------- */
+:is(#olRoot,#olSheet) :is(.ox-sec,.ol-sec,.ac-h b,.ox-l,.us-l){font-family:var(--f-display);font-weight:700;letter-spacing:.005em}
+
+/* ---------- البادجات (King / Gold / ...) والختم ---------- */
+.ol-bdg,.pp-seal{font-family:var(--f-num);font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase}
+
+/* ---------- الإنجازات ---------- */
+:is(#olRoot,#olSheet) :is(.ach-tx b,.ach-st b){font-family:var(--f-display);font-weight:700;letter-spacing:-.005em}
+:is(#olRoot,#olSheet) :is(.ach-tx small,.ach-sum-t span,.ac-next small,.ac-next b){font-family:var(--f-ui)}
+:is(#olRoot,#olSheet) :is(.ach-r,.ach-st small){font-family:var(--f-num);font-weight:700;letter-spacing:.08em}
+:is(#olRoot,#olSheet) :is(.ach-chip,.ox-ach){font-family:var(--f-ui);font-weight:600}
+
+/* ---------- أزرار وشرائح وفلاتر ---------- */
+:is(#olRoot,#olSheet) :is(.ac-pill,.ac-chip,.ac-tag,.ac-more,.ac-sq,.ac-out,.ox-chip,.ox-yes,.ox-no,.ox-seg button,.ox-tag,.ox-pill,.ach-f,.us-chip,.us-sel,.ol-mini,.pp-stamp){
+  font-family:var(--f-ui)}
+
+/* ---------- صفحة اللاعبين للأدمن ---------- */
+:is(#olRoot,#olSheet) .us-m,:is(#olRoot,#olSheet) .us-m b{font-family:var(--f-num);font-weight:600;letter-spacing:.01em}
