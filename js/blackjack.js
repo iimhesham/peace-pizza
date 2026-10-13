@@ -130,7 +130,7 @@ function drawHelp(){
   var s=$("blackjack");view="help";
   s.innerHTML=shellTop()+'<div class="bj-wrap"><div class="bj-card2 bj-rules"><h3>House rules</h3>'+
   '<h4>Goal</h4><ul><li>Beat the dealer without going over 21. Aces count 1 or 11. Face cards count 10.</li><li>A Blackjack is an Ace plus a 10-value card on your first two cards. It pays 3:2.</li></ul>'+
-  '<h4>Table</h4><ul><li>6 decks (312 cards). A new shoe is shuffled before a round when fewer than 52 cards remain.</li><li>No bet limit: bet any amount up to your balance.</li></ul>'+
+  '<h4>Table</h4><ul><li>6 decks (312 cards), freshly shuffled with a secure random generator before every round.</li><li>No bet limit: bet any amount up to your balance.</li></ul>'+
   '<h4>Dealer</h4><ul><li>Draws on 16 or less and stands on all 17s, including soft 17.</li><li>With a 10-value card or an Ace showing, the dealer checks for Blackjack first.</li></ul>'+
   '<h4>Your options</h4><ul><li><b>Hit / Stand</b>.</li><li><b>Double</b>: double the bet, take exactly one card. Allowed after a split.</li><li><b>Split</b>: two cards of the same value (any two 10-value cards like K and Q work), up to 4 hands. Split Aces get one card each and cannot be resplit. A+10 after a split is a normal 21.</li><li><b>Surrender</b>: first two cards only, get half your bet back.</li><li><b>Insurance</b>: only when the dealer shows an Ace. Up to half your bet, pays 2:1.</li></ul>'+
   '<h4>Payouts</h4><ul><li>Win 1:1 · Blackjack 3:2 · Push returns your bet.</li></ul></div>'+
@@ -146,7 +146,7 @@ function drawTable(){
   if(pub){
     h+=dealerHtml(pub)+arcHtml();
     var seat=pub.seats[0],res=pub.result?pub.result.seats[0]:null;
-    h+='<div class="bj-zone bj-pz"><div class="bj-lab"><span>You</span><em>'+(pub.reshuffled?"New shoe shuffled · ":"")+pub.shoeLeft+' cards left</em></div><div class="bj-hands">'+
+    h+='<div class="bj-zone bj-pz"><div class="bj-lab"><span>You</span><em>'+(pub.reshuffled&&!E.RULES.SHUFFLE_EACH_ROUND?"New shoe shuffled · ":"")+pub.shoeLeft+' cards left</em></div><div class="bj-hands">'+
       seat.hands.map(function(x,i){return handHtml(x,{active:pub.turn&&pub.turn.h===i&&pub.phase==="PLAYER_TURNS",res:res&&res.hands[i]});}).join("")+'</div>'+
       (seat.insurance?'<div class="bj-hinfo">Insurance: <span class="bj-chip">'+COIN+fmt(seat.insurance)+'</span>'+(res?(res.ins.won?'<span class="bj-res win">PAID 2:1</span>':'<span class="bj-res loss">LOST</span>'):"")+'</div>':"")+'</div>';
   }else h+='<div class="bj-zone bj-dz"><div class="bj-lab"><span>Dealer</span></div><div class="bj-cards"></div></div>'+arcHtml()+'<div class="bj-zone bj-pz"><div class="bj-lab"><span>You</span></div><div class="bj-cards"></div></div>';
@@ -178,8 +178,8 @@ function deal(){
   if(!E.validBet(bet)||bet>P.bank){say("Pick a valid bet");return;}
   P.bank-=bet;save();
   var seat={id:"s1",uid:"you",name:"You",bet:bet};
-  round=E.startRound({id:"p"+Date.now(),shoe:shoe,entrants:[seat]});
-  shoe=round.shoe;lastMsg=round.reshuffled?"New shoe shuffled":"";
+  round=E.startRound({id:"p"+Date.now(),shoe:E.RULES.SHUFFLE_EACH_ROUND?null:shoe,entrants:[seat]});
+  shoe=round.shoe;lastMsg=(round.reshuffled&&!E.RULES.SHUFFLE_EACH_ROUND)?"New shoe shuffled":"";
   afterChange();
 }
 function afterChange(){

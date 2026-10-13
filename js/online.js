@@ -394,7 +394,7 @@ function join(c0){if(busy)return;var u=U(),c=String(c0||(document.getElementById
         if(err)return bail("Could not join");
         if(ok){busy=false;listen();}else claim(i+1);});})(0);
   }).catch(function(){bail("Could not join");});}
-function shuf(n){var a=[],i;for(i=0;i<n;i++)a.push(i);return a.sort(function(){return Math.random()-.5;});}
+function shuf(n){var a=[],i;for(i=0;i<n;i++)a.push(i);return PPR.shuffle(a);}
 
 function pool(gk,cb){db.ref("qok/"+gk).once("value").then(function(v){v=v.val()||{};var r={};Object.keys(v).forEach(function(id){var d=(v[id]||{}).d;if(okEnt(gk,d))r["q"+id]=d;});cb(r);},function(){cb({});});}
 function ordFor(x){return x&&x.c?shuf(x.c.length):null;}

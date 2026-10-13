@@ -52,7 +52,11 @@
     return q>=1&&q<=TRACK&&g.s[1-who].c[25-q]===0;
   }
 
-  function die(rng){return 1+Math.floor((rng||Math.random)()*6);}
+  function die(rng){
+    if(rng)return 1+Math.floor(rng()*6);
+    if(typeof PPR!=="undefined"&&PPR.die)return PPR.die();      // crypto + من غير modulo bias
+    return 1+Math.floor(Math.random()*6);
+  }
   function rollDice(rng){
     var a=die(rng),b=die(rng);
     return {a:a,b:b,list:a===b?[a,a,a,a]:[a,b]};

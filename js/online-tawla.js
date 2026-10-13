@@ -164,7 +164,7 @@ function setColor(v){
 function start(){
   var ctx=ctxNow();if(!ctx||ctx.role!=="host")return;
   var S=ctx.S,P=S.players||{};if(!(P.a&&P.b)||S.status!=="lobby")return;
-  I.db().ref("rooms/"+ctx.code).update({status:"play",seed:1+Math.floor(Math.random()*2147483000),hc:S.hc==="w"?"w":"b"});
+  I.db().ref("rooms/"+ctx.code).update({status:"play",seed:1+PPR.int(2147483000),hc:S.hc==="w"?"w":"b"});
 }
 function leave(){if(confirm("تخرج من الغرفة؟"))OL.exit();}
 

@@ -173,7 +173,7 @@
 
   function openingRoll(){
     const spin=()=>{
-      const a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);
+      const a=PPR.die(),b=PPR.die();
       S.shown=[a,b];renderDice(true);
       UI.flicker($("twDice"),[a,b],UI.TOSS_MS-60);
       later(()=>{

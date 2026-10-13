@@ -117,7 +117,9 @@
 
   /* ---------- Dice ---------- */
   function rollDice(rng){
-    return 1+Math.floor((rng?rng():Math.random())*6);
+    if(rng)return 1+Math.floor(rng()*6);
+    if(typeof PPR!=="undefined"&&PPR.die)return PPR.die();      // crypto + من غير modulo bias
+    return 1+Math.floor(Math.random()*6);
   }
   /* نرد حتمي للأونلاين: نفس (seed,k) = نفس الرقم عند كل اللاعبين */
   function diceFor(seed,k){

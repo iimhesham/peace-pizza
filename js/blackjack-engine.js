@@ -4,6 +4,7 @@ var BJE;
     BJE.RULES = {
         DECKS: 6,
         RESHUFFLE_BELOW: 52,
+        SHUFFLE_EACH_ROUND: true,   // كل جولة بتتوزع من شو متخلط من الأول (crypto) — مفيش ذاكرة بين الجولات
         MAX_HANDS: 4,
         MIN_BET: 1,
         MAX_BET: 1000000000,

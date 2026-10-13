@@ -93,7 +93,7 @@ function pick(id){
 function start(again){
   var ctx=I.ctx(),S=ctx.S;if(!S||ctx.role!=="host")return;
   var sl=present(S);if(again&&S.cols){}else if(sl.length<2){T("You need at least 2 players");return;}
-  var u={status:"play",seed:(Math.random()*2147483647)|0,gid:(+S.gid||0)+1,bots:null};
+  var u={status:"play",seed:PPR.seed31(),gid:(+S.gid||0)+1,bots:null};
   var cnt=(again&&S.cols)?Object.keys(S.cols).length:sl.length;
   u.mode=isSix(S)?(cnt===5?5:6):4;   // with exactly 5 players the board has 5 arms
   if(!again||!S.cols){var lay=seatsFor(isSix(S),sl.length),cols={};sl.forEach(function(s,i){cols[s]=lay[i];});u.cols=cols;}

@@ -111,8 +111,8 @@ function create(cfg){
       ent.push({id:slot,uid:uid,name:(p&&p.name)||"Player",bet:a});
     });
     if(!ent.length)return false;
-    try{H.round=E.startRound({id:H.rid,shoe:H.shoe,entrants:ent});}catch(x){onErr(x);return false;}
-    H.shoe=H.round.shoe;H.msg=H.round.reshuffled?"New shoe shuffled":"";
+    try{H.round=E.startRound({id:H.rid,shoe:E.RULES.SHUFFLE_EACH_ROUND?null:H.shoe,entrants:ent});}catch(x){onErr(x);return false;}
+    H.shoe=H.round.shoe;H.msg=(H.round.reshuffled&&!E.RULES.SHUFFLE_EACH_ROUND)?"New shoe shuffled":"";
     H.forceDeal=false;
     var ph=H.round.phase;
     if(ph==="SETTLEMENT"){settle();}

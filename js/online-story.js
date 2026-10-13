@@ -29,7 +29,7 @@ function listen(){
   if(role==="host")on(db.ref("secrets/"+code),function(s){R=s.val()||{};draw();});
   else on(db.ref("secrets/"+code+"/"+U().uid),function(s){M=s.val();draw();});
 }
-function shuf(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function shuf(a){return PPR.shuffle(a);}
 function pub(rd){return{title:rd.title||"",text:rd.text||"",evidence:rd.evidence||""};}
 function privs(i,m){var rd=rg().rounds[i],p={};if(rd&&rd.private&&rd.privateRole!=null)Object.keys(m).forEach(function(u){if(m[u].id===rd.privateRole)p["secrets/"+code+"/"+u+"/priv/"+i]=rd.private;});return p;}
 function start(){var g=rg(),n=ids().length,rl=getGameRoles(S.st,code,n),us=shuf(ids()),cast={},p={};

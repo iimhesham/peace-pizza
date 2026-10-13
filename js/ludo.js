@@ -471,7 +471,7 @@ function boardSVG(active,mode){
       return{color:c,type:s.t==="human"?"human":"ai",level:s.t==="human"?"mid":s.t,
         name:s.t==="human"?(s.n.trim()||CNAME[c]):"CPU "+CNAME[c]};
     });
-    const first=Math.floor(Math.random()*players.length);
+    const first=PPR.int(players.length);
     G=E.initializeGame(players,{threeSixes:cfg.three,fullRanking:cfg.full},first);
     G.settings={auto:cfg.auto,timer:cfg.timer};
     humanColor=seats.find(c=>cfg.seats[c].t==="human");
@@ -778,7 +778,7 @@ function boardSVG(active,mode){
     sfx("click");
     // نفس اللاعبين والإعدادات، مباراة جديدة بالكامل
     const old=G.players.map(p=>({color:p.color,type:p.type,level:p.level,name:p.name}));
-    const first=Math.floor(Math.random()*old.length);
+    const first=PPR.int(old.length);
     const opts=G.opts,st=G.settings;
     G=E.initializeGame(old,opts,first);G.settings=st;elapsed=0;
     clearSave();enterPlay();
