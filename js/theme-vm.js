@@ -97,7 +97,7 @@
     secs.forEach(function(s){total+=s.items.length;});
 
     /* الهيرو: نص فانيليا + نص مونستون */
-    var hero=document.createElement("section");hero.id="vmHero";hero.className="vm-hero";
+    var hero=document.createElement("div");hero.id="vmHero";hero.className="vm-hero";
     hero.innerHTML=
       LOGO()+
       '<h1 class="vm-word" dir="ltr">GAME</h1><p class="vm-ask">تحب تلعب إيه؟</p>';
