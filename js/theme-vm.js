@@ -73,10 +73,15 @@
     /* الهيرو: نص فانيليا + نص مونستون */
     var hero=document.createElement("section");hero.id="vmHero";hero.className="vm-hero";
     hero.innerHTML=
-      '<div class="vm-hero-top"><span class="vm-tag" dir="ltr">PEACE PIZZA · PLAY NIGHT</span>'+
-      '<h1 class="vm-word" dir="ltr">GAME</h1></div>'+
-      '<div class="vm-hero-bot"><p class="vm-ask">تحب تلعب إيه؟</p><span class="vm-tag inv" dir="ltr">'+total+' GAMES</span></div>';
-
+      '<svg class="vm-logo" viewBox="0 0 120 120" role="img" aria-label="Peace Pizza">'+
+      '<defs><linearGradient id="vmLg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9BE70"/><stop offset="1" stop-color="#FFF8DC"/></linearGradient>'+
+      '<linearGradient id="vmLg2" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E7CC82"/><stop offset="1" stop-color="#FFF4CB"/></linearGradient></defs>'+
+      '<circle cx="60" cy="60" r="54" fill="url(#vmLg1)"/><circle cx="60" cy="60" r="47" fill="url(#vmLg2)"/>'+
+      '<circle cx="60" cy="60" r="40" fill="none" stroke="#4C9DB0" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>'+
+      '<path d="M60 60V22M60 60L93 79M60 60L27 79" stroke="#2D7488" stroke-width="2.4" stroke-linecap="round" opacity=".45"/>'+
+      '<g fill="#4C9DB0"><circle cx="60" cy="38" r="7"/><circle cx="79" cy="70" r="7"/><circle cx="41" cy="70" r="7"/></g>'+
+      '<g fill="#FFEBAF" opacity=".75"><circle cx="58" cy="36" r="2.2"/><circle cx="77" cy="68" r="2.2"/><circle cx="39" cy="68" r="2.2"/></g></svg>'+
+      '<h1 class="vm-word" dir="ltr">GAME</h1><p class="vm-ask">تحب تلعب إيه؟</p>';
     /* شريط الثيم */
     var bar=document.createElement("div");bar.id="vmBar";bar.className="vm-bar-row";
     bar.innerHTML='<span class="vm-bar-t">الثيم</span>'+sw();
