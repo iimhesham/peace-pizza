@@ -79,7 +79,7 @@ function show(id,opts){
   document.body.classList.toggle("mode-tawla",TAWLA_SCREENS.includes(id));
   document.body.classList.toggle("mode-sudoku",SUDOKU_SCREENS.includes(id));
   const tc=document.querySelector('meta[name="theme-color"]');
-  if(tc){if(!tc.dataset.def)tc.dataset.def=tc.content;tc.content=BLACKJACK_SCREENS.includes(id)?"#0E141C":CAREER_SCREENS.includes(id)?"#003566":XO_SCREENS.includes(id)?"#000000":LUDO_SCREENS.includes(id)?"#120d0a":TAWLA_SCREENS.includes(id)?"#140c08":SUDOKU_SCREENS.includes(id)?"#a60043":tc.dataset.def;}
+  if(tc){if(!tc.dataset.def)tc.dataset.def=tc.content;tc.content=BLACKJACK_SCREENS.includes(id)?"#0E141C":CAREER_SCREENS.includes(id)?"#003566":XO_SCREENS.includes(id)?"#000000":LUDO_SCREENS.includes(id)?(document.documentElement.getAttribute("data-theme")==="vm"?"#FFEBAF":"#120d0a"):TAWLA_SCREENS.includes(id)?"#140c08":SUDOKU_SCREENS.includes(id)?"#a60043":tc.dataset.def;}
   document.body.classList.toggle("mode-yousef",YOUSEF_SCREENS.includes(id)||TRAIN_SCREENS.includes(id));
   document.body.classList.toggle("mode-flags",FLAGS_SCREENS.includes(id));
   const creditsBtn=document.getElementById("creditsToggle");
