@@ -1,0 +1,92 @@
+/* =========================================================
+   LUDO — ثيم فاتح (فانيليا × مونستون)
+   بيشتغل بس لما data-theme="vm". الكلاسيك (الخشب الغامق) هو ludo.css زي ما هو.
+   Vanilla #FFEBAF · Moonstone #4C9DB0 / #2D7488 · Ink #10303A · Tomato #D9482B
+   أغلب الشغل بتغيير متغيرات --lu-* (ludo.css بيستخدمها في كل حتة)،
+   وبعدين اللوح والنرد والأونلاين.
+   ملحوظة: --lu-cream هنا = لون «الحبر» (نص + زراير رئيسية)، و --lu-ink = الفانيليا (نص على الزراير).
+========================================================= */
+
+html[data-theme="vm"] .lu-app,
+html[data-theme="vm"] #olRoot[data-g="ludo"]{
+  --lu-bg:#FFEBAF;--lu-p1:#FFF8DE;--lu-p2:#FFEFC0;--lu-p3:#F6D987;
+  --lu-cream:#10303A;--lu-dim:#4B7380;--lu-ink:#FFEBAF;
+  --lu-line:rgba(45,116,136,.38);
+}
+
+/* ---------- الصفحة ---------- */
+html[data-theme="vm"] body.mode-ludo{background:#FFEBAF!important}
+html[data-theme="vm"] body.mode-ludo::before{background:radial-gradient(rgba(76,157,176,.18) 1.2px,transparent 1.5px) 0 0/20px 20px!important}
+html[data-theme="vm"] body.mode-ludo .footer,html[data-theme="vm"] body.mode-ludo .hm-signature{display:none}
+html[data-theme="vm"] body.mode-ludo #toast{background:#10303A!important;color:#FFEBAF!important;border:2px solid #4C9DB0!important}
+
+/* ---------- الشريط العلوي والكروت ---------- */
+html[data-theme="vm"] .lu-back,html[data-theme="vm"] .lu-gear{background:#FFF8DE;border:2px solid #4C9DB0;box-shadow:0 3px 0 #2D7488}
+html[data-theme="vm"] .lu-back:active,html[data-theme="vm"] .lu-gear:active{transform:translateY(2px);box-shadow:0 1px 0 #2D7488}
+html[data-theme="vm"] .lu-title b{color:#2D7488}
+html[data-theme="vm"] .lu-panel{border:2px solid #4C9DB0;box-shadow:0 4px 0 #A9D2DB}
+html[data-theme="vm"] .lu-presets button{border:2px solid #A9D2DB}
+html[data-theme="vm"] .lu-presets button:active{background:#F6D987}
+html[data-theme="vm"] .lu-seat{border-width:2px;border-color:#A9D2DB}
+html[data-theme="vm"] .lu-seat:not(.is-off){border-color:var(--pc)}
+html[data-theme="vm"] .lu-nm{background:#fff;border:2px solid #A9D2DB}
+html[data-theme="vm"] .lu-nm::placeholder{color:#7F9BA4}
+html[data-theme="vm"] .lu-seat.is-off .lu-cyc{background:#E9D18A;color:#5B7B85}
+html[data-theme="vm"] .lu-sw i{background:#A9C3CB}
+html[data-theme="vm"] .lu-sw i:after{background:#fff;box-shadow:0 1px 3px rgba(16,48,58,.35)}
+html[data-theme="vm"] .lu-sw.on i{background:#2EAE6B}
+html[data-theme="vm"] .lu-seg button.is-on{box-shadow:0 2px 0 #061b22}
+html[data-theme="vm"] .lu-start,html[data-theme="vm"] .lu-main{box-shadow:0 4px 0 #061b22}
+html[data-theme="vm"] .lu-start:active,html[data-theme="vm"] .lu-main:active{transform:translateY(2px);box-shadow:0 2px 0 #061b22}
+html[data-theme="vm"] .lu-alt{background:#FFF8DE;border:2px solid #4C9DB0;box-shadow:0 3px 0 #2D7488}
+html[data-theme="vm"] .lu-resume{background:linear-gradient(135deg,#FFF8DE,#FFEFC0);border:2px solid #4C9DB0;box-shadow:0 4px 0 #2D7488}
+html[data-theme="vm"] #ludo .ol-go{--olc:#10303A;border-color:#4C9DB0}
+
+/* ---------- شريط اللاعبين ---------- */
+html[data-theme="vm"] .lu-pc{border:2px solid #A9D2DB}
+html[data-theme="vm"] .lu-pc.is-turn{border-color:var(--pc);background:#fff;box-shadow:0 3px 0 var(--pd)}
+html[data-theme="vm"] .lu-pips s{background:rgba(16,48,58,.16)}
+
+/* ---------- اللوح ---------- */
+html[data-theme="vm"] .lu-svg{box-shadow:0 7px 0 rgba(45,116,136,.5),0 0 0 3px #2D7488}
+html[data-theme="vm"] .lu-felt{fill:#F4DC96}
+html[data-theme="vm"] .lu-yard-in{fill:#FFFBEA;stroke:#2D7488;stroke-width:.07}
+html[data-theme="vm"] .lu-spot{fill:color-mix(in srgb,var(--pl) 70%,#fff)}
+html[data-theme="vm"] .lu-cell{fill:#FFFDF3;stroke:#6C97A3;stroke-width:.05}
+html[data-theme="vm"] .lu-cell.is-start{fill:var(--pc);stroke:var(--pd)}
+html[data-theme="vm"] .lu-cell.is-final{fill:color-mix(in srgb,var(--pc) 62%,#fff);stroke:var(--pd)}
+html[data-theme="vm"] .lu-cell.is-safe{fill:#D7E9ED;stroke:#6C97A3}
+html[data-theme="vm"] .lu-star{fill:#2D7488}
+html[data-theme="vm"] .lu-star.on-start{fill:rgba(255,255,255,.92)}
+html[data-theme="vm"] .lu-tri{stroke:#FFFBEA}
+html[data-theme="vm"] .lu-hub{fill:#10303A;stroke:#FFEBAF}
+html[data-theme="vm"] .lu-hubt{fill:#FFEBAF}
+html[data-theme="vm"] .lu-tk-sh{fill:rgba(16,48,58,.28)}
+html[data-theme="vm"] .lu-tk-ring{stroke:#10303A}
+html[data-theme="vm"] .lu-tk.is-valid .lu-tk-b{stroke:#10303A}
+html[data-theme="vm"] .lu-off{filter:saturate(.55) brightness(1.05)}
+
+/* ---------- النرد والحالة ---------- */
+html[data-theme="vm"] .lu-die{background:#FFFBEA;box-shadow:0 5px 0 #A9D2DB,0 9px 16px rgba(16,48,58,.2),inset 0 0 0 3px var(--pc,#4C9DB0)}
+html[data-theme="vm"] .lu-die3:after{background:rgba(16,48,58,.22)}
+html[data-theme="vm"] .lu-face{background:linear-gradient(145deg,#FFFEF6,#EFE3BC);box-shadow:inset 0 0 0 3px var(--pc,#4C9DB0),inset 0 -7px 12px rgba(16,48,58,.1),inset 0 5px 8px rgba(255,255,255,.6)}
+html[data-theme="vm"] .lu-face i{background:radial-gradient(circle at 35% 30%,#2D5663,#10303A)}
+html[data-theme="vm"] .lu-roll{box-shadow:0 4px 0 var(--pd,#2D7488)}
+html[data-theme="vm"] .lu-roll:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 var(--pd,#2D7488)}
+html[data-theme="vm"] .lu-roll:disabled{box-shadow:none}
+html[data-theme="vm"] .lu-auto{background:#FFF8DE;border:2px solid #A9D2DB}
+html[data-theme="vm"] .lu-auto.is-on{border-color:var(--pd)}
+html[data-theme="vm"] .lu-status b{color:var(--pd,#2D7488)}
+html[data-theme="vm"] .lu-meta .lu-timer.low{color:#D9482B}
+html[data-theme="vm"] .lu-foot button{background:#FFF8DE;border:2px solid #4C9DB0;box-shadow:0 3px 0 #2D7488}
+html[data-theme="vm"] .lu-foot button:active{transform:translateY(2px);box-shadow:0 1px 0 #2D7488;background:#F6D987}
+
+/* ---------- نافذة النهاية / الإحصائيات ---------- */
+html[data-theme="vm"] .lu-final{background:rgba(16,48,58,.55)}
+html[data-theme="vm"] .lu-final-card{border:2px solid #4C9DB0;box-shadow:0 6px 0 #2D7488,0 20px 40px rgba(16,48,58,.3)}
+html[data-theme="vm"] .lu-ach.on i{background:#F2B632;color:#10303A}
+
+/* ---------- الأونلاين (#olRoot[data-g="ludo"]) ---------- */
+html[data-theme="vm"] #olRoot[data-g="ludo"] .ol-ttl{color:#2D7488}
+html[data-theme="vm"] .olu-tag{background:#10303A;color:#FFEBAF}
+html[data-theme="vm"] .olu-rules{color:#4B7380}
