@@ -53,6 +53,20 @@
   function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
   function two(n){return n<10?"0"+n:""+n;}
 
+  /* تظبيط حجم وخط كلمة GAME واللوجو (بيتحط من هنا عشان ملف الـCSS ما يتغيرش) */
+  (function(){
+    if(document.getElementById("vmHeroTune"))return;
+    var st=document.createElement("style");st.id="vmHeroTune";
+    st.textContent=
+      'html[data-theme="vm"] #vmHero{padding:0 0 2px;margin:0 0 6px}'+
+      '.vm-logo{width:84px!important;height:84px!important}'+
+      '.vm-word{font-family:"Jost","IBM Plex Sans Arabic",sans-serif!important;font-weight:600!important;'+
+        'font-size:clamp(26px,8vw,34px)!important;letter-spacing:.42em!important;padding-inline-start:.42em;'+
+        'margin:6px 0 0!important;text-shadow:none!important;color:var(--vm-moon-d)!important}'+
+      '.vm-ask{font-size:17px!important;margin:2px 0 0!important;text-shadow:none!important}';
+    document.head.appendChild(st);
+  })();
+
   /* اللوجو: ألوان صريحة من غير gradient ids (الـurl(#id) كان بيفقد الرسم بعد الرجوع للهوم) */
   function LOGO(){
     return '<svg class="vm-logo" viewBox="0 0 120 120" role="img" aria-label="Peace Pizza">'+
