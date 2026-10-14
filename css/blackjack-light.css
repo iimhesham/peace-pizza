@@ -1,0 +1,239 @@
+/* =========================================================
+   BLACKJACK — ثيم فاتح (مش أبيض فاقع) + طاولة جديدة
+   بيتحمّل بعد blackjack.css وtheme-vm.css. مستقل عن ثيم الموقع (كلاسيك / فانيليا).
+   Mist #E7EDF3 (الخلفية) · Ink #122C4F · Ocean #2F6EA3 · Felt #DCE8F2
+========================================================= */
+html .bj-app,html body.mode-blackjack{background:#E7EDF3;color:#122C4F}
+html .ol-c .bj-app{background:transparent}
+
+/* ---------- نافذة الأونلاين ---------- */
+html #olRoot[data-g="blackjack"]{
+  --bg:#E7EDF3;--bgr:231,237,243;--bg0:#DDE6EE;--wash:linear-gradient(#E7EDF3,#E7EDF3);
+  --card:#fff;--cardr:255,255,255;--card2:#EEF3F8;--h1:#fff;--h2:#F1F5F9;
+  --ln:#C9D6E2;--ln2:#9FB4C9;--mu:#4A6078;--mu2:#6C8299;--ink:#122C4F;--ink2:#0C2038;
+  --ac:#2F6EA3;--acr:47,110,163;--acl:#8FB3D3;--on:#fff;--gr:#122C4F;--gon:#fff;color:#122C4F
+}
+html #olRoot[data-g="blackjack"] .ol-pill{color:#2F6EA3;background:#fff;border-color:#8FB3D3}
+html #olRoot[data-g="blackjack"] .ol-back{background:#fff;border:2px solid #9FB4C9;color:#122C4F;box-shadow:0 3px 0 #B5C8DA}
+html #olRoot[data-g="blackjack"] .ol-ttl{color:#122C4F}
+
+/* ---------- الهيدر والمحفظة ---------- */
+html .bj-app .bj-top{background:rgba(231,237,243,.94);border-bottom:1px solid #C9D6E2}
+html .bj-app .bj-back{background:#fff;border:2px solid #9FB4C9;color:#122C4F;box-shadow:0 3px 0 #B5C8DA}
+html .bj-app .bj-title{color:#122C4F}
+html .bj-app .bj-wal,html .wl-ico{background:#fff;border:2px solid #9FB4C9;color:#122C4F;box-shadow:0 3px 0 #B5C8DA}
+html .bj-app .bj-wal small,html .wl-ico span{color:#2F6EA3}
+html .wl-ico{color:#2F6EA3}
+
+/* ---------- شاشة البداية والكروت ---------- */
+html .bj-app .bj-card2,html .bj-app .bj-mode{background:#fff;color:#122C4F;border:2px solid #C3D3E2;box-shadow:0 4px 0 #C3D3E2}
+html .bj-app .bj-card2::before,html .bj-app .bj-felt::before{display:none}
+html .bj-app .bj-card2 h3,html .bj-app .bj-mode b{color:#2F6EA3}
+html .bj-app .bj-mode small{color:#5B7088}
+html .bj-app .bj-mode i{background:#E7EEF6;color:#122C4F;border:0}
+html .bj-app .bj-mode.on{background:#122C4F;color:#fff;border-color:#122C4F;box-shadow:0 4px 0 #0A1830}
+html .bj-app .bj-mode.on b{color:#fff}html .bj-app .bj-mode.on small{color:#B8CBE0}
+html .bj-app .bj-note,html .bj-app .bj-link,html .bj-app .bj-kv span,html .bj-app .bj-li small{color:#5B7088}
+html .bj-app .bj-rules,html .bj-app .bj-li,html .bj-app .bj-kv b{color:#122C4F}
+html .bj-app .bj-rules h4{color:#2F6EA3}
+html .bj-app .bj-li{border-top-color:#D4DFEA}
+html .bj-app .bj-in{background:#F4F7FA;color:#122C4F;border:2px solid #B5C8DA}
+html .bj-app .bj-ach div{background:#EEF3F8;color:#122C4F}
+html .bj-app .bj-ach div.got{background:#DDEBF7;border-color:#2F6EA3;color:#122C4F}
+html .wl-tabs{background:#DDE6EE;border:0;box-shadow:inset 0 2px 4px rgba(18,44,79,.15)}
+html .wl-tabs button{color:#4A6078}
+html .wl-tabs button.on{background:#122C4F;color:#fff;box-shadow:none}
+html .wl-fine{color:#5B7088}
+html .wl-tiles div{background:rgba(255,255,255,.1)}
+
+/* =========================================================
+   الطاولة الجديدة
+========================================================= */
+html .bj-app .bj-felt{
+  position:relative;padding:18px 12px 18px;border-radius:32px;border:2px solid #A9C0D6;
+  background:radial-gradient(130% 90% at 50% 0%,#F6FAFD 0%,#DCE8F2 52%,#C8DBEB 100%);
+  box-shadow:0 7px 0 #B3C7DA,inset 0 0 0 6px #EEF4F9,inset 0 0 0 7.5px #BCD0E2
+}
+html .bj-app .bj-status{color:#4A6078;margin-bottom:12px;padding:0 6px}
+html .bj-app .bj-phase{background:#fff;color:#122C4F;border:2px solid #B5C8DA;box-shadow:0 2px 0 #C3D3E2;font-weight:700}
+html .bj-app .bj-phase::before{background:#2F6EA3;box-shadow:0 0 0 3px rgba(47,110,163,.2)}
+html .bj-app .bj-msg{color:#122C4F;font-weight:700;margin:10px 0}
+html .bj-app .bj-zone+.bj-zone{border-top:0}
+html .bj-app .bj-lab{color:#4A6078;font-weight:700}
+html .bj-app .bj-lab em{color:#122C4F}
+
+/* الدلر: في النص فوق */
+html .bj-app .bj-dz{display:flex;flex-direction:column;align-items:center;padding:4px 0 2px}
+html .bj-app .bj-dz .bj-lab{justify-content:center;gap:10px;margin-bottom:8px;
+  background:#122C4F;color:#fff;border-radius:99px;padding:3px 14px;display:inline-flex;font-size:11px}
+html .bj-app .bj-dz .bj-lab span{color:#fff}
+html .bj-app .bj-dz .bj-cards{justify-content:center;min-height:86px}
+
+/* الخط المنحني */
+html .bj-app .bj-arc{margin:4px 0 8px}
+html .bj-app .bj-arc path{stroke:#8FAAC4;stroke-width:1.6}
+html .bj-app .bj-arc text{fill:#5E7B97;font-weight:700}
+
+/* اللاعبين: كل واحد في «مكانه» على الطاولة */
+html .bj-app .bj-players{gap:16px 10px}
+html .bj-app .bj-players>.bj-zone,html .bj-app .bj-pz{
+  position:relative;background:#fff;border:2px solid #C3D3E2!important;border-radius:20px;padding:20px 8px 10px;
+  box-shadow:0 4px 0 #C3D3E2;min-width:0
+}
+html .bj-app .bj-players>.bj-zone.me,html .bj-app .bj-pz{border-color:#2F6EA3!important;box-shadow:0 4px 0 #2F6EA3,0 0 0 4px rgba(47,110,163,.12)}
+html .bj-app .bj-players .bj-lab,html .bj-app .bj-pz .bj-lab{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);max-width:92%;margin:0;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+  background:#fff;color:#122C4F;border:2px solid #C3D3E2;border-radius:99px;padding:2px 10px;font-size:11px
+}
+html .bj-app .bj-players>.bj-zone.me .bj-lab,html .bj-app .bj-pz .bj-lab{background:#122C4F;color:#fff;border-color:#122C4F}
+html .bj-app .bj-players>.bj-zone.me .bj-lab em,html .bj-app .bj-pz .bj-lab em{color:#BFE3FF}
+html .bj-app .bj-players .bj-lab span{overflow:hidden;text-overflow:ellipsis}
+html .bj-app .bj-players .bj-lab em{font-weight:800}
+html .bj-app .bj-hands{justify-content:center;gap:8px}
+html .bj-app .bj-hand{background:transparent;border:2px solid transparent;border-radius:14px;padding:6px 4px;flex:1 1 120px}
+html .bj-app .bj-hand.act{border-color:#2F6EA3;background:rgba(47,110,163,.08);box-shadow:none}
+html .bj-app .bj-hand .bj-cards,html .bj-app .bj-players .bj-cards{justify-content:center;min-height:80px}
+html .bj-app .bj-hinfo{justify-content:center;color:#5B7088}
+html .bj-app .bj-chip{color:#122C4F}
+
+/* مجموع اليد والنتيجة */
+html .bj-app .bj-tot{background:#122C4F;color:#fff;border:0;border-radius:99px;padding:2px 10px}
+html .bj-app .bj-tot.bust{background:#D9534F;color:#fff}
+html .bj-app .bj-tot.bjk{background:#2E9D6B;color:#fff}
+html .bj-app .bj-res{background:#122C4F;color:#fff;border:0}
+html .bj-app .bj-res.win,html .bj-app .bj-res.blackjack{background:#2E9D6B;color:#fff}
+html .bj-app .bj-res.loss{background:#D9534F;color:#fff}
+html .bj-app .bj-res.push,html .bj-app .bj-res.surrender{background:#8197AC;color:#fff}
+
+/* الورق */
+html .bj-app .bj-felt .bj-card{width:56px;height:80px;margin-left:-24px;border-radius:9px;background:#fff;border:1.5px solid #1B2A3F;box-shadow:0 3px 6px rgba(18,44,79,.28)}
+html .bj-app .bj-felt .bj-card:first-child{margin-left:0}
+html .bj-app .bj-felt .bj-card .rk{font-size:18px;top:4px;left:5px}
+html .bj-app .bj-felt .bj-card .st{width:24px;height:24px;bottom:4px;right:4px}
+html .bj-app .bj-felt .bj-card .st2{width:12px;height:12px;top:23px;left:4px}
+html .bj-app .bj-felt .bj-card.back{background:repeating-linear-gradient(45deg,#122C4F 0 6px,#2F5F93 6px 12px);border-color:#122C4F}
+html .bj-app .bj-felt .bj-card.back::after{border-color:#fff}
+html .bj-app .bj-players:not(.n1) .bj-card{width:48px;height:69px;margin-left:-21px}
+html .bj-app .bj-players:not(.n1) .bj-card:first-child{margin-left:0}
+html .bj-app .bj-players:not(.n1) .bj-card .rk{font-size:15px}
+html .bj-app .bj-players:not(.n1) .bj-card .st{width:20px;height:20px}
+html .bj-app .bj-players:not(.n1) .bj-card .st2{width:10px;height:10px;top:20px}
+
+/* الأزرار */
+html .bj-app .bj-btn{background:#fff;color:#122C4F;border:2px solid #9FB4C9;border-radius:13px;box-shadow:0 3px 0 #B5C8DA;font-weight:700}
+html .bj-app .bj-btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #B5C8DA}
+html .bj-app .bj-btn.pri{background:#122C4F;color:#fff;border-color:#122C4F;box-shadow:0 3px 0 #0A1830}
+html .bj-app .bj-btn.pri:active:not(:disabled){box-shadow:0 1px 0 #0A1830}
+html .bj-app .bj-btn.dim{background:transparent;color:#4A6078;box-shadow:none;border-color:#9FB4C9}
+html .bj-app .bj-btn:disabled{opacity:.45;box-shadow:none}
+html .bj-app .bj-bet-show{color:#122C4F}html .bj-app .bj-bet-show small{color:#5B7088}
+html .bj-app .bj-warn{background:rgba(255,255,255,.7);border:2px dashed #9FB4C9;color:#4A6078}
+html .bj-app .bj-timer{background:#C9D6E2}html .bj-app .bj-timer i{background:#2F6EA3}
+
+/* الكراسي (قايمة تحت الطاولة) */
+html .bj-app .bj-seat{background:#fff;border:2px solid #C3D3E2;color:#122C4F}
+html .bj-app .bj-seat.me{border-color:#2F6EA3;box-shadow:none}
+html .bj-app .bj-seat.empty{color:#6C8299;background:transparent;border-style:dashed}
+html .bj-app .bj-seat small{color:#5B7088}
+html .bj-app .bj-seat img{border-color:#C3D3E2}
+html .bj-app .bj-badge{background:#E7EEF6;color:#122C4F;border:0}
+
+/* ---------- الوضع العرضي (الطاولة بتتفرد على عمودين) ---------- */
+html.bj-land .bj-app .bj-felt{border-radius:24px;padding:10px 16px 12px;box-shadow:0 5px 0 #B3C7DA,inset 0 0 0 5px #EEF4F9,inset 0 0 0 6.5px #BCD0E2}
+html.bj-land .bj-app .bj-felt .bj-card{width:46px;height:66px;margin-left:-20px}
+html.bj-land .bj-app .bj-felt .bj-card:first-child{margin-left:0}
+html.bj-land .bj-app .bj-felt .bj-card .rk{font-size:15px}
+html.bj-land .bj-app .bj-felt .bj-card .st{width:20px;height:20px}
+html.bj-land .bj-app .bj-felt .bj-card .st2{width:10px;height:10px;top:20px}
+html.bj-land .bj-app .bj-players:not(.n1) .bj-card{width:38px;height:55px;margin-left:-17px}
+html.bj-land .bj-app .bj-players:not(.n1) .bj-card:first-child{margin-left:0}
+html.bj-land .bj-app .bj-players:not(.n1) .bj-card .rk{font-size:13px}
+html.bj-land .bj-app .bj-players:not(.n1) .bj-card .st{width:16px;height:16px}
+html.bj-land .bj-app .bj-players:not(.n1) .bj-card .st2{width:8px;height:8px;top:17px}
+html.bj-land .bj-app .bj-dz .bj-cards,html.bj-land .bj-app .bj-hand .bj-cards,html.bj-land .bj-app .bj-players .bj-cards{min-height:62px}
+html.bj-land .bj-app .bj-players>.bj-zone,html.bj-land .bj-app .bj-pz{padding:18px 6px 8px}
+html.bj-land .bj-app .bj-players{gap:14px 8px}
+html.bj-land .bj-app .bj-dz{align-items:flex-start}
+html.bj-land .bj-app .bj-dz .bj-cards{justify-content:flex-start}
+html.bj-land .bj-app .bj-dz .bj-lab{margin-bottom:4px}
+
+/* ---------- تظبيطات بعد المعاينة ---------- */
+/* تسمية «You» في الأوفلاين: سطر واحد (الاسم + عدد الورق) بدل ما تنكسر */
+html .bj-app .bj-pz .bj-lab{flex-direction:row;white-space:nowrap}
+html .bj-app .bj-pz .bj-lab em{font-size:10px;font-weight:600;opacity:.85}
+html .bj-app .bj-pz{padding-top:24px}
+/* الورق مش بيتغطى تحت الليبل */
+html .bj-app .bj-hands{margin-top:2px}
+html .bj-app .bj-felt .bj-card .rk{line-height:1}
+/* الكروت الخلفية */
+html .bj-app .bj-felt .bj-card.back::after{inset:6px}
+/* الأزرار المعطلة (Split / Surrender) تفضل واضحة */
+html .bj-app .bj-btn:disabled{background:#EEF3F8;color:#7D91A6;border-color:#C3D3E2}
+html .bj-app .bj-acts .bj-btn{font-size:14px}
+/* الفوتر الأسود تحت: خلفية الصفحة فاتحة كمان */
+html body.mode-blackjack,html body.mode-blackjack::before{background:#E7EDF3!important}
+html body.mode-blackjack .footer,html body.mode-blackjack .hm-signature{display:none}
+
+/* تثبيت الليبل في النص بعرض محتواه (left:50% كانت بتضيّق العرض للنص) */
+html .bj-app .bj-players .bj-lab,html .bj-app .bj-pz .bj-lab{left:0;right:0;margin:0 auto;transform:none;width:max-content;max-width:94%}
+html .bj-app .bj-pz{padding-top:26px}
+html .bj-app .bj-players>.bj-zone{padding-top:24px}
+html .bj-app .bj-felt .bj-card{margin-left:-16px}
+html .bj-app .bj-players:not(.n1) .bj-card{margin-left:-15px}
+html .bj-app .bj-felt .bj-card:first-child,html .bj-app .bj-players:not(.n1) .bj-card:first-child{margin-left:0}
+html.bj-land .bj-app .bj-felt .bj-card{margin-left:-14px}
+html.bj-land .bj-app .bj-players:not(.n1) .bj-card{margin-left:-12px}
+html.bj-land .bj-app .bj-felt .bj-card:first-child,html.bj-land .bj-app .bj-players:not(.n1) .bj-card:first-child{margin-left:0}
+
+
+/* ===== المحفظة (Wallet) بالثيم الفاتح ===== */
+html .wl-app .bj-top{background:rgba(231,237,243,.94);border-bottom:1px solid #C9D6E2}
+html .wl-app .bj-back{background:#fff;border:2px solid #9FB4C9;color:#122C4F;box-shadow:0 3px 0 #B5C8DA}
+html .wl-app .bj-title{color:#122C4F}
+html .wl-app .bj-wal,html .wl-ico{background:#fff;border:2px solid #9FB4C9;color:#122C4F;box-shadow:0 3px 0 #B5C8DA}
+html .wl-app .bj-wal small,html .wl-ico span{color:#2F6EA3}
+html .wl-app .bj-mode small{color:#5B7088}
+html .wl-app .bj-mode i{background:#E7EEF6;color:#122C4F;border:0}
+html .wl-app .bj-mode.on{background:#122C4F;color:#fff;border-color:#122C4F;box-shadow:0 4px 0 #0A1830}
+html .wl-app .bj-mode.on b{color:#fff}
+html .wl-app .bj-note,html .wl-app .bj-link,html .wl-app .bj-kv span,html .wl-app .bj-li small{color:#5B7088}
+html .wl-app .bj-rules,html .wl-app .bj-li,html .wl-app .bj-kv b{color:#122C4F}
+html .wl-app .bj-rules h4{color:#2F6EA3}
+html .wl-app .bj-li{border-top-color:#D4DFEA}
+html .wl-app .bj-in{background:#F4F7FA;color:#122C4F;border:2px solid #B5C8DA}
+html .wl-app .bj-ach div{background:#EEF3F8;color:#122C4F}
+html .wl-app .bj-ach div.got{background:#DDEBF7;border-color:#2F6EA3;color:#122C4F}
+html .wl-app .bj-btn{background:#fff;color:#122C4F;border:2px solid #9FB4C9;border-radius:13px;box-shadow:0 3px 0 #B5C8DA;font-weight:700}
+html .wl-app .bj-btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #B5C8DA}
+html .wl-app .bj-btn.pri{background:#122C4F;color:#fff;border-color:#122C4F;box-shadow:0 3px 0 #0A1830}
+html .wl-app .bj-btn.pri:active:not(:disabled){box-shadow:0 1px 0 #0A1830}
+html .wl-app .bj-btn.dim{background:transparent;color:#4A6078;box-shadow:none;border-color:#9FB4C9}
+html .wl-app .bj-btn:disabled{opacity:.45;box-shadow:none}
+html .wl-app .bj-bet-show{color:#122C4F}
+html .wl-app .bj-warn{background:rgba(255,255,255,.7);border:2px dashed #9FB4C9;color:#4A6078}
+html .wl-app .bj-timer{background:#C9D6E2}
+html .wl-app .bj-badge{background:#E7EEF6;color:#122C4F;border:0}
+html .wl-app .bj-btn:disabled{background:#EEF3F8;color:#7D91A6;border-color:#C3D3E2}
+html .wl-app{background:transparent;color:#122C4F}
+html .wl-app .wl-hero{background:linear-gradient(160deg,#FFFFFF 0%,#E3EDF6 100%);border:2px solid #B5C8DA;box-shadow:0 5px 0 #C3D3E2}
+html .wl-app .wl-hero::after{display:none}
+html .wl-app .wl-hl{color:#2F6EA3}html .wl-app .wl-dot{background:#2F6EA3;box-shadow:0 0 0 3px rgba(47,110,163,.2)}
+html .wl-app .wl-bal{color:#122C4F}
+html .wl-app .wl-tiles div{background:#fff;border:2px solid #C9D6E2}
+html .wl-app .wl-tiles label{color:#5B7088}html .wl-app .wl-tiles b{color:#122C4F;font-size:13.5px;overflow-wrap:anywhere}
+html .wl-app .wl-fine{color:#5B7088}
+html .wl-app .wl-tabs{background:#DDE6EE;border:0;box-shadow:inset 0 2px 4px rgba(18,44,79,.15)}
+html .wl-app .wl-tabs button{color:#4A6078}
+html .wl-app .wl-tabs button.on{background:#122C4F;color:#fff;box-shadow:none}
+html .wl-app .bj-card2{background:#fff;border:2px solid #C3D3E2;box-shadow:0 4px 0 #C3D3E2;color:#122C4F}
+html .wl-app .bj-card2 h3{color:#2F6EA3}
+html .wl-app .bj-kv span,html .wl-app .bj-li small,html .wl-app .bj-note{color:#5B7088}
+html .wl-app .bj-kv b,html .wl-app .bj-li{color:#122C4F}
+html .wl-app .bj-li{border-top-color:#D4DFEA}
+html .wl-app .bj-in{font:600 15px var(--bj-mono,monospace)!important;letter-spacing:0!important;background:#F4F7FA!important;color:#122C4F!important;border:2px solid #B5C8DA!important;border-radius:12px;padding:10px 12px;min-width:0}
+html .wl-app .bj-in::placeholder{color:#8AA0B6}
+html .wl-app .bj-btn{background:#fff;color:#122C4F;border:2px solid #9FB4C9;box-shadow:0 3px 0 #B5C8DA;border-radius:13px;font-weight:700}
+html .wl-app .bj-btn.pri{background:#122C4F;color:#fff;border-color:#122C4F;box-shadow:0 3px 0 #0A1830}
+html .wl-app .bj-btn.dim{background:transparent;color:#4A6078;box-shadow:none}
+html .wl-app .bj-ach div{background:#EEF3F8;color:#122C4F}
