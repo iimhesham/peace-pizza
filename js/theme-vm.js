@@ -53,6 +53,32 @@
   function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
   function two(n){return n<10?"0"+n:""+n;}
 
+  /* اللوجو: ألوان صريحة من غير gradient ids (الـurl(#id) كان بيفقد الرسم بعد الرجوع للهوم) */
+  function LOGO(){
+    return '<svg class="vm-logo" viewBox="0 0 120 120" role="img" aria-label="Peace Pizza">'+
+      '<circle cx="60" cy="60" r="54" fill="#E9D18A"/><circle cx="60" cy="60" r="47" fill="#FFF1C2"/>'+
+      '<circle cx="60" cy="60" r="40" fill="none" stroke="#4C9DB0" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>'+
+      '<path d="M60 60V22M60 60L93 79M60 60L27 79" stroke="#2D7488" stroke-width="2.4" stroke-linecap="round" opacity=".45"/>'+
+      '<g fill="#4C9DB0"><circle cx="60" cy="38" r="7"/><circle cx="79" cy="70" r="7"/><circle cx="41" cy="70" r="7"/></g>'+
+      '<g fill="#FFEBAF" opacity=".75"><circle cx="58" cy="36" r="2.2"/><circle cx="77" cy="68" r="2.2"/><circle cx="39" cy="68" r="2.2"/></g></svg>';
+  }
+  /* نعيد رسم اللوجو كل ما الهوم يظهر (رجوع من لعبة / bfcache) */
+  function refreshLogo(){
+    var h=document.getElementById("vmHero");if(!h)return;
+    var old=h.querySelector(".vm-logo");if(!old)return;
+    var t=document.createElement("div");t.innerHTML=LOGO();old.replaceWith(t.firstChild);
+  }
+  function watchHub(){
+    var hub=document.getElementById("hub");if(!hub||hub._vmW)return;hub._vmW=1;
+    var was=!hub.classList.contains("hidden");
+    new MutationObserver(function(){
+      var now=!hub.classList.contains("hidden");
+      if(now&&!was)refreshLogo();was=now;
+    }).observe(hub,{attributes:true,attributeFilter:["class"]});
+    window.addEventListener("pageshow",function(e){if(e.persisted)refreshLogo();});
+    document.addEventListener("visibilitychange",function(){if(!document.hidden)refreshLogo();});
+  }
+
   function buildHub(){
     var hub=document.getElementById("hub");
     if(!hub||document.getElementById("vmMenu"))return;
@@ -73,14 +99,7 @@
     /* الهيرو: نص فانيليا + نص مونستون */
     var hero=document.createElement("section");hero.id="vmHero";hero.className="vm-hero";
     hero.innerHTML=
-      '<svg class="vm-logo" viewBox="0 0 120 120" role="img" aria-label="Peace Pizza">'+
-      '<defs><linearGradient id="vmLg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9BE70"/><stop offset="1" stop-color="#FFF8DC"/></linearGradient>'+
-      '<linearGradient id="vmLg2" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E7CC82"/><stop offset="1" stop-color="#FFF4CB"/></linearGradient></defs>'+
-      '<circle cx="60" cy="60" r="54" fill="url(#vmLg1)"/><circle cx="60" cy="60" r="47" fill="url(#vmLg2)"/>'+
-      '<circle cx="60" cy="60" r="40" fill="none" stroke="#4C9DB0" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" opacity=".7"/>'+
-      '<path d="M60 60V22M60 60L93 79M60 60L27 79" stroke="#2D7488" stroke-width="2.4" stroke-linecap="round" opacity=".45"/>'+
-      '<g fill="#4C9DB0"><circle cx="60" cy="38" r="7"/><circle cx="79" cy="70" r="7"/><circle cx="41" cy="70" r="7"/></g>'+
-      '<g fill="#FFEBAF" opacity=".75"><circle cx="58" cy="36" r="2.2"/><circle cx="77" cy="68" r="2.2"/><circle cx="39" cy="68" r="2.2"/></g></svg>'+
+      LOGO()+
       '<h1 class="vm-word" dir="ltr">GAME</h1><p class="vm-ask">تحب تلعب إيه؟</p>';
     /* شريط الثيم */
     var bar=document.createElement("div");bar.id="vmBar";bar.className="vm-bar-row";
@@ -129,6 +148,7 @@
     if(top&&hero.nextSibling!==top)hero.after(top);
     if(joinBox&&top)top.after(joinBox);
     syncSwitches();
+    watchHub();
   }
 
   window.PPTheme={on:on,cur:cur,set:set,toggle:toggle,sw:sw,sync:syncSwitches};
