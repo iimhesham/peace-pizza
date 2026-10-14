@@ -172,6 +172,15 @@ function draw(){
   I.shell(html,{room:true,t:"Blackjack",g:"blackjack",playing:true});
   afterDraw(S,code,B);
 }
+/* نقطة واحدة لكل جولة بتكسبها أونلاين (بتتسجل في إحصائيات الحساب والترتيب الشهري) */
+function recordStats(key,seat){
+  var u=U(),db=I.db(),lk="olbj_"+key;if(!u||!db)return;
+  try{if(localStorage.getItem(lk))return;localStorage.setItem(lk,"1");}catch(x){}
+  var win=(seat.net||0)>0,pts=win?1:0;
+  db.ref("users/"+u.uid+"/stats/blackjack").transaction(function(s){
+    s=s||{pts:0,right:0,wrong:0,games:0,wins:0};s.pts=(s.pts||0)+pts;s.games=(s.games||0)+1;if(win)s.wins=(s.wins||0)+1;return s;
+  },function(err){if(err)return;I.syncLB(function(){if(pts)db.ref("lb/"+u.uid+"/m/"+I.mkey()).transaction(function(v){return(v||0)+pts;});});});
+}
 /* بعد كل رسمة: سجّل نتيجتي مرة واحدة (إحصائيات + إنجازات) واستلم العوائد */
 function afterDraw(S,code,B){
   if(!window.SHK||!B||!B.pub||!B.pub.result||!(B.ph==="SETTLEMENT"||B.ph==="ROUND_COMPLETE"))return;
@@ -179,6 +188,7 @@ function afterDraw(S,code,B){
   var seat=null;B.pub.result.seats.forEach(function(s){if(s.uid===me)seat=s;});
   if(!seat)return;rec[key]=1;
   SHK.claimInbox();
+  recordStats(key,seat);
   SHK.recordBjRound(key,seat).then(function(list){(list||[]).forEach(function(a){T("Achievement: "+a.n+" +"+UI.fmt(a.reward));});}).catch(function(){});
 }
 

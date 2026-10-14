@@ -9,7 +9,7 @@
 ========================================================= */
 (function(){
 var P=window.PPB={};
-var GK=["flags","story","career","xo","ludo","sudoku","tawla"];
+var GK=["flags","story","career","xo","ludo","sudoku","tawla","blackjack"];
 
 /* ---------- icons (24x24 stroke paths, drawn with CSS mask so they take any color) ---------- */
 var ICONS={
@@ -96,7 +96,7 @@ P.level=function(pts,games){var xp=Math.max(0,Math.floor((pts||0)+(games||0)*2))
    [ name, description, unlocked(t,s), progress(t,s), target, {ic, tr (rarity 1-4), g (group)} ]
    t = totals {games,wins,right,wrong,pts}, s = per-game stats {flags:{games,wins,right,wrong,pts},...} */
 P.RAR={1:{n:"Common",c:"#d9a273",rgb:"217,162,115"},2:{n:"Rare",c:"#8dbdff",rgb:"141,189,255"},3:{n:"Epic",c:"#e6c25a",rgb:"230,194,90"},4:{n:"Legendary",c:"#c88cff",rgb:"200,140,255"}};
-P.GROUPS=[["all","Overall"],["flags","Flags"],["story","Who Am I"],["career","Transfers"],["xo","XO"],["ludo","Ludo"],["sudoku","Sudoku"],["tawla","Tawla"],["mix","Mixed"]];
+P.GROUPS=[["all","Overall"],["flags","Flags"],["story","Who Am I"],["career","Transfers"],["xo","XO"],["ludo","Ludo"],["sudoku","Sudoku"],["tawla","Tawla"],["blackjack","Blackjack"],["mix","Mixed"]];
 function X(s,k){return(s&&s[k])||{};}
 function A(n,d,ic,tr,g,pf,tg,ok){return[n,d,ok||function(t,s){return pf(t,s)>=tg;},pf,tg,{ic:ic,tr:tr,g:g}];}
 function pg(k,f){return function(t,s){return f(X(s,k))||0;};}
@@ -170,12 +170,19 @@ P.ACH=[
  A("Tawla Veteran","Win 25 Tawla games","medal",3,"tawla",pg("tawla",wins),25),
  A("Board Shark","Win 60% of your Tawla games (15+ played)","percent",3,"tawla",pg("tawla",games),15,wr("tawla",15,.6)),
  A("Tawla Grandmaster","Score 300 points in Tawla","crown",4,"tawla",pg("tawla",pts),300),
+ /* blackjack */
+ A("Blackjack Rookie","Win 1 Blackjack round online","dice",1,"blackjack",pg("blackjack",wins),1),
+ A("Card Regular","Play 10 Blackjack rounds online","clock",1,"blackjack",pg("blackjack",games),10),
+ A("Card Sharp","Win 10 Blackjack rounds","star",2,"blackjack",pg("blackjack",wins),10),
+ A("High Roller","Win 30 Blackjack rounds","medal",3,"blackjack",pg("blackjack",wins),30),
+ A("House Beater","Win 55% of your Blackjack rounds (20+ played)","percent",3,"blackjack",pg("blackjack",games),20,wr("blackjack",20,.55)),
+ A("Blackjack Legend","Score 100 points in Blackjack","crown",4,"blackjack",pg("blackjack",pts),100),
  /* mixed */
  A("Explorer","Play 3 different games","compass",1,"mix",playedN,3),
  A("All-Rounder","Score in Flags, Who Am I and Transfers","layers",2,"mix",function(t,s){return(X(s,"flags").pts>0)+(X(s,"story").pts>0)+(X(s,"career").pts>0);},3),
  A("Triple Threat","Win in 3 different games","star",3,"mix",wonN,3),
  A("Board Champion","Win a game of XO, Ludo, Sudoku and Tawla","trophy",4,"mix",function(t,s){return(X(s,"xo").wins>0)+(X(s,"ludo").wins>0)+(X(s,"sudoku").wins>0)+(X(s,"tawla").wins>0);},4),
- A("Seven Wonders","Play all 7 games","globe",4,"mix",playedN,7)
+ A("Eight Wonders","Play all 8 games","globe",4,"mix",playedN,8)
 ];
 /* each card: unlocked flag + progress (capped at the target) */
 P.state=function(t,s){return P.ACH.map(function(b){var on=!!b[2](t,s),c=Math.min(Number(b[3](t,s))||0,b[4]);return{b:b,on:on,c:on?b[4]:c};});};
