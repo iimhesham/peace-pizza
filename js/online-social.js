@@ -68,6 +68,52 @@ function shell(h,t,g){I.shell(h,{t:t,g:g||"base"});pre();}
 function sec(t,sub,extra){return'<div class="ac-h"><b>'+t+'</b>'+(sub?'<em>'+sub+'</em>':'')+(extra||"")+'</div>';}
 
 /* ---------- Account ---------- */
+/* ---------- Account (Vanilla × Moonstone) ---------- */
+function admBox(){return sec("Admin Tools","",'<span class="ac-tag">Admin</span>')+'<div class="ac-grid pp-adm">'+
+  '<button type="button" class="ac-sq" id="acQreq" onclick="OL.queue()">'+IX("send")+'<span>Question Requests</span></button>'+
+  '<button type="button" class="ac-sq" onclick="OL.users()">'+IX("users")+'<span>Users and Badges</span></button>'+
+  '<button type="button" class="ac-sq" id="olSyncB" onclick="OL.syncAll()">'+IX("sync")+'<span>Sync Ranking</span></button>'+
+  '<button type="button" class="ac-sq" onclick="OL.test()">'+IX("shield")+'<span>System Check</span></button></div>';}
+function vmMe(c){
+  var u=c.u,t=c.t,v=c.v,o=c.o,pad=c.pad,L=PPB.level(t.pts,t.games),h="",E=function(x){return e(String(x));};
+  var wal='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5V9z"/></svg>';
+  h+='<div class="vm-prow"><button type="button" class="vm-iconbtn" onclick="OL.wallet()" aria-label="Wallet">'+wal+'<span>WALLET</span></button>'+PPTheme.sw()+'</div>';
+  /* الكارت الرئيسي */
+  h+='<section class="vm-card"><div class="vm-card-top"><span class="vm-hex" dir="ltr">'+(c.ix>=0?'NO. '+pad(c.ix+1,4):'UNRANKED')+'</span>'+
+    '<div class="vm-ph">'+av(u.photoURL,u.uid,"vm-av",c.name)+PPB.seal(c.bk)+'</div>'+
+    '<h2 class="vm-name" dir="auto">'+E(c.name)+'</h2>'+(c.mail?'<p class="vm-mail" dir="ltr">'+E(c.mail)+'</p>':'')+
+    (c.mine.length?'<div class="vm-titles">'+c.mine.slice(0,2).map(function(x){return'<span>'+E(x.n)+'</span>';}).join("")+'</div>':'')+'</div>'+
+    '<div class="vm-card-bot"><span class="vm-lv"><small>LV</small><b>'+L.lv+'</b></span><div class="vm-lvt"><div class="vm-lvr"><b>'+E(L.rank)+'</b><em>'+L.xp+' / '+L.hi+' XP</em></div><i class="vm-bar"><i style="width:'+L.pc+'%"></i></i></div></div></section>';
+  /* الأرقام */
+  h+='<div class="vm-stats">'+
+    '<div class="vm-st w f"><label>Points</label><b>'+t.pts+'</b></div>'+
+    '<div class="vm-st w"><label>Rank</label><b>'+(c.ix>=0?'#'+(c.ix+1):'-')+'</b><small>of '+c.R.length+' players</small></div>'+
+    [[t.wins,"Wins"],[t.games,"Sessions"],[c.acc===null?"-":c.acc+"%","Accuracy"]].map(function(x){return'<div class="vm-st"><b>'+x[0]+'</b><label>'+x[1]+'</label></div>';}).join("")+'</div>';
+  if(o.adm)h+=admBox();
+  /* إيصال الليلة */
+  var GKs=Object.keys(GN).filter(function(k){return GI[k];});
+  h+=sec("Receipt","game night")+'<div class="vm-rcpt"><div class="vm-rc-h"><b>PEACE PIZZA</b><small>GAME NIGHT RECEIPT</small></div>'+
+    GKs.map(function(k){var x=v[k],xoG=k==="xo"||k==="ludo"||k==="sudoku"||k==="tawla",tot=x?(xoG?(x.games||0):(x.right||0)+(x.wrong||0)):0,pc=tot?Math.round((xoG?(x.wins||0):(x.right||0))/tot*100):0;
+      var isBest=c.best&&c.best.k===k&&c.best.p>0;
+      return'<div class="vm-rr'+(x?'':' off')+(isBest?' best':'')+'"><span class="vm-rg">'+IX(GI[k])+'</span><div class="vm-rm"><b>'+GN[k]+'</b>'+
+        (x?'<span class="vm-rs">'+(xoG?(x.wins||0)+'W / '+(x.games||0)+'G':(x.right||0)+' right / '+(x.wrong||0)+' wrong')+' · '+pc+'%</span><i class="vm-bar"><i style="width:'+pc+'%"></i></i>':'<span class="vm-rs">not played yet</span>')+'</div>'+
+        (isBest?'<span class="vm-best">BEST</span>':'')+'<span class="vm-rp">'+(x?x.pts:"-")+'</span></div>';}).join("")+
+    '<div class="vm-rt"><span>TOTAL</span><b>'+t.pts+'</b></div></div>';
+  /* هايلايتس */
+  h+=sec("Highlights")+'<div class="vm-hl">'+
+    '<div><span class="hl-i">'+IX(GI[c.best.k])+'</span><span class="hl-t"><label>Best game</label><b>'+(c.best.p>0?GN[c.best.k]:"-")+'</b></span></div>'+
+    '<div><span class="hl-i">'+PPB.ic("percent")+'</span><span class="hl-t"><label>Win rate</label><b>'+c.wr+'</b></span></div>'+
+    '<div><span class="hl-i">'+PPB.ic("medal")+'</span><span class="hl-t"><label>Medals</label><span class="pp-med"><span class="g"><i></i>'+c.md.g+'</span><span class="s"><i></i>'+c.md.s+'</span><span class="b"><i></i>'+c.md.b+'</span></span></span></div>'+
+    '<div><span class="hl-i">'+PPB.ic(c.since?"clock":"trophy")+'</span><span class="hl-t"><label>'+(c.since?"Member since":"Titles")+'</label><b>'+(c.since||c.mine.length)+'</b></span></div></div>';
+  /* الإنجازات: رف الميداليات */
+  var tot=c.ST.length,dn=c.done.length;
+  h+=sec("Achievements",dn+" of "+tot,'<button type="button" class="ac-more" onclick="OLX.go(\'awards\')">View all</button>')+
+    '<div class="vm-ach"><div class="vm-ach-t"><b>'+dn+'<small>/ '+tot+'</small></b><span>unlocked</span></div><i class="vm-bar"><i style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></i></i>'+
+    (c.show.length?'<div class="vm-meds">'+c.show.map(function(x){var b=x.b,m=b[5],r=PPB.RAR[m.tr];return'<div class="vm-md" style="--rc:'+r.rgb+'" title="'+E(b[1])+'"><span class="vm-mdi">'+PPB.ic(m.ic)+'</span><b>'+E(b[0])+'</b><small>'+r.n+'</small></div>';}).join("")+'</div>':'<div class="vm-none">Play online games to unlock achievements</div>')+
+    c.next.map(function(x){return'<div class="vm-nxt"><b>Next up: '+E(x.b[0])+'</b><small>'+E(x.b[1])+'</small><i class="vm-bar"><i style="width:'+Math.round(x.c/x.b[4]*100)+'%"></i></i><em>'+x.c+' / '+x.b[4]+'</em></div>';}).join("")+'</div>';
+  h+=sec("Community")+'<button type="button" class="ac-tile" onclick="OL.sug()">'+IX("pencil")+'<span><b>Suggest a Question</b><small>Send your own questions to the admin</small></span></button>';
+  return h;}
+
 function me(o){o=o||{};I.sv("stats");curTab="me";
   load(function(){if(!alive())return;
     var u=U(),v=o.v||{},t={games:0,wins:0,right:0,wrong:0,pts:0,s:v};
@@ -78,6 +124,13 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
     var bk=I.bk(u.uid);
     var pad=function(n,l){n=String(n);while(n.length<l)n="0"+n;return n;};
     var mail=I.mail(u);
+    var ST=PPB.state(t,v),done=ST.filter(function(x){return x.on;}),next=ST.filter(function(x){return!x.on;}).sort(function(a,c){return c.c/c.b[4]-a.c/a.b[4];}).slice(0,2),show=PPB.top(ST,3);
+    var best=GK.map(function(k){return{k:k,p:gp({s:v},k)};}).sort(function(a,c){return c.p-a.p;})[0],A0=awardsOf(u.uid),md=A0.medals,wr=t.games?Math.round(t.wins/t.games*100)+"%":"-";
+    var since="";try{since=u.metadata&&u.metadata.creationTime?dstr(u.metadata.creationTime):"";}catch(x){}
+    var vm=!!(window.PPTheme&&PPTheme.on());
+    if(vm){h+=vmMe({u:u,v:v,t:t,R:R,ix:ix,acc:acc,name:name,mine:mine,bk:bk,mail:mail,o:o,pad:pad,ST:ST,done:done,next:next,show:show,best:best,md:md,wr:wr,since:since});}
+    else{
+    h+='<div class="vm-prow" style="justify-content:flex-end">'+(window.PPTheme?PPTheme.sw():"")+'</div>';
     h+='<section class="pp-page"><button type="button" class="wl-ico sm" onclick="OL.wallet()" aria-label="Wallet">'+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5V17a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1v-3"/><path d="M21 9H16a2.5 2.5 0 0 0 0 5h5a0 0 0 0 0 0 0V9z"/><circle cx="16.6" cy="11.5" r=".6" fill="currentColor"/></svg>'+'</button><div class="pp-top"><b>Player Passport</b></div>'+
       '<div class="pp-body"><div class="pp-photo">'+av(u.photoURL,u.uid,"pp-av",name)+PPB.seal(bk)+'</div>'+
       '<div class="pp-f"><label>Name</label><b class="pp-name" dir="auto">'+e(name)+'</b>'+(mail?'<label>E-mail</label><span class="pp-mail" dir="ltr">'+e(mail)+'</span>':'')+
@@ -95,9 +148,6 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       return'<div class="pp-visa'+(x?'':' off')+'" style="--gc:'+GC[k]+'">'+
         '<div class="pp-vr"><span class="ac-gi">'+IX(GI[k])+'</span><b>'+(x?x.pts:"-")+'</b></div><small>'+GN[k]+'</small>'+
         (x?'<i class="ol-acc"><i style="width:'+pc+'%"></i></i><span class="pp-vs">'+(xoG?(x.wins||0)+'W '+(x.games||0)+'G':(x.right||0)+'&#10003; '+(x.wrong||0)+'&#10007;')+'</span>':'<em>Not played yet</em>')+'</div>';}).join("")+'</div>';
-    var ST=PPB.state(t,v),done=ST.filter(function(x){return x.on;}),next=ST.filter(function(x){return!x.on;}).sort(function(a,c){return c.c/c.b[4]-a.c/a.b[4];}).slice(0,2),show=PPB.top(ST,3);
-    var best=GK.map(function(k){return{k:k,p:gp({s:v},k)};}).sort(function(a,c){return c.p-a.p;})[0],A0=awardsOf(u.uid),md=A0.medals,wr=t.games?Math.round(t.wins/t.games*100)+"%":"-";
-    var since="";try{since=u.metadata&&u.metadata.creationTime?dstr(u.metadata.creationTime):"";}catch(x){}
     h+=sec("Highlights")+'<div class="pp-hl">'+
       '<div><span class="hl-i">'+IX(GI[best.k])+'</span><span class="hl-t"><label>Best game</label><b>'+(best.p>0?GN[best.k]:"-")+'</b></span></div>'+
       '<div><span class="hl-i">'+PPB.ic("percent")+'</span><span class="hl-t"><label>Win rate</label><b>'+wr+'</b></span></div>'+
@@ -107,6 +157,7 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       (show.length?'<div class="ach-show">'+show.map(PPB.tile).join("")+'</div>':'<div class="ac-none pp-none">Play online games to unlock achievements</div>')+
       next.map(function(x){return'<div class="ac-next"><b>Next up: '+e(x.b[0])+'</b><small>'+e(x.b[1])+'</small><i class="ol-pb"><i style="width:'+Math.round(x.c/x.b[4]*100)+'%"></i></i><em class="ol-of">'+x.c+' / '+x.b[4]+'</em></div>';}).join("");
     h+=sec("Community")+'<button type="button" class="ac-tile" onclick="OL.sug()">'+IX("pencil")+'<span><b>Suggest a Question</b><small>Send your own questions to the admin</small></span></button>';
+    }
     if(!o.adm&&o.claim)h+='<button type="button" class="ol-b o" onclick="OL.claim()">Make me the admin (one time only)</button>';
     if(!o.inRoom)h+='<button type="button" class="ac-out" onclick="OL.signOut()">'+IX("logout")+' Sign out</button>';
     shell(h,"Account");
@@ -511,7 +562,7 @@ var css=':root{--x-grid:'+SVG("<path d=\'M9 4v16M15 4v16M4 9h16M4 15h16\'/>")+';
 `;
 var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
-window.OLX={tabs:tabs,pre:pre,go:go,me:me,rank:rank,rf:function(f){rank(f);},awards:awards,friends:friends,prof:prof,close:close,
+window.OLX={cur:function(){return curTab;},tabs:tabs,pre:pre,go:go,me:me,rank:rank,rf:function(f){rank(f);},awards:awards,friends:friends,prof:prof,close:close,
   fadd:fadd,facc:facc,fdec:fdec,fcan:fcan,funf:funf,srch:srch,sug:sug,back:back,fg:fg,fp:fp,rm:rm,addc:addc,adds:adds,seg:seg,send:send,
   queue:queue,qdec:qdec,qcopy:qcopy,af:af};
 })();
