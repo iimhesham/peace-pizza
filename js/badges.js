@@ -9,7 +9,7 @@
 ========================================================= */
 (function(){
 var P=window.PPB={};
-var GK=["flags","story","career","xo","ludo","sudoku","tawla","blackjack"];
+var GK=["flags","story","career","xo","ludo","sudoku","tawla","blackjack","snake"];
 
 /* ---------- icons (24x24 stroke paths, drawn with CSS mask so they take any color) ---------- */
 var ICONS={
@@ -96,7 +96,7 @@ P.level=function(pts,games){var xp=Math.max(0,Math.floor((pts||0)+(games||0)*2))
    [ name, description, unlocked(t,s), progress(t,s), target, {ic, tr (rarity 1-4), g (group)} ]
    t = totals {games,wins,right,wrong,pts}, s = per-game stats {flags:{games,wins,right,wrong,pts},...} */
 P.RAR={1:{n:"Common",c:"#d9a273",rgb:"217,162,115"},2:{n:"Rare",c:"#8dbdff",rgb:"141,189,255"},3:{n:"Epic",c:"#e6c25a",rgb:"230,194,90"},4:{n:"Legendary",c:"#c88cff",rgb:"200,140,255"}};
-P.GROUPS=[["all","Overall"],["flags","Flags"],["story","Who Am I"],["career","Transfers"],["xo","XO"],["ludo","Ludo"],["sudoku","Sudoku"],["tawla","Tawla"],["blackjack","Blackjack"],["mix","Mixed"]];
+P.GROUPS=[["all","Overall"],["flags","Flags"],["story","Who Am I"],["career","Transfers"],["xo","XO"],["ludo","Ludo"],["sudoku","Sudoku"],["tawla","Tawla"],["blackjack","Blackjack"],["snake","Snakes"],["mix","Mixed"]];
 function X(s,k){return(s&&s[k])||{};}
 function A(n,d,ic,tr,g,pf,tg,ok){return[n,d,ok||function(t,s){return pf(t,s)>=tg;},pf,tg,{ic:ic,tr:tr,g:g}];}
 function pg(k,f){return function(t,s){return f(X(s,k))||0;};}
@@ -177,12 +177,25 @@ P.ACH=[
  A("High Roller","Win 30 Blackjack rounds","medal",3,"blackjack",pg("blackjack",wins),30),
  A("House Beater","Win 55% of your Blackjack rounds (20+ played)","percent",3,"blackjack",pg("blackjack",games),20,wr("blackjack",20,.55)),
  A("Blackjack Legend","Score 100 points in Blackjack","crown",4,"blackjack",pg("blackjack",pts),100),
+ /* snakes & ladders (counters: cb comeback wins, ch clean-hands wins, dg blocked bites, st stolen cards, tp sprung traps, ih survival wins) */
+ A("Ladder Rookie","Win 1 Snakes & Ladders game online","dice",1,"snake",pg("snake",wins),1),
+ A("Ladder Regular","Play 10 Snakes & Ladders games online","clock",1,"snake",pg("snake",games),10),
+ A("Ladder Climber","Win 10 Snakes & Ladders games","star",2,"snake",pg("snake",wins),10),
+ A("Snake Charmer","Win 25 Snakes & Ladders games","medal",3,"snake",pg("snake",wins),25),
+ A("Lucky Streak","Win 55% of your Snakes & Ladders games (15+ played)","percent",3,"snake",pg("snake",games),15,wr("snake",15,.55)),
+ A("Legendary Comeback","Win after trailing the leader by 40+ squares","flame",3,"snake",pg("snake",function(x){return x.cb;}),1),
+ A("Clean Hands","Win without playing a card or using a ward","check",2,"snake",pg("snake",function(x){return x.ch;}),1),
+ A("Snake Dodger","Block 10 snake bites in total","shield",2,"snake",pg("snake",function(x){return x.dg;}),10),
+ A("Pickpocket","Steal 10 cards in total","key",2,"snake",pg("snake",function(x){return x.st;}),10),
+ A("Trapmaster","Spring 10 of your traps on rivals","skull",3,"snake",pg("snake",function(x){return x.tp;}),10),
+ A("Iron Heart","Win a Survival match","heart",3,"snake",pg("snake",function(x){return x.ih;}),1),
+ A("Ladder Legend","Score 150 points in Snakes & Ladders","crown",4,"snake",pg("snake",pts),150),
  /* mixed */
  A("Explorer","Play 3 different games","compass",1,"mix",playedN,3),
  A("All-Rounder","Score in Flags, Who Am I and Transfers","layers",2,"mix",function(t,s){return(X(s,"flags").pts>0)+(X(s,"story").pts>0)+(X(s,"career").pts>0);},3),
  A("Triple Threat","Win in 3 different games","star",3,"mix",wonN,3),
  A("Board Champion","Win a game of XO, Ludo, Sudoku and Tawla","trophy",4,"mix",function(t,s){return(X(s,"xo").wins>0)+(X(s,"ludo").wins>0)+(X(s,"sudoku").wins>0)+(X(s,"tawla").wins>0);},4),
- A("Eight Wonders","Play all 8 games","globe",4,"mix",playedN,8)
+ A("Nine Wonders","Play all 9 games","globe",4,"mix",playedN,9)
 ];
 /* each card: unlocked flag + progress (capped at the target) */
 P.state=function(t,s){return P.ACH.map(function(b){var on=!!b[2](t,s),c=Math.min(Number(b[3](t,s))||0,b[4]);return{b:b,on:on,c:on?b[4]:c};});};
