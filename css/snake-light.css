@@ -1,0 +1,53 @@
+/* =========================================================
+   SNAKES & LADDERS — الثيم الفاتح (Vanilla × Moonstone).
+   بيتفعّل لما data-theme="vm" على <html>، زي ludo-light.css و blackjack-light.css.
+   اللوحة نفسها (ورق على خشب) فاضلة زي ما هي. بس الصفحة والألواح والأزرار بتتحول.
+========================================================= */
+html[data-theme="vm"] body.mode-snake{background:#FFEBAF!important}
+html[data-theme="vm"] body.mode-snake #toast{background:#10303A!important;color:#FFF6D6!important}
+html[data-theme="vm"] .sn-app,
+html[data-theme="vm"] #olRoot[data-g="snake"]{
+  --sn-bg:#FFEBAF;--sn-p1:#FFF6D6;--sn-p2:#FFEEBE;--sn-p3:#F8DE96;
+  --sn-cream:#10303A;--sn-dim:#4A6F7B;--sn-gold:#2D7488;--sn-green:#2D7488;--sn-ink:#FFF6D6;
+  --sn-line:rgba(16,48,58,.2);
+}
+html[data-theme="vm"] #olRoot[data-g="snake"]{
+  --bg:#FFEBAF;--bgr:255,235,175;--bg0:#FFF3CD;--wash:none;--card:#FFF6D6;--cardr:255,246,214;--card2:#FFEEBE;--h1:#FFEEBE;--h2:#FFF6D6;
+  --ln:rgba(16,48,58,.18);--ln2:rgba(16,48,58,.32);--mu:#4A6F7B;--mu2:#5d808c;--ink:#10303A;--ink2:#10303A;--ac:#2D7488;--acr:45,116,136;--on:#FFF6D6;
+}
+html[data-theme="vm"] .sn-title b,
+html[data-theme="vm"] #olRoot[data-g="snake"] .ol-ttl{color:#10303A}
+html[data-theme="vm"] .sn-title span{color:#2D7488}
+html[data-theme="vm"] .sn-app .sn-nm-in{background:#FFF6D6;color:#10303A}
+html[data-theme="vm"] .sn-nm-in::placeholder{color:#7b97a1}
+html[data-theme="vm"] .sn-start,
+html[data-theme="vm"] .sn-main{background:linear-gradient(180deg,#e9623f,#D9482B);color:#fff;box-shadow:0 4px 0 #9a2f18}
+html[data-theme="vm"] .sn-start:active,
+html[data-theme="vm"] .sn-main:active{box-shadow:0 2px 0 #9a2f18}
+html[data-theme="vm"] .sn-resume{background:linear-gradient(135deg,#FFF6D6,#FFE9A8);border-color:rgba(16,48,58,.35)}
+html[data-theme="vm"] .sn-pb.gold{background:#2D7488;color:#FFF6D6}
+html[data-theme="vm"] .sn-pb.good{background:rgba(45,116,136,.14);border-color:rgba(45,116,136,.55)}
+html[data-theme="vm"] .sn-sw i{background:#bfd2d6}
+html[data-theme="vm"] .sn-sw i:after{background:#fff}
+html[data-theme="vm"] .sn-sw.on i{background:#2D7488}
+html[data-theme="vm"] .sn-pc.is-turn{background:#F8DE96}
+html[data-theme="vm"] .sn-pos{color:#2D7488}
+html[data-theme="vm"] .sn-h{color:rgba(16,48,58,.2)}
+html[data-theme="vm"] .sn-h.on{color:#d9364a}
+html[data-theme="vm"] .sn-fx{background:rgba(45,116,136,.12);border-color:rgba(45,116,136,.5);color:#2D7488}
+html[data-theme="vm"] .sn-slot{border-color:rgba(16,48,58,.22);color:rgba(16,48,58,.4)}
+html[data-theme="vm"] .sn-svg{box-shadow:0 12px 28px rgba(16,48,58,.28)}
+html[data-theme="vm"] .pv-up{color:#117a45!important}
+html[data-theme="vm"] .pv-dn{color:#b3261e!important}
+html[data-theme="vm"] .pv-w{color:#2D7488!important}
+html[data-theme="vm"] .sn-final{background:rgba(16,48,58,.55)}
+html[data-theme="vm"] .sn-ach.on i{background:#2D7488;color:#FFF6D6}
+/* المسرح والبانر فاضلين غامقين: نصهم لازم يفضل فاتح */
+html[data-theme="vm"] .sn-cap b,
+html[data-theme="vm"] .sn-wbanner{color:#EFE6CF}
+html[data-theme="vm"] .sn-cap small,
+html[data-theme="vm"] .sn-wbanner p{color:#cfe0d5}
+html[data-theme="vm"] .sn-wbanner small,
+html[data-theme="vm"] .sn-wbanner em{color:#E3B94F}
+html[data-theme="vm"] .olsn-tag{background:#10303A;color:#FFF6D6}
+html[data-theme="vm"] #snake .ol-go{--olc:#10303A;border-color:rgba(16,48,58,.45)}
