@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="css/hubx.css?v=9">
 <link rel="stylesheet" href="css/xo.css?v=2">
 <link rel="stylesheet" href="css/ludo.css?v=5">
+<link rel="stylesheet" href="css/snake.css?v=1">
 <link rel="stylesheet" href="css/tawla.css?v=8">
 <link rel="stylesheet" href="css/blackjack.css?v=14">
 <link rel="stylesheet" href="css/hubtop.css?v=2">
@@ -40,6 +41,7 @@
 <link rel="stylesheet" href="css/theme-vm.css?v=2">
 <link rel="stylesheet" href="css/blackjack-light.css?v=2">
 <link rel="stylesheet" href="css/ludo-light.css?v=1">
+<link rel="stylesheet" href="css/snake-light.css?v=1">
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Noto+Sans+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -156,6 +158,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <div class="hm-fc hm-fc-ludo" role="button" tabindex="0" onclick="playClickSound();ludoOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();ludoOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2-4 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 64 64" width="50" height="50" fill="none"><rect x="2" y="2" width="60" height="60" rx="7" fill="#F2E6CF"/><rect x="2" y="2" width="25" height="25" rx="6" fill="#E5484D"/><rect x="37" y="2" width="25" height="25" rx="6" fill="#2EAE6B"/><rect x="37" y="37" width="25" height="25" rx="6" fill="#F2B632"/><rect x="2" y="37" width="25" height="25" rx="6" fill="#3B82E0"/><rect x="21" y="21" width="22" height="22" rx="5" fill="#fff" stroke="#1a120d" stroke-width="2" transform="rotate(12 32 32)"/></svg></span><span class="hm-fc-cap"><b>LUDO</b><small>BOARD GAME</small></span></div>
 <div class="hm-fc hm-fc-tawla" role="button" tabindex="0" onclick="playClickSound();tawlaOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();tawlaOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 60 40" width="52" height="35" fill="none"><rect x="1" y="1" width="58" height="38" rx="5" fill="#4a2c1a" stroke="#6b4326" stroke-width="2"/><path d="M5 4l4 14 4-14zM21 4l4 14 4-14zM37 4l4 14 4-14z" fill="#A8452F"/><path d="M13 4l4 14 4-14zM29 4l4 14 4-14zM45 4l4 14 4-14z" fill="#D9BE8C"/><path d="M5 36l4-14 4 14zM21 36l4-14 4 14zM37 36l4-14 4 14z" fill="#D9BE8C"/><path d="M13 36l4-14 4 14zM29 36l4-14 4 14zM45 36l4-14 4 14z" fill="#A8452F"/><circle cx="9" cy="6" r="3" fill="#fffdf6"/><circle cx="41" cy="34" r="3" fill="#2a1d18"/></svg></span><span class="hm-fc-cap"><b>TAWLA</b><small>BACKGAMMON</small></span></div>
 <div class="hm-fc hm-fc-bj" role="button" tabindex="0" onclick="playClickSound();bjOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();bjOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">1 – 5 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 60 40" width="52" height="35" fill="none"><rect x="12" y="4" width="22" height="30" rx="3" fill="#FBF9E4" stroke="#5B88B2" stroke-width="2" transform="rotate(-14 23 19)"/><rect x="26" y="4" width="22" height="30" rx="3" fill="#FBF9E4" stroke="#5B88B2" stroke-width="2" transform="rotate(10 37 19)"/><path d="M37 12l5 6a3 3 0 1 1-4.6 2.6L38 26h-2l.7-5.4A3 3 0 1 1 32 18z" fill="#122C4F"/></svg></span><span class="hm-fc-cap"><b>BLACKJACK</b><small>21 · SHANKALOLO</small></span></div>
+<div class="hm-fc hm-fc-snake" role="button" tabindex="0" onclick="playClickSound();snakeOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();snakeOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">2-4 PLAYERS</span><span class="hm-fc-art"><svg viewBox="0 0 80 64" width="58" height="46" fill="none"><rect x="3" y="3" width="74" height="58" rx="8" fill="#F1E4C2" stroke="#c9a14a" stroke-width="2"/><path d="M3 22h74M3 41h74M22 3v58M41 3v58M60 3v58" stroke="#c9a14a" stroke-width="1" opacity=".3"/><path d="M13 54L27 14M21 56L35 16" stroke="#7a4a1f" stroke-width="2.6" stroke-linecap="round"/><path d="M15.8 46l8 2M18.6 38l8 2M21.4 30l8 2M24.2 22l8 2" stroke="#a8743a" stroke-width="2" stroke-linecap="round"/><path d="M64 13C51 19 66 30 53 36S48 52 59 54" stroke="#2fae6b" stroke-width="6" stroke-linecap="round"/><path d="M64 13C51 19 66 30 53 36S48 52 59 54" stroke="#fff" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="1 4"/><circle cx="64" cy="12" r="4.6" fill="#2fae6b" stroke="#0e6b3a" stroke-width="1"/><circle cx="62.6" cy="10.6" r="1.3" fill="#fff"/><circle cx="66" cy="10.6" r="1.3" fill="#fff"/><circle cx="62.8" cy="10.8" r=".6" fill="#1a120d"/><circle cx="66.2" cy="10.8" r=".6" fill="#1a120d"/><circle cx="41" cy="49" r="4.6" fill="#E5484D" stroke="#9c2428" stroke-width="1.2"/><circle cx="39.6" cy="47.6" r="1.3" fill="#fff" opacity=".6"/>
+        </svg></span><span class="hm-fc-cap"><b>SNAKES</b><small>&amp; LADDERS</small></span></div>
 <div class="hm-fc hm-fc-s" role="button" tabindex="0" onclick="playClickSound();sdOpen()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playClickSound();sdOpen()}"><i></i><span class="hm-fc-tag" dir="ltr">9x9 PUZZLE</span><span class="hm-fc-art"><svg viewBox="0 0 60 60" width="50" height="50" fill="none"><rect x="2" y="2" width="56" height="56" rx="6" fill="#f4f0a8"/><path d="M20.7 4v52M39.3 4v52M4 20.7h52M4 39.3h52" stroke="#a60043" stroke-width="2.2"/><path d="M11.8 4v52M30 4v52M48.2 4v52M4 11.8h52M4 30h52M4 48.2h52" stroke="#a60043" stroke-width=".9" opacity=".45"/><g fill="#a60043" font-family="Anton,Impact,sans-serif" font-size="12" text-anchor="middle"><text x="12" y="17">5</text><text x="30" y="17">3</text><text x="48" y="34">7</text><text x="12" y="34">6</text><text x="30" y="52">9</text></g></svg></span><span class="hm-fc-cap"><b>SUDOKU</b><small>NUMBER PUZZLE</small></span></div>
     <div class="hm-fc hm-fc-l hm-fc-off" aria-disabled="true" role="button" tabindex="0" onclick="hxOff()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();hxOff()}"><i></i><span class="hm-fc-tag" dir="ltr">FILE 0221</span><span class="hm-fc-art"><svg viewBox="0 0 26 26" width="54" height="54"><g stroke="#0c1411" stroke-width=".6" stroke-linejoin="round"><rect x="5" y="2" width="16" height="4.2" rx=".9" fill="#d9727e"/><rect x="4" y="6.6" width="17" height="4.2" rx=".9" fill="#3f7fa0"/><rect x="3" y="11.2" width="19" height="4.2" rx=".9" fill="#7fb8cf"/><rect x="4" y="15.8" width="17" height="4.2" rx=".9" fill="#c79a6b"/><rect x="3" y="20.4" width="19" height="4.2" rx=".9" fill="#efd7a3"/></g><g stroke="#e9b44c" stroke-width=".9"><path d="M7.5 2.3v3.6M9 2.3v3.6M7 6.9v3.6M8.5 6.9v3.6"/></g></svg><span class="hm-fc-stamp" dir="ltr">CLOSED</span></span><span class="hm-fc-cap"><b>STORIES</b><small>CASE FILES</small></span><span class="hm-fc-desc">ألعاب تحقيق وغموض بأدوار وأدلة<br>مغلق مؤقتاً</span></div>
   </div>
@@ -396,6 +400,30 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
         <b class="hx-ar">Blackjack</b>
         <span class="hx-desc">Beat the dealer. Real tables, real Shankalolo.</span>
         <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i></span>
+      </span>
+    </button>
+
+    <button type="button" class="hx-card hx-wide hx-snake" data-g="snake" data-name="Snakes &amp; Ladders" onclick="playClickSound();snakeOpen()" aria-label="Snakes and Ladders">
+      <span class="hx-art" aria-hidden="true">
+        <svg viewBox="0 0 80 64" width="84" height="67" fill="none">
+          <rect x="3" y="3" width="74" height="58" rx="8" fill="#F1E4C2" stroke="#c9a14a" stroke-width="2"/>
+          <path d="M3 22h74M3 41h74M22 3v58M41 3v58M60 3v58" stroke="#c9a14a" stroke-width="1" opacity=".3"/>
+          <path d="M13 54L27 14M21 56L35 16" stroke="#7a4a1f" stroke-width="2.6" stroke-linecap="round"/>
+          <path d="M15.8 46l8 2M18.6 38l8 2M21.4 30l8 2M24.2 22l8 2" stroke="#a8743a" stroke-width="2" stroke-linecap="round"/>
+          <path d="M64 13C51 19 66 30 53 36S48 52 59 54" stroke="#2fae6b" stroke-width="6" stroke-linecap="round"/>
+          <path d="M64 13C51 19 66 30 53 36S48 52 59 54" stroke="#fff" stroke-opacity=".45" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="1 4"/>
+          <circle cx="64" cy="12" r="4.6" fill="#2fae6b" stroke="#0e6b3a" stroke-width="1"/>
+          <circle cx="62.6" cy="10.6" r="1.3" fill="#fff"/><circle cx="66" cy="10.6" r="1.3" fill="#fff"/>
+          <circle cx="62.8" cy="10.8" r=".6" fill="#1a120d"/><circle cx="66.2" cy="10.8" r=".6" fill="#1a120d"/>
+          <circle cx="41" cy="49" r="4.6" fill="#E5484D" stroke="#9c2428" stroke-width="1.2"/>
+          <circle cx="39.6" cy="47.6" r="1.3" fill="#fff" opacity=".6"/>
+        </svg>
+      </span>
+      <span class="hx-body">
+        <small class="hx-en" dir="ltr">2–4 PLAYERS · CHAOS</small>
+        <b class="hx-ar">Snakes &amp; Ladders</b>
+        <span class="hx-desc">سلم وتعبان بنكهة الفوضى: كروت وفخاخ وبوابات. أوفلاين أو أونلاين.</span>
+        <span class="hx-tags"><i class="on">أونلاين</i><i>أوفلاين</i><i>كمبيوتر</i></span>
       </span>
     </button>
   </div>
@@ -2410,6 +2438,128 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 </section>
 
 <!-- ========================================================
+     SNAKES & LADDERS (سلم وتعبان) — غابة زمرد + لوح بردي. أوفلاين هنا + أونلاين من جوه (js/online-snake.js).
+     القواعد: js/snake-engine.js (من ts/snake-engine.ts) · العرض واللعب الأوفلاين: js/snake.js · الشكل: css/snake.css
+======================================================== -->
+<section id="snake" class="hidden sn-app" lang="en" dir="ltr">
+  <header class="sn-bar">
+    <button class="sn-back" onclick="snakeBack()" aria-label="Back">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <div class="sn-title"><b dir="ltr">SNAKES &amp; LADDERS</b><span lang="ar" dir="rtl">سلم وتعبان</span></div>
+    <button class="sn-gear is-off" id="snGear" onclick="snakeShowSetup()" aria-label="Change settings">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+    </button>
+  </header>
+
+  <!-- الإعدادات -->
+  <div id="snSetup" class="sn-view">
+    <button type="button" class="sn-resume hidden" id="snResume" onclick="snakeResume()">
+      <span><b>Continue your game</b><small id="snResumeTxt"></small></span><em>Resume</em>
+    </button>
+
+    <div class="sn-panel">
+      <div class="sn-label">Players · tap a seat to change it</div>
+      <div class="sn-presets">
+        <button type="button" onclick="snakePreset('cpu')">vs CPU</button>
+        <button type="button" onclick="snakePreset('two')">2 Players</button>
+        <button type="button" onclick="snakePreset('four')">4 Players</button>
+      </div>
+      <div id="snSeats"></div>
+    </div>
+
+    <div class="sn-panel">
+      <div class="sn-label">Rules</div>
+      <button type="button" class="sn-sw on" id="snSwChaos" onclick="snakeTog('chaos')"><span><b>Chaos mode</b><small>Cards, traps, gates, forks and a world event every 5 rounds. Off = classic snakes and ladders</small></span><i></i></button>
+      <button type="button" class="sn-sw" id="snSwSurv" onclick="snakeTog('surv')"><span><b>Survival</b><small>3 hearts each. Long snakes, traps and curses cost a heart. Last one standing wins</small></span><i></i></button>
+      <button type="button" class="sn-sw" id="snSwFull" onclick="snakeTog('full')"><span><b>Play for every place</b><small>Keep playing after the first winner</small></span><i></i></button>
+      <div class="sn-label" style="margin-top:14px">Turn timer (players only)</div>
+      <div class="sn-seg" id="snTimerSeg" role="group" aria-label="Turn timer">
+        <button type="button" data-v="0" onclick="snakeTimer(0)">Off</button>
+        <button type="button" data-v="15" onclick="snakeTimer(15)">15s</button>
+        <button type="button" data-v="30" onclick="snakeTimer(30)">30s</button>
+        <button type="button" data-v="45" onclick="snakeTimer(45)">45s</button>
+      </div>
+      <div class="sn-label" style="margin-top:14px">Animation speed</div>
+      <div class="sn-seg" id="snSpeedSeg" role="group" aria-label="Animation speed">
+        <button type="button" data-v="fast" onclick="snakeSpeed('fast')">Fast</button>
+        <button type="button" data-v="normal" onclick="snakeSpeed('normal')">Normal</button>
+        <button type="button" data-v="slow" onclick="snakeSpeed('slow')">Slow</button>
+      </div>
+      <div class="sn-label" style="margin-top:14px">Dice</div>
+      <div class="sn-seg" id="snDiceSeg" role="group" aria-label="Dice style">
+        <button type="button" data-v="real" onclick="snakeDice('real')">Natural 3D</button>
+        <button type="button" data-v="flat" onclick="snakeDice('flat')">Simple</button>
+      </div>
+    </div>
+
+    <button type="button" class="sn-start" onclick="snakeStart()">Start Game</button>
+    <button type="button" class="sn-link" onclick="snakeHowTo()">How to play</button>
+    <div id="snHow" class="sn-how hidden">
+      <h4>The goal</h4>
+      <p>Reach square <b>100</b> first. You need the <b>exact</b> number: if the roll is too big you stay where you are. Every match gets a new random board.</p>
+      <h4>Ladders and snakes</h4>
+      <p>Land on the bottom of a ladder to climb. Land on a snake's head and you slide down to its tail.</p>
+      <h4>Special squares (Chaos mode)</h4>
+      <ul>
+        <li><b>Treasure</b>: draw a card.</li>
+        <li><b>Curse</b>: back 4 squares.</li>
+        <li><b>Gate</b>: jump to the matching gate (same colour).</li>
+        <li><b>Pickpocket</b>: steal a random card.</li>
+        <li><b>Shrine</b>: a ward that cancels one bad effect, even a snake.</li>
+        <li><b>Fork</b>: fast (+6, lose a turn), safe (+2 and a ward) or treasure.</li>
+      </ul>
+      <h4>Cards</h4>
+      <p>Hold up to 3. Play <b>one card per turn</b>, before you roll. Blockers (Snake Catcher, Lucky Shield) play themselves when you need them. Traps hide on a square: everyone sees a <b>?</b>, only you know what it does.</p>
+      <h4>World events</h4>
+      <p>Every 5th round something changes for everyone: gifts, a tax on the leader, headwinds, ladder season or sleepy snakes.</p>
+      <h4>Survival</h4>
+      <p>Everyone has 3 hearts. Long snakes, real traps and curses cost a heart. At 0 you are out. Last one standing, or the first to 100, wins.</p>
+    </div>
+    <button type="button" class="sn-link" onclick="snakeStats()">Stats &amp; Achievements</button>
+  </div>
+
+  <!-- اللعب -->
+  <div id="snPlay" class="sn-view hidden">
+    <div id="snPlayHost"></div>
+    <div class="sn-foot">
+      <button type="button" onclick="snakeRestart()">Restart</button>
+      <button type="button" onclick="snakeMenu()">Menu</button>
+      <button type="button" id="snMute" onclick="snakeMute()">Sound: on</button>
+    </div>
+
+    <div class="sn-final hidden" id="snFinal" role="dialog" aria-modal="true" aria-labelledby="snWinTitle">
+      <div class="sn-final-card" id="snWinCard">
+        <div class="sn-trophy"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a3 3 0 0 0 4 3M16 6h4v1a3 3 0 0 1-4 3M12 13v4M8 21h8M10 17h4"/></svg></div>
+        <h3 id="snWinTitle"></h3>
+        <p id="snWinSub"></p>
+        <div class="sn-rank" id="snRank"></div>
+        <button type="button" class="sn-main" id="snAgain" onclick="snakeAgain()">Play Again</button>
+        <button type="button" class="sn-alt" onclick="snakeMenu()">Change Settings</button>
+        <button type="button" class="sn-link" onclick="snakeHome()">Back to Home</button>
+      </div>
+    </div>
+
+    <div class="sn-final hidden" id="snQuit" role="dialog" aria-modal="true" aria-labelledby="snQuitT">
+      <div class="sn-final-card">
+        <h3 id="snQuitT">Leave this match?</h3>
+        <p>You can save it and come back to it later.</p>
+        <button type="button" class="sn-main" onclick="snakeQuitKeep()">Keep Playing</button>
+        <button type="button" class="sn-alt" onclick="snakeQuitLater()">Resume Later</button>
+        <button type="button" class="sn-link" onclick="snakeQuitNow()">Quit and discard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- الإحصائيات -->
+  <div id="snStats" class="sn-view hidden">
+    <div class="sn-panel"><div class="sn-label">Your stats on this device</div><div class="sn-kpis" id="snKpis"></div></div>
+    <div class="sn-panel"><div class="sn-label">Achievements</div><div id="snAchs"></div></div>
+    <button type="button" class="sn-link" onclick="snakeResetStats()">Reset stats</button>
+  </div>
+</section>
+
+<!-- ========================================================
      TAWLA — الطاولة المصرية (الفورة من 31). أوفلاين: جهاز واحد أو ضد الكمبيوتر.
      القواعد: js/tawla-engine.js · الرسم المشترك: js/tawla-ui.js · الواجهة واللعب: js/tawla.js · الأونلاين: js/online-tawla.js · الشكل: css/tawla.css
 ======================================================== -->
@@ -2545,6 +2695,8 @@ if(document.readyState==="complete")go();else window.addEventListener("load",go)
 <script src="js/xo.js"></script>
 <script src="js/ludo-engine.js?v=6"></script>
 <script src="js/ludo.js?v=6"></script>
+<script src="js/snake-engine.js?v=1"></script>
+<script src="js/snake.js?v=1"></script>
 <script src="js/tawla-engine.js?v=6"></script>
 <script src="js/tawla-ui.js?v=1"></script>
 <script src="js/tawla.js?v=9"></script>

@@ -10,5 +10,5 @@
     "newLine": "lf",
     "types": []
   },
-  "files": ["blackjack-engine.ts", "shankalolo.ts"]
+  "files": ["blackjack-engine.ts", "shankalolo.ts", "snake-engine.ts"]
 }
