@@ -122,6 +122,7 @@ namespace SNE {
 
   /* ---------- توليد اللوحة من الـ seed ---------- */
   export interface Board { jumps: Jump[]; sp: Special[]; }
+  const MAX_SNAKE_SPAN = 4.3, MAX_LADDER_SPAN = 5;
   export function genBoard(seed: number, style: Style): Board {
     for (let attempt = 0; attempt < 40; attempt++) {
       const b = tryBoard(seed + attempt * 7919, style);
@@ -136,26 +137,28 @@ namespace SNE {
     const used: { [c: number]: boolean } = { 1: true, 100: true };
     const raw: { from: number; to: number }[] = [];
     const nS = chaos ? ri(7, 8) : ri(8, 9), nL = chaos ? ri(6, 7) : ri(8, 9);
+    /* طول الرسم على اللوحة (بين مركزي الخانتين، بوحدة خانة) له حد أقصى: التعابين والسلالم القصيرة بتسيب اللوحة مقروءة */
+    const span = (a: number, b: number) => { const p = cellXY(a), q = cellXY(b); return Math.sqrt((p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1])); };
     function snake(hmin: number, hmax: number, dmin: number, dmax: number): boolean {
-      for (let t = 0; t < 300; t++) {
+      for (let t = 0; t < 600; t++) {
         const head = ri(hmin, hmax), tail = head - ri(dmin, dmax);
-        if (tail < 2 || rowOf(head) === rowOf(tail) || used[head] || used[tail]) continue;
+        if (tail < 2 || rowOf(head) === rowOf(tail) || used[head] || used[tail] || span(head, tail) > MAX_SNAKE_SPAN) continue;
         used[head] = used[tail] = true; raw.push({ from: head, to: tail }); return true;
       }
       return false;
     }
     function ladder(): boolean {
-      for (let t = 0; t < 300; t++) {
-        const bot = ri(2, 80), top = bot + ri(9, 45);
-        if (top > 98 || rowOf(top) === rowOf(bot) || used[bot] || used[top]) continue;
+      for (let t = 0; t < 600; t++) {
+        const bot = ri(2, 80), top = bot + ri(9, 40);
+        if (top > 98 || rowOf(top) === rowOf(bot) || used[bot] || used[top] || span(bot, top) > MAX_LADDER_SPAN) continue;
         used[bot] = used[top] = true; raw.push({ from: bot, to: top }); return true;
       }
       return false;
     }
     let ok = true;
-    ok = snake(90, 99, 12, 40) && ok;          // تعبان طويل قرب النهاية
-    ok = snake(76, 92, 14, 45) && ok;
-    for (let i = 2; i < nS; i++) ok = snake(18, 99, 9, 52) && ok;
+    ok = snake(90, 99, 12, 34) && ok;          // تعبان طويل قرب النهاية
+    ok = snake(76, 92, 14, 36) && ok;
+    for (let i = 2; i < nS; i++) ok = snake(18, 99, 9, 36) && ok;
     ok = ladder() && ok;
     for (let i = 1; i < nL; i++) ok = ladder() && ok;
     if (!ok && !force) return null;
