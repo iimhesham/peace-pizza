@@ -167,7 +167,7 @@ function controls(pub){
     return'<div class="bj-ctl"><div class="bj-warn">Dealer shows an Ace. Insurance pays 2:1 if the dealer has Blackjack.</div><div class="bj-row"><button type="button" class="bj-btn pri" '+(P.bank<mx?"disabled ":"")+'onclick="bjIns('+mx+')">Insure for '+fmt(mx)+'</button><button type="button" class="bj-btn dim" onclick="bjIns(0)">No thanks</button></div></div>';}
   if(ph==="PLAYER_TURNS"){var L=E.legal(round,0,P.bank);
     function b(a,t,c){return'<button type="button" class="bj-btn'+(c||"")+'" '+(L[a]?"":"disabled ")+'onclick="bjAct(\''+a+'\')">'+t+'</button>';}
-    return'<div class="bj-ctl"><div class="bj-acts">'+b("hit","Hit")+b("stand","Stand"," pri")+b("double","Double")+b("split","Split")+b("surrender","Surrender"," dim")+'</div></div>';}
+    return'<div class="bj-ctl"><div class="bj-acts">'+b("hit","Hit")+b("stand","Stand"," pri")+(L.standLow?b("standLow","Stand (Ace = 1)"):"")+b("double","Double")+b("split","Split")+b("surrender","Surrender"," dim")+'</div></div>';}
   return"";
 }
 var draw=drawTable;

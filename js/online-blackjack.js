@@ -143,7 +143,7 @@ function controls(S,B,slot,isHost,hv){
     if(!t||t.s!==i)return h+'<div class="bj-ctl"><div class="bj-warn">Waiting for '+e(B.pub.turn?B.pub.seats[B.pub.turn.s].name:"the dealer")+'...</div>'+timerBar(B)+'</div>';
     var hand=seat.hands[t.h],L=E.legalFor(hand,seat.hands.length,bal());
     var b=function(a,txt,c){return'<button type="button" class="bj-btn'+(c||"")+'" '+(L[a]&&!acting?"":"disabled ")+'onclick="OLBJ.act(\''+a+'\')">'+txt+'</button>';};
-    return h+'<div class="bj-ctl"><div class="bj-acts">'+b("hit","Hit")+b("stand","Stand"," pri")+b("double","Double")+b("split","Split")+b("surrender","Surrender"," dim")+'</div>'+timerBar(B)+'</div>';
+    return h+'<div class="bj-ctl"><div class="bj-acts">'+b("hit","Hit")+b("stand","Stand"," pri")+(L.standLow?b("standLow","Stand (Ace = 1)"):"")+b("double","Double")+b("split","Split")+b("surrender","Surrender"," dim")+'</div>'+timerBar(B)+'</div>';
   }
   if(ph==="DEALER_TURN")return h+'<div class="bj-ctl"><div class="bj-warn">Dealer is playing...</div></div>';
   if(ph==="SETTLEMENT"||ph==="ROUND_COMPLETE"){

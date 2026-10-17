@@ -109,6 +109,10 @@ t("bets validated",()=>{ok(!B.validBet(0));ok(!B.validBet(-10));ok(!B.validBet(1
 t("turn order: hand 1 before hand 2, seat 1 before seat 2",()=>{const r=B.startRound({id:"x",shoe:B.rig(["8S","9H","10D","8D","7C","5C","2H","2D","4C"]),entrants:[{id:"a",bet:100},{id:"b",bet:100}]});eq(r.turn,{s:0,h:0});B.act(r,0,"split");eq(r.turn,{s:0,h:0});B.act(r,0,"stand");eq(r.turn,{s:0,h:1});B.act(r,0,"stand");eq(r.turn,{s:1,h:0});});
 t("seat can't act out of turn",()=>{const r=B.startRound({id:"x",shoe:B.rig(["8S","9H","10D","5C","8H","7C"]),entrants:[{id:"a",bet:100},{id:"b",bet:100}]});ok(!B.act(r,1,"hit").ok);});
 
+t("standLow: A+6 stands as 7",()=>{const h=H(["AS","6H"]);ok(B.legalFor(h,1,Infinity).standLow);const r=start(["AS","KH","6H","5D","9C","9D","9S","9H"]);const L=B.legal(r,0,Infinity);if(L.standLow){B.act(r,0,"standLow",Infinity);const hh=r.seats[0].hands[0];ok(hh.lowAce&&hh.stood);eq(ev(hh.cards,true).total,B.evaluate(hh.cards,true).total);}});
+t("standLow: hard hand not offered",()=>{ok(!B.legalFor(H(["AS","6H","10D"]),1,Infinity).standLow);});
+t("standLow: low evaluate",()=>{const v=ev(["AS","6H"],true);eq([v.total,v.soft],[7,false]);});
+
 console.log("Blackjack engine: "+pass+" passed, "+fail+" failed");
 failed.forEach(f=>console.log(" FAIL "+f));
 process.exit(fail?1:0);

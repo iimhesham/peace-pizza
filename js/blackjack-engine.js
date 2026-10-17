@@ -67,7 +67,7 @@ var BJE;
         return { shoe: shoe, reshuffled: false };
     }
     BJE.prepareShoe = prepareShoe;
-    function evaluate(cards) {
+    function evaluate(cards, lowAce) {
         let sum = 0, aces = 0;
         for (const c of cards) {
             const r = rankOf(c);
@@ -79,13 +79,13 @@ var BJE;
                 sum += cardValue(r);
         }
         let total = sum, soft = false;
-        if (aces > 0 && sum + 10 <= 21) {
+        if (!lowAce && aces > 0 && sum + 10 <= 21) {
             total = sum + 10;
             soft = true;
         }
         const bust = total > 21;
         const blackjack = cards.length === 2 && aces === 1 && sum === 11;
-        const label = bust ? "Bust " + total : blackjack ? "Blackjack" : (soft ? "Soft " : "Hard ") + total;
+        const label = lowAce && aces > 0 && sum + 10 <= 21 ? "Ace as 1 · " + total : bust ? "Bust " + total : blackjack ? "Blackjack" : (soft ? "Soft " : "Hard ") + total;
         return { total, soft, bust, blackjack, label };
     }
     BJE.evaluate = evaluate;
@@ -188,7 +188,7 @@ var BJE;
     }
     BJE.curHand = curHand;
     function legalFor(h, nHands, balance) {
-        const none = { hit: false, stand: false, double: false, split: false, surrender: false };
+        const none = { hit: false, stand: false, standLow: false, double: false, split: false, surrender: false };
         if (!h || h.done || h.stood || h.surrendered)
             return none;
         const ev = evaluate(h.cards);
@@ -200,6 +200,7 @@ var BJE;
         return {
             hit: !h.splitAces && !h.doubled && ev.total < 21,
             stand: true,
+            standLow: ev.soft && ev.total < 21,
             double: two && !h.splitAces && !h.doubled && bal >= h.bet,
             split: two && !h.splitAces && cardValue(h.cards[0]) === cardValue(h.cards[1]) && nHands < BJE.RULES.MAX_HANDS && bal >= h.bet,
             surrender: two && nHands === 1 && !h.fromSplit && !h.doubled && !h.splitAces && !natural
@@ -209,7 +210,7 @@ var BJE;
     function legal(r, seatIdx, balance) {
         const h = curHand(r, seatIdx);
         if (!h)
-            return { hit: false, stand: false, double: false, split: false, surrender: false };
+            return { hit: false, stand: false, standLow: false, double: false, split: false, surrender: false };
         return legalFor(h, r.seats[seatIdx].hands.length, balance);
     }
     BJE.legal = legal;
@@ -232,6 +233,11 @@ var BJE;
         }
         else if (action === "stand") {
             h.stood = true;
+            h.done = true;
+        }
+        else if (action === "standLow") {
+            h.stood = true;
+            h.lowAce = true;
             h.done = true;
         }
         else if (action === "double") {
@@ -304,7 +310,7 @@ var BJE;
     function dealerPlay(r) { let g = 0; while (!dealerStep(r).done && ++g < 60) { } }
     BJE.dealerPlay = dealerPlay;
     function settleHand(h, dealer) {
-        const ev = evaluate(h.cards), dEv = evaluate(dealer), dBJ = dealer.length === 2 && dEv.blackjack, nat = isNatural(h);
+        const ev = evaluate(h.cards, h.lowAce), dEv = evaluate(dealer), dBJ = dealer.length === 2 && dEv.blackjack, nat = isNatural(h);
         let outcome, ret;
         if (h.surrendered) {
             outcome = "surrender";
@@ -370,7 +376,7 @@ var BJE;
             turn: r.turn,
             seats: r.seats.map(s => ({
                 id: s.id, uid: s.uid, name: s.name, insurance: s.insurance, insAsked: s.insAsked,
-                hands: s.hands.map(h => { const e = evaluate(h.cards); return { cards: h.cards.slice(), bet: h.bet, doubled: h.doubled, fromSplit: h.fromSplit, splitAces: h.splitAces, done: h.done, surrendered: h.surrendered, natural: isNatural(h), total: e.total, label: e.label, bust: e.bust }; })
+                hands: s.hands.map(h => { const e = evaluate(h.cards, h.lowAce); return { cards: h.cards.slice(), bet: h.bet, doubled: h.doubled, fromSplit: h.fromSplit, splitAces: h.splitAces, done: h.done, surrendered: h.surrendered, natural: isNatural(h), total: e.total, label: e.label, bust: e.bust }; })
             })),
             result: r.result
         };
