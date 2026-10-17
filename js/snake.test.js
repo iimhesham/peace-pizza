@@ -172,6 +172,8 @@ for(const style of["chaos","classic"]){
     if(style==="chaos"){spBad=cnt("gate")!==4||cnt("fork")!==1||cnt("treasure")!==4||cnt("curse")!==3||cnt("steal")!==2||cnt("ward")!==2;
       b.sp.filter(s=>s.t==="gate").forEach(s=>{const p=b.sp.find(x=>x.cell===s.to);if(!p||p.to!==s.cell)spBad=true;});}
     else spBad=b.sp.length!==0;
+    const longJ=b.jumps.some(j=>{const a=E.cellXY(j.from),c=E.cellXY(j.to);const d=Math.hypot(a[0]-c[0],a[1]-c[1]);return d>(j.to>j.from?5:4.3)+1e-9;});
+    if(longJ){bad++;if(bad<6)console.log('BAD long jump',style,seed);}
     if(dup||range||rows||spBad||lad<4||sn<5){bad++;if(bad<6)console.log("BAD",style,seed,{dup,range,rows,spBad,lad,sn});}
     stat.lad+=lad;stat.sn+=sn;stat.sp+=b.sp.length;
   }

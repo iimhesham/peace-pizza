@@ -87,7 +87,7 @@ function mk(tag,attrs,parent){
   if(parent)parent.appendChild(el);
   return el;
 }
-var SNAKE_COL=["#2fae6b","#e0602f","#8a5cf6","#d6a615","#2e86d6","#d6457b","#27b3a6","#c4552d","#6aa83a"];
+var SNAKE_COL="#E4564E";   /* كل التعابين نفس اللون: أحمر = خطر، والسلالم خشب دهبي */
 var GATE_COL=["#27b3d6","#d6459e"];
 
 function ladderGeom(a,b){
@@ -97,7 +97,7 @@ function ladderGeom(a,b){
 }
 function snakeGeom(h,t,id){
   var dx=t[0]-h[0],dy=t[1]-h[1],len=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/len,uy=dy/len,nx=-uy,ny=ux;
-  var amp=Math.min(len*.24,15)*(id%2?1:-1);
+  var amp=Math.min(len*.15,6)*(id%2?1:-1);
   var P0=h,P3=t,P1=[h[0]+dx*.33+nx*amp,h[1]+dy*.33+ny*amp],P2=[h[0]+dx*.66-nx*amp,h[1]+dy*.66-ny*amp],N=34,pts=[];
   for(var i=0;i<=N;i++){
     var u=i/N,v=1-u,x=v*v*v*P0[0]+3*v*v*u*P1[0]+3*v*u*u*P2[0]+u*u*u*P3[0],y=v*v*v*P0[1]+3*v*v*u*P1[1]+3*v*u*u*P2[1]+u*u*u*P3[1];
@@ -180,11 +180,11 @@ function makeBoard(host,g){
         }
         mk("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],class:"sn-hit"},grp);
       }else{
-        var S=snakeGeom(a,b,j.id),col=SNAKE_COL[j.id%SNAKE_COL.length];B.jumpGeo[j.id]={pts:S.pts,lad:false};
+        var S=snakeGeom(a,b,j.id),col=SNAKE_COL;B.jumpGeo[j.id]={pts:S.pts,lad:false};
         var pts=S.pts,left=[],right=[],N=pts.length;
         for(var k=0;k<N;k++){
           var pa=pts[Math.max(0,k-1)],pb=pts[Math.min(N-1,k+1)],ddx=pb[0]-pa[0],ddy=pb[1]-pa[1],dl=Math.sqrt(ddx*ddx+ddy*ddy)||1,nx=-ddy/dl,ny=ddx/dl;
-          var u2=k/(N-1),w=(1.22*Math.pow(1-u2,.62)+.2)*(k<3?.9+k*.04:1);
+          var u2=k/(N-1),w=(1.12*Math.pow(1-u2,.62)+.18)*(k<3?.9+k*.04:1);
           left.push([pts[k][0]+nx*w,pts[k][1]+ny*w]);right.push([pts[k][0]-nx*w,pts[k][1]-ny*w]);
         }
         var dstr="M"+left.map(function(q){return q[0].toFixed(2)+" "+q[1].toFixed(2);}).join("L")+"L"+right.reverse().map(function(q){return q[0].toFixed(2)+" "+q[1].toFixed(2);}).join("L")+"Z";
@@ -196,7 +196,7 @@ function makeBoard(host,g){
         var hx=pts[0][0],hy=pts[0][1],ang=Math.atan2(pts[0][1]-pts[3][1],pts[0][0]-pts[3][0])*180/Math.PI;
         var head=mk("g",{transform:"translate("+hx.toFixed(2)+","+hy.toFixed(2)+") rotate("+ang.toFixed(1)+")",class:"sn-snk-head"},grp);
         mk("path",{d:"M2.4 0L4.9 -.7M2.4 0L4.9 .7",class:"sn-tongue"},head);
-        mk("ellipse",{cx:.4,cy:0,rx:2.55,ry:2.05,style:"fill:"+col,class:"sn-head-sh"},head);
+        mk("ellipse",{cx:.4,cy:0,rx:2.2,ry:1.8,style:"fill:"+col,class:"sn-head-sh"},head);
         mk("circle",{cx:.9,cy:-1.05,r:.62,fill:"#fff"},head);mk("circle",{cx:.9,cy:1.05,r:.62,fill:"#fff"},head);
         mk("circle",{cx:1.05,cy:-1.05,r:.3,fill:"#1a120d"},head);mk("circle",{cx:1.05,cy:1.05,r:.3,fill:"#1a120d"},head);
         var path=mk("path",{d:mid,class:"sn-hit"},grp);
