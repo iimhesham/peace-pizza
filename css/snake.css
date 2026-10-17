@@ -356,32 +356,35 @@ body.mode-snake #toast{background:#EAF0FB!important;color:#0a1324!important}
 
 /* ---------- كروت الصفحة الرئيسية ---------- */
 .hx-snake{
-  --c:#EAF0FB;--ac:111,150,235;--b1:#1d3a70;--b2:#0a1324;--rad:22px;
-  min-height:168px;flex-direction:row-reverse;
-  background:
-    radial-gradient(120% 150% at 14% 50%,rgba(111,150,235,.38),transparent 58%),
-    linear-gradient(135deg,#1d3a70 0%,#102246 55%,#0a1324 100%);
-  border-color:rgba(143,180,255,.55);
-  box-shadow:0 12px 26px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);
+  --c:#EAF0FB;--ac:247,213,124;--b1:#0a0a10;--b2:#050507;--rad:20px;
+  min-height:0;flex-direction:row-reverse;
+  background:#050507 url(../img/snake-maze.svg) 0 0/120px 120px;
+  border:1px solid transparent;
+  background-clip:padding-box;
+  box-shadow:0 0 0 1px rgba(247,213,124,.55),0 14px 28px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.04);
 }
 .hx-snake::before{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(0deg,rgba(143,176,238,.08) 0 1px,transparent 1px 24px),repeating-linear-gradient(90deg,rgba(143,176,238,.08) 0 1px,transparent 1px 24px);
-  -webkit-mask-image:linear-gradient(90deg,#000 0,transparent 80%);mask-image:linear-gradient(90deg,#000 0,transparent 80%);
+  background:
+    radial-gradient(90px 80px at 17% 50%,rgba(143,180,255,.28),transparent 70%),
+    linear-gradient(270deg,rgba(3,3,6,.82) 0%,rgba(3,3,6,.58) 45%,rgba(3,3,6,.12) 100%);
 }
-.hx-snake .hx-art{position:relative;flex:none;width:160px;padding:10px 4px 10px 12px;background:none!important}
-.hx-wide.hx-snake .hx-art svg{width:100%;height:auto;transform:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.55));transition:transform .25s}
-.hx-wide.hx-snake:active .hx-art svg{transform:scale(1.05) rotate(2deg)}
-.hx-snake .hx-body{position:relative;gap:4px;padding:14px 16px;background:none!important;justify-content:center;border-inline-start:0;border-inline-end:1px solid rgba(143,180,255,.3)}
-.hx-snake .hx-en{color:#8fb4ff;opacity:.95;letter-spacing:.22em;font-size:10px;text-align:right}
-.hx-snake .hx-ar{font-family:'Tajarib Bold','Tajawal',sans-serif;font-size:30px;line-height:1.2;font-weight:700;letter-spacing:0;color:#F7D57C;text-shadow:0 2px 0 rgba(0,0,0,.4),0 0 18px rgba(247,213,124,.28)}
-.hx-snake .hx-desc{color:#cbd8f2;font-size:12.5px;line-height:1.55;-webkit-line-clamp:3;line-clamp:3}
-.hx-snake .hx-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
-.hx-snake .hx-chips i{font-style:normal;font-size:10.5px;font-weight:700;line-height:1.5;padding:1px 9px;border-radius:999px;background:rgba(143,180,255,.14);border:1px solid rgba(143,180,255,.35);color:#dbe6ff;white-space:nowrap}
+.hx-snake::after{border-color:rgba(247,213,124,.38);opacity:1;inset:5px}
+.hx-snake .hx-art{position:relative;flex:none;width:104px;padding:8px 0 8px 10px;background:none!important}
+.hx-wide.hx-snake .hx-art svg{width:100%;height:auto;transform:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.7));transition:transform .25s}
+.hx-wide.hx-snake:active .hx-art svg{transform:scale(1.06) rotate(2deg)}
+.hx-snake .hx-body{position:relative;gap:2px;padding:10px 16px 10px 12px;background:none!important;justify-content:center;border:0}
+.hx-snake .hx-en{color:#F7D57C;opacity:.9;letter-spacing:.24em;font-size:9px;text-align:right}
+.hx-snake .hx-ar{font-family:'Tajarib Bold','Tajawal',sans-serif;font-size:26px;line-height:1.2;font-weight:700;letter-spacing:0;
+  background:linear-gradient(180deg,#fff3c4,#F7D57C 55%,#d8a43c);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#F7D57C;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.55))}
+.hx-snake .hx-desc{color:#c3c7d6;font-size:11.5px;line-height:1.45;-webkit-line-clamp:1;line-clamp:1}
+.hx-snake .hx-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
+.hx-snake .hx-chips i{font-style:normal;font-size:10px;font-weight:700;line-height:1.5;padding:0 9px;border-radius:999px;background:rgba(247,213,124,.1);border:1px solid rgba(247,213,124,.4);color:#f6e3ae;white-space:nowrap}
 @media (max-width:380px){
-  .hx-snake .hx-art{width:128px;padding-inline:6px}
-  .hx-snake .hx-ar{font-size:25px}
-  .hx-snake .hx-desc{font-size:12px}
+  .hx-snake .hx-art{width:92px;padding-inline:4px}
+  .hx-snake .hx-ar{font-size:23px}
+  .hx-snake .hx-desc{font-size:11px}
 }
 .dx .hm-fc-snake{background:linear-gradient(160deg,#1d3a70,#0a1324);border:1px solid rgba(111,150,235,.6);color:#EAF0FB}
 .dx .hm-fc-snake .hm-fc-tag{color:#8fb4ff;opacity:1;direction:rtl;letter-spacing:0}
@@ -415,3 +418,4 @@ html #olRoot[data-g="snake"]{
 /* الحروف العربية بتتقطّع لو فيها letter-spacing: نلغيه جوه اللعبة (إلا العنوان الإنجليزي الصغير) */
 .sn-app *,#olRoot[data-g="snake"] .sn-play *,#olRoot[data-g="snake"] .sn-final-card *{letter-spacing:0!important}
 .sn-app .sn-title span{letter-spacing:.2em!important}
+.hx-snake .hx-tags{margin-top:4px}
