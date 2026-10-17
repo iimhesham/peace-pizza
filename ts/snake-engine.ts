@@ -31,11 +31,11 @@ namespace SNE {
   export interface Opts { style: Style; surv: boolean; full: boolean; }
   export type CardId = "flip" | "cut" | "hunt" | "swap" | "loaded" | "shield" | "draw" | "tback" | "tskip" | "tsteal" | "tfake";
   export type TrapT = "tback" | "tskip" | "tsteal" | "tfake";
-  export type SpT = "treasure" | "curse" | "gate" | "steal" | "ward" | "fork";
+  export type SpT = "treasure" | "curse" | "steal" | "ward" | "fork";
   export type HitKind = "snake" | "curse" | "trap" | "steal" | "swap" | "tax" | "ambush";
 
   export interface Jump { id: number; from: number; to: number; cut: number; }
-  export interface Special { cell: number; t: SpT; to?: number; }
+  export interface Special { cell: number; t: SpT; }
   export interface Trap { id: number; cell: number; owner: number; tt: TrapT; exp: number; }
   export interface Stats { gap: number; used: number; wardUsed: number; dodged: number; steals: number; sprung: number; bites: number; climbs: number; }
   export interface Player { pos: number; hearts: number; hand: CardId[]; ward: number; skip: number; ghost: boolean; fin: boolean; st: Stats; }
@@ -60,39 +60,38 @@ namespace SNE {
 
   /* ---------- الكروت ---------- */
   export type Tgt = "none" | "seat" | "jump" | "cell" | "draw" | "react";
-  export interface CardDef { id: CardId; en: string; ar: string; d: string; tgt: Tgt; w: number; tone: string; }
+  export interface CardDef { id: CardId; en: string; ar: string; d: string; da: string; tgt: Tgt; w: number; tone: string; }
   export const CARDS: { [k: string]: CardDef } = {
-    hunt:   { id: "hunt",   en: "Snake Catcher", ar: "صيد التعبان",  d: "Cancels one snake bite. Plays itself when a snake gets you.",             tgt: "react", w: 13, tone: "green" },
-    shield: { id: "shield", en: "Lucky Shield",  ar: "درع الحظ",     d: "Blocks one trap, curse, steal, swap or penalty. Not snakes.",             tgt: "react", w: 13, tone: "blue" },
-    draw:   { id: "draw",   en: "Draw a Card",   ar: "اسحب كارتًا",   d: "Take a card from the deck, or steal a random one from an opponent.",       tgt: "draw",  w: 9,  tone: "gold" },
-    cut:    { id: "cut",    en: "Cut the Ladder", ar: "اقطع السلم",  d: "A ladder is out of use for 3 rounds. Only one can be cut at a time.",       tgt: "jump",  w: 9,  tone: "orange" },
-    swap:   { id: "swap",   en: "Swap Places",   ar: "بدّل مكاني",    d: "Trade places with a player. Not inside the last 10 squares.",              tgt: "seat",  w: 9,  tone: "violet" },
-    loaded: { id: "loaded", en: "Loaded Dice",   ar: "النرد المزوّر", d: "Roll twice this turn and keep the roll you like.",                          tgt: "none",  w: 7,  tone: "gold" },
-    tback:  { id: "tback",  en: "Trap: Setback", ar: "فخ الرجوع",     d: "Hidden trap. Whoever lands on it goes back 5 squares.",                      tgt: "cell",  w: 7,  tone: "red" },
-    tskip:  { id: "tskip",  en: "Trap: Freeze",  ar: "فخ التجميد",    d: "Hidden trap. Whoever lands on it loses their next turn.",                    tgt: "cell",  w: 6,  tone: "red" },
-    tsteal: { id: "tsteal", en: "Trap: Thief",   ar: "فخ السرقة",     d: "Hidden trap. You steal a random card from whoever lands on it.",             tgt: "cell",  w: 6,  tone: "red" },
-    tfake:  { id: "tfake",  en: "Trap: Bluff",   ar: "فخ مزيف",       d: "Looks like a trap, does nothing. Make them worry.",                          tgt: "cell",  w: 5,  tone: "red" },
-    flip:   { id: "flip",   en: "Flip the Table", ar: "اقلب الطاولة", d: "Flip one snake into a ladder, or a ladder into a snake. Twice per match.",  tgt: "jump",  w: 3,  tone: "violet" }
+    hunt:   { id: "hunt",   en: "Snake Catcher", ar: "صيد التعبان",  d: "Cancels one snake bite. Plays itself when a snake gets you.", da: "بيلغي لدغة تعبان واحدة. بيشتغل لوحده لما تعبان يلدغك.",             tgt: "react", w: 13, tone: "green" },
+    shield: { id: "shield", en: "Lucky Shield",  ar: "درع الحظ",     d: "Blocks one trap, curse, steal, swap or penalty. Not snakes.", da: "بيمنع فخ أو لعنة أو سرقة أو تبديل أو أي عقوبة. مش بيمنع التعابين.",             tgt: "react", w: 13, tone: "blue" },
+    draw:   { id: "draw",   en: "Draw a Card",   ar: "اسحب كارتًا",   d: "Take a card from the deck, or steal a random one from an opponent.", da: "خد كارت من الكومة، أو اسرق كارت عشوائي من خصم.",       tgt: "draw",  w: 9,  tone: "gold" },
+    cut:    { id: "cut",    en: "Cut the Ladder", ar: "اقطع السلم",  d: "A ladder is out of use for 3 rounds. Only one can be cut at a time.", da: "بيعطّل سلم 3 جولات. سلم واحد بس ينقطع في المرة.",       tgt: "jump",  w: 9,  tone: "orange" },
+    swap:   { id: "swap",   en: "Swap Places",   ar: "بدّل مكاني",    d: "Trade places with a player. Not inside the last 10 squares.", da: "بدّل مكانك مع لاعب. مش مسموح في آخر 10 خانات.",              tgt: "seat",  w: 9,  tone: "violet" },
+    loaded: { id: "loaded", en: "Loaded Dice",   ar: "النرد المزوّر", d: "Roll twice this turn and keep the roll you like.", da: "ارمي النرد مرتين في دورك وخد الرمية اللي تعجبك.",                          tgt: "none",  w: 7,  tone: "gold" },
+    tback:  { id: "tback",  en: "Trap: Setback", ar: "فخ الرجوع",     d: "Hidden trap. Whoever lands on it goes back 5 squares.", da: "فخ مخفي. اللي يقف عليه يرجع 5 خانات.",                      tgt: "cell",  w: 7,  tone: "red" },
+    tskip:  { id: "tskip",  en: "Trap: Freeze",  ar: "فخ التجميد",    d: "Hidden trap. Whoever lands on it loses their next turn.", da: "فخ مخفي. اللي يقف عليه يضيّع دوره الجاي.",                    tgt: "cell",  w: 6,  tone: "red" },
+    tsteal: { id: "tsteal", en: "Trap: Thief",   ar: "فخ السرقة",     d: "Hidden trap. You steal a random card from whoever lands on it.", da: "فخ مخفي. بتسرق كارت عشوائي من اللي يقف عليه.",             tgt: "cell",  w: 6,  tone: "red" },
+    tfake:  { id: "tfake",  en: "Trap: Bluff",   ar: "فخ مزيف",       d: "Looks like a trap, does nothing. Make them worry.", da: "شكله فخ بس مفيهوش حاجة. وتّر خصومك.",                          tgt: "cell",  w: 5,  tone: "red" },
+    flip:   { id: "flip",   en: "Flip the Table", ar: "اقلب الطاولة", d: "Flip one snake into a ladder, or a ladder into a snake. Twice per match.", da: "اقلب تعبان لسلم أو سلم لتعبان. مرتين بس في المباراة.",  tgt: "jump",  w: 3,  tone: "violet" }
   };
   export const CARD_IDS: string[] = ["hunt", "shield", "draw", "cut", "swap", "loaded", "tback", "tskip", "tsteal", "tfake", "flip"];
   const CARD_TOTAL = CARD_IDS.reduce((s, k) => s + CARDS[k].w, 0);
 
-  export const SP_INFO: { [k: string]: { en: string; ar: string; d: string } } = {
-    treasure: { en: "Treasure", ar: "كنز",    d: "Draw a card (in survival, sometimes a heart)." },
-    curse:    { en: "Curse",    ar: "لعنة",   d: "Go back 4 squares." },
-    gate:     { en: "Gate",     ar: "بوابة",  d: "Teleports you to the matching gate." },
-    steal:    { en: "Pickpocket", ar: "سرقة", d: "Steal a random card from a player." },
-    ward:     { en: "Shrine",   ar: "حماية",  d: "Gain a ward that cancels one bad effect, even a snake." },
-    fork:     { en: "Fork",     ar: "تفرع",   d: "Choose: fast (+6, lose next turn), safe (+2 and a ward) or treasure (a card, risk of ambush)." }
+  export const SP_INFO: { [k: string]: { en: string; ar: string; d: string; da: string } } = {
+    treasure: { en: "Treasure",   ar: "كنز",   d: "Draw a card (in survival, sometimes a heart).", da: "اسحب كارت (وفي وضع النجاة ساعات بتلاقي قلب)." },
+    curse:    { en: "Curse",      ar: "لعنة",  d: "Go back 4 squares.", da: "ارجع 4 خانات." },
+    steal:    { en: "Pickpocket", ar: "سرقة",  d: "Steal a random card from a player.", da: "اسرق كارت عشوائي من لاعب." },
+    ward:     { en: "Shrine",     ar: "حماية", d: "Gain a ward that cancels one bad effect, even a snake.", da: "خد حماية بتلغي تأثير سيّئ واحد، حتى التعبان." },
+    fork:     { en: "Fork",       ar: "تفرع",  d: "Choose: fast (+6, lose next turn), safe (+2 and a ward) or treasure (a card, risk of ambush).", da: "اختار: سريع (+6 وتضيّع دور)، آمن (+2 وحماية) أو كنز (كارت بس ممكن كمين)." }
   };
 
   export const WORLD_IDS: string[] = ["gift", "tax", "headwind", "season", "sleepy"];
-  export const WORLD_INFO: { [k: string]: { en: string; ar: string; d: string } } = {
-    gift:     { en: "Gift Day",        ar: "هدية للجميع",   d: "Everyone with room in their hand draws a card." },
-    tax:      { en: "Leader's Tax",    ar: "ضريبة المتصدر", d: "The leader goes back 5 squares." },
-    headwind: { en: "Headwind",        ar: "رياح عكسية",    d: "Every roll counts 1 less this round (min 1)." },
-    season:   { en: "Ladder Season",   ar: "موسم السلالم",  d: "Ladders lift you 3 squares higher this round." },
-    sleepy:   { en: "Sleepy Snakes",   ar: "ثعابين نايمة",  d: "Snakes do not bite this round." }
+  export const WORLD_INFO: { [k: string]: { en: string; ar: string; d: string; da: string } } = {
+    gift:     { en: "Gift Day",      ar: "هدية للجميع",   d: "Everyone with room in their hand draws a card.", da: "كل لاعب إيده مش مليانة بيسحب كارت." },
+    tax:      { en: "Leader's Tax",  ar: "ضريبة المتصدر", d: "The leader goes back 5 squares.", da: "اللي في المقدمة بيرجع 5 خانات." },
+    headwind: { en: "Headwind",      ar: "رياح عكسية",    d: "Every roll counts 1 less this round (min 1).", da: "كل رمية بتتحسب بواحد أقل الجولة دي (الأقل 1)." },
+    season:   { en: "Ladder Season", ar: "موسم السلالم",  d: "Ladders lift you 3 squares higher this round.", da: "السلالم بتطلّعك 3 خانات زيادة الجولة دي." },
+    sleepy:   { en: "Sleepy Snakes", ar: "ثعابين نايمة",  d: "Snakes do not bite this round.", da: "التعابين مش بتلدغ الجولة دي." }
   };
 
   /* ---------- عشوائية حتمية ---------- */
@@ -169,24 +168,15 @@ namespace SNE {
     const sp: Special[] = [];
     if (chaos) {
       const free = (c: number) => !used[c] && c >= 3 && c <= 98;
-      function put(t: SpT, lo: number, hi: number, to?: number): number {
+      function put(t: SpT, lo: number, hi: number): number {
         for (let k = 0; k < 400; k++) {
           const c = ri(lo, hi);
           if (!free(c)) continue;
-          used[c] = true; sp.push(to === undefined ? { cell: c, t: t } : { cell: c, t: t, to: to }); return c;
+          used[c] = true; sp.push({ cell: c, t: t }); return c;
         }
         return 0;
       }
       let good = true;
-      for (let i = 0; i < 2; i++) {          // بوابتين (زوجين)
-        let placed = false;
-        for (let k = 0; k < 400 && !placed; k++) {
-          const a = ri(8, 62), b = ri(a + 14, 96);
-          if (b > 96 || !free(a) || !free(b)) continue;
-          used[a] = used[b] = true; sp.push({ cell: a, t: "gate", to: b }); sp.push({ cell: b, t: "gate", to: a }); placed = true;
-        }
-        good = good && placed;
-      }
       good = (put("fork", 25, 75) > 0) && good;
       for (let i = 0; i < 4; i++) good = (put("treasure", 4, 96) > 0) && good;
       for (let i = 0; i < 3; i++) good = (put("curse", 8, 96) > 0) && good;
@@ -511,7 +501,6 @@ namespace SNE {
     switch (sp.t) {
       case "treasure": g.q.unshift({ k: "treasure", seat: s }); break;
       case "curse": g.q.unshift(hitFor(g, s, { kind: "curse", back: 4, heart: g.opts.surv })); break;
-      case "gate": P.pos = sp.to as number; ev.push({ t: "gate", seat: s, from: cell, to: P.pos }); break;
       case "ward":
         if (P.ward < 1) { P.ward = 1; ev.push({ t: "ward", seat: s }); } else ev.push({ t: "nothing", seat: s, why: "haveward" });
         break;
@@ -646,8 +635,7 @@ namespace SNE {
     const sp = spAt(g, cell);
     let v = cell;
     if (sp) {
-      if (sp.t === "gate") v = sp.to as number;
-      else if (sp.t === "curse") v = Math.max(1, cell - 4);
+      if (sp.t === "curse") v = Math.max(1, cell - 4);
       else if (sp.t === "treasure" || sp.t === "ward") v = cell + 3;
       else if (sp.t === "steal") v = cell + 2;
       else if (sp.t === "fork") v = cell + 4;
