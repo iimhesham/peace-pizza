@@ -54,7 +54,7 @@ function send(tok){
 }
 function start(again){
   var ctx=I.ctx(),S=ctx.S;if(!S||ctx.role!=="host")return;
-  var sl=present(S);if(again&&S.cols){}else if(sl.length<2){T("You need at least 2 players");return;}
+  var sl=present(S);if(again&&S.cols){}else if(sl.length<2){T("محتاج لاعبين اتنين على الأقل");return;}
   var u={status:"play",seed:PPR.seed31(),gid:(+S.gid||0)+1,bots:null};
   if(!again||!S.cols){var lay=seatsFor(sl.length),cols={};sl.forEach(function(s,i){cols[s]=lay[i];});u.cols=cols;}
   room(ctx.code).update(u);
@@ -62,7 +62,7 @@ function start(again){
 function opt(k){
   var ctx=I.ctx(),S=ctx.S;if(!S||ctx.role!=="host"||S.status!=="lobby")return;
   var o=S.opts||{cls:0,surv:0,full:0},r=room(ctx.code);
-  if(k==="surv"&&o.cls){T("Survival needs Chaos mode");return;}
+  if(k==="surv"&&o.cls){T("النجاة محتاجة وضع الفوضى");return;}
   var nv=o[k]?0:1;
   if(k==="cls"&&nv){r.child("opts/surv").set(0);}
   r.child("opts/"+k).set(nv);
@@ -70,13 +70,13 @@ function opt(k){
 function bot(color){
   var ctx=I.ctx(),S=ctx.S,R=view&&view.R;if(!S||!R||ctx.role!=="host")return;
   var p=(S.players||{})[R.slotOf[color]];if(!p||p.uid===U().uid)return;
-  if(!confirm("Let the computer play for "+p.name+"?"))return;
+  if(!confirm("تخلي الكمبيوتر يلعب مكان "+p.name+"؟"))return;
   room(ctx.code).child("bots/"+color).set(myLog(S,R.slotOf[color]).length);
 }
 function leave(){
   var ctx=I.ctx(),S=ctx.S;
   if(S&&S.status==="lobby"&&ctx.role!=="host"){var sl=mySeat(S,U().uid);if(sl)room(ctx.code).child("players/"+sl).remove().catch(function(){});OL.exit();return;}
-  if(confirm("Leave this room?"))OL.exit();
+  if(confirm("تخرج من الغرفة؟"))OL.exit();
 }
 
 /* ---------- stats: 1st +10, 2nd +7, 3rd +5 ---------- */
@@ -109,28 +109,28 @@ function lobby(ctx,S){
   view=null;
   var host=ctx.role==="host",sl=present(S),P=S.players||{},o=S.opts||{cls:0,surv:0,full:0},n=sl.length,lay=seatsFor(n);
   var rows=SLOTS.map(function(s,i){
-    var p=P[s];if(!p)return'<div class="ol-t empty olsn-row">Waiting for a player...</div>';
+    var p=P[s];if(!p)return'<div class="ol-t empty olsn-row">مستني لاعب...</div>';
     var k=sl.indexOf(s),c=lay[k];
-    return'<div class="ol-t ol-ck olsn-row c-'+c+'" onclick="OL.prof(\''+e(p.uid)+'\')"><b>'+dot(c)+I.nmu(p.uid,p.name)+(p.uid===S.host?' <small class="olsn-tag">HOST</small>':'')+'</b></div>';}).join("");
-  var set=host?'<div class="ol-sec">Rules</div>'+
-    '<button type="button" class="ol-sw'+(!o.cls?' on':'')+'" onclick="OLSNK.opt(\'cls\')"><span><b>Chaos mode</b><small>'+(!o.cls?'Cards, hidden traps, gates, forks and a world event every 5 rounds':'Classic: only snakes and ladders. Switch on for the full chaos')+'</small></span><i></i></button>'+
-    '<button type="button" class="ol-sw'+(o.surv&&!o.cls?' on':'')+'" onclick="OLSNK.opt(\'surv\')"><span><b>Survival</b><small>'+(o.cls?'Needs Chaos mode':'3 hearts each. Long snakes, traps and curses cost a heart. Last one standing wins')+'</small></span><i></i></button>'+
-    '<button type="button" class="ol-sw'+(o.full?' on':'')+'" onclick="OLSNK.opt(\'full\')"><span><b>Play for every place</b><small>Keep playing after the first winner</small></span><i></i></button>':
-    '<div class="olsn-rules">'+(o.cls?'Classic':'Chaos mode')+(o.surv&&!o.cls?' · Survival':'')+' · '+(o.full?'Playing for every place':'First to 100 wins')+'</div>';
-  I.shell('<div class="ol-ticket" onclick="OL.copy()"><small>Room code · tap to share</small><div class="ol-code">'+e(ctx.code)+'</div><span>Send this code to your friends</span></div>'+
-    '<div class="ol-sec">Players ('+n+'/4)</div>'+rows+set+
-    (host?'<button type="button" class="ol-b" '+(n<2?'disabled ':'')+'onclick="OLSNK.start()">'+(n<2?'Waiting for players...':'Start Game')+'</button><button type="button" class="ol-b r" onclick="OL.close()">Close Room</button>'
-         :'<div class="ol-w">Waiting for the host to start...</div><button type="button" class="ol-s" onclick="OLSNK.leave()">Leave Room</button>')+
-    '<div class="xo2-rules">Finish 1st for <b>+10</b> points, 2nd for <b>+7</b>, 3rd for <b>+5</b>.</div>',{room:true,t:"SNAKES & LADDERS",g:"snake",c:""});
+    return'<div class="ol-t ol-ck olsn-row c-'+c+'" onclick="OL.prof(\''+e(p.uid)+'\')"><b>'+dot(c)+I.nmu(p.uid,p.name)+(p.uid===S.host?' <small class="olsn-tag">المضيف</small>':'')+'</b></div>';}).join("");
+  var set=host?'<div class="ol-sec">القواعد</div>'+
+    '<button type="button" class="ol-sw'+(!o.cls?' on':'')+'" onclick="OLSNK.opt(\'cls\')"><span><b>وضع الفوضى</b><small>'+(!o.cls?'كروت وفخاخ مخفية وخانات خاصة وحدث عالمي كل 5 جولات':'كلاسيك: سلالم وتعابين بس. شغّل الفوضى للعبة الكاملة')+'</small></span><i></i></button>'+
+    '<button type="button" class="ol-sw'+(o.surv&&!o.cls?' on':'')+'" onclick="OLSNK.opt(\'surv\')"><span><b>وضع النجاة</b><small>'+(o.cls?'محتاج وضع الفوضى':'3 قلوب لكل لاعب. التعابين الطويلة والفخاخ واللعنة بتاخد قلب. آخر واحد يفضل يكسب')+'</small></span><i></i></button>'+
+    '<button type="button" class="ol-sw'+(o.full?' on':'')+'" onclick="OLSNK.opt(\'full\')"><span><b>العب لكل المراكز</b><small>كمّل اللعب بعد أول فايز</small></span><i></i></button>':
+    '<div class="olsn-rules">'+(o.cls?'كلاسيك':'وضع الفوضى')+(o.surv&&!o.cls?' · نجاة':'')+' · '+(o.full?'اللعب لكل المراكز':'أول واحد يوصل 100 يكسب')+'</div>';
+  I.shell('<div class="olsn-ar" dir="rtl" lang="ar"><div class="ol-ticket" onclick="OL.copy()"><small>كود الغرفة · دوس عشان تشاركه</small><div class="ol-code" dir="ltr">'+e(ctx.code)+'</div><span>ابعت الكود لصحابك</span></div>'+
+    '<div class="ol-sec">اللاعبين ('+n+'/4)</div>'+rows+set+
+    (host?'<button type="button" class="ol-b" '+(n<2?'disabled ':'')+'onclick="OLSNK.start()">'+(n<2?'مستني لاعبين...':'ابدأ اللعب')+'</button><button type="button" class="ol-b r" onclick="OL.close()">اقفل الغرفة</button>'
+         :'<div class="ol-w">مستني المضيف يبدأ...</div><button type="button" class="ol-s" onclick="OLSNK.leave()">اخرج من الغرفة</button>')+
+    '<div class="xo2-rules">المركز الأول <b>+10</b> نقاط، التاني <b>+7</b>، التالت <b>+5</b>.</div></div>',{room:true,t:"سلم وتعبان",g:"snake",c:""});
 }
 
 function shellHTML(){
-  return'<div id="olsnRoot">'+UI.playHTML()+'</div><div id="olsnHost"></div><div id="olsnRes"></div>'+
-    '<button type="button" class="ol-s olsn-leave" onclick="OLSNK.leave()">Leave Room</button>';
+  return'<div class="olsn-ar" dir="rtl" lang="ar"><div id="olsnRoot">'+UI.playHTML()+'</div><div id="olsnHost"></div><div id="olsnRes"></div>'+
+    '<button type="button" class="ol-s olsn-leave" onclick="OLSNK.leave()">اخرج من الغرفة</button></div>';
 }
 
 function build(R,S,ctx){
-  I.shell(shellHTML(),{room:true,t:"SNAKES & LADDERS",g:"snake",playing:!R.over});
+  I.shell(shellHTML(),{room:true,t:"سلم وتعبان",g:"snake",playing:!R.over});
   var my=myIdx(S,R),v={key:ctx.code+"_"+R.gid,R:R,my:my,autoKey:"",over:false,fed:R.tokens.slice(),v:null};
   view=v;
   v.v=UI.createView($("olsnRoot"),{
@@ -150,7 +150,7 @@ function build(R,S,ctx){
 function auto(){
   LU.autoSet(!LU.autoGet());sfx("click");
   var b=document.querySelector("#olsnRoot .sn-auto");LU.autoPaint(b);
-  T(LU.autoGet()?"Auto roll: on":"Auto roll: off");
+  T(LU.autoGet()?"الرمي التلقائي: شغال":"الرمي التلقائي: مقفول");
   if(view){view.autoKey="";autoRoll();}
 }
 function autoRoll(){
@@ -171,7 +171,7 @@ function hostPanel(){
   if(ctx.role!=="host"||sh.over||!sh.pend)return;
   var seat=sh.pend.seat,col=R.order[seat];
   if(seat===vw.my||R.bots[col]!=null)return;
-  hp.innerHTML='<button type="button" class="ol-s" onclick="OLSNK.bot(\''+col+'\')">Not playing? Let the CPU play for '+e(R.names[seat])+'</button>';
+  hp.innerHTML='<button type="button" class="ol-s" onclick="OLSNK.bot(\''+col+'\')">مش بيلعب؟ خلّي الكمبيوتر يلعب مكان '+e(R.names[seat])+'</button>';
 }
 
 function draw(){
@@ -200,10 +200,10 @@ function showResult(){
   g.ranking.forEach(function(s,i){if(PTS[i]&&R.bots[R.order[s]]==null)pts[s]=PTS[i];});
   var w=g.winner;
   $("olsnRes").innerHTML='<div class="sn-final-card c-'+R.order[w]+' olsn-res"><div class="sn-trophy"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a3 3 0 0 0 4 3M16 6h4v1a3 3 0 0 1-4 3M12 13v4M8 21h8M10 17h4"/></svg></div>'+
-    '<h3>'+e(R.names[w])+' wins!</h3><p>1st +10 · 2nd +7 · 3rd +5 points in stats</p><div class="sn-rank">'+UI.resultHTML(g,R.names,R.order,{points:pts})+'</div>'+
-    (host?'<button type="button" class="sn-main" onclick="OLSNK.again()">Play Again</button><button type="button" class="sn-alt" onclick="OL.close()">Close Room</button>'
-         :'<div class="ol-w">Waiting for the host to start another game...</div>')+
-    '<button type="button" class="sn-alt" onclick="OL.rank()">Ranking</button><button type="button" class="sn-link" onclick="OL.stats()">My Stats</button></div>';
+    '<h3>الفايز: '+e(R.names[w])+'</h3><p>المركز 1: +10 · 2: +7 · 3: +5 نقاط في الإحصائيات</p><div class="sn-rank">'+UI.resultHTML(g,R.names,R.order,{points:pts})+'</div>'+
+    (host?'<button type="button" class="sn-main" onclick="OLSNK.again()">العب تاني</button><button type="button" class="sn-alt" onclick="OL.close()">اقفل الغرفة</button>'
+         :'<div class="ol-w">مستني المضيف يبدأ مباراة تانية...</div>')+
+    '<button type="button" class="sn-alt" onclick="OL.rank()">الترتيب</button><button type="button" class="sn-link" onclick="OL.stats()">إحصائياتي</button></div>';
   var rs=$("olsnRes");if(rs&&rs.scrollIntoView)setTimeout(function(){try{rs.scrollIntoView({behavior:"smooth",block:"nearest"});}catch(x){}},250);
 }
 

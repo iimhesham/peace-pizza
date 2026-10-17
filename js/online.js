@@ -32,7 +32,7 @@ var META={
   ic:"<path d='M9 4v16M15 4v16M4 9h16M4 15h16'/>"},
  ludo:{n:"Ludo",d:"Roll, race and capture. Bring all four pieces home first. Finish 1st for 10 points, 2nd for 7, 3rd for 5. The host can switch on the big board for up to 6 players.",who:"2 to 6 players. The host starts the game",
   ic:"<rect x='4' y='4' width='16' height='16' rx='3.5'/><circle cx='9' cy='9' r='.9'/><circle cx='15' cy='15' r='.9'/><circle cx='12' cy='12' r='.9'/>"},
-  snake:{n:"Snakes & Ladders",d:"Race to square 100 and land on it with the exact roll. Chaos mode adds cards, hidden traps, gates and a world event every 5 rounds. Finish 1st for 10 points, 2nd for 7, 3rd for 5. The host picks Chaos or Classic, Survival and play-for-every-place.",who:"2 to 4 players. The host starts the game",
+  snake:{n:"سلم وتعبان",d:"سباق لخانة 100، ولازم توصلها بالرقم بالظبط. وضع الفوضى فيه كروت وفخاخ مخفية وخانات خاصة وحدث عالمي كل 5 جولات. المركز الأول 10 نقاط، التاني 7، التالت 5. المضيف بيختار الفوضى أو الكلاسيك، والنجاة، واللعب لكل المراكز.",who:"من 2 لـ 4 لاعبين. المضيف هو اللي بيبدأ اللعبة",
   ic:"<path d='M6 20c-2-3 0-6 4-6s6-2 4-5-5-3-6-6'/><circle cx='15' cy='6' r='2.3'/><path d='M18 14v7M21 14v7M18 16.5h3M18 19h3'/>"},
  blackjack:{n:"Blackjack",d:"Beat the dealer to 21 with real Shankalolo. No bet limit. Blackjack pays 3:2. Double, split, surrender and insurance are all in.",who:"Up to 5 players per table. Pick a CPU dealer, or sit in the dealer seat yourself",
   ic:"<rect x='4' y='3' width='11' height='16' rx='2'/><path d='M9 21h8a2 2 0 0 0 2-2V8'/><path d='M9.5 9.5l1.5 2.2a1.2 1.2 0 1 1-1.8.9l.3 1.4h-1l.3-1.4a1.2 1.2 0 1 1-1.8-.9z'/>"},
@@ -269,7 +269,7 @@ function draw(){
   if(!S){if(code){T("The room was closed");OL.exit();}return;}
   if(S.game==="xo"){if(window.OLXO)return OLXO.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"XO",g:"xo"});setTimeout(draw,300);return;}
   if(S.game==="ludo"){if(window.OLLUDO)return OLLUDO.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"LUDO",g:"ludo"});setTimeout(draw,300);return;}
-  if(S.game==="snake"){if(window.OLSNK)return OLSNK.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"SNAKES & LADDERS",g:"snake"});setTimeout(draw,300);return;}
+  if(S.game==="snake"){if(window.OLSNK)return OLSNK.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"سلم وتعبان",g:"snake"});setTimeout(draw,300);return;}
   if(S.game==="blackjack"){if(window.OLBJ)return OLBJ.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"Blackjack",g:"blackjack"});setTimeout(draw,300);return;}
   if(S.game==="sudoku"){if(window.OLSD)return OLSD.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"Sudoku",g:"sudoku"});setTimeout(draw,300);return;}
   if(S.game==="tawla"){if(window.OLTW)return OLTW.draw();shell('<div class="ol-w">Loading...</div>',{room:true,t:"Tawla",g:"tawla"});setTimeout(draw,300);return;}

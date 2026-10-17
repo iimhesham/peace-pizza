@@ -42,11 +42,6 @@ t("curse square goes back 4; shield blocks it",()=>{
   const g=mk();g.sp=[{cell:20,t:"curse"}];g.players[0].pos=17;roll(g,3);eq(g.players[0].pos,16);
   const h=mk();h.sp=[{cell:20,t:"curse"}];h.players[0].pos=17;h.players[0].hand=["shield"];roll(h,3);eq(h.pend.t,"defend");E.apply(h,"a0");eq(h.players[0].pos,20);
 });
-t("gate teleports both ways, no chain",()=>{
-  const g=mk();g.sp=[{cell:10,t:"gate",to:50},{cell:50,t:"gate",to:10}];g.jumps=[{id:0,from:50,to:99,cut:0}];
-  g.jumps=[];g.players[0].pos=7;roll(g,3);eq(g.players[0].pos,50);
-  g.players[1].pos=44;roll(g,6);eq(g.players[1].pos,10);
-});
 t("treasure gives a card; full hand asks which to drop",()=>{
   const g=mk();g.sp=[{cell:6,t:"treasure"}];g.players[0].pos=3;roll(g,3);eq(g.players[0].hand.length,1);
   const h=mk();h.sp=[{cell:6,t:"treasure"}];h.players[0].pos=3;h.players[0].hand=["hunt","hunt","hunt"];roll(h,3);
@@ -169,8 +164,7 @@ for(const style of["chaos","classic"]){
     const lad=b.jumps.filter(j=>j.to>j.from).length,sn=b.jumps.length-lad;
     const cnt=t=>b.sp.filter(s=>s.t===t).length;
     let spBad=false;
-    if(style==="chaos"){spBad=cnt("gate")!==4||cnt("fork")!==1||cnt("treasure")!==4||cnt("curse")!==3||cnt("steal")!==2||cnt("ward")!==2;
-      b.sp.filter(s=>s.t==="gate").forEach(s=>{const p=b.sp.find(x=>x.cell===s.to);if(!p||p.to!==s.cell)spBad=true;});}
+    if(style==="chaos"){spBad=cnt("gate")!==0||cnt("fork")!==1||cnt("treasure")!==4||cnt("curse")!==3||cnt("steal")!==2||cnt("ward")!==2;}
     else spBad=b.sp.length!==0;
     const longJ=b.jumps.some(j=>{const a=E.cellXY(j.from),c=E.cellXY(j.to);const d=Math.hypot(a[0]-c[0],a[1]-c[1]);return d>(j.to>j.from?5:4.3)+1e-9;});
     if(longJ){bad++;if(bad<6)console.log('BAD long jump',style,seed);}

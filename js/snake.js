@@ -19,7 +19,7 @@ function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
 function pad(n){return(n<10?"0":"")+n;}
 
 /* ---------- ألوان اللاعبين (نفس ألوان لودو) ---------- */
-var CNAME={red:"Red",green:"Green",yellow:"Yellow",blue:"Blue"};
+var CNAME={red:"الأحمر",green:"الأخضر",yellow:"الأصفر",blue:"الأزرق"};
 var SEAT_LAYOUT={2:["red","yellow"],3:["red","green","yellow"],4:["red","green","yellow","blue"]};
 var HEX={red:"#E5484D",green:"#2EAE6B",yellow:"#F2B632",blue:"#3B82E0"};
 
@@ -48,7 +48,6 @@ var IC={
   flip:"<path d='M4 12a8 8 0 0 1 14-5.2l2-1.8v6h-6l2.3-2.1A5.8 5.8 0 0 0 6 12'/><path d='M20 12a8 8 0 0 1-14 5.2l-2 1.8v-6h6l-2.3 2.1A5.8 5.8 0 0 0 18 12'/>",
   treasure:"<path d='M6 4h12l3 5-9 11L3 9z'/><path d='M3 9h18M9 4L7.5 9 12 20M15 4l1.5 5L12 20'/>",
   curse:"<path d='M12 3a8 8 0 0 0-8 8c0 2.6 1.2 4.2 3 5.2V20h10v-3.8c1.8-1 3-2.6 3-5.2a8 8 0 0 0-8-8z'/><circle cx='9' cy='11' r='1.6' fill='currentColor'/><circle cx='15' cy='11' r='1.6' fill='currentColor'/><path d='M10.5 16h3'/>",
-  gate:"<path d='M12 3a9 9 0 1 0 9 9'/><path d='M12 7a5 5 0 1 0 5 5'/><path d='M12 11a1 1 0 1 0 1 1'/><path d='M17 3l4 0 0 4'/>",
   steal:"<path d='M7 9h10l1.5 10a1 1 0 0 1-1 1.2h-11a1 1 0 0 1-1-1.2z'/><path d='M9 9V7a3 3 0 0 1 6 0v2'/>",
   ward:"<path d='M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z'/>",
   fork:"<path d='M12 21v-7M12 14L6 6M12 14l6-8'/><path d='M3 8l3-3 3 3M15 8l3-3 3 3'/>",
@@ -73,7 +72,7 @@ function cardHTML(id,o){
   o=o||{};
   var d=E.CARDS[id];
   if(!d||o.back)return'<div class="sn-card is-back'+(o.cls?" "+o.cls:"")+'"'+(o.attr||"")+'><i class="sn-back-ic">'+ic("cards",30)+'</i><span class="sn-back-pat"></span></div>';
-  return'<div class="sn-card tone-'+d.tone+(o.cls?" "+o.cls:"")+'" data-card="'+id+'"'+(o.attr||"")+'><span class="sn-c-top"></span><i class="sn-c-ic">'+ic(id,34)+'</i><b class="sn-c-en">'+esc(d.en)+'</b><em class="sn-c-ar" dir="rtl" lang="ar">'+esc(d.ar)+'</em>'+(o.noDesc?"":'<p class="sn-c-d">'+esc(d.d)+'</p>')+(o.tag?'<span class="sn-c-tag">'+esc(o.tag)+'</span>':"")+'</div>';
+  return'<div class="sn-card tone-'+d.tone+(o.cls?" "+o.cls:"")+'" data-card="'+id+'"'+(o.attr||"")+'><span class="sn-c-top"></span><i class="sn-c-ic">'+ic(id,34)+'</i><b class="sn-c-en">'+esc(d.ar)+'</b>'+(o.noDesc?"":'<p class="sn-c-d">'+esc(d.da)+'</p>')+(o.tag?'<span class="sn-c-tag">'+esc(o.tag)+'</span>':"")+'</div>';
 }
 
 /* =========================================================
@@ -88,7 +87,6 @@ function mk(tag,attrs,parent){
   return el;
 }
 var SNAKE_COL="#E4564E";   /* كل التعابين نفس اللون: أحمر = خطر، والسلالم خشب دهبي */
-var GATE_COL=["#27b3d6","#d6459e"];
 
 function ladderGeom(a,b){
   var dx=b[0]-a[0],dy=b[1]-a[1],len=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/len,uy=dy/len,nx=-uy,ny=ux;
@@ -109,7 +107,7 @@ function snakeGeom(h,t,id){
 /* بيبني اللوحة جوه host. g = حالة اللعبة (بس عشان اللوحة نفسها). */
 function makeBoard(host,g){
   host.innerHTML="";
-  var svg=mk("svg",{viewBox:"0 0 "+VBW+" "+VBH,class:"sn-svg",role:"img","aria-label":"Snakes and ladders board"});
+  var svg=mk("svg",{viewBox:"0 0 "+VBW+" "+VBH,class:"sn-svg",role:"img","aria-label":"لوحة سلم وتعبان"});
   host.appendChild(svg);
   var L={bg:mk("g",{class:"sn-l-bg"},svg),tiles:mk("g",{class:"sn-l-tiles"},svg),sp:mk("g",{class:"sn-l-sp"},svg),jump:mk("g",{class:"sn-l-jump"},svg),spi:mk("g",{class:"sn-l-spi"},svg),
     trap:mk("g",{class:"sn-l-trap"},svg),hl:mk("g",{class:"sn-l-hl"},svg),pawn:mk("g",{class:"sn-l-pawn"},svg),fx:mk("g",{class:"sn-l-fx"},svg)};
@@ -117,7 +115,7 @@ function makeBoard(host,g){
   mk("rect",{x:0,y:0,width:VBW,height:104,rx:3.5,class:"sn-frame"},L.bg);
   mk("rect",{x:1.4,y:1.4,width:VBW-2.8,height:101.2,rx:2.6,class:"sn-frame2"},L.bg);
   mk("rect",{x:2,y:106,width:60,height:10,rx:3,class:"sn-startpad"},L.bg);
-  var st=mk("text",{x:50,y:112.8,class:"sn-starttxt","text-anchor":"middle"},L.bg);st.textContent="START";
+  var st=mk("text",{x:50,y:112.8,class:"sn-starttxt","text-anchor":"middle"},L.bg);st.textContent="البداية";
   // الخانات
   for(var c=1;c<=100;c++){
     var p=E.cellXY(c),x=2+p[0]*10,y=2+(9-p[1])*10;
@@ -129,21 +127,14 @@ function makeBoard(host,g){
   var crown=mk("g",{transform:"translate("+(gx[0]-4)+","+(gx[1]-3)+") scale(.34)",class:"sn-crown"},L.spi);
   crown.innerHTML=IC.crown;
   // الخانات الخاصة
-  var gateIdx={},gp=0;
-  g.sp.forEach(function(s,i){
+  var SPLAB={treasure:"كنز",curse:"لعنة",steal:"سرقة",ward:"حماية",fork:"تفرّع"};
+  g.sp.forEach(function(s){
     var xy=cxy(s.cell),x0=xy[0]-5,y0=xy[1]-5;
-    var tone=mk("rect",{x:x0+.25,y:y0+.25,width:9.5,height:9.5,rx:1,class:"sn-sp-bg sp-"+s.t},L.sp);
-    var gg=mk("g",{transform:"translate("+(xy[0]-3.6)+","+(xy[1]-3.2)+") scale(.3)",class:"sn-sp-ic sp-"+s.t},L.spi);
+    mk("rect",{x:x0+.25,y:y0+.25,width:9.5,height:9.5,rx:1,class:"sn-sp-bg sp-"+s.t},L.sp);
+    var gg=mk("g",{transform:"translate("+(xy[0]-3.6)+","+(xy[1]-3.8)+") scale(.3)",class:"sn-sp-ic sp-"+s.t},L.spi);
     gg.innerHTML=IC[s.t]||"";
-    if(s.t==="gate"){
-      var pi=gateIdx[s.to]!==undefined?gateIdx[s.to]:gp++;
-      gateIdx[s.cell]=pi;
-      var col=GATE_COL[pi%2];
-      gg.setAttribute("style","color:"+col);
-      mk("rect",{x:x0+.7,y:y0+.7,width:8.6,height:8.6,rx:1,fill:"none",stroke:col,"stroke-width":.7,"stroke-dasharray":"1.6 1"},L.spi);
-    }
-    var lab=mk("text",{x:xy[0],y:y0+9.1,class:"sn-sp-lab","text-anchor":"middle"},L.spi);
-    lab.textContent={treasure:"TREASURE",curse:"CURSE",gate:"GATE",steal:"STEAL",ward:"SHRINE",fork:"FORK"}[s.t];
+    var lab=mk("text",{x:xy[0],y:y0+9.2,class:"sn-sp-lab","text-anchor":"middle"},L.spi);
+    lab.textContent=SPLAB[s.t];
   });
 
   var B={svg:svg,L:L,host:host,disp:[],pawns:[],jumpGeo:{},sig:"",viewSeat:-1,names:[],colors:[]};
@@ -349,7 +340,7 @@ function makeBoard(host,g){
 var SPEEDM={fast:.6,normal:1,slow:1.5};
 function speedMul(){var s="normal";try{s=localStorage.getItem("snakeSpeed")||"normal";}catch(e){}return SPEEDM[s]||1;}
 var WORLD_ICON={gift:"gift",tax:"tax",headwind:"headwind",season:"season",sleepy:"sleepy"};
-var BACK_WHY={curse:"Curse",tax:"Leader's Tax",ambush:"Ambush",trap:"Trap"};
+var BACK_WHY={curse:"لعنة",tax:"ضريبة المتصدر",ambush:"كمين",trap:"فخ"};
 
 function playHTML(){
   return'<div class="sn-play">'+
@@ -358,12 +349,12 @@ function playHTML(){
     '<div class="sn-boardwrap"><div class="sn-board"></div><div class="sn-stage"></div><div class="sn-floats"></div></div>'+
     '<p class="sn-last"></p><p class="sn-status" role="status" aria-live="polite"></p>'+
     '<div class="sn-ctl"><div class="sn-dice"><div class="sn-die"></div><div class="sn-die2 hidden"></div></div>'+
-      '<div class="sn-act"><div class="sn-rollrow"><button type="button" class="sn-roll">Roll Dice</button>'+
-      '<button type="button" class="sn-auto" aria-pressed="false" aria-label="Auto roll" title="Auto roll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg><span>AUTO</span></button></div>'+
+      '<div class="sn-act"><div class="sn-rollrow"><button type="button" class="sn-roll">ارمي النرد</button>'+
+      '<button type="button" class="sn-auto" aria-pressed="false" aria-label="رمي تلقائي" title="رمي تلقائي"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg><span>تلقائي</span></button></div>'+
       '<div class="sn-prompt hidden"></div></div></div>'+
     '<div class="sn-hand hidden"></div>'+
     '<div class="sn-meta"><span class="sn-m1"></span><span class="sn-tt"></span><span class="sn-m2"></span></div>'+
-    '<details class="sn-log"><summary>History</summary><div class="sn-loglist"></div></details>'+
+    '<details class="sn-log"><summary>السجل</summary><div class="sn-loglist"></div></details>'+
   '</div>';
 }
 
@@ -382,10 +373,10 @@ function createView(root,cfg){
   var T=function(ms){return reduce()?Math.min(ms,60):Math.round(ms*spd());};
   var viewSeat=function(){return cfg.viewSeat?cfg.viewSeat():-1;};
   var reveal=function(s){return cfg.reveal?cfg.reveal(s):viewSeat()===s;};
-  var nameOf=function(s){return cfg.names[s]||("Player "+(s+1));};
+  var nameOf=function(s){return cfg.names[s]||("لاعب "+(s+1));};
   var colOf=function(s){return cfg.colors[s]||"red";};
-  var nmH=function(s){return'<b class="sn-nm c-'+colOf(s)+'">'+esc(nameOf(s))+"</b>";};
-  var cardEn=function(id){return E.CARDS[id]?E.CARDS[id].en:id;};
+  var nmH=function(s){return'<bdi class="sn-nm c-'+colOf(s)+'"><b>'+esc(nameOf(s))+"</b></bdi>";};
+  var cardAr=function(id){return E.CARDS[id]?E.CARDS[id].ar:id;};
 
   /* ---------- نص الحالة + السجل ---------- */
   function say(html,log){
@@ -393,13 +384,13 @@ function createView(root,cfg){
     if(log!==false&&html){lines.unshift(html);if(lines.length>60)lines.pop();el.log.innerHTML=lines.map(function(l){return"<div>"+l+"</div>";}).join("");}
   }
   function pre(dest){
-    if(dest>100)return{t:"Needs an exact roll",c:"x"};
-    if(dest===100)return{t:"Reaches 100!",c:"w"};
+    if(dest>100)return{t:"محتاج رقم بالظبط",c:"x"};
+    if(dest===100)return{t:"بتوصل 100!",c:"w"};
     var j=E.jumpAt(sh,dest);
-    if(j&&!j.cut)return E.isLadder(j)?{t:"Ladder to "+j.to,c:"up"}:{t:"Snake to "+j.to,c:"dn"};
+    if(j&&!j.cut)return E.isLadder(j)?{t:"سلم لخانة "+j.to,c:"up"}:{t:"تعبان لخانة "+j.to,c:"dn"};
     var sp=E.spAt(sh,dest);
-    if(sp)return{t:E.SP_INFO[sp.t].en+" square",c:"sp"};
-    return{t:"Square "+dest,c:""};
+    if(sp)return{t:"خانة "+E.SP_INFO[sp.t].ar,c:"sp"};
+    return{t:"خانة "+dest,c:""};
   }
 
   /* ---------- كارت على المسرح (ريفيل) ---------- */
@@ -421,7 +412,7 @@ function createView(root,cfg){
   }
   async function stageBanner(o){
     var s=el.stage;skipStage=false;
-    s.innerHTML='<div class="sn-wbanner tone-'+(o.tone||"gold")+'"><i>'+ic(o.icon,44)+'</i><small>'+(o.kicker||"")+'</small><b>'+esc(o.title)+'</b><em dir="rtl" lang="ar">'+esc(o.ar||"")+'</em><p>'+esc(o.d||"")+'</p></div>';
+    s.innerHTML='<div class="sn-wbanner tone-'+(o.tone||"gold")+'"><i>'+ic(o.icon,44)+'</i><small>'+(o.kicker||"")+'</small><b>'+esc(o.title)+'</b><p>'+esc(o.d||"")+'</p></div>';
     s.classList.add("on");s.onclick=function(){skipStage=true;};
     var t0=Date.now(),ms=T(o.ms||1900);
     while(Date.now()-t0<ms&&!skipStage&&!destroyed)await sleep(40);
@@ -457,7 +448,7 @@ function createView(root,cfg){
   }
 
   /* ---------- الأحداث ---------- */
-  function trapName(tt){return E.CARDS[tt]?E.CARDS[tt].en:"Trap";}
+  function trapName(tt){return E.CARDS[tt]?E.CARDS[tt].ar:"فخ";}
   async function playEv(e){
     switch(e.t){
       case "turn":
@@ -468,124 +459,119 @@ function createView(root,cfg){
       case "round":renderMeta();break;
       case "roll":
         await rollDice(e);
-        say(nmH(e.seat)+(e.loaded?" rolled <b>"+e.d+"</b> and <b>"+e.d2+"</b>":" rolled <b>"+e.d+"</b>"));
+        say(nmH(e.seat)+(e.loaded?" رمى <b>"+e.d+"</b> و <b>"+e.d2+"</b>":" رمى <b>"+e.d+"</b>"));
         break;
-      case "headwind":say(nmH(e.seat)+" is slowed by the headwind: <b>"+e.d+"</b> counts as <b>"+e.eff+"</b>");await sleep(T(450));break;
+      case "headwind":say(nmH(e.seat)+" اتعطّل بالرياح العكسية: <b>"+e.d+"</b> اتحسبت <b>"+e.eff+"</b>");await sleep(T(450));break;
       case "move":
         await board.walk(e.seat,e.from,e.to,T(120));sfx("click");renderStrip();
-        say(nmH(e.seat)+" moves to <b>"+e.to+"</b>");
+        say(nmH(e.seat)+" راح خانة <b>"+e.to+"</b>");
         break;
       case "exact":
-        board.nudge(e.seat);sfx("click");say(nmH(e.seat)+" needs the <b>exact</b> number to finish. Stays put.");await sleep(T(650));break;
+        board.nudge(e.seat);sfx("click");say(nmH(e.seat)+" محتاج الرقم <b>بالظبط</b> عشان يخلص، فمفيش حركة.");await sleep(T(650));break;
       case "special":{
-        var si=E.SP_INFO[e.sp];board.pulse(e.cell,"sp-"+e.sp);floatAt(e.cell,si.en,"sp");sfx("click");
-        say(nmH(e.seat)+" lands on <b>"+si.en+"</b>. "+esc(si.d));await sleep(T(650));break;
+        var si=E.SP_INFO[e.sp];board.pulse(e.cell,"sp-"+e.sp);floatAt(e.cell,si.ar,"sp");sfx("click");
+        say(nmH(e.seat)+" وقف على خانة <b>"+si.ar+"</b>. "+esc(si.da));await sleep(T(650));break;
       }
       case "climb":{
         var geo=board.jumpGeo[e.jid];board.pulseJump(e.jid);
-        say(nmH(e.seat)+" climbs a ladder: <b>"+e.from+"</b> → <b>"+e.to+"</b>");sfx("win");
+        say(nmH(e.seat)+" طلع سلم: <b>"+e.from+"</b> ← <b>"+e.to+"</b>");sfx("win");
         await sleep(T(250));
         await board.slide(e.seat,geo?geo.pts.slice():[board.cellPt(e.from),board.cellPt(e.to)],T(750),e.to);
-        if(e.bonus)floatAt(e.to,"+"+e.bonus+" season","up");
+        if(e.bonus)floatAt(e.to,"+"+e.bonus+" موسم","up");
         renderStrip();break;
       }
       case "bite":{
         var gb=board.jumpGeo[e.jid];board.pulseJump(e.jid,"is-bite");board.shake();
-        say("A snake bites "+nmH(e.seat)+": <b>"+e.from+"</b> → <b>"+e.to+"</b>");sfx("big");
-        floatAt(e.from,"BITE!","dn");await sleep(T(250));
+        say("تعبان لدغ "+nmH(e.seat)+": <b>"+e.from+"</b> ← <b>"+e.to+"</b>");sfx("big");
+        floatAt(e.from,"لدغة!","dn");await sleep(T(250));
         await board.slide(e.seat,gb?gb.pts.slice():[board.cellPt(e.from),board.cellPt(e.to)],T(900),e.to);
         renderStrip();break;
       }
       case "sleepy":
-        say("The snake is asleep. "+nmH(e.seat)+" is safe.");board.pulseJump(e.jid,"is-sleep");floatAt(board.disp[e.seat],"zzz","up");await sleep(T(700));break;
-      case "cutBlock":say("The ladder is cut. "+nmH(e.seat)+" can't climb it.");board.nudge(e.seat);await sleep(T(600));break;
+        say("التعبان نايم. "+nmH(e.seat)+" في أمان.");board.pulseJump(e.jid,"is-sleep");floatAt(board.disp[e.seat],"zzz","up");await sleep(T(700));break;
+      case "cutBlock":say("السلم مقطوع. "+nmH(e.seat)+" مش هيقدر يطلعه.");board.nudge(e.seat);await sleep(T(600));break;
       case "back":{
-        var why=BACK_WHY[e.why]||"Setback";
-        say(nmH(e.seat)+" goes back: <b>"+e.from+"</b> → <b>"+e.to+"</b> ("+why+")");sfx("big");board.shake();
+        var why=BACK_WHY[e.why]||"رجوع";
+        say(nmH(e.seat)+" رجع: <b>"+e.from+"</b> ← <b>"+e.to+"</b> ("+why+")");sfx("big");board.shake();
         floatAt(e.from,"−"+(e.from-e.to),"dn");
         await board.slide(e.seat,board.line(board.cellPt(e.from),board.cellPt(e.to),6),T(520),e.to);renderStrip();break;
       }
-      case "gate":
-        say(nmH(e.seat)+" is pulled through the gate to <b>"+e.to+"</b>");
-        board.pulse(e.from,"sp-gate");await sleep(T(250));
-        await board.slide(e.seat,[board.cellPt(e.from),board.cellPt(e.to)],T(560),e.to);board.pulse(e.to,"sp-gate");renderStrip();break;
       case "ward":
-        say(nmH(e.seat)+" gains a <b>ward</b>. It cancels one bad effect, even a snake.");floatAt(board.disp[e.seat],"WARD","up");renderStrip();await sleep(T(520));break;
+        say(nmH(e.seat)+" خد <b>حماية</b>. بتلغي ضربة واحدة، حتى التعبان.");floatAt(board.disp[e.seat],"حماية","up");renderStrip();await sleep(T(520));break;
       case "nothing":{
-        var msg={empty:function(){return nmH(e.victim)+" has no cards to steal.";},nopockets:function(){return nmH(e.seat)+" finds every pocket empty.";},
-          haveward:function(){return nmH(e.seat)+" already has a ward.";},fake:function(){return"It was a bluff! Nothing happens to "+nmH(e.seat)+".";},
-          calm:function(){return"The treasure path is calm. No ambush.";},tax:function(){return"There is no leader to tax yet.";}}[e.why];
-        say(msg?msg():"Nothing happens.");await sleep(T(560));break;
+        var msg={empty:function(){return nmH(e.victim)+" معاه ولا كارت يتسرق.";},nopockets:function(){return nmH(e.seat)+" لقى الجيوب كلها فاضية.";},
+          haveward:function(){return nmH(e.seat)+" معاه حماية بالفعل.";},fake:function(){return"كان فخ مزيف! مفيش حاجة حصلت لـ "+nmH(e.seat)+".";},
+          calm:function(){return"طريق الكنز هادي. مفيش كمين.";},tax:function(){return"مفيش متصدر يتفرض عليه ضريبة لسه.";}}[e.why];
+        say(msg?msg():"مفيش حاجة حصلت.");await sleep(T(560));break;
       }
       case "gain":{
         var rv=reveal(e.seat),d=E.CARDS[e.card];
-        var via={treasure:"from the treasure",draw:"from the deck",gift:"as a gift",steal:"by stealing"}[e.via]||"";
-        say(nmH(e.seat)+(rv?" gets <b>"+esc(d.en)+"</b>":" gets a card")+" "+via);
+        var via={treasure:"من الكنز",draw:"من الكومة",gift:"هدية",steal:"بالسرقة"}[e.via]||"";
+        say(nmH(e.seat)+(rv?" خد <b>"+esc(d.ar)+"</b>":" خد كارت")+" "+via);
         sfx("click");renderStrip();
-        await stageCard({id:e.card,back:!rv,cap:esc(nameOf(e.seat))+(rv?" gets "+esc(d.en):" draws a card"),sub:rv?esc(d.d):"",ms:rv?1700:900});
+        await stageCard({id:e.card,back:!rv,cap:esc(nameOf(e.seat))+(rv?" خد "+esc(d.ar):" سحب كارت"),sub:rv?esc(d.da):"",ms:rv?1700:900});
         renderHand();break;
       }
-      case "full":say(nmH(e.seat)+" has a full hand. One card has to go.");await sleep(T(300));break;
-      case "drop":say(nmH(e.seat)+" drops "+(reveal(e.seat)?"<b>"+esc(cardEn(e.card))+"</b>":"a card"));renderStrip();await sleep(T(350));break;
-      case "swapcard":say(nmH(e.seat)+" swaps a card in their hand.");renderStrip();renderHand();await sleep(T(350));break;
+      case "full":say("إيد "+nmH(e.seat)+" مليانة. لازم كارت يروح.");await sleep(T(300));break;
+      case "drop":say(nmH(e.seat)+" رمى "+(reveal(e.seat)?"<b>"+esc(cardAr(e.card))+"</b>":"كارت"));renderStrip();await sleep(T(350));break;
+      case "swapcard":say(nmH(e.seat)+" بدّل كارت في إيده.");renderStrip();renderHand();await sleep(T(350));break;
       case "steal":{
         var rvs=reveal(e.from)||reveal(e.to),ds=E.CARDS[e.card];
-        say(nmH(e.to)+" steals "+(rvs?"<b>"+esc(ds.en)+"</b>":"a card")+" from "+nmH(e.from));sfx("big");renderStrip();
-        await stageCard({id:e.card,back:!rvs,cap:esc(nameOf(e.to))+" steals from "+esc(nameOf(e.from)),sub:rvs?esc(ds.en):"",ms:rvs?1600:1000});
+        say(nmH(e.to)+" سرق "+(rvs?"<b>"+esc(ds.ar)+"</b>":"كارت")+" من "+nmH(e.from));sfx("big");renderStrip();
+        await stageCard({id:e.card,back:!rvs,cap:esc(nameOf(e.to))+" بيسرق من "+esc(nameOf(e.from)),sub:rvs?esc(ds.ar):"",ms:rvs?1600:1000});
         renderHand();break;
       }
       case "play":{
         var dp=E.CARDS[e.card],trap=dp.tgt==="cell",rp=!trap||reveal(e.seat);
-        say(nmH(e.seat)+(trap?" hides a trap":" plays <b>"+esc(dp.en)+"</b>"));sfx("big");renderStrip();renderHand();
-        if(dp.tgt==="none"&&e.card==="loaded")await stageCard({id:e.card,cap:esc(nameOf(e.seat))+" plays "+esc(dp.en),sub:esc(dp.d),ms:1300});
-        else await stageCard({id:e.card,back:!rp,cap:esc(nameOf(e.seat))+(trap?" sets a trap":" plays "+esc(dp.en)),sub:rp?esc(dp.d):"A hidden trap is set. The square is marked with a ?",ms:1400});
+        say(nmH(e.seat)+(trap?" خبّى فخ":" لعب <b>"+esc(dp.ar)+"</b>"));sfx("big");renderStrip();renderHand();
+        if(dp.tgt==="none"&&e.card==="loaded")await stageCard({id:e.card,cap:esc(nameOf(e.seat))+" لعب "+esc(dp.ar),sub:esc(dp.da),ms:1300});
+        else await stageCard({id:e.card,back:!rp,cap:esc(nameOf(e.seat))+(trap?" زرع فخ":" لعب "+esc(dp.ar)),sub:rp?esc(dp.da):"فخ مخفي اتزرع. الخانة اتعلّمت بعلامة ؟",ms:1400});
         break;
       }
-      case "trapSet":board.renderTraps(sh);board.pulse(e.cell,"sp-trap");floatAt(e.cell,"?","sp");await sleep(T(350));break;
-      case "trapExpire":board.renderTraps(sh);say("A trap on <b>"+e.cell+"</b> wore off.",false);break;
+      case "trapSet":board.renderTraps(sh);board.pulse(e.cell,"sp-trap");floatAt(e.cell,"؟","sp");await sleep(T(350));break;
+      case "trapExpire":board.renderTraps(sh);say("فخ على خانة <b>"+e.cell+"</b> انتهت مدته.",false);break;
       case "trapHit":{
         board.renderTraps(sh);board.shake();sfx("big");
-        say(nmH(e.seat)+" springs "+nmH(e.owner)+"'s trap: <b>"+esc(trapName(e.tt))+"</b>");
-        await stageCard({id:e.tt,cap:esc(nameOf(e.seat))+" triggers a trap!",sub:esc(trapName(e.tt))+" · set by "+esc(nameOf(e.owner)),ms:1500});
+        say(nmH(e.seat)+" داس على فخ "+nmH(e.owner)+": <b>"+esc(trapName(e.tt))+"</b>");
+        await stageCard({id:e.tt,cap:esc(nameOf(e.seat))+" داس على فخ!",sub:esc(trapName(e.tt))+" · زرعه "+esc(nameOf(e.owner)),ms:1500});
         break;
       }
       case "threat":break;
       case "defend":{
-        var byName=E.CARDS[e.by]?E.CARDS[e.by].en:"a ward";
-        say(nmH(e.seat)+" blocks it with <b>"+esc(byName)+"</b>!");sfx("win");floatAt(board.disp[e.seat],"BLOCKED","up");
+        var byName=E.CARDS[e.by]?E.CARDS[e.by].ar:"الحماية";
+        say(nmH(e.seat)+" صدّ الضربة بـ <b>"+esc(byName)+"</b>!");sfx("win");floatAt(board.disp[e.seat],"اتصدّت","up");
         board.pulse(board.disp[e.seat]||1,"sp-ward");renderStrip();renderHand();await sleep(T(700));break;
       }
-      case "freeze":say(nmH(e.seat)+" is frozen and loses the next turn.");floatAt(board.disp[e.seat],"FROZEN","dn");renderStrip();await sleep(T(550));break;
-      case "skip":say(nmH(e.seat)+" skips a turn.");renderStrip();await sleep(T(500));break;
+      case "freeze":say(nmH(e.seat)+" اتجمّد وبيضيّع دوره الجاي.");floatAt(board.disp[e.seat],"متجمّد","dn");renderStrip();await sleep(T(550));break;
+      case "skip":say("فات دور "+nmH(e.seat)+".");renderStrip();await sleep(T(500));break;
       case "route":{
-        var rn=["Fast route","Safe route","Treasure route"][e.r];say(nmH(e.seat)+" takes the <b>"+rn+"</b>.");await sleep(T(350));break;
+        var rn=["الطريق السريع","الطريق الآمن","طريق الكنز"][e.r];say(nmH(e.seat)+" اختار <b>"+rn+"</b>.");await sleep(T(350));break;
       }
       case "boost":
         await board.slide(e.seat,board.line(board.cellPt(e.from),board.cellPt(e.to),6),T(520),e.to);renderStrip();
-        say(nmH(e.seat)+" moves to <b>"+e.to+"</b>");break;
+        say(nmH(e.seat)+" راح خانة <b>"+e.to+"</b>");break;
       case "swap":{
-        var pa=board.cellPt(e.pb),pb=board.cellPt(e.pa);
-        say(nmH(e.a)+" and "+nmH(e.b)+" swap places!");sfx("big");
+        say(nmH(e.a)+" و"+nmH(e.b)+" بدّلوا أماكنهم!");sfx("big");
         await Promise.all([board.slide(e.a,board.line(board.cellPt(board.disp[e.a]),board.cellPt(e.pa),8),T(700),e.pa),board.slide(e.b,board.line(board.cellPt(board.disp[e.b]),board.cellPt(e.pb),8),T(700),e.pb)]);
         renderStrip();break;
       }
-      case "cut":board.renderJumps(sh);board.pulseJump(e.jid,"is-cutflash");say(nmH(e.seat)+" cuts a ladder. It is out of use for 3 rounds.");await sleep(T(700));break;
-      case "mend":board.renderJumps(sh);board.pulseJump(e.jid);say("A cut ladder is mended.",false);break;
-      case "flip":board.renderJumps(sh);board.pulseJump(e.jid,"is-cutflash");board.shake();say(nmH(e.seat)+" flips the table: a "+(E.isLadder(sh.jumps[e.jid])?"snake became a ladder":"ladder became a snake")+"!");await sleep(T(800));break;
+      case "cut":board.renderJumps(sh);board.pulseJump(e.jid,"is-cutflash");say(nmH(e.seat)+" قطع سلم. هيتعطّل 3 جولات.");await sleep(T(700));break;
+      case "mend":board.renderJumps(sh);board.pulseJump(e.jid);say("سلم مقطوع اتصلّح.",false);break;
+      case "flip":board.renderJumps(sh);board.pulseJump(e.jid,"is-cutflash");board.shake();say(nmH(e.seat)+" قلب الطاولة: "+(E.isLadder(sh.jumps[e.jid])?"تعبان بقى سلم":"سلم بقى تعبان")+"!");await sleep(T(800));break;
       case "heart":
         floatAt(board.disp[e.seat]||1,e.d>0?"+♥":"−♥",e.d>0?"up":"dn");renderStrip();
-        say(nmH(e.seat)+(e.d>0?" finds a heart":" loses a heart")+" ("+e.left+" left)");await sleep(T(550));break;
+        say(nmH(e.seat)+(e.d>0?" لقى قلب":" خسر قلب")+" (فاضل "+e.left+")");await sleep(T(550));break;
       case "ghost":
-        say(nmH(e.seat)+" is out! A ghost now.");sfx("big");board.syncPawns(sh);renderStrip();await sleep(T(900));break;
+        say(nmH(e.seat)+" خرج من اللعبة! بقى شبح.");sfx("big");board.syncPawns(sh);renderStrip();await sleep(T(900));break;
       case "world":{
         var wi=E.WORLD_INFO[e.id];renderBanner();
-        say("<b>"+esc(wi.en)+"</b>: "+esc(wi.d));sfx("big");
-        await stageBanner({icon:WORLD_ICON[e.id],kicker:"WORLD EVENT · ROUND "+e.round,title:wi.en,ar:wi.ar,d:wi.d,tone:"gold"});
+        say("<b>"+esc(wi.ar)+"</b>: "+esc(wi.da));sfx("big");
+        await stageBanner({icon:WORLD_ICON[e.id],kicker:"حدث عالمي · الجولة "+e.round,title:wi.ar,d:wi.da,tone:"gold"});
         break;
       }
       case "finish":
         board.syncPawns(sh);floatAt(100,"#"+e.place,"up");board.pulse(100,"sp-fin");sfx("win");confetti();
-        say(nmH(e.seat)+" reaches <b>100</b>! Place <b>"+e.place+"</b>");renderStrip();await sleep(T(1100));break;
+        say(nmH(e.seat)+" وصل <b>100</b>! المركز <b>"+e.place+"</b>");renderStrip();await sleep(T(1100));break;
       case "over":break;
       default:break;
     }
@@ -598,18 +584,18 @@ function createView(root,cfg){
       var h="";
       if(sh.opts.surv){for(var k=0;k<Math.max(3,p.hearts);k++)h+='<s class="sn-h'+(k<p.hearts?" on":"")+'">'+ic("heart",11)+"</s>";}
       var cnt=p.hand.length,trs=sh.traps.filter(function(t){return t.owner===i;}).length;
-      var pos=p.ghost?"OUT":(board.disp[i]>0?board.disp[i]:"START");
+      var pos=p.ghost?"خارج":(board.disp[i]>0?board.disp[i]:"البداية");
       var meta="";
       if(sh.opts.style==="chaos"&&!p.ghost){
-        if(p.ward)meta+='<span class="sn-ico ward" title="Ward">'+ic("shield",12)+"</span>";
-        if(cnt)meta+='<span class="sn-ico" title="Cards">'+ic("cards",12)+cnt+"</span>";
-        if(trs)meta+='<span class="sn-ico trap" title="Traps">'+ic("trap",12)+trs+"</span>";
-        if(p.skip)meta+='<span class="sn-ico frz" title="Frozen">'+ic("tskip",12)+"</span>";
+        if(p.ward)meta+='<span class="sn-ico ward" title="حماية">'+ic("shield",12)+"</span>";
+        if(cnt)meta+='<span class="sn-ico" title="كروت">'+ic("cards",12)+cnt+"</span>";
+        if(trs)meta+='<span class="sn-ico trap" title="فخاخ">'+ic("trap",12)+trs+"</span>";
+        if(p.skip)meta+='<span class="sn-ico frz" title="متجمّد">'+ic("tskip",12)+"</span>";
       }
       var cpu=cfg.isCpu&&cfg.isCpu(i);
       return'<div class="sn-pc c-'+colOf(i)+(i===sh.turn&&!sh.over?" is-turn":"")+(p.ghost?" is-ghost":"")+(p.fin?" is-done":"")+(curSpec&&curSpec.seats&&curSpec.seats.indexOf(i)>=0?" is-pick":"")+'" data-seat="'+i+'">'+
-        '<span class="sn-dot"></span><b dir="auto">'+esc(nameOf(i))+(vs===i&&!cfg.hideYou?" (you)":"")+"</b>"+
-        '<span class="sn-pos">'+pos+"</span>"+(cpu?'<span class="sn-rk">CPU</span>':"")+
+        '<span class="sn-dot"></span><b dir="auto">'+esc(nameOf(i))+(vs===i&&!cfg.hideYou?" (إنت)":"")+"</b>"+
+        '<span class="sn-pos">'+pos+"</span>"+(cpu?'<span class="sn-rk">كمبيوتر</span>':"")+
         (h?'<span class="sn-hearts">'+h+"</span>":"")+(meta?'<span class="sn-pmeta">'+meta+"</span>":"")+"</div>";
     }).join("");
     el.strip.style.setProperty("--n",sh.n);
@@ -619,32 +605,32 @@ function createView(root,cfg){
     var on=E.WORLD_IDS.filter(function(id){return E.fxOn(sh,id);});
     if(!on.length||sh.over){el.banner.classList.add("hidden");el.banner.innerHTML="";return;}
     el.banner.classList.remove("hidden");
-    el.banner.innerHTML=on.map(function(id){var w=E.WORLD_INFO[id];return'<span class="sn-fx fx-'+id+'">'+ic(WORLD_ICON[id],15)+"<b>"+esc(w.en)+"</b><small>"+esc(w.d)+"</small></span>";}).join("");
+    el.banner.innerHTML=on.map(function(id){var w=E.WORLD_INFO[id];return'<span class="sn-fx fx-'+id+'">'+ic(WORLD_ICON[id],15)+"<b>"+esc(w.ar)+"</b><small>"+esc(w.da)+"</small></span>";}).join("");
   }
   function renderMeta(){
-    el.m1.textContent="Round "+sh.round+" · "+(sh.opts.style==="classic"?"Classic":"Chaos")+(sh.opts.surv?" · Survival":"")+(sh.opts.full?" · Every place":"");
+    el.m1.textContent="الجولة "+sh.round+" · "+(sh.opts.style==="classic"?"كلاسيك":"فوضى")+(sh.opts.surv?" · نجاة":"")+(sh.opts.full?" · كل المراكز":"");
     el.m2.textContent="";
   }
   function whyNot(card,slot){
     var p=sh.pend,mine=!sh.over&&p&&cfg.canAct(p.seat)&&p.seat===viewSeat();
     var d=E.CARDS[card];
-    if(d.tgt==="react")return d.id==="hunt"?"Plays itself when a snake bites you":"Plays itself when a trap, curse or steal hits you";
-    if(!mine)return"Cards are played on your own turn";
-    if(p.t!=="roll")return"Finish the current choice first";
-    if(sh.cardUsed)return"One card per turn";
-    return"Nothing to target right now";
+    if(d.tgt==="react")return d.id==="hunt"?"بيشتغل لوحده لما تعبان يلدغك":"بيشتغل لوحده لما فخ أو لعنة أو سرقة تضربك";
+    if(!mine)return"الكروت بتتلعب في دورك";
+    if(p.t!=="roll")return"خلّص الاختيار الحالي الأول";
+    if(sh.cardUsed)return"كارت واحد بس في الدور";
+    return"مفيش هدف للكارت ده دلوقتي";
   }
   function renderHand(){
     var vs=viewSeat();
     if(vs<0||sh.opts.style!=="chaos"||!sh.players[vs]){el.hand.classList.add("hidden");return;}
     var P=sh.players[vs],p=sh.pend,legal=(!sh.over&&p&&p.seat===vs&&cfg.canAct(vs))?E.legal(sh):[];
     el.hand.classList.remove("hidden");
-    var h='<div class="sn-hand-h"><b>Your cards</b><small>'+P.hand.length+"/"+E.MAXHAND+"</small></div><div class=\"sn-hand-row\">";
+    var h='<div class="sn-hand-h"><b>كروتك</b><small>'+P.hand.length+"/"+E.MAXHAND+"</small></div><div class=\"sn-hand-row\">";
     for(var i=0;i<E.MAXHAND;i++){
       if(i<P.hand.length){
         var play=legal.indexOf("u"+i)>=0;
         h+=cardHTML(P.hand[i],{cls:play?"is-playable":"is-dim",attr:' data-slot="'+i+'" role="button" tabindex="0"'});
-      }else h+='<div class="sn-slot"><span>empty</span></div>';
+      }else h+='<div class="sn-slot"><span>فاضي</span></div>';
     }
     h+="</div>";
     el.hand.innerHTML=h;
@@ -674,53 +660,53 @@ function createView(root,cfg){
     var s=p.seat,P=sh.players[s];
     switch(p.t){
       case "target":{
-        var c=p.card,d=E.CARDS[c],h='<div class="sn-pt"><b>'+esc(d.en)+"</b>";
-        if(c==="cut")h+="<small>Tap a ladder on the board to cut it.</small></div>";
-        else if(c==="flip")h+="<small>Tap a snake or a ladder to flip it.</small></div>";
-        else if(d.tgt==="cell")h+="<small>Tap a plain square to hide the trap. Everyone sees a ? there, but only you know what it is.</small></div>";
+        var c=p.card,d=E.CARDS[c],h='<div class="sn-pt"><b>'+esc(d.ar)+"</b>";
+        if(c==="cut")h+="<small>دوس على سلم في اللوحة عشان تقطعه.</small></div>";
+        else if(c==="flip")h+="<small>دوس على تعبان أو سلم عشان تقلبه.</small></div>";
+        else if(d.tgt==="cell")h+="<small>دوس على خانة عادية عشان تخبّي الفخ. الكل هيشوف علامة ؟ هناك، بس إنت اللي عارف هو إيه.</small></div>";
         else if(c==="swap"){
-          h+="<small>Choose who to swap places with.</small></div><div class=\"sn-pbs\">";
-          L.forEach(function(t){if(t.charAt(0)==="t"){var i=+t.charAt(1);h+=btn(t,'<span class="sn-dot c-'+colOf(i)+'"></span>'+esc(nameOf(i))+" <small>square "+sh.players[i].pos+"</small>");}});
+          h+="<small>اختار مين تبدّل مكانك معاه.</small></div><div class=\"sn-pbs\">";
+          L.forEach(function(t){if(t.charAt(0)==="t"){var i=+t.charAt(1);h+=btn(t,'<span class="sn-dot c-'+colOf(i)+'"></span>'+esc(nameOf(i))+" <small>خانة "+sh.players[i].pos+"</small>");}});
           h+="</div>";
         }else{
-          h+="<small>Draw from the deck, or steal a random card.</small></div><div class=\"sn-pbs\">"+btn("d",ic("cards",16)+" Draw from the deck","gold");
-          L.forEach(function(t){if(t.charAt(0)==="t"){var i=+t.charAt(1);h+=btn(t,'<span class="sn-dot c-'+colOf(i)+'"></span>Steal from '+esc(nameOf(i))+" <small>"+sh.players[i].hand.length+" cards</small>");}});
+          h+="<small>اسحب من الكومة، أو اسرق كارت عشوائي.</small></div><div class=\"sn-pbs\">"+btn("d",ic("cards",16)+" اسحب من الكومة","gold");
+          L.forEach(function(t){if(t.charAt(0)==="t"){var i=+t.charAt(1);h+=btn(t,'<span class="sn-dot c-'+colOf(i)+'"></span>اسرق من '+esc(nameOf(i))+" <small>"+sh.players[i].hand.length+" كروت</small>");}});
           h+="</div>";
         }
-        return h+'<div class="sn-pbs">'+btn("z","Cancel","ghost")+"</div>";
+        return h+'<div class="sn-pbs">'+btn("z","إلغاء","ghost")+"</div>";
       }
       case "steal":{
-        var h2='<div class="sn-pt"><b>Pickpocket!</b><small>Choose who to rob. You take a random card.</small></div><div class="sn-pbs">';
-        L.forEach(function(t){var i=+t.charAt(1);h2+=btn(t,'<span class="sn-dot c-'+colOf(i)+'"></span>'+esc(nameOf(i))+" <small>"+sh.players[i].hand.length+" cards</small>");});
+        var h2='<div class="sn-pt"><b>سرقة!</b><small>اختار مين تسرقه. هتاخد كارت عشوائي.</small></div><div class="sn-pbs">';
+        L.forEach(function(t){var i=+t.charAt(1);h2+=btn(t,'<span class="sn-dot c-'+colOf(i)+'"></span>'+esc(nameOf(i))+" <small>"+sh.players[i].hand.length+" كروت</small>");});
         return h2+"</div>";
       }
       case "pick":{
         var pa=pre(P.pos+p.a),pb=pre(P.pos+p.b);
-        return'<div class="sn-pt"><b>Loaded dice</b><small>Keep the roll you like.</small></div><div class="sn-pbs two">'+
+        return'<div class="sn-pt"><b>النرد المزوّر</b><small>خد الرمية اللي تعجبك.</small></div><div class="sn-pbs two">'+
           btn("A",'<span class="sn-bigdie">'+p.a+'</span><small class="pv-'+pa.c+'">'+pa.t+"</small>")+btn("B",'<span class="sn-bigdie">'+p.b+'</span><small class="pv-'+pb.c+'">'+pb.t+"</small>")+"</div>";
       }
       case "fork":
-        return'<div class="sn-pt"><b>Fork in the road</b><small>Pick your route.</small></div><div class="sn-pbs col">'+
-          btn("f0",'<i>'+ic("bolt",20)+'</i><span><b>Fast</b><small>+6 squares, but you lose your next turn</small></span>')+
-          btn("f1",'<i>'+ic("shield",20)+'</i><span><b>Safe</b><small>+2 squares and a ward (if you have none)</small></span>')+
-          btn("f2",'<i>'+ic("treasure",20)+'</i><span><b>Treasure</b><small>A card, but 1 in 3 you get ambushed (back 3)</small></span>')+"</div>";
+        return'<div class="sn-pt"><b>مفترق طرق</b><small>اختار طريقك.</small></div><div class="sn-pbs col">'+
+          btn("f0",'<i>'+ic("bolt",20)+'</i><span><b>سريع</b><small>+6 خانات، بس بتضيّع دورك الجاي</small></span>')+
+          btn("f1",'<i>'+ic("shield",20)+'</i><span><b>آمن</b><small>+2 خانة وحماية (لو مش معاك)</small></span>')+
+          btn("f2",'<i>'+ic("treasure",20)+'</i><span><b>كنز</b><small>كارت، بس فيه احتمال 1 من 3 يتعملك كمين (رجوع 3)</small></span>')+"</div>";
       case "discard":{
-        var h3='<div class="sn-pt"><b>Your hand is full</b><small>Tap the card to throw away.</small></div><div class="sn-disc">';
+        var h3='<div class="sn-pt"><b>إيدك مليانة</b><small>دوس على الكارت اللي عايز ترميه.</small></div><div class="sn-disc">';
         P.hand.forEach(function(cid,i){h3+=cardHTML(cid,{noDesc:true,cls:"is-mini is-playable",attr:' data-tok="x'+i+'" role="button" tabindex="0"'});});
-        h3+=cardHTML(p.incoming,{noDesc:true,cls:"is-mini is-playable is-new",tag:"NEW",attr:' data-tok="x3" role="button" tabindex="0"'});
+        h3+=cardHTML(p.incoming,{noDesc:true,cls:"is-mini is-playable is-new",tag:"جديد",attr:' data-tok="x3" role="button" tabindex="0"'});
         return h3+"</div>";
       }
       case "defend":{
         var h4=p.hit,why={
-          snake:"A snake is about to bite you: square "+h4.from+" → "+h4.to,curse:"Cursed square! You'd go back 4.",
-          trap:"A trap springs on you: "+trapName(h4.tt),steal:nameOf(h4.by)+" is stealing a card from you.",
-          swap:nameOf(h4.by)+" wants to swap places with you.",tax:"Leader's Tax: you'd go back 5.",ambush:"Ambush! You'd go back 3."}[h4.kind]||"Something bad is coming.";
-        var h5='<div class="sn-pt warn"><b>Block it?</b><small>'+esc(why)+'</small></div><div class="sn-pbs col">';
+          snake:"تعبان هيلدغك: من خانة "+h4.from+" لخانة "+h4.to,curse:"خانة لعنة! هترجع 4 خانات.",
+          trap:"فخ اشتغل عليك: "+trapName(h4.tt),steal:nameOf(h4.by)+" بيسرق كارت منك.",
+          swap:nameOf(h4.by)+" عايز يبدّل مكانه معاك.",tax:"ضريبة المتصدر: هترجع 5 خانات.",ambush:"كمين! هترجع 3 خانات."}[h4.kind]||"في ضربة جاية.";
+        var h5='<div class="sn-pt warn"><b>تصدّ الضربة؟</b><small>'+esc(why)+'</small></div><div class="sn-pbs col">';
         L.forEach(function(t){
-          if(t==="w")h5+=btn("w",'<i>'+ic("shield",20)+'</i><span><b>Use your ward</b><small>Cancels this, even a snake</small></span>',"good");
-          else if(t.charAt(0)==="a"){var cid=P.hand[+t.charAt(1)];h5+=btn(t,'<i>'+ic(cid,20)+'</i><span><b>Use '+esc(cardEn(cid))+"</b><small>"+esc(E.CARDS[cid].d)+"</small></span>","good");}
+          if(t==="w")h5+=btn("w",'<i>'+ic("shield",20)+'</i><span><b>استخدم الحماية</b><small>بتلغي الضربة، حتى التعبان</small></span>',"good");
+          else if(t.charAt(0)==="a"){var cid=P.hand[+t.charAt(1)];h5+=btn(t,'<i>'+ic(cid,20)+'</i><span><b>استخدم '+esc(cardAr(cid))+"</b><small>"+esc(E.CARDS[cid].da)+"</small></span>","good");}
         });
-        return h5+btn("n","Take it","ghost")+"</div>";
+        return h5+btn("n","خد الضربة","ghost")+"</div>";
       }
       default:return"";
     }
@@ -734,7 +720,7 @@ function createView(root,cfg){
     if(sh.over){
       board.setTargets(null);board.render(sh,vs);board.setTurn(-1);renderStrip();renderHand();
       el.prompt.classList.add("hidden");el.rollrow.classList.remove("hidden");
-      el.roll.disabled=true;el.roll.classList.remove("is-go");el.roll.textContent="Game over";
+      el.roll.disabled=true;el.roll.classList.remove("is-go");el.roll.textContent="المباراة خلصت";
       if(UI)UI.setDie(el.die,lastDie,true);
       if(!overDone){overDone=true;setTimeout(function(){if(!destroyed&&cfg.onOver)cfg.onOver(sh);},T(900));}
       return;
@@ -756,17 +742,17 @@ function createView(root,cfg){
       el.prompt.classList.add("hidden");el.prompt.innerHTML="";el.rollrow.classList.remove("hidden");
       var can=mine&&onRoll&&!locked;
       el.roll.disabled=!can;el.roll.classList.toggle("is-go",can);
-      el.roll.textContent=can?(sh.loaded?"Roll Twice":"Roll Dice"):(mine?"Wait...":(onRoll?"Waiting...":"Waiting..."));
+      el.roll.textContent=can?(sh.loaded?"ارمي مرتين":"ارمي النرد"):"استنى...";
       var nm=nmH(p.seat),txt="";
-      if(mine&&onRoll)txt=sh.loaded?"Loaded dice! Roll twice and keep one":(sh.cardUsed?"Card played. Now roll the dice":"Your turn. Roll the dice"+(sh.players[p.seat].hand.length&&sh.opts.style==="chaos"?" or play a card":""));
-      else if(onRoll)txt=nm+" is about to roll...";
-      else txt=nm+({target:" is choosing a target...",steal:" is picking a pocket...",pick:" is choosing a die...",fork:" is at the fork...",discard:" has too many cards...",defend:" can block this..."}[p.t]||" is choosing...");
+      if(mine&&onRoll)txt=sh.loaded?"نرد مزوّر! ارمي مرتين وخد واحدة":(sh.cardUsed?"لعبت كارت. دلوقتي ارمي النرد":"دورك. ارمي النرد"+(sh.players[p.seat].hand.length&&sh.opts.style==="chaos"?" أو العب كارت":""));
+      else if(onRoll)txt=nm+" هيرمي النرد...";
+      else txt=nm+({target:" بيختار هدف...",steal:" بيسرق...",pick:" بيختار نرد...",fork:" عند مفترق الطرق...",discard:" إيده مليانة...",defend:" ممكن يصدّ الضربة..."}[p.t]||" بيختار...");
       if(UI&&!el.die2.classList.contains("hidden")&&p.t!=="pick"&&p.t!=="roll")el.die2.classList.add("hidden");
       el.status.innerHTML=txt;
     }else{
       el.rollrow.classList.add("hidden");
       el.prompt.classList.remove("hidden");el.prompt.innerHTML=promptHTML(p,L);bindPrompt();
-      el.status.innerHTML=({target:"Choose your target",steal:"Choose who to rob",pick:"Pick a die",fork:"Choose a route",discard:"Choose a card to throw away",defend:"Block the hit?"}[p.t]||"");
+      el.status.innerHTML=({target:"اختار الهدف",steal:"اختار مين تسرقه",pick:"اختار نرد",fork:"اختار طريق",discard:"اختار كارت ترميه",defend:"تصدّ الضربة؟"}[p.t]||"");
     }
     if(UI)UI.autoPaint(el.auto);
     if(cfg.onIdle)cfg.onIdle(sh);
@@ -808,7 +794,7 @@ function createView(root,cfg){
   dieColor(sh.turn);
   board.render(sh,viewSeat());board.setTurn(sh.over?-1:sh.turn);
   renderStrip();renderMeta();renderBanner();renderHand();
-  say(nmH(sh.turn)+" starts.",false);
+  say(nmH(sh.turn)+" بيبدأ.",false);
   setTimeout(settle,0);
   return V;
 }
@@ -817,9 +803,9 @@ function createView(root,cfg){
 function resultHTML(sh,names,colors,o){
   o=o||{};
   var rows=sh.ranking.map(function(s,i){
-    var p=sh.players[s],pts=o.points&&o.points[s]?" · +"+o.points[s]+" pts":"";
-    var sub=p.ghost?"Eliminated":(p.fin?"Reached 100":"Square "+p.pos);
-    return'<div class="c-'+colors[s]+'"><em>'+(i+1)+'</em><b dir="auto">'+esc(names[s])+"</b><small>"+sub+" · "+p.st.bites+(p.st.bites===1?" bite":" bites")+" · "+p.st.climbs+(p.st.climbs===1?" climb":" climbs")+pts+"</small></div>";
+    var p=sh.players[s],pts=o.points&&o.points[s]?" · +"+o.points[s]+" نقطة":"";
+    var sub=p.ghost?"خرج من اللعبة":(p.fin?"وصل 100":"وقف عند خانة "+p.pos);
+    return'<div class="c-'+colors[s]+'"><em>'+(i+1)+'</em><b dir="auto">'+esc(names[s])+"</b><small>"+sub+" · لدغات: "+p.st.bites+" · سلالم: "+p.st.climbs+pts+"</small></div>";
   }).join("");
   return rows;
 }
@@ -840,7 +826,7 @@ function toast_(m){try{toast(m);}catch(e){}}
 var UI=window.LudoUI;
 
 var TYPES=["human","easy","mid","hard","off"];
-var TLABEL={human:"Player",easy:"CPU · Easy",mid:"CPU · Medium",hard:"CPU · Hard",off:"Off"};
+var TLABEL={human:"لاعب",easy:"كمبيوتر · سهل",mid:"كمبيوتر · متوسط",hard:"كمبيوتر · صعب",off:"مقفول"};
 var COLS=["red","green","yellow","blue"];
 function defCfg(){
   return{seats:[{c:"red",t:"human",name:""},{c:"green",t:"mid",name:""},{c:"yellow",t:"off",name:""},{c:"blue",t:"off",name:""}],chaos:true,surv:false,full:false,timer:0};
@@ -887,7 +873,7 @@ function syncSetup(){
     row.classList.toggle("is-off",s.t==="off");
     inp.disabled=s.t!=="human";
     inp.value=s.t==="human"?s.name:"";
-    inp.placeholder=s.t==="human"?"Player "+(i+1):(s.t==="off"?"—":"CPU "+CNAME[s.c]);
+    inp.placeholder=s.t==="human"?"لاعب "+(i+1):(s.t==="off"?"—":"كمبيوتر "+CNAME[s.c]);
     b.textContent=TLABEL[s.t];b.className="sn-cyc t-"+s.t;
   });
   $("snSwChaos").classList.toggle("on",cfg.chaos);
@@ -901,7 +887,7 @@ function syncSetup(){
   [].forEach.call($("snDiceSeg").children,function(b){b.classList.toggle("on",b.dataset.v===ds);});
   var sv=lsGet(KEY_SAVE,null),ok=savedOk(sv);
   $("snResume").classList.toggle("hidden",!ok);
-  if(ok)$("snResumeTxt").textContent="Round "+sv.G.round+" · "+sv.M.names.join(", ");
+  if(ok)$("snResumeTxt").textContent="الجولة "+sv.G.round+" · "+sv.M.names.join("، ");
 }
 function showView(name){
   ["Setup","Play","Stats"].forEach(function(n){$("sn"+n).classList.toggle("hidden",n.toLowerCase()!==name);});
@@ -912,14 +898,14 @@ function playing(){return!$("snPlay").classList.contains("hidden");}
 
 /* ---------- مباراة جديدة ---------- */
 function mkNames(act){
-  return act.map(function(s){return s.t==="human"?(s.name||("Player "+(cfg.seats.indexOf(s)+1))):("CPU "+CNAME[s.c]);});
+  return act.map(function(s){return s.t==="human"?(s.name||("لاعب "+(cfg.seats.indexOf(s)+1))):CNAME[s.c];});
 }
 function newGame(){
   captureNames();
   var act=cfg.seats.filter(function(s){return s.t!=="off";});
-  if(act.length<2){toast_("Pick at least 2 players");return false;}
+  if(act.length<2){toast_("اختار لاعبين اتنين على الأقل");return false;}
   var humans=act.filter(function(s){return s.t==="human";}).length;
-  if(!humans&&!confirm("No human players. Watch the CPUs play?"))return false;
+  if(!humans&&!confirm("مفيش لاعبين بشر. تتفرج على الكمبيوتر وهو بيلعب؟"))return false;
   var seed=PPR.seed31(),first=PPR.int(act.length);
   var opts={style:cfg.chaos?"chaos":"classic",surv:cfg.chaos&&cfg.surv,full:cfg.full};
   G=E.init(act.length,opts,seed,first);
@@ -927,7 +913,7 @@ function newGame(){
   lastHuman=-1;
   return true;
 }
-function savedOk(sv){return!!(sv&&sv.v===1&&sv.G&&sv.G.v===1&&!sv.G.over&&sv.M&&sv.M.names&&sv.M.names.length===sv.G.n);}
+function savedOk(sv){return!!(sv&&sv.v===1&&sv.G&&sv.G.v===1&&!sv.G.over&&sv.M&&sv.M.names&&sv.M.names.length===sv.G.n&&(sv.G.sp||[]).every(function(x){return x.t!=="gate";}));}   /* مباراة محفوظة من نسخة فيها بوابات: بتتتجاهل */
 function saveGame(){if(G&&!G.over)lsSet(KEY_SAVE,{v:1,G:G,M:M,t:Date.now()});}
 function clearSave(){lsDel(KEY_SAVE);}
 
@@ -997,27 +983,27 @@ function startTimer(){
     if(!G||G.over||!view||!playing()||$("snQuit").classList.contains("hidden")===false){return;}
     tLeft--;paintTimer();
     if(tLeft<=0){
-      stopTimer();toast_("Time ran out. The CPU decides for you");
+      stopTimer();toast_("الوقت خلص. الكمبيوتر هيقرر عنك");
       if(!view.busy())doTok(E.ai(G,"mid"));
     }
   },1000);
 }
 function stopTimer(){clearInterval(tickT);tickT=0;if(view&&view.setTimer)view.setTimer("");}
-function paintTimer(){if(view)view.setTimer("⏱ "+tLeft+"s");}
+function paintTimer(){if(view)view.setTimer("⏱ "+tLeft+" ث");}
 
 /* ---------- نهاية المباراة + إحصائيات ---------- */
 var ACH=[
-  {k:"first",n:"First Win",d:"Win your first game",f:function(s){return s.wins>=1;}},
-  {k:"w5",n:"Regular Winner",d:"Win 5 games",f:function(s){return s.wins>=5;}},
-  {k:"w10",n:"Ladder Master",d:"Win 10 games",f:function(s){return s.wins>=10;}},
-  {k:"cb",n:"Legendary Comeback",d:"Win after trailing the leader by 40+ squares",f:function(s){return!!s.flags.cb;}},
-  {k:"clean",n:"Clean Hands",d:"Win without playing a card or using a ward",f:function(s){return!!s.flags.clean;}},
-  {k:"dodge",n:"Snake Dodger",d:"Block 3 snake bites in one match",f:function(s){return!!s.flags.dodge;}},
-  {k:"heist",n:"Heist",d:"Steal 2 cards in one match",f:function(s){return!!s.flags.heist;}},
-  {k:"iron",n:"Iron Heart",d:"Win a Survival match",f:function(s){return!!s.flags.iron;}},
-  {k:"trap",n:"Trapper",d:"Spring 2 traps on rivals in one match",f:function(s){return!!s.flags.trap;}},
-  {k:"hard",n:"Giant Slayer",d:"Beat a Hard CPU",f:function(s){return!!s.flags.hard;}},
-  {k:"streak",n:"On Fire",d:"Win 3 games in a row",f:function(s){return s.bestStreak>=3;}}
+  {k:"first",n:"أول فوز",d:"اكسب أول مباراة ليك",f:function(s){return s.wins>=1;}},
+  {k:"w5",n:"فايز منتظم",d:"اكسب 5 مباريات",f:function(s){return s.wins>=5;}},
+  {k:"w10",n:"سيد السلالم",d:"اكسب 10 مباريات",f:function(s){return s.wins>=10;}},
+  {k:"cb",n:"عودة أسطورية",d:"اكسب بعد ما تتأخر عن المتصدر 40 خانة أو أكتر",f:function(s){return!!s.flags.cb;}},
+  {k:"clean",n:"إيد نضيفة",d:"اكسب من غير ما تلعب كارت أو تستخدم حماية",f:function(s){return!!s.flags.clean;}},
+  {k:"dodge",n:"متفادي التعابين",d:"صدّ 3 لدغات تعبان في مباراة واحدة",f:function(s){return!!s.flags.dodge;}},
+  {k:"heist",n:"نشّال",d:"اسرق كارتين في مباراة واحدة",f:function(s){return!!s.flags.heist;}},
+  {k:"iron",n:"قلب حديد",d:"اكسب مباراة نجاة",f:function(s){return!!s.flags.iron;}},
+  {k:"trap",n:"صاحب الفخاخ",d:"اوقّع خصمين في فخاخك في مباراة واحدة",f:function(s){return!!s.flags.trap;}},
+  {k:"hard",n:"قاتل العمالقة",d:"اهزم كمبيوتر صعب",f:function(s){return!!s.flags.hard;}},
+  {k:"streak",n:"على نار",d:"اكسب 3 مباريات ورا بعض",f:function(s){return s.bestStreak>=3;}}
 ];
 function defStats(){return{games:0,wins:0,losses:0,bites:0,climbs:0,steals:0,blocks:0,bestStreak:0,streak:0,flags:{}};}
 function recordStats(sh){
@@ -1036,22 +1022,22 @@ function recordStats(sh){
   var had=lsGet(KEY_ACH,{}),now=Object.assign({},had),fresh=[];
   ACH.forEach(function(a){if(!now[a.k]&&a.f(s)){now[a.k]=1;fresh.push(a.n);}});
   lsSet(KEY_STATS,s);lsSet(KEY_ACH,now);
-  if(fresh.length)setTimeout(function(){toast_("Achievement: "+fresh.join(", "));},1600);
+  if(fresh.length)setTimeout(function(){toast_("إنجاز جديد: "+fresh.join("، "));},1600);
 }
 function finish(sh){
   if(finalShown||!G||!G.over)return;finalShown=true;
   stopTimer();clearTimeout(cpuT);clearSave();recordStats(G);sfx("win");
   var w=G.winner;
   $("snWinCard").className="sn-final-card c-"+M.colors[w];
-  $("snWinTitle").textContent=M.names[w]+" wins!";
-  $("snWinSub").textContent="Round "+G.round+" · "+(G.opts.style==="classic"?"Classic":"Chaos")+(G.opts.surv?" · Survival":"");
+  $("snWinTitle").textContent="الفايز: "+M.names[w];
+  $("snWinSub").textContent="الجولة "+G.round+" · "+(G.opts.style==="classic"?"كلاسيك":"فوضى")+(G.opts.surv?" · نجاة":"");
   $("snRank").innerHTML=resultHTML(G,M.names,M.colors);
   $("snFinal").classList.remove("hidden");
   var ag=$("snAgain");if(ag)ag.focus({preventScroll:true});
 }
 function renderStats(){
   var s=Object.assign(defStats(),lsGet(KEY_STATS,{})),got=lsGet(KEY_ACH,{}),rate=s.games?Math.round(s.wins/s.games*100):0;
-  $("snKpis").innerHTML=[["Games",s.games],["Wins",s.wins],["Win rate",rate+"%"],["Snake bites",s.bites],["Ladders climbed",s.climbs],["Cards stolen",s.steals],["Hits blocked",s.blocks],["Best streak",s.bestStreak]]
+  $("snKpis").innerHTML=[["المباريات",s.games],["الفوز",s.wins],["نسبة الفوز",rate+"%"],["لدغات التعابين",s.bites],["سلالم طلعتها",s.climbs],["كروت سرقتها",s.steals],["ضربات صدّيتها",s.blocks],["أفضل سلسلة",s.bestStreak]]
     .map(function(a){return"<div><b>"+a[1]+"</b><small>"+a[0]+"</small></div>";}).join("");
   $("snAchs").innerHTML=ACH.map(function(a){return'<div class="sn-ach'+(got[a.k]?" on":"")+'"><i>'+(got[a.k]?"✓":"•")+"</i><span><b>"+a.n+"</b><small>"+a.d+"</small></span></div>";}).join("");
 }
@@ -1093,7 +1079,7 @@ window.snakeAuto=function(){
   if(!UI)return;
   UI.autoSet(!UI.autoGet());sfx("click");
   var b=document.querySelector("#snPlayHost .sn-auto");UI.autoPaint(b);
-  toast_(UI.autoGet()?"Auto roll: on":"Auto roll: off");
+  toast_(UI.autoGet()?"الرمي التلقائي: شغال":"الرمي التلقائي: مقفول");
   if(view)view.settle();
 };
 window.snakeAgain=function(){
@@ -1104,13 +1090,13 @@ window.snakeAgain=function(){
   clearSave();enterPlay();
 };
 window.snakeMenu=function(){snakeShowSetup(true);};
-window.snakeRestart=function(){sfx("click");if(!confirm("Restart this match from the beginning?"))return;snakeAgain();};
+window.snakeRestart=function(){sfx("click");if(!confirm("تبدأ المباراة من الأول؟"))return;snakeAgain();};
 window.snakeQuitKeep=function(){$("snQuit").classList.add("hidden");sfx("click");};
 window.snakeQuitLater=function(){saveGame();snakeShowSetup(true);};
 window.snakeQuitNow=function(){clearSave();G=null;snakeShowSetup(true);};
-window.snakeMute=function(){SnakeUI.setMuted(!SnakeUI.isMuted());$("snMute").textContent=SnakeUI.isMuted()?"Sound: off":"Sound: on";};
+window.snakeMute=function(){SnakeUI.setMuted(!SnakeUI.isMuted());$("snMute").textContent=SnakeUI.isMuted()?"الصوت: مقفول":"الصوت: شغال";};
 window.snakeStats=function(){sfx("click");renderStats();showView("stats");};
-window.snakeResetStats=function(){if(!confirm("Reset your offline stats and achievements?"))return;lsDel(KEY_STATS);lsDel(KEY_ACH);renderStats();};
+window.snakeResetStats=function(){if(!confirm("تمسح إحصائياتك وإنجازاتك على الجهاز ده؟"))return;lsDel(KEY_STATS);lsDel(KEY_ACH);renderStats();};
 window.snakePreset=function(k){
   captureNames();
   var T=k==="cpu"?["human","mid","off","off"]:k==="two"?["human","human","off","off"]:["human","human","human","human"];
@@ -1120,7 +1106,7 @@ window.snakePreset=function(k){
 window.snakeTog=function(k){
   captureNames();
   if(k==="chaos"){cfg.chaos=!cfg.chaos;if(!cfg.chaos)cfg.surv=false;}
-  else if(k==="surv"){if(!cfg.chaos){toast_("Survival needs Chaos mode");return;}cfg.surv=!cfg.surv;}
+  else if(k==="surv"){if(!cfg.chaos){toast_("النجاة محتاجة وضع الفوضى");return;}cfg.surv=!cfg.surv;}
   else cfg.full=!cfg.full;
   saveSettings();syncSetup();sfx("click");
 };
@@ -1128,5 +1114,5 @@ window.snakeTimer=function(v){captureNames();cfg.timer=v;saveSettings();syncSetu
 window.snakeSpeed=function(v){try{localStorage.setItem("snakeSpeed",v);}catch(e){}syncSetup();sfx("click");};
 window.snakeDice=function(v){try{localStorage.setItem("ludoDiceStyle",v);}catch(e){}syncSetup();sfx("click");};
 window.snakeHowTo=function(){sfx("click");$("snHow").classList.toggle("hidden");};
-$("snMute").textContent=SnakeUI.isMuted()?"Sound: off":"Sound: on";
+$("snMute").textContent=SnakeUI.isMuted()?"الصوت: مقفول":"الصوت: شغال";
 })();
