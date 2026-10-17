@@ -44,10 +44,10 @@ html[data-theme="vm"] .sn-final{background:rgba(16,48,58,.55)}
 html[data-theme="vm"] .sn-ach.on i{background:#2D7488;color:#FFF6D6}
 /* المسرح والبانر فاضلين غامقين: نصهم لازم يفضل فاتح */
 html[data-theme="vm"] .sn-cap b,
-html[data-theme="vm"] .sn-wbanner{color:#EFE6CF}
+html[data-theme="vm"] .sn-wbanner{color:#EAF0FB}
 html[data-theme="vm"] .sn-cap small,
-html[data-theme="vm"] .sn-wbanner p{color:#cfe0d5}
+html[data-theme="vm"] .sn-wbanner p{color:#c3d0ea}
 html[data-theme="vm"] .sn-wbanner small,
-html[data-theme="vm"] .sn-wbanner em{color:#E3B94F}
+html[data-theme="vm"] .sn-wbanner em{color:#F0C25A}
 html[data-theme="vm"] .olsn-tag{background:#10303A;color:#FFF6D6}
 html[data-theme="vm"] #snake .ol-go{--olc:#10303A;border-color:rgba(16,48,58,.45)}
