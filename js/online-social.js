@@ -116,7 +116,7 @@ function vmMe(c){
   h+=sec("Achievements",dn+" of "+tot,'<button type="button" class="ac-more" onclick="OLX.go(\'awards\')">View all</button>')+
     '<div class="vm-ach"><div class="vm-ach-t"><b>'+dn+'<small>/ '+tot+'</small></b><span>unlocked</span></div><i class="vm-bar"><i style="width:'+(tot?Math.round(dn/tot*100):0)+'%"></i></i>'+
     (c.show.length?'<div class="vm-meds">'+c.show.map(function(x){var b=x.b,m=b[5],r=PPB.RAR[m.tr];return'<div class="vm-md" style="--rc:'+r.rgb+'" title="'+E(b[1])+'"><span class="vm-mdi">'+PPB.ic(m.ic)+'</span><b>'+E(b[0])+'</b><small>'+r.n+'</small></div>';}).join("")+'</div>':'<div class="vm-none">Play online games to unlock achievements</div>')+
-    c.next.map(function(x){return'<div class="vm-nxt"><b>Next up: '+E(x.b[0])+'</b><small>'+E(x.b[1])+'</small><i class="vm-bar"><i style="width:'+Math.round(x.c/x.b[4]*100)+'%"></i></i><em>'+x.c+' / '+x.b[4]+'</em></div>';}).join("")+'</div>';
+    c.next.map(function(x){return'<div class="vm-nxt"><b>Next up: '+E(x.b[0])+'</b><small>'+E(x.b[1])+'</small><i class="vm-bar"><i style="width:'+Math.round(x.c/x.b[4]*100)+'%"></i></i><em>'+x.c+(x.b[5].u||'')+' / '+x.b[4]+(x.b[5].u||'')+'</em></div>';}).join("")+'</div>';
   h+=sec("Community")+'<button type="button" class="ac-tile" onclick="OL.sug()">'+IX("pencil")+'<span><b>Suggest a Question</b><small>Send your own questions to the admin</small></span></button>';
   return h;}
 
@@ -162,7 +162,7 @@ function me(o){o=o||{};I.sv("stats");curTab="me";
       '<div><span class="hl-i">'+PPB.ic(since?"clock":"trophy")+'</span><span class="hl-t"><label>'+(since?"Member since":"Titles")+'</label><b>'+(since||mine.length)+'</b></span></div></div>';
     h+=sec("Achievements",done.length+" of "+ST.length,'<button type="button" class="ac-more" onclick="OLX.go(\'awards\')">View all</button>')+
       (show.length?'<div class="ach-show">'+show.map(PPB.tile).join("")+'</div>':'<div class="ac-none pp-none">Play online games to unlock achievements</div>')+
-      next.map(function(x){return'<div class="ac-next"><b>Next up: '+e(x.b[0])+'</b><small>'+e(x.b[1])+'</small><i class="ol-pb"><i style="width:'+Math.round(x.c/x.b[4]*100)+'%"></i></i><em class="ol-of">'+x.c+' / '+x.b[4]+'</em></div>';}).join("");
+      next.map(function(x){return'<div class="ac-next"><b>Next up: '+e(x.b[0])+'</b><small>'+e(x.b[1])+'</small><i class="ol-pb"><i style="width:'+Math.round(x.c/x.b[4]*100)+'%"></i></i><em class="ol-of">'+x.c+(x.b[5].u||'')+' / '+x.b[4]+(x.b[5].u||'')+'</em></div>';}).join("");
     h+=sec("Community")+'<button type="button" class="ac-tile" onclick="OL.sug()">'+IX("pencil")+'<span><b>Suggest a Question</b><small>Send your own questions to the admin</small></span></button>';
     }
     if(!o.adm&&o.claim)h+='<button type="button" class="ol-b o" onclick="OL.claim()">Make me the admin (one time only)</button>';

@@ -105,6 +105,9 @@ function ans(t){return(t.right||0)+(t.wrong||0);}
 function accAll(mn,r){return function(t){var n=ans(t);return n>=mn&&(t.right||0)/n>=r;};}
 function accG(k,mn,r){return function(t,s){var x=X(s,k),n=(x.right||0)+(x.wrong||0);return n>=mn&&(x.right||0)/n>=r;};}
 function wr(k,mg,r){return function(t,s){var x=X(s,k),g=x.games||0;return g>=mg&&(x.wins||0)/g>=r;};}
+
+/* إنجازات نسبة الفوز: الشريط بيبيّن نسبة الفوز الحالية مقابل المطلوبة (مش عدد الجولات) */
+function AR(n,d,k,mg,r){var tg=Math.round(r*100),b=A(n,d,"percent",3,k,function(t,s){var x=X(s,k),g=x.games||0,p=g?Math.floor((x.wins||0)/g*100):0;return g>=mg?p:Math.min(p,tg-1);},tg,wr(k,mg,r));b[5].u="%";return b;}
 var wins=function(x){return x.wins;},games=function(x){return x.games;},right=function(x){return x.right;},pts=function(x){return x.pts;};
 var playedN=cnt(function(x){return(x.games||0)>0;}),wonN=cnt(function(x){return(x.wins||0)>0;});
 
@@ -147,42 +150,42 @@ P.ACH=[
  A("XO Regular","Play 10 XO games","clock",1,"xo",pg("xo",games),10),
  A("XO Ace","Win 10 XO games","star",2,"xo",pg("xo",wins),10),
  A("XO Veteran","Win 25 XO games","medal",3,"xo",pg("xo",wins),25),
- A("XO Strategist","Win 60% of your XO games (20+ played)","percent",3,"xo",pg("xo",games),20,wr("xo",20,.6)),
+ AR("XO Strategist","Win 60% of your XO games (20+ played)","xo",20,.6),
  A("XO Legend","Win 50 XO games","crown",4,"xo",pg("xo",wins),50),
  /* ludo */
  A("Ludo Rookie","Win 1 Ludo game","dice",1,"ludo",pg("ludo",wins),1),
  A("Ludo Regular","Play 10 Ludo games","clock",1,"ludo",pg("ludo",games),10),
  A("Ludo Ace","Win 10 Ludo games","star",2,"ludo",pg("ludo",wins),10),
  A("Ludo Veteran","Win 25 Ludo games","medal",3,"ludo",pg("ludo",wins),25),
- A("Dice Master","Win 40% of your Ludo games (15+ played)","percent",3,"ludo",pg("ludo",games),15,wr("ludo",15,.4)),
+ AR("Dice Master","Win 40% of your Ludo games (15+ played)","ludo",15,.4),
  A("Ludo Legend","Win 50 Ludo games","crown",4,"ludo",pg("ludo",wins),50),
  /* sudoku */
  A("Sudoku Rookie","Win 1 Sudoku race","grid",1,"sudoku",pg("sudoku",wins),1),
  A("Sudoku Regular","Play 10 Sudoku races","clock",1,"sudoku",pg("sudoku",games),10),
  A("Sudoku Ace","Win 10 Sudoku races","star",2,"sudoku",pg("sudoku",wins),10),
  A("Sudoku Veteran","Win 25 Sudoku races","medal",3,"sudoku",pg("sudoku",wins),25),
- A("Speed Solver","Win 60% of your Sudoku races (15+ played)","percent",3,"sudoku",pg("sudoku",games),15,wr("sudoku",15,.6)),
+ AR("Speed Solver","Win 60% of your Sudoku races (15+ played)","sudoku",15,.6),
  A("Puzzle Machine","Score 150 points in Sudoku","bolt",4,"sudoku",pg("sudoku",pts),150),
  /* tawla */
  A("Tawla Rookie","Win 1 Tawla game","board",1,"tawla",pg("tawla",wins),1),
  A("Tawla Regular","Play 10 Tawla games","clock",1,"tawla",pg("tawla",games),10),
  A("Tawla Ace","Win 10 Tawla games","star",2,"tawla",pg("tawla",wins),10),
  A("Tawla Veteran","Win 25 Tawla games","medal",3,"tawla",pg("tawla",wins),25),
- A("Board Shark","Win 60% of your Tawla games (15+ played)","percent",3,"tawla",pg("tawla",games),15,wr("tawla",15,.6)),
+ AR("Board Shark","Win 60% of your Tawla games (15+ played)","tawla",15,.6),
  A("Tawla Grandmaster","Score 300 points in Tawla","crown",4,"tawla",pg("tawla",pts),300),
  /* blackjack */
  A("Blackjack Rookie","Win 1 Blackjack round online","dice",1,"blackjack",pg("blackjack",wins),1),
  A("Card Regular","Play 10 Blackjack rounds online","clock",1,"blackjack",pg("blackjack",games),10),
  A("Card Sharp","Win 10 Blackjack rounds","star",2,"blackjack",pg("blackjack",wins),10),
  A("High Roller","Win 30 Blackjack rounds","medal",3,"blackjack",pg("blackjack",wins),30),
- A("House Beater","Win 55% of your Blackjack rounds (20+ played)","percent",3,"blackjack",pg("blackjack",games),20,wr("blackjack",20,.55)),
+ AR("House Beater","Win 55% of your Blackjack rounds (20+ played)","blackjack",20,.55),
  A("Blackjack Legend","Score 100 points in Blackjack","crown",4,"blackjack",pg("blackjack",pts),100),
  /* snakes & ladders (counters: cb comeback wins, ch clean-hands wins, dg blocked bites, st stolen cards, tp sprung traps, ih survival wins) */
  A("Ladder Rookie","Win 1 Snakes & Ladders game online","dice",1,"snake",pg("snake",wins),1),
  A("Ladder Regular","Play 10 Snakes & Ladders games online","clock",1,"snake",pg("snake",games),10),
  A("Ladder Climber","Win 10 Snakes & Ladders games","star",2,"snake",pg("snake",wins),10),
  A("Snake Charmer","Win 25 Snakes & Ladders games","medal",3,"snake",pg("snake",wins),25),
- A("Lucky Streak","Win 55% of your Snakes & Ladders games (15+ played)","percent",3,"snake",pg("snake",games),15,wr("snake",15,.55)),
+ AR("Lucky Streak","Win 55% of your Snakes & Ladders games (15+ played)","snake",15,.55),
  A("Legendary Comeback","Win after trailing the leader by 40+ squares","flame",3,"snake",pg("snake",function(x){return x.cb;}),1),
  A("Clean Hands","Win without playing a card or using a ward","check",2,"snake",pg("snake",function(x){return x.ch;}),1),
  A("Snake Dodger","Block 10 snake bites in total","shield",2,"snake",pg("snake",function(x){return x.dg;}),10),
@@ -202,7 +205,7 @@ P.state=function(t,s){return P.ACH.map(function(b){var on=!!b[2](t,s),c=Math.min
 P.top=function(st,n){return st.filter(function(x){return x.on;}).sort(function(a,b){return b.b[5].tr-a.b[5].tr;}).slice(0,n);};
 P.card=function(x){var b=x.b,m=b[5],r=P.RAR[m.tr];
   return'<div class="ach'+(x.on?' on':'')+'" style="--rc:'+r.rgb+'"><span class="ach-ic">'+P.ic(m.ic)+'</span><div class="ach-tx"><b>'+b[0]+'</b><small>'+b[1]+'</small>'+
-    (x.on?'':'<i class="ol-pb"><i style="width:'+Math.round(x.c/b[4]*100)+'%"></i></i><em class="ol-of">'+x.c+' / '+b[4]+'</em>')+'</div><span class="ach-r">'+r.n+'</span></div>';};
+    (x.on?'':'<i class="ol-pb"><i style="width:'+Math.round(x.c/b[4]*100)+'%"></i></i><em class="ol-of">'+x.c+(b[5].u||'')+' / '+b[4]+(b[5].u||'')+'</em>')+'</div><span class="ach-r">'+r.n+'</span></div>';};
 P.chip=function(x){var b=x.b,m=b[5];return'<span class="ach-chip" style="--rc:'+P.RAR[m.tr].rgb+'" title="'+b[1]+'">'+P.ic(m.ic)+b[0]+'</span>';};
 P.tile=function(x){var b=x.b,m=b[5],r=P.RAR[m.tr];return'<div class="ach-st" style="--rc:'+r.rgb+'" title="'+b[1]+'"><span class="ach-ic">'+P.ic(m.ic)+'</span><b>'+b[0]+'</b><small>'+r.n+'</small></div>';};
 
