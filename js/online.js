@@ -242,7 +242,7 @@ function bk(id){return BD[BDG[id]]?BDG[id]:"";}
 function bdg(id){var k=bk(id);return k?window.PPB.pill(k):"";}
 function nmu(id,name){var k=bk(id);return'<span class="ol-nm'+(k?' t-'+k:'')+'" dir="auto">'+e(name)+'</span>'+bdg(id);}
 function nm(p){return nmu(p.uid,p.name);}
-function loadB(){return db.ref("badges").once("value").then(function(s){BDG=s.val()||{};},function(){});}
+var bAt=0;function loadB(){if(bAt&&Date.now()-bAt<30000)return Promise.resolve();return db.ref("badges").once("value").then(function(s){BDG=s.val()||{};bAt=Date.now();},function(){});}
 function grantCoins(id){if(!isAdmin())return;var el=document.getElementById("gc_"+id),n=el?Math.floor(Number((el.value||"").replace(/[^\d]/g,""))):0;
   if(!(n>0)||n>1000000000){T("Enter a valid amount");return;}
   var me=U();db.ref("inbox/"+id+"/adm_"+Date.now()+"_"+Math.floor(Math.random()*1e6)).set({a:n,r:"admin_grant",f:me.uid,t:Date.now()}).then(function(){T(n.toLocaleString("en-US")+" coins sent");if(el)el.value="";}).catch(function(){T("No permission. Publish the new Firebase Rules");});}
@@ -314,10 +314,15 @@ function me(){var u=U();return'<div class="ol-me">'+(u.photoURL?'<img class="'+(
 var synced=false;
 var sTry=0;
 function stats(){var u=U();vw="stats";
-  db.ref("admins").once("value").then(function(a){ADM=a.exists()?a.val():false;},function(){ADM=null;}).then(function(){return db.ref("users/"+u.uid+"/stats").once("value");}).then(function(s){
+  if(window.OLX&&OLX.warm)OLX.warm();
+  Promise.all([
+    db.ref("admins").once("value").then(function(a){ADM=a.exists()?a.val():false;},function(){ADM=null;}),
+    db.ref("users/"+u.uid+"/stats").once("value"),
+    loadB()
+  ]).then(function(r){var s=r[1];
     var v=s.val()||{};
     var go=function(){if(vw!=="stats")return;OLX.me({v:v,adm:isAdmin(),claim:canClaim(),inRoom:!!code});};
-    if(window.OLX&&OLX.me){sTry=0;if(!synced){synced=true;syncLB(go);}else go();}
+    if(window.OLX&&OLX.me){sTry=0;if(!synced){synced=true;syncLB();}go();}
     else{shell('<div class="ol-w">Loading...</div>',{t:"Account",g:"base"});if(++sTry<12)setTimeout(function(){if(vw==="stats")stats();},400);}
   }).catch(function(){T("Couldn\'t load your stats");});}
 /* Sync Ranking (admin): copies every player's points from users to lb in one go, without touching monthly points */
@@ -440,23 +445,23 @@ window.addEventListener("popstate",function(){if(!ov)return;hist=false;
   if(inRoom&&playing){pushH();T("A game is running. Use the back button at the top to leave");return;}
   OL.exit();});
 document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&ov)OL.up();});
-function ensure(go){
+function ensure(go,nowait){
   if(!U()){T("Sign in with Google first");return;}
-  var run=function(){var fresh=!ov;if(fresh){sy=window.pageYOffset||0;document.body.classList.add("ol-open");}root();if(fresh)pushH();loadB().then(go);};
+  var run=function(){var fresh=!ov;if(fresh){sy=window.pageYOffset||0;document.body.classList.add("ol-open");}root();if(fresh)pushH();if(nowait)go();else loadB().then(go);};
   if(db)return run();
   if(window.firebase&&firebase.database){db=firebase.database();return run();}
   var s=document.createElement("script");s.src=SDK+"firebase-database-compat.js";
   s.onload=function(){db=firebase.database();run();};s.onerror=function(){T("Could not load online mode. Check your connection");};document.head.appendChild(s);
 }
 function open(k){mk=k||"flags";ensure(function(){menu(mk);});}
-function account(){mk=null;ensure(stats);}
+function account(){mk=null;ensure(function(){vw="stats";shell('<div class="ol-w ol-skel">Loading...</div>',{t:"Account",g:"base"});stats();},true);}
 window.OL={test:function(){if(window.OLT)return OLT.run();var s=document.createElement("script");s.src="js/online-test.js?v=2";s.onload=function(){OLT.run();};s.onerror=function(){T("Could not load the system check");};document.head.appendChild(s);},mk:mkRoom,nmu:nmu,bdg:bdg,badge:setBadge,uq:function(v){uq=v;un=30;uDraw();},us:function(v){us=v;un=30;uDraw();},uf:function(v){uf=v;un=30;uDraw();},ut:function(v){ut=v;un=30;uDraw();},um:function(){un+=30;uDraw();},uo:function(id){uo=(uo===id?null:id);uDraw();var el=document.getElementById("us_"+id);if(uo&&el&&el.scrollIntoView)el.scrollIntoView({block:"nearest",behavior:"smooth"});},gp:function(id,n){var el=document.getElementById("gc_"+id);if(el)el.value=n;grantCoins(id);},ucp:function(id){try{navigator.clipboard.writeText(id).then(function(){T("ID copied");});}catch(x){T(id);}},grant:grantCoins,shell:shell,users:users,syncAll:syncAll,claim:claim,open:open,account:account,wallet:function(){ensure(function(){loadWallet(function(){SHKUI.render();});});},create:create,join:join,start:start,mark:mark,hint:hint,next:next,buzz:buzz,copy:copy,exit:exit,up:up,back:up,stats:stats,opt:opt,shuffle:shuffle,fin:endNow,
   prof:function(id,fb){if(!fb&&S){var P=S.players||{};Object.keys(P).forEach(function(k){if(P[k].uid===id)fb={name:P[k].name,photo:P[k].photo};});}if(window.OLX)OLX.prof(id,fb);},rank:function(){if(window.OLX)OLX.go("rank");},queue:function(){if(window.OLX)OLX.queue();},
   sug:function(k){if(!U()){T("Sign in with Google first");return;}if(window.OLX)OLX.sug(k,k?function(){OL.open(k);}:null);},
   rejoin:function(c){ensure(function(){OL.join(c);});},
   signOut:function(){OL.exit();if(window.ppSignOut)window.ppSignOut();},close:function(){if(confirm("Close the room for everyone?"))db.ref("rooms/"+code).remove();}};
 OL.i={db:function(){return db;},e:e,U:U,T:T,IC:IC,IX:IX,bk:bk,nmu:nmu,loadB:loadB,adm:isAdmin,BADGES:BADGES,G:G,META:META,shell:shell,syncLB:syncLB,mkey:mkey,MO:MO,ctx:function(){return{S:S,code:code,role:role};},sv:function(v){vw=v;},mail:mail};
-var lx=document.createElement("script");lx.src="js/online-social.js?v=8";document.head.appendChild(lx);
+var lx=document.createElement("script");lx.src="js/online-social.js?v=9";document.head.appendChild(lx);
 var ls=document.createElement("script");ls.src="js/online-story.js?v=8";document.head.appendChild(ls);var lp=document.createElement("script");lp.src="js/online-plus.js?v=8";document.head.appendChild(lp);var lo=document.createElement("script");lo.src="js/online-xo.js?v=1";document.head.appendChild(lo);var ll=document.createElement("script");ll.src="js/online-ludo.js?v=5";document.head.appendChild(ll);var lsd=document.createElement("script");lsd.src="js/online-sudoku.js?v=1";document.head.appendChild(lsd);var ltw=document.createElement("script");ltw.src="js/online-tawla.js?v=1";document.head.appendChild(ltw);var lsn=document.createElement("script");lsn.src="js/online-snake.js?v=1";document.head.appendChild(lsn);
 var lbh=document.createElement("script");lbh.src="js/blackjack-host.js?v=1";lbh.onload=function(){var lbo=document.createElement("script");lbo.src="js/online-blackjack.js?v=7";document.head.appendChild(lbo);};document.head.appendChild(lbh);
 /* المحفظة (شنكلولو): بنحمّلها مرة واحدة بس، حتى لو auth.js سبقنا */

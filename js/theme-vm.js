@@ -368,7 +368,7 @@
 
   var pages={};[].forEach.call(shell.querySelectorAll(".pp-page"),function(p){pages[p.getAttribute("data-page")]=p;});
   var navEl=shell.querySelector(".pp-nav"),orb=shell.querySelector(".pp-orb"),navPath=shell.querySelector(".pp-navpath"),navSh=shell.querySelector(".pp-navsh"),navSvg=shell.querySelector(".pp-navbg");
-  var navCx=null,navRaf=0,NH=70;
+  var navCx=null,navRaf=0,NH=70,pendingMove=false;
   function tabBtn(n){return navEl.querySelector('[data-tab="'+n+'"]');}
   /* البار الأسود بفتحة منحنية تحت الدايرة */
   function pathFor(cx,W){
@@ -383,6 +383,8 @@
   }
   function moveInd(n,anim){
     var b=tabBtn(n);if(!b||!orb)return;
+    if(!navEl.offsetWidth||!b.offsetWidth){pendingMove=true;return;}   /* الهَب مخفي: نستنى لما يظهر ونرسم صح */
+    pendingMove=false;
     var cx=b.offsetLeft+b.offsetWidth/2,ico=b.querySelector(".ico");
     var html='<span class="oi">'+(ico&&!ico.querySelector("img")?ico.innerHTML:"")+'</span>';
     if(orb.getAttribute("data-t")!==n){orb.innerHTML=html;orb.setAttribute("data-t",n);var oi=orb.firstChild;if(anim&&oi&&oi.animate&&!RM)oi.animate([{transform:"scale(.4) rotate(-40deg)",opacity:0},{transform:"scale(1) rotate(0)",opacity:1}],{duration:420,delay:120,easing:"cubic-bezier(.3,1.5,.4,1)",fill:"backwards"});}
@@ -497,6 +499,8 @@
     var h=Math.floor(nav-top-40);if(h>200)shell.style.setProperty("--pp-avail",h+"px");
   }
   window.addEventListener("resize",function(){moveInd(cur);fit();});
+  if(window.ResizeObserver){try{new ResizeObserver(function(){if(navEl.offsetWidth)moveInd(cur);}).observe(navEl);}catch(e){}}
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)requestAnimationFrame(function(){moveInd(cur);});});
   window.addEventListener("pageshow",paint);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){moveInd(cur);fit();});
   paint();fit();setTimeout(function(){moveInd(cur);paint();fit();},60);setTimeout(function(){moveInd(cur);fit();},600);

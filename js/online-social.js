@@ -24,7 +24,11 @@ function val(id){var el=document.getElementById(id);return el?String(el.value||"
 function alive(){return!!document.getElementById("olRoot");}
 function ico(s){return s.indexOf("o:")===0?IC(s.slice(2),1):IX(s.slice(2));}
 function dstr(t){try{return new Date(t).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});}catch(x){return"";}}
-function load(cb){I.loadB().then(function(){return D().ref("lb").once("value");}).then(function(s){LB=s.val()||{};cb(LB);},function(){LB=LB||{};T("Couldn't load the ranking. Make sure the Rules are published");cb(LB);});}
+var LBp=null;
+function fetchLB(){return I.loadB().then(function(){return D().ref("lb").once("value");}).then(function(s){LB=s.val()||{};return LB;},function(){LB=LB||{};T("Couldn't load the ranking. Make sure the Rules are published");return LB;});}
+/* warm(): بنبدأ تحميل الترتيب بالتوازي مع باقي بيانات الحساب، وأول load() بياخد نتيجته */
+function warm(){if(!LBp){LBp=fetchLB();setTimeout(function(){LBp=null;},10000);}}
+function load(cb){var p=LBp||fetchLB();LBp=null;p.then(cb);}
 function list(f){return Object.keys(LB||{}).map(function(id){var x=LB[id]||{},a=agg(x);return{id:id,x:x,n:x.n||"Player",p:x.p||"",a:a,v:f==="all"?a.pts:gp(x,f)};}).filter(function(r){return r.a.games>0||r.v!==0;}).sort(function(a,b){return b.v-a.v||b.a.wins-a.a.wins||(a.n<b.n?-1:1);});}
 function accOf(a){var t=a.right+a.wrong;return t?Math.round(a.right/t*100):null;}
 
@@ -119,6 +123,7 @@ function vmMe(c){
 function me(o){o=o||{};I.sv("stats");curTab="me";
   load(function(){if(!alive())return;
     var u=U(),v=o.v||{},t={games:0,wins:0,right:0,wrong:0,pts:0,s:v};
+    LB=LB||{};if(Object.keys(v).length){var m0=LB[u.uid]||(LB[u.uid]={n:u.displayName||"Player",p:u.photoURL||""});m0.s=v;}
     GK.forEach(function(k){var y=v[k]||{};t.games+=y.games||0;t.wins+=y.wins||0;t.right+=y.right||0;t.wrong+=y.wrong||0;t.pts+=y.pts||0;});
     var R=list("all"),ix=R.map(function(r){return r.id;}).indexOf(u.uid),acc=accOf(t),name=u.displayName||"Player",
         mine=holders().filter(function(x){return x.h&&x.h.id===u.uid;}).map(function(x){return x.t;});
@@ -564,7 +569,7 @@ var css=':root{--x-grid:'+SVG("<path d=\'M9 4v16M15 4v16M4 9h16M4 15h16\'/>")+';
 `;
 var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
-window.OLX={cur:function(){return curTab;},tabs:tabs,pre:pre,go:go,me:me,rank:rank,rf:function(f){rank(f);},awards:awards,friends:friends,prof:prof,close:close,
+window.OLX={warm:warm,cur:function(){return curTab;},tabs:tabs,pre:pre,go:go,me:me,rank:rank,rf:function(f){rank(f);},awards:awards,friends:friends,prof:prof,close:close,
   fadd:fadd,facc:facc,fdec:fdec,fcan:fcan,funf:funf,srch:srch,sug:sug,back:back,fg:fg,fp:fp,rm:rm,addc:addc,adds:adds,seg:seg,send:send,
   queue:queue,qdec:qdec,qcopy:qcopy,af:af};
 })();
