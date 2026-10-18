@@ -349,7 +349,7 @@
         '<button type="button" class="pp-s pp-btn g" data-off="1" style="--i:5">اعرف أكتر</button>'+
       '</div></div>';
 
-  var nav='<nav class="pp-nav" aria-label="التنقل"><svg class="pp-navbg" aria-hidden="true"><path class="pp-navpath"/></svg><span class="pp-orb" aria-hidden="true"></span>'+
+  var nav='<nav class="pp-nav" aria-label="التنقل"><svg class="pp-navbg" aria-hidden="true"><path class="pp-navsh"/><path class="pp-navpath"/></svg><span class="pp-orb" aria-hidden="true"></span>'+
     [["home","الرئيسية"],["football","كورة"],["games","ألعاب"],["soon","قريباً"],["me","حسابي"]].map(function(t,i){
       return '<button type="button" data-tab="'+t[0]+'"'+(i===0?' class="on" aria-current="page"':'')+'><span class="ico">'+IC[t[0]]+'</span><span>'+t[1]+'</span></button>';
     }).join("")+'</nav>';
@@ -367,7 +367,7 @@
   }
 
   var pages={};[].forEach.call(shell.querySelectorAll(".pp-page"),function(p){pages[p.getAttribute("data-page")]=p;});
-  var navEl=shell.querySelector(".pp-nav"),orb=shell.querySelector(".pp-orb"),navPath=shell.querySelector(".pp-navpath"),navSvg=shell.querySelector(".pp-navbg");
+  var navEl=shell.querySelector(".pp-nav"),orb=shell.querySelector(".pp-orb"),navPath=shell.querySelector(".pp-navpath"),navSh=shell.querySelector(".pp-navsh"),navSvg=shell.querySelector(".pp-navbg");
   var navCx=null,navRaf=0,NH=70;
   function tabBtn(n){return navEl.querySelector('[data-tab="'+n+'"]');}
   /* البار الأسود بفتحة منحنية تحت الدايرة */
@@ -378,7 +378,7 @@
   }
   function draw(cx){
     navCx=cx;var W=navEl.offsetWidth||360;
-    navSvg.setAttribute("viewBox","0 0 "+W+" "+NH);navPath.setAttribute("d",pathFor(cx,W));
+    navSvg.setAttribute("viewBox","0 0 "+W+" "+NH);var pd=pathFor(cx,W);navPath.setAttribute("d",pd);navSh.setAttribute("d",pd);
     orb.style.transform="translate3d("+(cx-27)+"px,0,0)";
   }
   function moveInd(n,anim){
@@ -388,7 +388,7 @@
     if(orb.getAttribute("data-t")!==n){orb.innerHTML=html;orb.setAttribute("data-t",n);var oi=orb.firstChild;if(anim&&oi&&oi.animate&&!RM)oi.animate([{transform:"scale(.4) rotate(-40deg)",opacity:0},{transform:"scale(1) rotate(0)",opacity:1}],{duration:420,delay:120,easing:"cubic-bezier(.3,1.5,.4,1)",fill:"backwards"});}
     cancelAnimationFrame(navRaf);
     if(!anim||navCx==null||RM){draw(cx);return;}
-    var from=navCx,t0=performance.now(),D=560;
+    var from=navCx,t0=performance.now(),D=360;
     (function step(now){
       var k=Math.min(1,(now-t0)/D),e=1+2.2*Math.pow(k-1,3)+1.2*Math.pow(k-1,2);
       draw(from+(cx-from)*e);
