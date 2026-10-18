@@ -261,7 +261,7 @@
   var offName=offT?offT.textContent.trim():"القصص",offSub=offS?offS.textContent.trim():"مغلق مؤقتاً";
 
   var home=
-    '<section class="pp-page" data-page="home">'+
+    '<div class="pp-page" role="region" data-page="home">'+
       '<div class="pp-s pp-greet" style="--i:0"><small class="pp-kick" dir="ltr">TONIGHT</small><h1>تحب تلعب إيه؟</h1></div>'+
       '<div class="pp-s" style="--i:1" id="ppHeroHost"></div>'+
       '<form class="pp-s pp-join" id="ppJoin" style="--i:2" autocomplete="off">'+IC.key+
@@ -271,10 +271,10 @@
       '<div class="pp-s pp-rh" style="--i:7"><h3>قريباً</h3><a type="button" data-go="soon">عرض الكل</a></div>'+
       '<div class="pp-s pp-row" style="--i:8"><button type="button" class="pp-tile lock" data-off="1" style="--g1:#222226;--g2:#0a0a0c"><span class="ic" aria-hidden="true">'+IC.lock+'</span>'+
         '<span class="t">'+esc(offName)+'</span><span class="e" dir="ltr">CASE FILES</span><span class="st">'+esc(offSub)+'</span></button></div>'+
-    '</section>';
+    '</div>';
 
   var fb=
-    '<section class="pp-page" data-page="football" hidden>'+
+    '<div class="pp-page" role="region" data-page="football" hidden>'+
       '<div class="pp-s pp-fb-head" style="--i:0"><small class="pp-kick" dir="ltr">FOOTBALL</small><h1>كورة</h1><p>ألعاب بأسامي لاعبين وأندية، من كلمة السر لحد عقود الانتقالات.</p></div>'+
       '<div class="pp-fb-list">'+balls.map(function(c,i){
         return '<button type="button" class="pp-frow pp-s" data-g="'+esc(c.g)+'" style="--i:'+(i+1)+'">'+
@@ -282,7 +282,7 @@
           '<span class="tx"><span class="t">'+esc(c.ar)+'</span>'+(c.en?'<span class="e" dir="ltr">'+esc(c.en)+'</span>':'')+
           '<span class="d">'+esc(c.ds)+'</span><span class="m">'+(c.online?'<i class="pp-dot"></i>':'')+'<span>'+[c.online?'أونلاين':'',c.off?'أوفلاين':'',c.pc?'كمبيوتر':''].filter(Boolean).join(' · ')+'</span></span></span>'+
           '<span class="ic" aria-hidden="true">'+c.art+'</span></button>';
-      }).join("")+'</div></section>';
+      }).join("")+'</div></div>';
 
   /* أرفف الألعاب حسب النوع (مفيش فلاتر). لعبة جديدة مش في أي رف بتروح رف «ألعاب تانية» لوحدها */
   var SHELVES=[
@@ -295,7 +295,7 @@
   if(rest.length)SHELVES.push({t:"ألعاب تانية",s:"",lay:"big",list:rest});
   var gi=1;
   var gm=
-    '<section class="pp-page" data-page="games" hidden>'+
+    '<div class="pp-page" role="region" data-page="games" hidden>'+
       '<div class="pp-s pp-g-head" style="--i:0"><small class="pp-kick" dir="ltr">GAMES</small><h1>ألعاب</h1></div>'+
       SHELVES.filter(function(sh){return sh.list&&sh.list.length;}).map(function(sh){
         var h='<div class="pp-s pp-shelf-h" style="--i:'+(gi++)+'"><div><h3>'+esc(sh.t)+'</h3>'+(sh.s?'<small>'+esc(sh.s)+'</small>':'')+'</div><span class="ln"></span></div>';
@@ -304,10 +304,10 @@
         }).join("")+'</div>';
         return h+body;
       }).join("")+
-    '</section>';
+    '</div>';
 
   var soon=
-    '<section class="pp-page" data-page="soon" hidden>'+
+    '<div class="pp-page" role="region" data-page="soon" hidden>'+
       '<div class="pp-soon">'+
         '<div class="pp-s pp-lock" style="--i:0">'+IC.lock+'</div>'+
         '<small class="pp-s pp-kick" style="--i:1" dir="ltr">COMING SOON</small>'+
@@ -315,7 +315,7 @@
         '<p class="pp-s" style="--i:3">'+esc(offName)+' — '+esc(offSub)+'. بنجهّز حاجة جديدة، ولما تجهز هتلاقيها هنا.</p>'+
         '<div class="pp-s pp-ghosts" style="--i:4"><i class="pp-ghost"></i><i class="pp-ghost"></i><i class="pp-ghost"></i></div>'+
         '<button type="button" class="pp-s pp-btn g" data-off="1" style="--i:5">اعرف أكتر</button>'+
-      '</div></section>';
+      '</div></div>';
 
   var nav='<nav class="pp-nav" aria-label="التنقل"><svg class="pp-navbg" aria-hidden="true"><path class="pp-navpath"/></svg><span class="pp-orb" aria-hidden="true"></span>'+
     [["home","الرئيسية"],["football","كورة"],["games","ألعاب"],["soon","قريباً"],["me","حسابي"]].map(function(t,i){
@@ -375,11 +375,10 @@
     try{if(navigator.vibrate)navigator.vibrate(8);}catch(e){}
     if(RM||!old.animate){old.hidden=true;nu.hidden=false;window.scrollTo(0,0);return;}
     busy=true;
-    var out=old.animate([{opacity:1,transform:"translateX(0) scale(1)"},{opacity:0,transform:"translateX("+(-dir*34)+"px) scale(.985)"}],{duration:200,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"});
+    var out=old.animate([{opacity:1},{opacity:0}],{duration:130,easing:"ease-out",fill:"forwards"});
     function enter(){
       old.hidden=true;out.cancel();
       nu.hidden=false;window.scrollTo(0,0);
-      nu.animate([{opacity:0,transform:"translateX("+(dir*44)+"px) scale(.985)"},{opacity:1,transform:"translateX(0) scale(1)"}],{duration:460,easing:"cubic-bezier(.16,1,.3,1)"});
       busy=false;
     }
     out.onfinish=enter;out.oncancel=function(){if(busy)enter();};
