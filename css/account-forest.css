@@ -1,0 +1,93 @@
+/* =========================================================
+   صفحة الحساب / اللاعب — ثيم FOREST (Burnham #00221C)
+   نفس لغة الرئيسية: قطع منحوتة + حفر (wells) + أخضر غامق بدل الدهبي.
+   كله متحصّر تحت الثيم الغامق فثيم فانيليا مش بيتأثر.
+   عايز تغيّر درجة الأخضر؟ غيّر --fa-* اللي تحت بس.
+========================================================= */
+html:not([data-theme="vm"]) #olRoot[data-g="base"]{
+  --fa-bg:#00221C;--fa-bg2:#010f0c;
+  --fa-plate-t:#0c2c24;--fa-plate-b:#061712;
+  --fa-well:#020a08;--fa-edge:#1b5a47;--fa-deep:#000;
+  --fa-btn-t:#2b8a6c;--fa-btn-b:#165f4a;--fa-btn-d:#062f24;--fa-on:#e9f8f1;
+  --fa-acc:#58b498;
+  --bg:#01120e;--bgr:1,18,14;--bg0:#010d0a;
+  --wash:radial-gradient(120% 55% at 50% -8%,#0a3a2f 0%,rgba(0,34,28,.55) 45%,transparent 75%),linear-gradient(#00221C,#010d0a 70%);
+  --card:#071f19;--cardr:7,31,25;--card2:#0a2a22;--h1:#0b2c24;--h2:#061812;
+  --ln:#12392d;--ln2:#1d5642;--mu:#86aa9b;--mu2:#5f8577;
+  --ink:#e8f3ee;--ink2:#f2fbf6;--ac:var(--fa-acc);--acr:88,180,152;--acl:#2c6a58;
+  --on:#031510;--gr:var(--fa-btn-b);--gon:var(--fa-on);
+}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-bar{background:rgba(1,18,14,.9);border-bottom-color:#0f3328}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-back{background:linear-gradient(180deg,var(--fa-plate-t),var(--fa-plate-b));border:0;color:var(--ink);box-shadow:0 3px 0 var(--fa-deep),inset 0 1.5px 0 rgba(190,255,230,.14),inset 0 0 0 2px var(--fa-edge)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-back:active{transform:translateY(2px);box-shadow:0 1px 0 var(--fa-deep),inset 0 0 0 2px var(--fa-edge)}
+
+/* ---------- التابات: بار منحوت + زرار نشط أخضر غامق ---------- */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ox-tabs{gap:6px;padding:6px;border-radius:20px;border:0;background:#050c0a;box-shadow:inset 0 3px 7px rgba(0,0,0,.75),inset 0 0 0 2px #0f2a22,0 1px 0 rgba(190,255,230,.07)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ox-tab{border-radius:14px;color:#6f9486;padding:9px 2px 8px;transition:color .2s,transform .12s}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ox-tab.on{background:linear-gradient(180deg,var(--fa-btn-t),var(--fa-btn-b));color:var(--fa-on);box-shadow:0 4px 0 var(--fa-btn-d),inset 0 2px 0 rgba(190,255,230,.28),inset 0 -3px 0 rgba(0,0,0,.25);transform:translateY(-1px)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ox-tab:active{transform:translateY(1px)}
+
+/* ---------- سطر الثيم + المحفظة ---------- */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .vm-prow{margin-bottom:14px}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .wl-ico.sm{border:0;background:linear-gradient(180deg,var(--fa-plate-t),var(--fa-plate-b));color:var(--fa-acc);box-shadow:0 3px 0 var(--fa-deep),inset 0 1.5px 0 rgba(190,255,230,.14),inset 0 0 0 2px var(--fa-edge)}
+
+/* ---------- كارت اللاعب: «بطاقة هوية» منحوتة ---------- */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-page{border:0;border-radius:26px;background:linear-gradient(180deg,var(--fa-plate-t) 0%,var(--fa-plate-b) 100%);overflow:visible;
+  box-shadow:0 7px 0 var(--fa-deep),0 16px 24px rgba(0,0,0,.4),inset 0 2px 0 rgba(190,255,230,.14),inset 0 0 0 2px var(--fa-edge)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-page:before{inset:auto;top:0;left:50%;width:74px;height:6px;border:0;border-radius:0 0 8px 8px;transform:translateX(-50%);background:var(--fa-edge);opacity:.9}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-body{flex-direction:column;text-align:center;gap:12px;padding:30px 16px 18px}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-photo .ol-av,html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-photo .ol-ph{width:96px;height:96px;border:0;box-shadow:0 0 0 3px #04120d,0 0 0 5px var(--fa-edge),0 5px 0 5px var(--fa-deep)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-seal{bottom:-12px;padding:3px 12px;border:0;background:linear-gradient(180deg,var(--fa-btn-t),var(--fa-btn-b));color:var(--fa-on);box-shadow:0 3px 0 var(--fa-btn-d),0 0 0 2px #04120d}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-f{width:100%;margin-top:6px}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-name{font-size:22px;color:var(--ink2);text-shadow:0 2px 0 rgba(0,0,0,.5)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-mail{color:var(--mu2)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-tt{display:inline-block;margin-top:9px;padding:4px 12px;border-radius:99px;background:var(--fa-well);color:var(--fa-acc);box-shadow:inset 0 2px 4px rgba(0,0,0,.7),0 0 0 1.5px #10261e}
+
+/* الأرقام: حفر منفصلة بدل جدول */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k{border-top:0;gap:8px;padding:0 12px 14px;grid-template-columns:1.3fr 1fr 1fr 1fr}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k>div{padding:11px 2px 9px;border-radius:15px;background:var(--fa-well);box-shadow:inset 0 3px 6px rgba(0,0,0,.7),inset 0 -1px 0 rgba(190,255,230,.08),0 0 0 1.5px #0f251d}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k>div+div{border-inline-start:0}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k b{color:var(--ink)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k>div:first-child b{color:var(--fa-acc)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k label{color:var(--mu2)}
+
+/* المستوى */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-lv{margin:0 12px 14px;padding:11px 12px;border-radius:18px;background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1.5px #0f2a22}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-lv-b{border:0;background:linear-gradient(180deg,var(--fa-btn-t),var(--fa-btn-b));color:var(--fa-on);box-shadow:0 3px 0 var(--fa-btn-d),inset 0 2px 0 rgba(190,255,230,.25)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-lv-b small,html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-lv-b b{color:var(--fa-on)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-lv-r b{color:var(--ink2)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-lv-r em{color:var(--mu)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-pb{height:9px;border-radius:9px;background:var(--fa-well);box-shadow:inset 0 2px 4px rgba(0,0,0,.8)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-pb i{background:linear-gradient(180deg,#46b08f,#1c7a60);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+
+/* الشريط السفلي */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-strip{margin:0 12px 14px;border-top:0;border-radius:16px;background:var(--fa-well);box-shadow:inset 0 3px 6px rgba(0,0,0,.7),0 0 0 1.5px #0f251d;overflow:hidden}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-strip b{color:var(--fa-acc)}
+
+/* ---------- العناوين ---------- */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-h{margin:28px 2px 12px;color:var(--ink2)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-h:before{width:9px;height:9px;border-radius:50%;background:var(--fa-acc);box-shadow:0 0 0 3px #04120d,0 0 0 4.5px var(--fa-edge)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-h b{font-size:16px;color:var(--ink2)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-h em{color:var(--mu2)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-tag{border:0;background:var(--fa-well);color:var(--fa-acc);box-shadow:inset 0 2px 4px rgba(0,0,0,.7),0 0 0 1.5px #10261e}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-h .ac-more{color:var(--fa-acc)}
+
+/* ---------- كروت: ألعاب / هايلايت / أدمن / مجتمع ---------- */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] :is(.pp-visa,.ac-sq,.ac-tile,.ac-next,.pp-hl>div,.ac-g,.bd2,.ox-q){border:0;border-radius:18px;background:linear-gradient(180deg,var(--fa-plate-t),var(--fa-plate-b));box-shadow:0 4px 0 var(--fa-deep),inset 0 1.5px 0 rgba(190,255,230,.1),inset 0 0 0 1.5px #123a2e}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-next{border-style:solid}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] :is(.ac-sq,.ac-tile):active{transform:translateY(3px);box-shadow:0 1px 0 var(--fa-deep),inset 0 0 0 1.5px #123a2e}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-visa:before{height:4px;opacity:.9}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] :is(.ac-sq .ol-i,.ac-tile>.ol-i){color:var(--fa-acc)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ac-out{border:0;background:var(--fa-well);color:#e58a85;box-shadow:inset 0 3px 6px rgba(0,0,0,.7),0 0 0 1.5px #3a1b1a}
+
+/* ---------- أزرار عامة في الصفحات دي ---------- */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-b:not(.o):not(.r):not(.g),html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-b.g{background:linear-gradient(180deg,var(--fa-btn-t),var(--fa-btn-b));color:var(--fa-on);border:0;box-shadow:0 5px 0 var(--fa-btn-d),inset 0 2px 0 rgba(190,255,230,.26),inset 0 -3px 0 rgba(0,0,0,.25)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-b:not(.o):not(.r):not(.g):active,html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-b.g:active{transform:translateY(4px);box-shadow:0 1px 0 var(--fa-btn-d)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ol-b.o{border:0;background:linear-gradient(180deg,var(--fa-plate-t),var(--fa-plate-b));color:var(--fa-acc);box-shadow:0 4px 0 var(--fa-deep),inset 0 0 0 1.5px var(--fa-edge)}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ox-chip.on{background:linear-gradient(180deg,var(--fa-btn-t),var(--fa-btn-b));color:var(--fa-on);border-color:transparent}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .ox-chip{border-color:#15402f;background:#07140f}
+
+/* بروفايل لاعب تاني (الـ sheet) بنفس الألوان */
+html:not([data-theme="vm"]) #olSheet{--bg:#01120e;--card:#071f19;--card2:#0a2a22;--h1:#0b2c24;--h2:#061812;--ln:#12392d;--ln2:#1d5642;--mu:#86aa9b;--mu2:#5f8577;--ink:#e8f3ee;--ac:#58b498;--acr:88,180,152;--on:#031510;--gr:#165f4a;--gon:#e9f8f1}
+
+@media (max-width:360px){html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-photo .ol-av,html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-photo .ol-ph{width:84px;height:84px}html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k{gap:6px;padding:0 8px 12px}}

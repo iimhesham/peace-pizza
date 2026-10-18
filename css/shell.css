@@ -13,7 +13,7 @@ html:not([data-theme="vm"]){
   --f-moss:#0f6b4c;--f-olive:#10b981;--f-clay:#74431f;
   --pp-van:#EDF5F0;--pp-sand:#8fdcb9;--pp-mut:#8aa89b;--pp-ink:#050706;
   --pp-line:#16372c;--pp-ease:cubic-bezier(.16,1,.3,1);
-  --pp-gold:linear-gradient(180deg,#43e3a8,#10b981);--pp-gold-s:#4ae0a6;--pp-gold-d:#04684a;
+  --pp-gold:linear-gradient(180deg,#2b8a6c,#165f4a);--pp-gold-s:#5cc3a2;--pp-gold-d:#062f24;--pp-on:#e9f8f1;
   --w1:#040605;--w2:#07100c;--w3:#0a1b14;--w4:#0d2e22;--w5:#0f5a41;--w6:#020403;--w7:#06140e;--wc:#0e6a4b;--wl:#6fe0b3;--wk:#052d21;
   /* قطعة منحوتة جاهزة */
   --plate:linear-gradient(180deg,var(--f-pt),var(--f-pb));
@@ -93,10 +93,10 @@ html:not([data-theme="vm"]) #hub .hm-wallet.__old:active,html:not([data-theme="v
 /* أزرار منحوتة */
 .pp-btn{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 20px;border-radius:15px;
   font:800 15px/1 'Tajawal','IBM Plex Sans Arabic',sans-serif;cursor:pointer;transition:transform .12s,box-shadow .12s;-webkit-tap-highlight-color:transparent}
-.pp-btn.p{background:var(--pp-gold);color:#03160f;box-shadow:0 5px 0 var(--pp-gold-d),0 9px 14px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.7),inset 0 -3px 0 rgba(0,70,48,.3)}
+.pp-btn.p{background:var(--pp-gold);color:var(--pp-on,#e9f8f1);box-shadow:0 5px 0 var(--pp-gold-d),0 9px 14px rgba(0,0,0,.35),inset 0 2px 0 rgba(190,255,230,.28),inset 0 -3px 0 rgba(0,0,0,.25)}
 .pp-btn.g{background:var(--plate);color:var(--pp-van);box-shadow:var(--plate-sh)}
 .pp-btn:active{transform:translateY(4px)}
-.pp-btn.p:active{box-shadow:0 1px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.5)}
+.pp-btn.p:active{box-shadow:0 1px 0 var(--pp-gold-d),inset 0 2px 0 rgba(190,255,230,.18)}
 .pp-btn.g:active{box-shadow:var(--plate-sh-p)}
 
 /* ---------- الرئيسية (شاشة واحدة، من غير ألعاب) ---------- */
@@ -110,13 +110,13 @@ html:not([data-theme="vm"]) #hub .hm-wallet.__old:active,html:not([data-theme="v
 @media (max-height:700px){.pp-emblem .rings{opacity:.9}}
 
 .pp-slab{appearance:none;border:0;flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;height:64px;padding:0 20px 0 14px;border-radius:20px;cursor:pointer;text-align:start;
-  background:var(--pp-gold);color:#03160f;-webkit-tap-highlight-color:transparent;transition:transform .12s,box-shadow .12s;
-  box-shadow:0 6px 0 var(--pp-gold-d),0 12px 18px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.75),inset 0 -4px 0 rgba(0,70,48,.28)}
-.pp-slab:active{transform:translateY(5px);box-shadow:0 1px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.5)}
+  background:var(--pp-gold);color:var(--pp-on,#e9f8f1);-webkit-tap-highlight-color:transparent;transition:transform .12s,box-shadow .12s;
+  box-shadow:0 6px 0 var(--pp-gold-d),0 12px 18px rgba(0,0,0,.35),inset 0 2px 0 rgba(190,255,230,.3),inset 0 -4px 0 rgba(0,0,0,.25)}
+.pp-slab:active{transform:translateY(5px);box-shadow:0 1px 0 var(--pp-gold-d),inset 0 2px 0 rgba(190,255,230,.18)}
 .pp-slab .tx{display:flex;flex-direction:column;gap:4px}
 .pp-slab b{font:900 22px/1 'Tajawal','IBM Plex Sans Arabic',sans-serif}
-.pp-slab small{font:700 11.5px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:rgba(3,22,15,.72)}
-.pp-slab .go{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#0a0f0c;color:var(--pp-sand);box-shadow:inset 0 3px 5px rgba(0,0,0,.6),0 1.5px 0 rgba(255,255,255,.55)}
+.pp-slab small{font:700 11.5px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:rgba(233,248,241,.72)}
+.pp-slab .go{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#0a0f0c;color:var(--pp-sand);box-shadow:inset 0 3px 5px rgba(0,0,0,.6),0 1.5px 0 rgba(190,255,230,.2)}
 
 .pp-join{display:flex;align-items:center;gap:12px;flex:none;height:78px;padding:0 12px 0 14px;border-radius:22px;background:var(--plate);box-shadow:var(--plate-sh)}
 .pp-join>svg{flex:none;color:var(--pp-sand)}
@@ -128,8 +128,8 @@ html:not([data-theme="vm"]) #hub .hm-wallet.__old:active,html:not([data-theme="v
 .pp-cells i:empty::before{content:"";width:6px;height:6px;border-radius:50%;background:rgba(237,245,240,.18)}
 .pp-cells i.on{box-shadow:inset 0 3px 5px rgba(0,0,0,.7),0 0 0 2px var(--pp-sand)}
 .pp-join input{position:absolute;inset:0;width:100%;height:100%!important;min-height:0!important;opacity:0;border:0!important;padding:0!important;margin:0;font-size:16px;direction:ltr;background:none!important;box-shadow:none!important}
-.pp-join button{appearance:none;border:0;flex:none;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;cursor:pointer;background:var(--pp-gold);color:#03160f;
-  box-shadow:0 4px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.7);transition:transform .12s,box-shadow .12s}
+.pp-join button{appearance:none;border:0;flex:none;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;cursor:pointer;background:var(--pp-gold);color:var(--pp-on,#e9f8f1);
+  box-shadow:0 4px 0 var(--pp-gold-d),inset 0 2px 0 rgba(190,255,230,.28);transition:transform .12s,box-shadow .12s}
 .pp-join button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pp-gold-d)}
 
 .pp-stats{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -222,8 +222,8 @@ html:not([data-theme="vm"]) #hub .hm-wallet.__old:active,html:not([data-theme="v
 .pp-navsh{fill:#000;transform:translateY(6px)}
 .pp-navpath{fill:#0a0f0c;stroke:var(--f-edge);stroke-width:2}
 .pp-orb{position:absolute;z-index:2;left:0;top:-17px;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;pointer-events:none;will-change:transform;
-  background:var(--pp-gold);color:#03160f;
-  box-shadow:0 5px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.75),inset 0 -3px 4px rgba(0,70,48,.3),0 0 0 4px #0a0f0c}
+  background:var(--pp-gold);color:var(--pp-on,#e9f8f1);
+  box-shadow:0 5px 0 var(--pp-gold-d),inset 0 2px 0 rgba(190,255,230,.3),inset 0 -3px 4px rgba(0,0,0,.28),0 0 0 4px #0a0f0c}
 .pp-orb .oi{display:grid;place-items:center}
 .pp-orb svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .pp-nav button{appearance:none;border:0;background:none;position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 0 9px;
