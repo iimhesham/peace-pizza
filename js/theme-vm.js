@@ -7,7 +7,7 @@
    الثيم الكلاسيك هو الافتراضي ومفيش حاجة فيه اتغيّرت.
 ========================================================= */
 (function(){
-  var KEY="pp_theme",root=document.documentElement,TC={classic:"#070a14",vm:"#FFEBAF"};
+  var KEY="pp_theme",root=document.documentElement,TC={classic:"#050506",vm:"#FFEBAF"};
 
   function stored(){var t="";try{t=localStorage.getItem(KEY)||"";}catch(e){}return t==="vm"?"vm":"classic";}
   function cur(){return root.getAttribute("data-theme")==="vm"?"vm":"classic";}
@@ -221,8 +221,8 @@
     go:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
     lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.6"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg>'
   };
-  var GRAD={password:["#235a93","#0B2545"],story:["#454b86","#282B4A"],career:["#1a4a7c","#102a4e"],flags:["#2d6199","#0B2545"],xo:["#4b5091","#282B4A"],
-    ludo:["#33489a","#1c2250"],sudoku:["#3a5a8c","#18254a"],tawla:["#51496b","#262947"],blackjack:["#1d4470","#0B2545"],snake:["#3f4585","#1b1f45"]};
+  var GRAD={password:["#2a2a2f","#0a0a0c"],story:["#2c2a30","#0b0a0d"],career:["#272a2e","#0a0b0c"],flags:["#2b2c30","#0a0a0b"],xo:["#2d2b2f","#0b0b0c"],
+    ludo:["#2a2b2f","#0a0a0c"],sudoku:["#2b2a2d","#0b0b0c"],tawla:["#2e2b2a","#0c0a0a"],blackjack:["#282a2e","#0a0b0c"],snake:["#2b2b30","#0a0a0d"]};
 
   /* ---------- نقرا الألعاب من الكروت ---------- */
   function readCards(){
@@ -243,7 +243,7 @@
   var games=readCards();if(!games.length)return;
   var balls=games.filter(function(x){return x.sec==="ball";}),funs=games.filter(function(x){return x.sec!=="ball";});
   function byG(g){for(var i=0;i<games.length;i++)if(games[i].g===g)return games[i];return null;}
-  function gr(g){var c=GRAD[g]||["#235a93","#0B2545"];return'--g1:'+c[0]+';--g2:'+c[1];}
+  function gr(g){var c=GRAD[g]||["#2a2a2f","#0a0a0c"];return'--g1:'+c[0]+';--g2:'+c[1];}
 
   function tile(c,i,note){
     return '<button type="button" class="pp-tile pp-s" data-g="'+esc(c.g)+'" style="'+gr(c.g)+';--i:'+i+'" aria-label="'+esc(c.ar)+'">'+
@@ -267,10 +267,9 @@
       '<form class="pp-s pp-join" id="ppJoin" style="--i:2" autocomplete="off">'+IC.key+
         '<div class="jl"><small>معاك كود غرفة؟</small><input id="ppCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="٠٠٠٠" aria-label="كود الغرفة" dir="ltr"></div>'+
         '<button type="submit" aria-label="ادخل الغرفة">'+IC.go+'</button></form>'+
-      '<div id="ppRecent"></div>'+
       row("كورة","football",balls,3)+row("ألعاب","games",funs,5)+
       '<div class="pp-s pp-rh" style="--i:7"><h3>قريباً</h3><a type="button" data-go="soon">عرض الكل</a></div>'+
-      '<div class="pp-s pp-row" style="--i:8"><button type="button" class="pp-tile lock" data-off="1" style="--g1:#2a2d44;--g2:#12142a"><span class="ic" aria-hidden="true">'+IC.lock+'</span>'+
+      '<div class="pp-s pp-row" style="--i:8"><button type="button" class="pp-tile lock" data-off="1" style="--g1:#222226;--g2:#0a0a0c"><span class="ic" aria-hidden="true">'+IC.lock+'</span>'+
         '<span class="t">'+esc(offName)+'</span><span class="e" dir="ltr">CASE FILES</span><span class="st">'+esc(offSub)+'</span></button></div>'+
     '</section>';
 
@@ -285,15 +284,27 @@
           '<span class="ic" aria-hidden="true">'+c.art+'</span></button>';
       }).join("")+'</div></section>';
 
+  /* أرفف الألعاب حسب النوع (مفيش فلاتر). لعبة جديدة مش في أي رف بتروح رف «ألعاب تانية» لوحدها */
+  var SHELVES=[
+    {t:"طاولة وورق",s:"كلاسيكيات القعدة",gs:["tawla","blackjack"],lay:"big"},
+    {t:"حظ وسباق",s:"كل رمية ممكن تقلب اللعبة",gs:["ludo","snake"],lay:"wide"},
+    {t:"تفكير وألغاز",s:"ركّز وفكّر",gs:["xo","sudoku","flags"],lay:"trio"}
+  ];
+  var placed={};SHELVES.forEach(function(sh){sh.list=sh.gs.map(byG).filter(Boolean);sh.list.forEach(function(c){placed[c.g]=1;});});
+  var rest=funs.filter(function(c){return!placed[c.g];});
+  if(rest.length)SHELVES.push({t:"ألعاب تانية",s:"",lay:"big",list:rest});
+  var gi=1;
   var gm=
     '<section class="pp-page" data-page="games" hidden>'+
       '<div class="pp-s pp-g-head" style="--i:0"><small class="pp-kick" dir="ltr">GAMES</small><h1>ألعاب</h1></div>'+
-      '<div class="pp-s pp-chips" style="--i:1" role="tablist"><button type="button" class="pp-chip on" data-f="all">الكل</button><button type="button" class="pp-chip" data-f="online">أونلاين</button>'+
-        '<button type="button" class="pp-chip" data-f="pc">ضد الكمبيوتر</button><button type="button" class="pp-chip" data-f="off">أوفلاين</button></div>'+
-      '<div class="pp-grid" id="ppGrid">'+funs.map(function(c,i){
-        var t=tile(c,0).replace('class="pp-tile pp-s"','class="pp-tile pp-s"').replace('style="','style="--i:'+(i+2)+';');
-        return t.replace('<button ','<button data-on="'+(c.online?1:0)+'" data-pc="'+(c.pc?1:0)+'" data-of="'+(c.off?1:0)+'" ');
-      }).join("")+'<div class="pp-empty" id="ppEmpty" hidden>مفيش ألعاب بالفلتر ده</div></div></section>';
+      SHELVES.filter(function(sh){return sh.list&&sh.list.length;}).map(function(sh){
+        var h='<div class="pp-s pp-shelf-h" style="--i:'+(gi++)+'"><div><h3>'+esc(sh.t)+'</h3>'+(sh.s?'<small>'+esc(sh.s)+'</small>':'')+'</div><span class="ln"></span></div>';
+        var body='<div class="pp-lay pp-'+sh.lay+'">'+sh.list.map(function(c){
+          return tile(c,0).replace('style="','style="--i:'+(gi++)+';');
+        }).join("")+'</div>';
+        return h+body;
+      }).join("")+
+    '</section>';
 
   var soon=
     '<section class="pp-page" data-page="soon" hidden>'+
@@ -306,7 +317,7 @@
         '<button type="button" class="pp-s pp-btn g" data-off="1" style="--i:5">اعرف أكتر</button>'+
       '</div></section>';
 
-  var nav='<nav class="pp-nav" aria-label="التنقل"><span class="pp-ind"></span>'+
+  var nav='<nav class="pp-nav" aria-label="التنقل"><svg class="pp-navbg" aria-hidden="true"><path class="pp-navpath"/></svg><span class="pp-orb" aria-hidden="true"></span>'+
     [["home","الرئيسية"],["football","كورة"],["games","ألعاب"],["soon","قريباً"],["me","حسابي"]].map(function(t,i){
       return '<button type="button" data-tab="'+t[0]+'"'+(i===0?' class="on" aria-current="page"':'')+'><span class="ico">'+IC[t[0]]+'</span><span>'+t[1]+'</span></button>';
     }).join("")+'</nav>';
@@ -324,11 +335,33 @@
   }
 
   var pages={};[].forEach.call(shell.querySelectorAll(".pp-page"),function(p){pages[p.getAttribute("data-page")]=p;});
-  var navEl=shell.querySelector(".pp-nav"),ind=shell.querySelector(".pp-ind");
+  var navEl=shell.querySelector(".pp-nav"),orb=shell.querySelector(".pp-orb"),navPath=shell.querySelector(".pp-navpath"),navSvg=shell.querySelector(".pp-navbg");
+  var navCx=null,navRaf=0,NH=70;
   function tabBtn(n){return navEl.querySelector('[data-tab="'+n+'"]');}
-  function moveInd(n){
-    var b=tabBtn(n);if(!b||!ind)return;
-    ind.style.width=b.offsetWidth+"px";ind.style.transform="translateX("+b.offsetLeft+"px)";
+  /* البار الأسود بفتحة منحنية تحت الدايرة */
+  function pathFor(cx,W){
+    var r=22,d=42,a=40,x1=Math.max(r+2,cx-a),x2=Math.min(W-r-2,cx+a),l=cx-x1,m=x2-cx;
+    return"M"+r+" 0H"+x1+"C"+(x1+l*.5)+" 0 "+(cx-l*.5)+" "+d+" "+cx+" "+d+"C"+(cx+m*.5)+" "+d+" "+(x2-m*.5)+" 0 "+x2+" 0H"+(W-r)+
+      "Q"+W+" 0 "+W+" "+r+"V"+(NH-r)+"Q"+W+" "+NH+" "+(W-r)+" "+NH+"H"+r+"Q0 "+NH+" 0 "+(NH-r)+"V"+r+"Q0 0 "+r+" 0Z";
+  }
+  function draw(cx){
+    navCx=cx;var W=navEl.offsetWidth||360;
+    navSvg.setAttribute("viewBox","0 0 "+W+" "+NH);navPath.setAttribute("d",pathFor(cx,W));
+    orb.style.transform="translate3d("+(cx-27)+"px,0,0)";
+  }
+  function moveInd(n,anim){
+    var b=tabBtn(n);if(!b||!orb)return;
+    var cx=b.offsetLeft+b.offsetWidth/2,ico=b.querySelector(".ico");
+    var html='<span class="oi">'+(ico&&!ico.querySelector("img")?ico.innerHTML:"")+'</span>';
+    if(orb.getAttribute("data-t")!==n){orb.innerHTML=html;orb.setAttribute("data-t",n);var oi=orb.firstChild;if(anim&&oi&&oi.animate&&!RM)oi.animate([{transform:"scale(.4) rotate(-40deg)",opacity:0},{transform:"scale(1) rotate(0)",opacity:1}],{duration:420,delay:120,easing:"cubic-bezier(.3,1.5,.4,1)",fill:"backwards"});}
+    cancelAnimationFrame(navRaf);
+    if(!anim||navCx==null||RM){draw(cx);return;}
+    var from=navCx,t0=performance.now(),D=560;
+    (function step(now){
+      var k=Math.min(1,(now-t0)/D),e=1+2.2*Math.pow(k-1,3)+1.2*Math.pow(k-1,2);
+      draw(from+(cx-from)*e);
+      if(k<1)navRaf=requestAnimationFrame(step);else draw(cx);
+    })(t0);
   }
 
   /* ---------- الانتقال بين الصفحات ---------- */
@@ -338,7 +371,7 @@
     var dir=(nb&&ob&&nb.getBoundingClientRect().left<ob.getBoundingClientRect().left)?-1:1;
     cur=name;
     TABS.forEach(function(t){var b=tabBtn(t);if(b){b.classList.toggle("on",t===name);if(t===name)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");}});
-    shell.setAttribute("data-page",name);moveInd(name);
+    shell.setAttribute("data-page",name);moveInd(name,true);
     try{if(navigator.vibrate)navigator.vibrate(8);}catch(e){}
     if(RM||!old.animate){old.hidden=true;nu.hidden=false;window.scrollTo(0,0);return;}
     busy=true;
@@ -385,11 +418,6 @@
         '<div class="pp-cta"><button type="button" class="pp-btn p pp-play" data-g="'+esc(pick.g)+'">'+IC.play+'العب</button>'+
         '<button type="button" class="pp-btn g" data-go="games">كل الألعاب</button></div></div>';
     }
-    var recent=games.filter(function(c){return st[c.g]&&st[c.g].t;}).sort(function(a,b){return st[b.g].t-st[a.g].t;}).slice(0,6);
-    var rc=document.getElementById("ppRecent");
-    if(rc){
-      rc.innerHTML=recent.length?'<div class="pp-rh"><h3>لعبت قريب</h3></div><div class="pp-row">'+recent.map(function(c){return tile(c,0,ago(st[c.g].t)).replace(" pp-s","");}).join("")+'</div>':"";
-    }
     /* صورة الحساب في التاب */
     var chip=document.getElementById("accChip"),me=tabBtn("me"),img=chip&&chip.querySelector("img");
     if(me){var ico=me.querySelector(".ico");if(ico){ico.innerHTML=img?'<img class="av" alt="" src="'+esc(img.getAttribute("src"))+'">':IC.me;}}
@@ -403,18 +431,6 @@
     if(tb){click();var n=tb.getAttribute("data-tab");if(n==="me"){var c=document.getElementById("accChip");if(c)c.click();}else go(n);return;}
     var gb=t.closest("[data-go]");if(gb){click();go(gb.getAttribute("data-go"));return;}
     var of=t.closest("[data-off]");if(of){click();if(typeof hxOff==="function")hxOff();return;}
-    var ch=t.closest(".pp-chip");
-    if(ch){
-      click();var f=ch.getAttribute("data-f");
-      [].forEach.call(shell.querySelectorAll(".pp-chip"),function(x){x.classList.toggle("on",x===ch);});
-      var shown=0;
-      [].forEach.call(document.querySelectorAll("#ppGrid .pp-tile"),function(x){
-        var ok=f==="all"||(f==="online"&&x.dataset.on==="1")||(f==="pc"&&x.dataset.pc==="1")||(f==="off"&&x.dataset.of==="1");
-        x.hidden=!ok;if(ok){x.style.setProperty("--i",shown);shown++;x.style.animation="none";void x.offsetWidth;x.style.animation="";}
-      });
-      var em=document.getElementById("ppEmpty");if(em)em.hidden=shown>0;
-      return;
-    }
     var gm2=t.closest("[data-g]");if(gm2&&(gm2.classList.contains("pp-tile")||gm2.classList.contains("pp-frow")||gm2.classList.contains("pp-play"))){launch(gm2,gm2.getAttribute("data-g"));}
   });
   var jf=document.getElementById("ppJoin"),jc=document.getElementById("ppCode");
@@ -448,12 +464,4 @@
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){moveInd(cur);});
   paint();setTimeout(function(){moveInd(cur);paint();},60);setTimeout(function(){moveInd(cur);},600);
   window.PPShell={go:go,paint:paint,brand:brand};
-
-  /* السبلاش بنفس الهوية */
-  var sp=document.getElementById("ppSplash");
-  if(sp&&!sp.querySelector(".ps-new")){
-    var wrap=sp.querySelector(".ps-wrap"),nm=sp.querySelector(".ps-name");
-    if(wrap)wrap.style.display="none";if(nm)nm.style.display="none";
-    var nd=document.createElement("div");nd.className="ps-new";nd.innerHTML=brand(true);sp.insertBefore(nd,sp.firstChild);
-  }
 })();
