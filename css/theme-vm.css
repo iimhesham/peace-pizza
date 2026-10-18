@@ -376,160 +376,145 @@ html[data-theme="vm"] #olRoot .ol-t>span{font-size:22px}
 
 /* =========================================================
    EVIDENCE BOARD — لوحة التحقيق (الثيم الغامق الأساسي للصفحة الرئيسية)
-   الفكرة: حيطة تحقيق مضلمة تحت لمبة مكتب. كل لعبة «ملف قضية» مدبّس على اللوحة
-   بدبوس، بزاوية مايلة، عليه ختم CASE ورقمه، وخيوط حمرا بتوصل بين الملفات.
-   «كمّل من حيث وقفت» = فولدر القضية المفتوحة. بيستخدم نفس منيو #vmMenu.
-   مفيش حاجة هنا بتأثر على ثيم فانيليا.
+   حيطة تحقيق مضلمة. كل لعبة «ملف قضية» غامق مدبّس بدبوس، بكعب دهبي معدني،
+   وختم CASE، وخيوط حمرا بتوصل بين الملفات. كله غامق + دهبي حقيقي، من غير أي لون فاتح.
+   بيستخدم نفس منيو #vmMenu. مفيش حاجة هنا بتأثر على ثيم فانيليا.
 ========================================================= */
 html:not([data-theme="vm"]){
-  --eb-ink:#1d1710;--eb-paper:#ece2c6;--eb-paper2:#dccfa8;--eb-red:#b3261e;--eb-tape:#e7c872;
+  --gold:linear-gradient(135deg,#fff0a6 0%,#f3c33f 26%,#c18d1c 52%,#f7d96b 76%,#9a6b14 100%);
+  --gold-s:#e2b23a;--gold-l:#f7d96b;--eb-red:#e0453b;
+  --card:linear-gradient(160deg,#1e1e22,#0f0f12);
 }
 
 /* ---------- الحيطة + لمبة المكتب ---------- */
 html:not([data-theme="vm"]) body.mode-home::before{
   background:
-    radial-gradient(560px 420px at 50% -8%,rgba(255,214,140,.24),transparent 72%),
-    radial-gradient(rgba(255,255,255,.04) 1px,transparent 1.5px) 0 0/7px 7px,
+    radial-gradient(560px 420px at 50% -8%,rgba(255,200,110,.2),transparent 72%),
+    radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.5px) 0 0/7px 7px,
     radial-gradient(rgba(0,0,0,.4) 1px,transparent 1.7px) 3px 4px/9px 9px,
-    radial-gradient(130% 95% at 50% 38%,transparent 52%,rgba(0,0,0,.7)),
-    #1a140e;
+    radial-gradient(130% 95% at 50% 38%,transparent 52%,rgba(0,0,0,.75)),
+    #141110;
 }
 
 /* ---------- نخفي الكروت القديمة ونظهر اللوحة ---------- */
 html:not([data-theme="vm"]) #hub .hx-h,
 html:not([data-theme="vm"]) #hub .hx-grid,
 html:not([data-theme="vm"]) #hub .hx-off{display:none!important}
-html:not([data-theme="vm"]) #hub #vmMenu{
-  display:grid;grid-template-columns:1fr 1fr;gap:26px 16px;position:relative;margin-top:18px;padding:4px 4px 40px;
-}
+html:not([data-theme="vm"]) #hub #vmMenu{display:grid;grid-template-columns:1fr;gap:15px;position:relative;margin-top:16px;padding:4px 2px 40px}
 
 /* ---------- فولدر القضية المفتوحة (كمّل من حيث وقفت) ---------- */
 html:not([data-theme="vm"]) #hub .hx-top{display:grid;grid-template-columns:1fr;gap:12px}
 html:not([data-theme="vm"]) #hub #hxResume{
-  position:relative;display:flex;align-items:center;gap:14px;min-height:96px;margin-top:20px;padding:16px 18px 14px;
-  border:0;border-radius:4px 16px 10px 10px;color:#2a1d08;text-align:start;transform:rotate(-.7deg);
-  background:
-    repeating-linear-gradient(0deg,rgba(90,60,10,.05) 0 1px,transparent 1px 3px),
-    linear-gradient(160deg,#e9c97e,#d3aa57 60%,#bd913f);
-  box-shadow:0 14px 24px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -2px 0 rgba(90,60,10,.35);
-  transition:transform .15s;
-}
+  position:relative;display:flex;align-items:center;gap:14px;min-height:88px;margin-top:20px;padding:14px 16px 12px;
+  border:2px solid transparent;border-radius:6px 18px 12px 12px;color:#f5eed8;text-align:start;transform:rotate(-.5deg);
+  background:linear-gradient(160deg,#1c1c20,#0c0c0e) padding-box,var(--gold) border-box;
+  box-shadow:0 14px 26px rgba(0,0,0,.65),0 0 26px rgba(226,178,58,.12);transition:transform .15s}
 html:not([data-theme="vm"]) #hub #hxResume::before{
-  content:"ACTIVE CASE";position:absolute;top:-19px;right:20px;width:126px;height:20px;
-  display:grid;place-items:center;border-radius:9px 9px 0 0;
-  font:700 9.5px/1 ui-monospace,'Courier New',monospace;letter-spacing:.28em;color:rgba(42,29,8,.7);
-  background:linear-gradient(160deg,#e9c97e,#d9b360)}
+  content:"ACTIVE CASE";position:absolute;top:-21px;right:18px;width:126px;height:21px;display:grid;place-items:center;
+  border-radius:9px 9px 0 0;background:var(--gold);color:#1a1205;
+  font:800 9.5px/1 ui-monospace,'Courier New',monospace;letter-spacing:.26em}
 html:not([data-theme="vm"]) #hub #hxResume::after{
-  content:"قيد التحقيق";position:absolute;left:16px;bottom:12px;padding:2px 9px 3px;border:2px solid var(--eb-red);border-radius:5px;
-  color:var(--eb-red);font:800 12px/1.2 'Tajawal',sans-serif;transform:rotate(-9deg);opacity:.85;mix-blend-mode:multiply}
+  content:"قيد التحقيق";position:absolute;left:14px;bottom:11px;padding:2px 9px 3px;border:2px solid var(--eb-red);border-radius:5px;
+  color:var(--eb-red);font:800 12px/1.2 'Tajawal',sans-serif;transform:rotate(-9deg);opacity:.92}
 html:not([data-theme="vm"]) #hub #hxResume>svg{
-  flex:none;width:50px;height:50px;padding:14px 12px 14px 16px;border-radius:50%;background:#1a140e;color:var(--eb-tape);
-  box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 0 0 2px rgba(231,200,114,.35)}
+  flex:none;width:50px;height:50px;padding:14px 12px 14px 16px;border-radius:50%;background:var(--gold);color:#1a1205;
+  box-shadow:0 4px 12px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.5)}
 html:not([data-theme="vm"]) #hub #hxResume span{display:flex;flex-direction:column;gap:2px;min-width:0}
-html:not([data-theme="vm"]) #hub #hxResume small{font:700 11.5px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:rgba(42,29,8,.72)}
-html:not([data-theme="vm"]) #hub #hxResume b{font:800 27px/1.15 'Tajawal','IBM Plex Sans Arabic',sans-serif;color:#2a1d08}
-html:not([data-theme="vm"]) #hub #hxResume .lg-ago{font:600 11px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:rgba(42,29,8,.62)}
+html:not([data-theme="vm"]) #hub #hxResume small{font:700 11.5px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:#b3ab97}
+html:not([data-theme="vm"]) #hub #hxResume b{font:800 27px/1.15 'Tajawal','IBM Plex Sans Arabic',sans-serif;
+  background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--gold-s)}
+html:not([data-theme="vm"]) #hub #hxResume .lg-ago{font:600 11px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:#8f897a}
 html:not([data-theme="vm"]) #hub #hxResume:active{transform:rotate(0) scale(.985)}
 html:not([data-theme="vm"]) #hub #hxJoinBtn{
-  min-height:52px;border-radius:6px;background:rgba(0,0,0,.45);border:1px dashed rgba(236,226,198,.45);
-  color:#efe6cc;box-shadow:none}
+  min-height:50px;border-radius:8px;background:rgba(0,0,0,.5);border:1px dashed rgba(226,178,58,.55);color:#f5eed8;box-shadow:none}
 
-/* ---------- شرايط عناوين الأقسام (شريط الليبل + شريط التحذير) ---------- */
-html:not([data-theme="vm"]) .vm-sec{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:14px 0 -2px}
+/* ---------- شرايط عناوين الأقسام ---------- */
+html:not([data-theme="vm"]) .vm-sec{display:flex;align-items:center;gap:12px;margin:12px 0 0}
 html:not([data-theme="vm"]) .vm-sec::before{display:none!important}
 html:not([data-theme="vm"]) .vm-sec b{
-  padding:5px 15px 7px;border-radius:3px;background:#0b0b0a;color:#f6f3e8;transform:rotate(-1.2deg);
+  padding:4px 15px 6px;border-radius:3px;background:#0a0a09;transform:rotate(-1deg);
   font:800 21px/1.1 'Tajawal','IBM Plex Sans Arabic',sans-serif;
-  box-shadow:0 4px 8px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.14),inset 0 -3px 0 rgba(255,255,255,.06);
-  text-shadow:0 1px 0 rgba(255,255,255,.25)}
-html:not([data-theme="vm"]) .vm-sec small{font:700 10px/1 ui-monospace,'Courier New',monospace;letter-spacing:.34em;color:#c4a862}
+  -webkit-text-fill-color:transparent;background-image:none;color:transparent;
+  position:relative;box-shadow:0 4px 8px rgba(0,0,0,.55),inset 0 0 0 1px rgba(226,178,58,.5)}
+html:not([data-theme="vm"]) .vm-sec b{background:var(--gold);-webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 0 0 #000)}
+html:not([data-theme="vm"]) .vm-sec small{font:700 10px/1 ui-monospace,'Courier New',monospace;letter-spacing:.34em;color:#a88a3d}
 html:not([data-theme="vm"]) .vm-sec::after{
-  content:"";flex:1;height:9px;opacity:.75;border:0;border-radius:2px;
-  background:repeating-linear-gradient(135deg,#e7c872 0 9px,#14100b 9px 18px);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+  content:"";flex:1;height:9px;border:0;border-radius:2px;opacity:.9;
+  background:repeating-linear-gradient(135deg,#e2b23a 0 9px,#0c0a07 9px 18px);box-shadow:0 2px 4px rgba(0,0,0,.5)}
 
-/* ---------- ملف القضية (اللعبة) ---------- */
-html:not([data-theme="vm"]) .vm-row{
-  --r:0deg;--pin:#c62828;
-  position:relative;z-index:1;display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0;
-  width:auto;margin:0;padding:15px 11px 11px;border:0;border-radius:3px;color:var(--eb-ink);font:inherit;text-align:start;cursor:pointer;
-  background:
-    repeating-linear-gradient(0deg,rgba(80,60,20,.045) 0 1px,transparent 1px 3px),
-    linear-gradient(160deg,#f2e9cf,#e0d3ac);
-  box-shadow:0 12px 20px rgba(0,0,0,.6),0 2px 3px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.55);
-  transform:rotate(var(--r));transition:transform .18s cubic-bezier(.2,.9,.3,1.3),box-shadow .18s;
+/* ---------- ملف القضية (اللعبة) — صف مضغوط ---------- */
+html:not([data-theme="vm"]) .vm-row,
+html:not([data-theme="vm"]) .vm-row[data-g]{
+  --r:0deg;--pin:#d63a30;--px:24%;
+  position:relative;z-index:1;display:grid;grid-template-columns:68px 1fr;grid-template-areas:"plate txt" "plate tags";
+  align-items:center;gap:3px 13px;min-width:0;width:auto;margin:0;padding:13px 14px 11px 12px;
+  border:1px solid rgba(226,178,58,.3);border-radius:4px 10px 10px 4px;color:#f5eed8;font:inherit;text-align:start;cursor:pointer;
+  background:var(--card);
+  box-shadow:0 10px 18px rgba(0,0,0,.65),0 2px 3px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);
+  transform:rotate(var(--r));transition:transform .18s cubic-bezier(.2,.9,.3,1.3),box-shadow .18s,border-color .18s;
   -webkit-tap-highlight-color:transparent}
+/* كعب الملف الدهبي */
+html:not([data-theme="vm"]) .vm-row::after{
+  content:"";position:absolute;top:0;bottom:0;right:0;width:5px;border-radius:0 9px 9px 0;background:var(--gold);opacity:.95}
 /* الدبوس */
 html:not([data-theme="vm"]) .vm-row::before{
-  content:"";position:absolute;top:-7px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;z-index:3;
-  background:radial-gradient(circle at 35% 30%,#fff 0 7%,var(--pin) 8% 58%,rgba(0,0,0,.55) 100%);
-  box-shadow:0 4px 5px rgba(0,0,0,.6)}
-html:not([data-theme="vm"]) .vm-row:active{transform:rotate(0) translateY(-4px) scale(1.03);box-shadow:0 20px 28px rgba(0,0,0,.65)}
-html:not([data-theme="vm"]) .vm-row:focus-visible{outline:2px solid var(--eb-tape);outline-offset:3px}
+  content:"";position:absolute;top:-8px;left:var(--px);width:16px;height:16px;margin-left:-8px;border-radius:50%;z-index:3;
+  background:radial-gradient(circle at 35% 30%,#fff 0 7%,var(--pin) 8% 58%,rgba(0,0,0,.6) 100%);box-shadow:0 4px 5px rgba(0,0,0,.65)}
+html:not([data-theme="vm"]) .vm-row:active{transform:rotate(0) translateY(-3px) scale(1.012);border-color:var(--gold-s);box-shadow:0 18px 26px rgba(0,0,0,.7),0 0 18px rgba(226,178,58,.18)}
+html:not([data-theme="vm"]) .vm-row:focus-visible{outline:2px solid var(--gold-s);outline-offset:3px}
 /* ختم رقم القضية */
 html:not([data-theme="vm"]) .vm-no{
-  position:absolute;top:20px;left:15px;right:auto;z-index:2;grid-area:auto;pointer-events:none;
-  padding:0 5px 1px;border:2px solid var(--eb-red);border-radius:3px;background:rgba(236,226,198,.82);
-  font:800 9.5px/1.3 ui-monospace,'Courier New',monospace;letter-spacing:.06em;color:var(--eb-red);transform:rotate(-7deg)}
+  position:absolute;top:11px;left:12px;right:auto;z-index:2;grid-area:auto;pointer-events:none;
+  padding:0 5px 1px;border:1.5px solid var(--gold-s);border-radius:3px;
+  font:800 9.5px/1.35 ui-monospace,'Courier New',monospace;letter-spacing:.07em;color:var(--gold-l);transform:rotate(-6deg);opacity:.95}
 html:not([data-theme="vm"]) .vm-no::before{content:"CASE "}
-/* الصورة (الدليل) */
+/* صورة الدليل */
 html:not([data-theme="vm"]) .vm-plate{
-  grid-area:auto;display:grid;place-items:end center;padding-bottom:9px;box-sizing:border-box;width:100%;aspect-ratio:1/.8;border-radius:2px;overflow:hidden;
-  background:radial-gradient(circle at 50% 38%,#34302a,#0e0d0b 78%);color:#f1e8cf;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),inset 0 0 26px rgba(0,0,0,.75),0 1px 0 rgba(255,255,255,.5)}
-html:not([data-theme="vm"]) .vm-plate svg{width:46px;height:46px;max-width:46px;max-height:46px;display:block;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6))}
-html:not([data-theme="vm"]) .vm-txt{grid-area:auto;display:flex;flex-direction:column;min-width:0;padding:10px 3px 0}
-html:not([data-theme="vm"]) .vm-ar{font:800 19px/1.2 'Tajawal','IBM Plex Sans Arabic',sans-serif;color:var(--eb-ink);overflow-wrap:anywhere}
-html:not([data-theme="vm"]) .vm-en{align-self:flex-start;margin-top:3px;font:700 9px/1.3 ui-monospace,'Courier New',monospace;letter-spacing:.16em;color:rgba(29,23,16,.6)}
-html:not([data-theme="vm"]) .vm-ds{margin-top:6px;font:500 11.5px/1.5 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:rgba(29,23,16,.78);
-  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden}
-html:not([data-theme="vm"]) .vm-ds b{font-weight:800;color:var(--eb-ink)}
+  grid-area:plate;display:grid;place-items:center;width:68px;height:68px;border-radius:3px;overflow:hidden;
+  background:radial-gradient(circle at 50% 38%,#34302a,#0b0a09 80%);color:#f5eed8;
+  box-shadow:inset 0 0 0 1px rgba(226,178,58,.5),inset 0 0 18px rgba(0,0,0,.8),0 3px 6px rgba(0,0,0,.5)}
+html:not([data-theme="vm"]) .vm-plate svg{width:40px;height:40px;max-width:40px;max-height:40px;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.6))}
+html:not([data-theme="vm"]) .vm-txt{grid-area:txt;display:flex;flex-direction:column;min-width:0;padding:0}
+html:not([data-theme="vm"]) .vm-ar{font:800 18.5px/1.2 'Tajawal','IBM Plex Sans Arabic',sans-serif;color:#f7f0da;overflow-wrap:anywhere;padding-inline-end:0}
+html:not([data-theme="vm"]) .vm-en{align-self:flex-start;margin-top:2px;font:700 8.5px/1.3 ui-monospace,'Courier New',monospace;letter-spacing:.18em;color:#a88a3d}
+html:not([data-theme="vm"]) .vm-ds{margin-top:3px;font:500 11px/1.45 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:#a9a393;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+html:not([data-theme="vm"]) .vm-ds b{font-weight:800;color:#f5eed8}
 html:not([data-theme="vm"]) .vm-go{display:none}
-/* ملاحظة بخط «القلم» */
-html:not([data-theme="vm"]) .lg-meta{
-  align-self:flex-start;margin-top:8px;padding:0 0 2px;border-bottom:1.5px dashed rgba(179,38,30,.6);
-  font:700 10.5px/1.3 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--eb-red);transform:rotate(-1deg)}
-html:not([data-theme="vm"]) .lg-meta.new{color:rgba(29,23,16,.5);border-bottom-color:rgba(29,23,16,.3)}
-/* تاجات المتاحية (ليبلات آلة كاتبة) */
-html:not([data-theme="vm"]) .vm-tags{grid-area:auto;display:flex;flex-wrap:wrap;gap:4px;margin-top:9px;padding:0 3px}
+/* الشارات + الملاحظة في سطر واحد */
+html:not([data-theme="vm"]) .vm-tags{grid-area:tags;display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:2px 0 0;padding:0}
 html:not([data-theme="vm"]) .vm-tags i{
-  font:700 9px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;font-style:normal;padding:4px 7px 3px;border-radius:2px;
-  border:0;background:rgba(29,23,16,.1);color:rgba(29,23,16,.62)}
-html:not([data-theme="vm"]) .vm-tags i.on{background:#1d1710;color:#f1e8cf}
+  font:700 9px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;font-style:normal;padding:4px 7px 3px;border:0;border-radius:2px;
+  background:rgba(255,255,255,.07);color:#aaa493}
+html:not([data-theme="vm"]) .vm-tags i.on{background:rgba(226,178,58,.16);color:var(--gold-l)}
 html:not([data-theme="vm"]) .vm-tags i.on::before{content:"";display:inline-block;width:5px;height:5px;margin-inline-end:4px;border-radius:50%;background:#43d17f;box-shadow:0 0 6px #43d17f}
-
-/* ضمان إن كل الملفات بنفس الورق (حتى لو ملف تاني حاول يغيّر خلفية صف معين) */
-html:not([data-theme="vm"]) .vm-row[data-g]{
-  background:repeating-linear-gradient(0deg,rgba(80,60,20,.045) 0 1px,transparent 1px 3px),linear-gradient(160deg,#f2e9cf,#e0d3ac)}
-
-/* آخر ملف لو العدد فردي: عريض بالطول */
-html:not([data-theme="vm"]) .vm-row.lg-wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;padding:16px 14px 13px 14px}
-html:not([data-theme="vm"]) .vm-row.lg-wide .vm-plate{flex:none;width:112px;aspect-ratio:1/.8}
-html:not([data-theme="vm"]) .vm-row.lg-wide .vm-txt{flex:1;padding-top:0}
-html:not([data-theme="vm"]) .vm-row.lg-wide .vm-tags{position:absolute;left:14px;bottom:11px;margin:0;padding:0}
-html:not([data-theme="vm"]) .vm-row.lg-wide .vm-no{top:auto;bottom:11px;right:auto;left:auto;inset-inline-end:14px}
-html:not([data-theme="vm"]) .vm-row.lg-wide .vm-txt{padding-bottom:26px}
+html:not([data-theme="vm"]) .lg-meta{margin-inline-end:4px;font:700 10px/1.2 'IBM Plex Sans Arabic','Tajawal',sans-serif;
+  color:var(--gold-l);white-space:nowrap}
+html:not([data-theme="vm"]) .lg-meta.new{color:#8a8473}
+html:not([data-theme="vm"]) .lg-meta::after{content:"·";margin-inline-start:6px;opacity:.5}
 
 /* القصص المغلقة: ملف سري */
-html:not([data-theme="vm"]) .vm-row.off{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;cursor:default;--r:.6deg;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px),linear-gradient(160deg,#a89f86,#8f866c);color:#2b2518}
-html:not([data-theme="vm"]) .vm-row.off::before{background:radial-gradient(circle at 35% 30%,#fff 0 7%,#777 8% 58%,rgba(0,0,0,.55) 100%)}
-html:not([data-theme="vm"]) .vm-row.off .vm-plate{flex:none;width:86px;aspect-ratio:1/.8}
-html:not([data-theme="vm"]) .vm-row.off .vm-txt{padding-top:0;flex:1}
+html:not([data-theme="vm"]) .vm-row.off{cursor:default;--r:.4deg;border-style:dashed;opacity:.9;grid-template-columns:68px 1fr}
+html:not([data-theme="vm"]) .vm-row.off::after{background:#4a4a4a}
+html:not([data-theme="vm"]) .vm-row.off::before{background:radial-gradient(circle at 35% 30%,#fff 0 7%,#777 8% 58%,rgba(0,0,0,.6) 100%)}
+html:not([data-theme="vm"]) .vm-row.off .vm-ar{color:#9a9482}
 html:not([data-theme="vm"]) .vm-row.off .vm-no{display:none}
-html:not([data-theme="vm"]) .vm-row.off:active{transform:rotate(.6deg);box-shadow:0 12px 20px rgba(0,0,0,.6)}
+html:not([data-theme="vm"]) .vm-row.off:active{transform:rotate(.4deg);border-color:rgba(226,178,58,.3);box-shadow:0 10px 18px rgba(0,0,0,.65)}
 html:not([data-theme="vm"]) .vm-stamp{
-  position:absolute;left:-6px;top:50%;margin-top:-16px;padding:4px 30px 5px;transform:rotate(-12deg);
-  background:var(--eb-red);color:#f6ecd0;font:800 14px/1.2 'Tajawal',sans-serif;letter-spacing:.06em;
-  box-shadow:0 4px 8px rgba(0,0,0,.5);white-space:nowrap}
+  position:absolute;left:-8px;top:50%;margin-top:-15px;padding:4px 28px 5px;transform:rotate(-12deg);
+  background:var(--eb-red);color:#fff1e8;font:800 14px/1.2 'Tajawal',sans-serif;letter-spacing:.06em;
+  box-shadow:0 4px 8px rgba(0,0,0,.55);white-space:nowrap}
 
 /* خيوط التحقيق */
 #lgStrings{position:absolute;left:0;top:0;width:100%;pointer-events:none;z-index:0;overflow:visible}
 html[data-theme="vm"] #lgStrings{display:none}
 
 @media (max-width:360px){
-  html:not([data-theme="vm"]) #hub #vmMenu{gap:22px 12px}
-  html:not([data-theme="vm"]) .vm-ar{font-size:17px}
-  html:not([data-theme="vm"]) .vm-plate svg{width:46px;height:46px;max-width:46px;max-height:46px}
+  html:not([data-theme="vm"]) .vm-row,html:not([data-theme="vm"]) .vm-row[data-g]{grid-template-columns:58px 1fr;gap:3px 10px}
+  html:not([data-theme="vm"]) .vm-plate{width:58px;height:58px}
+  html:not([data-theme="vm"]) .vm-plate svg{width:34px;height:34px;max-width:34px;max-height:34px}
+  html:not([data-theme="vm"]) .vm-ar{font-size:16.5px}
   html:not([data-theme="vm"]) #hub #hxResume b{font-size:23px}
 }
 @media (prefers-reduced-motion:reduce){html:not([data-theme="vm"]) .vm-row,html:not([data-theme="vm"]) #hub #hxResume{transition:none}}
