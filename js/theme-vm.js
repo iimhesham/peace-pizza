@@ -169,3 +169,83 @@
   set(stored(),true);
   buildHub();
 })();
+
+/* =========================================================
+   EVIDENCE BOARD — لوحة التحقيق: ميل الملفات، لون الدبوس، الخيوط الحمرا،
+   «اتلعبت N مرة / ملف جديد» (محفوظة على جهازك بس) و«آخر لعب» تحت فولدر القضية.
+========================================================= */
+(function(){
+  var KEY="pp_play_stats",hub=document.getElementById("hub");
+  if(!hub)return;
+  var TILT=[-1.5,1.1,-.6,1.6,-1.1,.7,1.4,-.9],PIN=["#c62828","#2f6fd6","#c9a227","#c62828","#2f9e63"];
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){return {};}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}}
+  function ar(n){return String(n).replace(/\d/g,function(d){return"٠١٢٣٤٥٦٧٨٩"[d];});}
+  function ago(t){
+    var m=Math.max(0,Math.round((Date.now()-t)/60000));
+    if(m<2)return"دلوقتي";
+    if(m<60)return"من "+ar(m)+" دقيقة";
+    var h=Math.round(m/60);if(h<24)return h===1?"من ساعة":h===2?"من ساعتين":"من "+ar(h)+" ساعات";
+    var d=Math.round(h/24);if(d<30)return d===1?"من إمبارح":d===2?"من يومين":"من "+ar(d)+" أيام";
+    var w=Math.round(d/7);return"من "+ar(w)+" أسابيع";
+  }
+  function times(n){return n===1?"مرة":n===2?"مرتين":ar(n)+" مرات";}
+
+  function strings(menu){
+    var NS="http://www.w3.org/2000/svg",svg=document.getElementById("lgStrings");
+    if(!svg){svg=document.createElementNS(NS,"svg");svg.id="lgStrings";svg.setAttribute("aria-hidden","true");menu.insertBefore(svg,menu.firstChild);}
+    var mr=menu.getBoundingClientRect();if(!mr.width){return;}
+    svg.setAttribute("height",menu.scrollHeight);svg.setAttribute("viewBox","0 0 "+mr.width+" "+menu.scrollHeight);
+    var d="",sh="",prev=null;
+    [].forEach.call(menu.children,function(el){
+      if(el.classList.contains("vm-sec")){prev=null;return;}
+      if(!el.classList.contains("vm-row")||el.getAttribute("data-off")){return;}
+      var r=el.getBoundingClientRect(),p={x:r.left-mr.left+r.width/2,y:r.top-mr.top+1};
+      if(prev){
+        var mx=(prev.x+p.x)/2,sag=26+Math.abs(prev.x-p.x)*.06,my=(prev.y+p.y)/2+sag;
+        var seg="M"+prev.x.toFixed(1)+" "+prev.y.toFixed(1)+"Q"+mx.toFixed(1)+" "+my.toFixed(1)+" "+p.x.toFixed(1)+" "+p.y.toFixed(1);
+        d+=seg;
+      }
+      prev=p;
+    });
+    svg.innerHTML='<path d="'+d+'" fill="none" stroke="rgba(0,0,0,.55)" stroke-width="3.2" stroke-linecap="round" transform="translate(0 3)"/>'+
+                  '<path d="'+d+'" fill="none" stroke="#c9302c" stroke-width="2" stroke-linecap="round"/>';
+  }
+
+  function paint(){
+    var menu=document.getElementById("vmMenu");if(!menu)return;
+    var st=load(),secRows=[],n=0;
+    function flush(){if(secRows.length%2===1)secRows[secRows.length-1].classList.add("lg-wide");else if(secRows.length)secRows[secRows.length-1].classList.remove("lg-wide");secRows=[];}
+    [].forEach.call(menu.children,function(el){
+      if(el.classList.contains("vm-sec")){flush();return;}
+      if(!el.classList.contains("vm-row")||el.getAttribute("data-off"))return;
+      el.style.setProperty("--r",TILT[n%TILT.length]+"deg");el.style.setProperty("--pin",PIN[n%PIN.length]);n++;
+      secRows.push(el);el.classList.remove("lg-wide");
+      var g=el.getAttribute("data-g"),s=st[g],txt=el.querySelector(".vm-txt"),m=el.querySelector(".lg-meta");
+      if(!txt)return;
+      if(!m){m=document.createElement("span");m.className="lg-meta";txt.appendChild(m);}
+      if(s&&s.n){m.className="lg-meta";m.textContent="اتلعبت "+times(s.n)+" · "+ago(s.t);}
+      else{m.className="lg-meta new";m.textContent="ملف جديد";}
+    });
+    flush();
+    var r=document.getElementById("hxResume"),last="";try{last=localStorage.getItem("pp_last_game")||"";}catch(e){}
+    if(r){
+      var sp=r.querySelector("span"),a=r.querySelector(".lg-ago");
+      if(st[last]&&st[last].t){
+        if(!a&&sp){a=document.createElement("em");a.className="lg-ago";a.style.fontStyle="normal";sp.appendChild(a);}
+        if(a)a.textContent="آخر لعب "+ago(st[last].t);
+      }else if(a)a.remove();
+    }
+    requestAnimationFrame(function(){strings(menu);});
+  }
+  hub.addEventListener("click",function(e){
+    var c=e.target.closest&&e.target.closest(".hx-card[data-g]");if(!c)return;
+    var st=load(),g=c.dataset.g;st[g]={n:((st[g]&&st[g].n)||0)+1,t:Date.now()};save(st);
+    setTimeout(paint,60);
+  },true);
+  new MutationObserver(function(){if(!hub.classList.contains("hidden"))paint();}).observe(hub,{attributes:true,attributeFilter:["class"]});
+  window.addEventListener("pageshow",paint);window.addEventListener("resize",paint);
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)paint();});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(paint);
+  setTimeout(paint,0);setTimeout(paint,400);setTimeout(paint,1200);
+})();
