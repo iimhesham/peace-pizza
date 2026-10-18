@@ -7,7 +7,7 @@
    الثيم الكلاسيك هو الافتراضي ومفيش حاجة فيه اتغيّرت.
 ========================================================= */
 (function(){
-  var KEY="pp_theme",root=document.documentElement,TC={classic:"#050506",vm:"#FFEBAF"};
+  var KEY="pp_theme",root=document.documentElement,TC={classic:"#050706",vm:"#FFEBAF"};
 
   function stored(){var t="";try{t=localStorage.getItem(KEY)||"";}catch(e){}return t==="vm"?"vm":"classic";}
   function cur(){return root.getAttribute("data-theme")==="vm"?"vm":"classic";}
@@ -200,14 +200,47 @@
   function mark(){
     return '<span class="pp-mark" aria-hidden="true"><svg viewBox="0 0 64 64">'+
       '<g fill="none" stroke-linecap="round"><path d="M32 11V53M32 32L17 47M32 32L47 47" stroke="#fffdf0" stroke-width="2.4" opacity=".9" transform="translate(.9 1.1)"/>'+
-      '<path d="M32 11V53M32 32L17 47M32 32L47 47" stroke="#0B2545" stroke-width="2.4" opacity=".82"/></g>'+
+      '<path d="M32 11V53M32 32L17 47M32 32L47 47" stroke="#0a2e22" stroke-width="2.4" opacity=".85"/></g>'+
       [[21,24,6.3],[44.5,21.5,4.1],[45,38,5.6],[23.5,41,3.9],[33.5,57,0]].map(function(p){
         if(!p[2])return'';return '<circle cx="'+(p[0]+.8)+'" cy="'+(p[1]+1.3)+'" r="'+p[2]+'" fill="#000" opacity=".3"/>'+
-               '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+p[2]+'" fill="#0B2545"/>'+
+               '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+p[2]+'" fill="#0a2e22"/>'+
                '<circle cx="'+(p[0]-p[2]*.3)+'" cy="'+(p[1]-p[2]*.34)+'" r="'+(p[2]*.32)+'" fill="#EEEBDA" opacity=".3"/>';
       }).join("")+'</svg></span>';
   }
   function brand(xl){return '<span class="pp-brand'+(xl?' xl':'')+'" role="img" aria-label="Peace Pizza">'+mark()+'<span class="pp-word" dir="ltr"><b>peace</b><b>pizza</b></span></span>';}
+
+  /* ---------- أشكال عضوية (موجات + حلقات) مستوحاة من صورة الموجات ---------- */
+  function f1(n){return Math.round(n*10)/10;}
+  function smooth(pts,closed){
+    var n=pts.length,d="M"+f1(pts[0][0])+" "+f1(pts[0][1]),last=closed?n:n-1;
+    for(var j=0;j<last;j++){
+      var p0=pts[closed?(j+n-1)%n:Math.max(j-1,0)],p1=pts[j],p2=pts[(j+1)%n],p3=pts[closed?(j+2)%n:Math.min(j+2,n-1)];
+      d+="C"+f1(p1[0]+(p2[0]-p0[0])/6)+" "+f1(p1[1]+(p2[1]-p0[1])/6)+" "+f1(p2[0]-(p3[0]-p1[0])/6)+" "+f1(p2[1]-(p3[1]-p1[1])/6)+" "+f1(p2[0])+" "+f1(p2[1]);
+    }
+    return d+(closed?"Z":"");
+  }
+  function blob(cx,cy,r,seed,amp){
+    var pts=[],n=12;for(var i=0;i<n;i++){var a=i/n*Math.PI*2,k=1+amp*Math.sin(a*3+seed)+amp*.6*Math.cos(a*2+seed*1.7);pts.push([cx+Math.cos(a)*r*k,cy+Math.sin(a)*r*k]);}
+    return smooth(pts,true);
+  }
+  function wave(a,b,amp,ph,dy){
+    var pts=[],n=9;for(var i=0;i<=n;i++){var x=i/n*440-20;pts.push([x,a+(b-a)*(i/n)+amp*Math.sin(i/n*Math.PI*2.6+ph)+(dy||0)]);}
+    return smooth(pts,false);
+  }
+  function waves(){
+    var B=[[150,90,40,0,"w1"],[300,220,44,1.2,"w2"],[470,380,46,2.1,"w3"],[620,540,48,.4,"w4"],[740,700,36,1.7,"w6"],[810,780,26,.9,"w5"]],o='';
+    B.forEach(function(x){o+='<path d="'+wave(x[0],x[1],x[2],x[3])+'V880H-20Z" fill="var(--'+x[4]+')"/>';});
+    B.forEach(function(x,i){if(i%2===0)o+='<path d="'+wave(x[0],x[1],x[2],x[3],-14)+'" fill="none" stroke="var(--wl)" stroke-opacity=".2" stroke-width="1.2"/>';});
+    o+='<path d="'+blob(380,120,95,.6,.12)+'" fill="var(--wc)" opacity=".45"/><path d="'+blob(-10,760,110,1.9,.14)+'" fill="var(--wk)" opacity=".9"/>';
+    [[330,640,3],[352,662,2],[310,668,2.4],[372,628,1.8],[338,690,1.6],[60,330,2],[84,350,1.5]].forEach(function(c){o+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'" fill="var(--wl)" opacity=".28"/>';});
+    return '<svg class="pp-waves" viewBox="0 0 400 860" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+o+'</svg>';
+  }
+  function emblem(){
+    var R=[[136,0,.04,"w2",.22],[115,1.3,.045,"w3",.22],[95,2.4,.05,"w4",.24],[76,3.5,.045,"w5",.28]],o='';
+    R.forEach(function(r,i){o+='<path d="'+blob(160+(i%2?3:-3),160+(i%2?-2:3),r[0],r[1],r[2])+'" fill="var(--'+r[3]+')" stroke="var(--wl)" stroke-opacity="'+r[4]+'" stroke-width="1.4"/>';});
+    o+='<path d="'+blob(160,160,148,4.2,.035)+'" fill="none" stroke="var(--wl)" stroke-opacity=".2" stroke-width="1.2"/>';
+    return '<svg class="rings" viewBox="0 0 320 320" aria-hidden="true">'+o+'</svg>';
+  }
 
   /* ---------- الأيقونات ---------- */
   var IC={
@@ -221,8 +254,8 @@
     go:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
     lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.6"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg>'
   };
-  var GRAD={password:["#2a2a2f","#0a0a0c"],story:["#2c2a30","#0b0a0d"],career:["#272a2e","#0a0b0c"],flags:["#2b2c30","#0a0a0b"],xo:["#2d2b2f","#0b0b0c"],
-    ludo:["#2a2b2f","#0a0a0c"],sudoku:["#2b2a2d","#0b0b0c"],tawla:["#2e2b2a","#0c0a0a"],blackjack:["#282a2e","#0a0b0c"],snake:["#2b2b30","#0a0a0d"]};
+  var GRAD={password:["#0f5f46","#06251b"],story:["#4d2b24","#1a0e0c"],career:["#17564f","#071f1c"],flags:["#2a6b3a","#0c2413"],xo:["#14604e","#072720"],
+    ludo:["#0d6b57","#052a22"],sudoku:["#0e5a3a","#05211a"],tawla:["#3a2a1e","#140d09"],blackjack:["#0b4d3a","#04170f"],snake:["#127a52","#062b1e"]};
 
   /* ---------- نقرا الألعاب من الكروت ---------- */
   function readCards(){
@@ -243,7 +276,7 @@
   var games=readCards();if(!games.length)return;
   var balls=games.filter(function(x){return x.sec==="ball";}),funs=games.filter(function(x){return x.sec!=="ball";});
   function byG(g){for(var i=0;i<games.length;i++)if(games[i].g===g)return games[i];return null;}
-  function gr(g){var c=GRAD[g]||["#2a2a2f","#0a0a0c"];return'--g1:'+c[0]+';--g2:'+c[1];}
+  function gr(g){var c=GRAD[g]||["#0f5f46","#06251b"];return'--g1:'+c[0]+';--g2:'+c[1];}
 
   function tile(c,i,note){
     return '<button type="button" class="pp-tile pp-s" data-g="'+esc(c.g)+'" style="'+gr(c.g)+';--i:'+i+'" aria-label="'+esc(c.ar)+'">'+
@@ -260,18 +293,18 @@
   var off=document.getElementById("hxOff"),offT=off&&off.querySelector(".hx-off-tx b"),offS=off&&off.querySelector(".hx-off-tx small");
   var offName=offT?offT.textContent.trim():"القصص",offSub=offS?offS.textContent.trim():"مغلق مؤقتاً";
 
+  var hr=new Date().getHours(),KICK=hr<5?"LATE NIGHT":hr<12?"MORNING":hr<17?"AFTERNOON":hr<21?"EVENING":"TONIGHT";
   var home=
     '<div class="pp-page" role="region" data-page="home">'+
-      '<div class="pp-s pp-greet" style="--i:0"><small class="pp-kick" dir="ltr">TONIGHT</small><h1>تحب تلعب إيه؟</h1></div>'+
-      '<div class="pp-s" style="--i:1" id="ppHeroHost"></div>'+
-      '<form class="pp-s pp-join" id="ppJoin" style="--i:2" autocomplete="off">'+IC.key+
-        '<div class="jl"><small>معاك كود غرفة؟</small><input id="ppCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="٠٠٠٠" aria-label="كود الغرفة" dir="ltr"></div>'+
-        '<button type="submit" aria-label="ادخل الغرفة">'+IC.go+'</button></form>'+
-      row("كورة","football",balls,3)+row("ألعاب","games",funs,5)+
-      '<div class="pp-s pp-rh" style="--i:7"><h3>قريباً</h3><a type="button" data-go="soon">عرض الكل</a></div>'+
-      '<div class="pp-s pp-row" style="--i:8"><button type="button" class="pp-tile lock" data-off="1" style="--g1:#222226;--g2:#0a0a0c"><span class="ic" aria-hidden="true">'+IC.lock+'</span>'+
-        '<span class="t">'+esc(offName)+'</span><span class="e" dir="ltr">CASE FILES</span><span class="st">'+esc(offSub)+'</span></button></div>'+
-    '</div>';
+      '<div class="pp-home">'+
+        '<div class="pp-s pp-greet" style="--i:0"><small class="pp-kick" dir="ltr">'+KICK+'</small><h1>تحب تلعب إيه؟</h1></div>'+
+        '<div class="pp-s pp-emblem" style="--i:1">'+emblem()+mark()+'</div>'+
+        '<button type="button" class="pp-s pp-slab" style="--i:2" data-go="games"><span class="tx"><b>ابدأ لعب</b><small>اختار من كل الألعاب</small></span><span class="go">'+IC.go+'</span></button>'+
+        '<form class="pp-s pp-join" id="ppJoin" style="--i:3" autocomplete="off">'+IC.key+
+          '<div class="jl"><small>معاك كود غرفة؟</small><label class="pp-cells" dir="ltr"><i></i><i></i><i></i><i></i>'+
+          '<input id="ppCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" aria-label="كود الغرفة" dir="ltr"></label></div>'+
+          '<button type="submit" aria-label="ادخل الغرفة">'+IC.go+'</button></form>'+
+      '</div></div>';
 
   var fb=
     '<div class="pp-page" role="region" data-page="football" hidden>'+
@@ -311,8 +344,7 @@
       '<div class="pp-soon">'+
         '<div class="pp-s pp-lock" style="--i:0">'+IC.lock+'</div>'+
         '<small class="pp-s pp-kick" style="--i:1" dir="ltr">COMING SOON</small>'+
-        '<h1 class="pp-s" style="--i:2">قريباً</h1>'+
-        '<p class="pp-s" style="--i:3">'+esc(offName)+' — '+esc(offSub)+'. بنجهّز حاجة جديدة، ولما تجهز هتلاقيها هنا.</p>'+
+        '<p class="pp-s" style="--i:2">'+esc(offName)+' — '+esc(offSub)+'. بنجهّز حاجة جديدة، ولما تجهز هتلاقيها هنا.</p>'+
         '<div class="pp-s pp-ghosts" style="--i:4"><i class="pp-ghost"></i><i class="pp-ghost"></i><i class="pp-ghost"></i></div>'+
         '<button type="button" class="pp-s pp-btn g" data-off="1" style="--i:5">اعرف أكتر</button>'+
       '</div></div>';
@@ -323,7 +355,7 @@
     }).join("")+'</nav>';
 
   var shell=document.createElement("div");shell.id="ppShell";shell.setAttribute("data-page","home");
-  shell.innerHTML='<div class="pp-bg" aria-hidden="true"><i class="b-home"></i><i class="b-football"></i><i class="b-games"></i><i class="b-soon"></i></div>'+
+  shell.innerHTML='<div class="pp-bg" aria-hidden="true">'+waves()+'<i class="vg"></i><i class="vg2"></i></div>'+
     '<main class="pp-pages">'+home+fb+gm+soon+'</main>'+nav;
   var head=hub.querySelector(".hm-head");
   if(head){head.after(shell);}else hub.prepend(shell);
@@ -404,18 +436,13 @@
     a.onfinish=fin;setTimeout(fin,700);
   }
 
-  /* ---------- حالة الصفحة الرئيسية: البطل + «لعبت قريب» ---------- */
+  /* ---------- حالة الصفحة الرئيسية: أرقام صغيرة + صورة الحساب ---------- */
   function paint(){
-    var st=load(),last="";try{last=localStorage.getItem("pp_last_game")||"";}catch(e){}
-    var pick=byG(last),isLast=!!pick;
-    if(!pick){var d=Math.floor(Date.now()/864e5),cand=funs.filter(function(c){return c.online;});pick=cand.length?cand[d%cand.length]:games[0];}
-    var s=st[pick.g],host=document.getElementById("ppHeroHost");
+    var st=load(),plays=0;Object.keys(st).forEach(function(k){plays+=(st[k]&&st[k].n)||0;});
+    var host=document.getElementById("ppStats");
     if(host){
-      host.innerHTML='<div class="pp-hero" style="--g1:'+(GRAD[pick.g]||GRAD.password)[0]+'"><span class="wm" aria-hidden="true">'+pick.art+'</span>'+
-        '<span class="tag">'+(isLast?'كمّل من حيث وقفت':'اللعبة المختارة النهاردة')+'</span>'+
-        '<h2>'+esc(pick.ar)+'</h2><p>'+(isLast&&s&&s.t?'آخر لعب '+ago(s.t)+(s.n?' · '+times(s.n):''):esc(pick.ds))+'</p>'+
-        '<div class="pp-cta"><button type="button" class="pp-btn p pp-play" data-g="'+esc(pick.g)+'">'+IC.play+'العب</button>'+
-        '<button type="button" class="pp-btn g" data-go="games">كل الألعاب</button></div></div>';
+      var on=games.filter(function(c){return c.online;}).length;
+      host.innerHTML=[[games.length,"لعبة"],[on,"أونلاين"],[plays,"مرة لعب"]].map(function(x){return '<div class="pp-stat"><b>'+ar(x[0])+'</b><small>'+x[1]+'</small></div>';}).join("");
     }
     /* صورة الحساب في التاب */
     var chip=document.getElementById("accChip"),me=tabBtn("me"),img=chip&&chip.querySelector("img");
@@ -434,11 +461,17 @@
   });
   var jf=document.getElementById("ppJoin"),jc=document.getElementById("ppCode");
   if(jf&&jc){
-    jc.addEventListener("input",function(){jc.value=jc.value.replace(/[^\d٠-٩]/g,function(c){var i="٠١٢٣٤٥٦٧٨٩".indexOf(c);return i>-1?String(i):"";}).replace(/\D/g,"").slice(0,4);});
+    var cells=jf.querySelectorAll(".pp-cells i");
+    function syncCells(){
+      var v=jc.value,focus=document.activeElement===jc;
+      [].forEach.call(cells,function(c,i){c.textContent=v[i]?ar(v[i]):"";c.classList.toggle("on",focus&&i===Math.min(v.length,3));});
+    }
+    jc.addEventListener("focus",syncCells);jc.addEventListener("blur",syncCells);
+    jc.addEventListener("input",function(){jc.value=jc.value.replace(/[^\d٠-٩]/g,function(c){var i="٠١٢٣٤٥٦٧٨٩".indexOf(c);return i>-1?String(i):"";}).replace(/\D/g,"").slice(0,4);syncCells();});
     jf.addEventListener("submit",function(e){
       e.preventDefault();
       var hc=document.getElementById("hxCode"),hb=document.getElementById("hxJoinBox");
-      if(hc&&hb){hc.value=jc.value;hb.dispatchEvent(new Event("submit",{cancelable:true,bubbles:true}));if(!/^\d{4}$/.test(jc.value))jc.focus();else jc.value="";}
+      if(hc&&hb){hc.value=jc.value;hb.dispatchEvent(new Event("submit",{cancelable:true,bubbles:true}));if(!/^\d{4}$/.test(jc.value))jc.focus();else jc.value="";syncCells();}
     });
   }
   /* عدّاد اللعب */
@@ -450,7 +483,7 @@
   var was=!hub.classList.contains("hidden");
   new MutationObserver(function(){
     var now=!hub.classList.contains("hidden");
-    if(now&&!was){var p=pages[cur];paint();if(p){p.hidden=true;void p.offsetWidth;p.hidden=false;}requestAnimationFrame(function(){moveInd(cur);});}
+    if(now&&!was){var p=pages[cur];paint();if(p){p.hidden=true;void p.offsetWidth;p.hidden=false;}requestAnimationFrame(function(){moveInd(cur);fit();});}
     was=now;
   }).observe(hub,{attributes:true,attributeFilter:["class"]});
   (function watchChip(n){
@@ -458,9 +491,14 @@
     if(c){new MutationObserver(function(){paint();}).observe(c,{childList:true});}
     else if(n<40)setTimeout(function(){watchChip(n+1);},500);
   })(0);
-  window.addEventListener("resize",function(){moveInd(cur);});
+  function fit(){
+    var hd=hub.querySelector(".hm-head");if(!hd||!navEl)return;
+    var top=hd.getBoundingClientRect().bottom+window.scrollY,nav=navEl.getBoundingClientRect().top+window.scrollY;
+    var h=Math.floor(nav-top-40);if(h>200)shell.style.setProperty("--pp-avail",h+"px");
+  }
+  window.addEventListener("resize",function(){moveInd(cur);fit();});
   window.addEventListener("pageshow",paint);
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){moveInd(cur);});
-  paint();setTimeout(function(){moveInd(cur);paint();},60);setTimeout(function(){moveInd(cur);},600);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){moveInd(cur);fit();});
+  paint();fit();setTimeout(function(){moveInd(cur);paint();fit();},60);setTimeout(function(){moveInd(cur);fit();},600);
   window.PPShell={go:go,paint:paint,brand:brand};
 })();
