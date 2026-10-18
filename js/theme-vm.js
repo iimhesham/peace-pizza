@@ -254,8 +254,8 @@
     go:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
     lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.6"/><path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg>'
   };
-  var GRAD={password:["#0f5f46","#06251b"],story:["#4d2b24","#1a0e0c"],career:["#17564f","#071f1c"],flags:["#2a6b3a","#0c2413"],xo:["#14604e","#072720"],
-    ludo:["#0d6b57","#052a22"],sudoku:["#0e5a3a","#05211a"],tawla:["#3a2a1e","#140d09"],blackjack:["#0b4d3a","#04170f"],snake:["#127a52","#062b1e"]};
+  var GRAD={password:["#1b2263","#0a0e2a","255,170,0"],story:["#5c0507","#2b0203","116,165,190"],career:["#1d4560","#0b2233","212,182,117"],flags:["#4a2f22","#28160f","248,165,125"],xo:["#36434A","#1d262b","255,71,119"],
+    ludo:["#2b3038","#14171c","204,146,68"],sudoku:["#b3004b","#6b002b","244,240,168"],tawla:["#3a2216","#1c110a","227,177,92"],blackjack:["#314B6E","#0E141C","91,136,178"],snake:["#1a2e55","#111f3a","240,194,90"]};
 
   /* ---------- نقرا الألعاب من الكروت ---------- */
   function readCards(){
@@ -276,7 +276,7 @@
   var games=readCards();if(!games.length)return;
   var balls=games.filter(function(x){return x.sec==="ball";}),funs=games.filter(function(x){return x.sec!=="ball";});
   function byG(g){for(var i=0;i<games.length;i++)if(games[i].g===g)return games[i];return null;}
-  function gr(g){var c=GRAD[g]||["#0f5f46","#06251b"];return'--g1:'+c[0]+';--g2:'+c[1];}
+  function gr(g){var c=GRAD[g]||["#0f5f46","#06251b"];return'--g1:'+c[0]+';--g2:'+c[1]+';--ga:'+(c[2]||"110,224,179");}
 
   function tile(c,i,note){
     return '<button type="button" class="pp-tile pp-s" data-g="'+esc(c.g)+'" style="'+gr(c.g)+';--i:'+i+'" aria-label="'+esc(c.ar)+'">'+
