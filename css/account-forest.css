@@ -91,3 +91,11 @@ html:not([data-theme="vm"]) #olRoot[data-g="base"] .ox-chip{border-color:#15402f
 html:not([data-theme="vm"]) #olSheet{--bg:#01120e;--card:#071f19;--card2:#0a2a22;--h1:#0b2c24;--h2:#061812;--ln:#12392d;--ln2:#1d5642;--mu:#86aa9b;--mu2:#5f8577;--ink:#e8f3ee;--ac:#58b498;--acr:88,180,152;--on:#031510;--gr:#165f4a;--gon:#e9f8f1}
 
 @media (max-width:360px){html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-photo .ol-av,html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-photo .ol-ph{width:84px;height:84px}html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k{gap:6px;padding:0 8px 12px}}
+
+/* شريط الرتبة: مسافات متوازنة ومبيلزقش في حافة الكارت */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-page{padding-bottom:16px}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-strip{margin:0 12px;grid-template-columns:1.25fr 1fr 1fr}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-strip>div{display:flex;flex-direction:column;gap:5px;padding:12px 14px 12px}
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-strip label,html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-strip b{margin:0;line-height:1.1;letter-spacing:.06em}
+/* حفر الأرقام: نفس السُمك المنحوت */
+html:not([data-theme="vm"]) #olRoot[data-g="base"] .pp-k>div{box-shadow:inset 0 3px 6px rgba(0,0,0,.75),inset 0 -2px 0 rgba(190,255,230,.1),0 2px 0 #000,0 0 0 1.5px #123a2e}

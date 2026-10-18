@@ -256,3 +256,13 @@ html:not([data-theme="vm"]) .credits-toggle{filter:sepia(.5) saturate(.8) hue-ro
 /* أداء: نوقف الضباب القديم (3 عناصر blur متحركة طول الوقت) تحت الثيم الجديد */
 html:not([data-theme="vm"]) body.mode-home .fog{display:none!important}
 .pp-page:not([hidden]) .pp-s{will-change:auto}
+
+/* ---------- كروت الألعاب: منحوتة أكتر + بلون اللعبة الأصلي (--g1/--g2/--ga من theme-vm.js) ---------- */
+.pp-tile{border-radius:24px;--gd:color-mix(in srgb,var(--g2) 45%,#000);
+  background:linear-gradient(172deg,var(--g1),var(--g2));
+  box-shadow:0 8px 0 var(--gd,#000),0 16px 20px rgba(0,0,0,.45),inset 0 2.5px 0 rgba(255,255,255,.3),inset 0 -5px 0 rgba(0,0,0,.34),inset 0 0 0 2px rgba(var(--ga,110,224,179),.38)}
+.pp-tile::before{content:"";position:absolute;inset:0 0 auto 0;height:44%;border-radius:24px 24px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.17),transparent);pointer-events:none;z-index:1}
+.pp-tile .e{color:rgb(var(--ga,110,224,179))}
+.pp-tile .ic{filter:drop-shadow(0 4px 0 rgba(0,0,0,.45)) drop-shadow(0 9px 10px rgba(0,0,0,.35))}
+.pp-tile:active{transform:translateY(7px);box-shadow:0 1px 0 var(--gd,#000),inset 0 2.5px 0 rgba(255,255,255,.2),inset 0 -5px 0 rgba(0,0,0,.34),inset 0 0 0 2px rgba(var(--ga,110,224,179),.38)}
+.pp-lay{gap:22px}.pp-trio{gap:16px}
