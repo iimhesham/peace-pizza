@@ -1,0 +1,256 @@
+/* =========================================================
+   PEACE PIZZA — App Shell  ·  ثيم FOREST (الغامق الأساسي)
+   الألوان من صورة الموجات: أخضر غابة · طحلب · زيتوني · كريمي · بني طين
+   الشكل: منحوت (solid + حافة فاتحة فوق + «سُمك» تحت)، مفيش زجاج ولا شفافيات رمادي.
+   كل القواعد تحت html:not([data-theme="vm"]) فثيم فانيليا مش بيتأثر.
+========================================================= */
+html:not([data-theme="vm"]){
+  --f-bg:#050706;
+  --f-pt:#141c18;--f-pb:#080c0a;      /* سطح منحوت: فوق / تحت */
+  --f-edge:#1e6a50;                   /* حافة مضيئة */
+  --f-deep:#000;                   /* «سُمك» القطعة */
+  --f-well:#030504;                   /* حفرة (إدخال) */
+  --f-moss:#0f6b4c;--f-olive:#10b981;--f-clay:#74431f;
+  --pp-van:#EDF5F0;--pp-sand:#8fdcb9;--pp-mut:#8aa89b;--pp-ink:#050706;
+  --pp-line:#16372c;--pp-ease:cubic-bezier(.16,1,.3,1);
+  --pp-gold:linear-gradient(180deg,#43e3a8,#10b981);--pp-gold-s:#4ae0a6;--pp-gold-d:#04684a;
+  --w1:#040605;--w2:#07100c;--w3:#0a1b14;--w4:#0d2e22;--w5:#0f5a41;--w6:#020403;--w7:#06140e;--wc:#0e6a4b;--wl:#6fe0b3;--wk:#052d21;
+  /* قطعة منحوتة جاهزة */
+  --plate:linear-gradient(180deg,var(--f-pt),var(--f-pb));
+  --plate-sh:0 5px 0 var(--f-deep),0 10px 16px rgba(0,0,0,.35),inset 0 2px 0 rgba(190,255,230,.16),inset 0 -3px 0 rgba(0,0,0,.3),inset 0 0 0 2px var(--f-edge);
+  --plate-sh-p:0 1px 0 var(--f-deep),inset 0 2px 0 rgba(190,255,230,.1),inset 0 -2px 0 rgba(0,0,0,.3),inset 0 0 0 2px var(--f-edge);
+}
+html[data-theme="vm"] #ppShell,html[data-theme="vm"] .pp-brand,html[data-theme="vm"] .pp-hsw,html[data-theme="vm"] .pp-bg,html[data-theme="vm"] .pp-wipe{display:none!important}
+
+/* ---------- نخفي القديم ---------- */
+html:not([data-theme="vm"]) #hub.page-in{animation:none!important;transform:none!important}
+html:not([data-theme="vm"]) #hub .hm-badge,
+html:not([data-theme="vm"]) #hub .hm-id,
+html:not([data-theme="vm"]) #hub #vmBar,
+html:not([data-theme="vm"]) #hub #vmHero,
+html:not([data-theme="vm"]) #hub #hxTop,
+html:not([data-theme="vm"]) #hub #hxJoinBox,
+html:not([data-theme="vm"]) #hub #vmMenu,
+html:not([data-theme="vm"]) #hub .hx-h,
+html:not([data-theme="vm"]) #hub .hx-grid,
+html:not([data-theme="vm"]) #hub .hx-off,
+html:not([data-theme="vm"]) #hub #dxHandle,
+html:not([data-theme="vm"]) body.mode-home .footer,
+html:not([data-theme="vm"]) #lgStrings{display:none!important}
+html:not([data-theme="vm"]) body.mode-home::before{background:#050706!important}
+/* الرئيسية: مفيش سكرول خالص */
+html:not([data-theme="vm"]) body.mode-home:has(#ppShell[data-page="home"]):has(#hub:not(.hidden)){overflow:hidden;height:100vh;height:100dvh}
+
+/* ---------- الخلفية: موجات SVG (واحدة بس، بتتحرك مع كل تاب) ---------- */
+.pp-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#050706}
+.pp-waves{position:absolute;inset:0;width:100%;height:100%;transition:transform 1s var(--pp-ease);will-change:transform;transform-origin:50% 40%}
+.pp-bg .vg{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 38%,transparent 52%,rgba(0,0,0,.55));transition:opacity .6s}
+.pp-bg .vg2{position:absolute;inset:0;background:rgba(0,0,0,.4);opacity:0;transition:opacity .7s}
+#ppShell[data-page="football"] .pp-waves{transform:translate3d(-5%,-5%,0) scale(1.14) rotate(-2deg)}
+#ppShell[data-page="games"] .pp-waves{transform:translate3d(6%,-10%,0) scale(1.2) rotate(2.5deg)}
+#ppShell[data-page="soon"] .pp-waves{transform:translate3d(0,-14%,0) scale(1.28) rotate(-1deg)}
+#ppShell[data-page="soon"] .pp-bg .vg2,#ppShell[data-page="games"] .pp-bg .vg2,#ppShell[data-page="football"] .pp-bg .vg2{opacity:1}
+#ppShell[data-page="football"] .pp-bg .vg2{opacity:.55}
+#ppShell[data-page="games"] .pp-bg .vg2{opacity:.4}
+
+/* ---------- الهيدر + اللوجو ---------- */
+html:not([data-theme="vm"]) #hub .hm-head.hm-head-c{
+  position:relative;z-index:6;display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:9px;
+  padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 8px 64px;margin:0;min-height:0;background:none;border:0;box-shadow:none}
+.pp-brand{display:flex;align-items:center;gap:10px;margin-inline-end:auto;order:0;min-width:0}
+.pp-mark{position:relative;display:block;flex:none;width:46px;height:46px;border-radius:50%;
+  background:radial-gradient(circle at 34% 26%,#ffffff 0,#EDF5F0 38%,#C9DDD3 66%,#8fa89c 100%);
+  box-shadow:inset 0 -4px 5px rgba(20,60,45,.35),inset 0 3px 3px rgba(255,255,255,.85),0 4px 0 var(--f-deep),0 0 0 2.5px #0b3a2b,0 0 0 4px var(--f-edge)}
+.pp-mark::before{content:"";position:absolute;inset:6.5%;border-radius:50%;
+  background:radial-gradient(circle at 40% 32%,#ffffff,#e8f3ed 70%,#cfe2d8);
+  box-shadow:inset 0 3px 4px rgba(20,60,45,.35),0 1px 0 rgba(255,255,255,.75)}
+.pp-mark svg{position:absolute;inset:0;width:100%;height:100%}
+.pp-word{display:flex;flex-direction:column;font:800 20px/.9 'Playfair Display','Georgia',serif;letter-spacing:-.012em;color:var(--pp-van);text-shadow:0 2px 0 var(--f-deep)}
+.pp-word b{font:inherit;display:block}
+.pp-brand.xl{flex-direction:column;gap:14px;margin:0}
+.pp-brand.xl .pp-mark{width:112px;height:112px}
+.pp-brand.xl .pp-word{align-items:center;font-size:38px;line-height:.92;text-align:center}
+html:not([data-theme="vm"]) #hub .hm-wallet,html:not([data-theme="vm"]) #hub .acc-chip{display:none!important}
+html:not([data-theme="vm"]) #hub .hm-wallet.__old,html:not([data-theme="vm"]) #hub .acc-chip.__old{
+  position:static!important;margin:0;height:40px;border-radius:14px;color:var(--pp-van);background:var(--plate);border:0;box-shadow:0 3px 0 var(--f-deep),inset 0 1.5px 0 rgba(190,255,230,.16),inset 0 0 0 2px var(--f-edge)}
+html:not([data-theme="vm"]) #hub .hm-wallet.__old{order:3;padding:0 12px}
+html:not([data-theme="vm"]) #hub .acc-chip.__old{order:4;min-width:40px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font:700 12px/1 'Plus Jakarta Sans','IBM Plex Sans Arabic',sans-serif}
+html:not([data-theme="vm"]) #hub .acc-chip.in.__old{padding:0;width:40px;border-radius:50%;overflow:hidden}
+html:not([data-theme="vm"]) #hub .acc-chip.__old img{width:100%;height:100%;object-fit:cover}
+html:not([data-theme="vm"]) #hub .hm-wallet.__old:active,html:not([data-theme="vm"]) #hub .acc-chip.__old:active{transform:translateY(2px);box-shadow:0 1px 0 var(--f-deep),inset 0 0 0 2px var(--f-edge)}
+.pp-hsw{order:5;display:flex;transform:scale(.82);transform-origin:center}
+
+/* ---------- الصفحات ---------- */
+#ppShell{position:relative;z-index:1}
+.pp-pages{position:relative;z-index:2;padding:2px 0 128px}
+#ppShell[data-page="home"] .pp-pages{padding-bottom:0}
+.pp-page[hidden]{display:none!important}
+.pp-page{padding:0 14px}
+.pp-page:not([hidden]) .pp-s{animation:ppRise .5s var(--pp-ease) both;animation-delay:calc(min(var(--i,0),7)*45ms + 40ms)}
+@keyframes ppRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.pp-page h1,.pp-page h2,.pp-page h3{margin:0;font-family:'Tajawal','IBM Plex Sans Arabic',sans-serif;color:var(--pp-van);text-shadow:0 3px 0 rgba(0,0,0,.55)}
+.pp-kick{display:block;font:700 10.5px/1 'Jost','Plus Jakarta Sans',sans-serif;letter-spacing:.32em;color:var(--pp-sand)}
+.pp-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#9be37a;box-shadow:0 0 0 2px rgba(0,0,0,.5);margin-inline-end:5px}
+
+/* أزرار منحوتة */
+.pp-btn{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 20px;border-radius:15px;
+  font:800 15px/1 'Tajawal','IBM Plex Sans Arabic',sans-serif;cursor:pointer;transition:transform .12s,box-shadow .12s;-webkit-tap-highlight-color:transparent}
+.pp-btn.p{background:var(--pp-gold);color:#03160f;box-shadow:0 5px 0 var(--pp-gold-d),0 9px 14px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.7),inset 0 -3px 0 rgba(0,70,48,.3)}
+.pp-btn.g{background:var(--plate);color:var(--pp-van);box-shadow:var(--plate-sh)}
+.pp-btn:active{transform:translateY(4px)}
+.pp-btn.p:active{box-shadow:0 1px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.5)}
+.pp-btn.g:active{box-shadow:var(--plate-sh-p)}
+
+/* ---------- الرئيسية (شاشة واحدة، من غير ألعاب) ---------- */
+.pp-home{display:flex;flex-direction:column;gap:12px;height:var(--pp-avail,calc(100vh - 190px));min-height:0;padding-bottom:2px}
+.pp-greet{display:flex;flex-direction:column;align-items:flex-start;padding:8px 4px 0;flex:none}
+.pp-greet h1{font-size:30px;font-weight:900;line-height:1.15;margin-top:7px}
+.pp-emblem{position:relative;flex:1 1 0;min-height:0;display:grid;place-items:center}
+.pp-emblem .rings{position:absolute;height:100%;max-height:100%;aspect-ratio:1;max-width:100%;filter:drop-shadow(0 7px 0 rgba(0,0,0,.55));animation:ppFloat 7s ease-in-out infinite}
+.pp-emblem .pp-mark{position:relative;width:min(40%,150px);height:auto;aspect-ratio:1;animation:ppFloat 7s ease-in-out infinite;animation-delay:-.4s}
+@keyframes ppFloat{50%{transform:translateY(-5px) rotate(1.2deg)}}
+@media (max-height:700px){.pp-emblem .rings{opacity:.9}}
+
+.pp-slab{appearance:none;border:0;flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;height:64px;padding:0 20px 0 14px;border-radius:20px;cursor:pointer;text-align:start;
+  background:var(--pp-gold);color:#03160f;-webkit-tap-highlight-color:transparent;transition:transform .12s,box-shadow .12s;
+  box-shadow:0 6px 0 var(--pp-gold-d),0 12px 18px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.75),inset 0 -4px 0 rgba(0,70,48,.28)}
+.pp-slab:active{transform:translateY(5px);box-shadow:0 1px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.5)}
+.pp-slab .tx{display:flex;flex-direction:column;gap:4px}
+.pp-slab b{font:900 22px/1 'Tajawal','IBM Plex Sans Arabic',sans-serif}
+.pp-slab small{font:700 11.5px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:rgba(3,22,15,.72)}
+.pp-slab .go{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#0a0f0c;color:var(--pp-sand);box-shadow:inset 0 3px 5px rgba(0,0,0,.6),0 1.5px 0 rgba(255,255,255,.55)}
+
+.pp-join{display:flex;align-items:center;gap:12px;flex:none;height:78px;padding:0 12px 0 14px;border-radius:22px;background:var(--plate);box-shadow:var(--plate-sh)}
+.pp-join>svg{flex:none;color:var(--pp-sand)}
+.pp-join .jl{flex:1;display:flex;flex-direction:column;gap:7px;min-width:0}
+.pp-join .jl small{font:700 11px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-mut)}
+.pp-cells{position:relative;display:flex;gap:8px;direction:ltr;width:max-content;max-width:100%}
+.pp-cells i{display:grid;place-items:center;width:38px;height:36px;border-radius:10px;background:var(--f-well);font:800 20px/1 'Jost','Plus Jakarta Sans',sans-serif;font-style:normal;color:var(--pp-van);
+  box-shadow:inset 0 3px 5px rgba(0,0,0,.7),inset 0 -1px 0 rgba(190,255,230,.12);transition:box-shadow .15s}
+.pp-cells i:empty::before{content:"";width:6px;height:6px;border-radius:50%;background:rgba(237,245,240,.18)}
+.pp-cells i.on{box-shadow:inset 0 3px 5px rgba(0,0,0,.7),0 0 0 2px var(--pp-sand)}
+.pp-join input{position:absolute;inset:0;width:100%;height:100%!important;min-height:0!important;opacity:0;border:0!important;padding:0!important;margin:0;font-size:16px;direction:ltr;background:none!important;box-shadow:none!important}
+.pp-join button{appearance:none;border:0;flex:none;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;cursor:pointer;background:var(--pp-gold);color:#03160f;
+  box-shadow:0 4px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.7);transition:transform .12s,box-shadow .12s}
+.pp-join button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pp-gold-d)}
+
+.pp-stats{flex:none;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pp-stat{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px 9px;border-radius:16px;background:var(--f-well);
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.65),inset 0 -1px 0 rgba(190,255,230,.1),0 0 0 2px #10241c}
+.pp-stat b{font:800 22px/1 'Jost','Plus Jakarta Sans',sans-serif;color:var(--pp-gold-s)}
+.pp-stat small{font:700 10.5px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-mut)}
+
+/* ---------- صفحة الألعاب: لوح اللعبة ---------- */
+.pp-rh{display:flex;align-items:baseline;justify-content:space-between;margin:26px 4px 12px}
+.pp-rh h3{font-size:21px;font-weight:800}
+.pp-tile{--g1:#4b6a37;--g2:#2a4021;appearance:none;border:0;position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;flex:none;
+  width:138px;height:188px;padding:13px;border-radius:22px;overflow:hidden;text-align:start;color:var(--pp-van);cursor:pointer;
+  background:linear-gradient(170deg,var(--g1),var(--g2));
+  box-shadow:0 6px 0 var(--f-deep),0 12px 16px rgba(0,0,0,.3),inset 0 2px 0 rgba(190,255,230,.26),inset 0 -3px 0 rgba(0,0,0,.28),inset 0 0 0 2px rgba(0,0,0,.2);
+  transition:transform .12s,box-shadow .12s;-webkit-tap-highlight-color:transparent}
+.pp-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.42),transparent 52%);pointer-events:none}
+.pp-tile>*{position:relative;z-index:2}
+.pp-tile .wm{position:absolute!important;z-index:1!important;bottom:-22px;inset-inline-start:-26px;width:150px;height:150px;opacity:.09;transform:rotate(-14deg);color:var(--pp-van)}
+.pp-tile .wm svg,.pp-tile .ic svg{width:100%;height:100%;display:block}
+.pp-tile .ic{position:absolute!important;top:14px;inset-inline-end:14px;width:54px;height:54px;color:var(--pp-van);filter:drop-shadow(0 2px 0 rgba(0,0,0,.5))}
+.pp-tile .t{font:800 18px/1.15 'Tajawal','IBM Plex Sans Arabic',sans-serif;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+.pp-tile .e{align-self:flex-start;font:700 8.5px/1.2 'Jost','Plus Jakarta Sans',sans-serif;letter-spacing:.2em;color:var(--pp-sand)}
+.pp-tile .st{margin-top:5px;font:600 10px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-van);display:flex;align-items:center}
+.pp-tile:active{transform:translateY(5px);box-shadow:0 1px 0 var(--f-deep),inset 0 2px 0 rgba(190,255,230,.18),inset 0 -3px 0 rgba(0,0,0,.28),inset 0 0 0 2px rgba(0,0,0,.2)}
+
+/* ---------- كورة ---------- */
+.pp-fb-head{padding:12px 4px 18px}
+.pp-fb-head h1{font-size:50px;font-weight:900;line-height:1;margin-top:8px;letter-spacing:-.01em}
+.pp-fb-head p{margin:8px 0 0;font:500 13px/1.6 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-mut)}
+.pp-fb-list{display:flex;flex-direction:column;gap:14px}
+.pp-frow{appearance:none;border:0;position:relative;overflow:hidden;display:grid;grid-template-columns:64px 1fr 46px;align-items:center;gap:12px;
+  width:100%;min-height:104px;padding:14px 14px 14px 16px;border-radius:22px;text-align:start;color:var(--pp-van);cursor:pointer;
+  background:var(--plate);box-shadow:var(--plate-sh);transition:transform .12s,box-shadow .12s;-webkit-tap-highlight-color:transparent}
+.pp-frow::before{content:"";position:absolute;inset-block:16px;inset-inline-end:0;width:5px;border-radius:5px 0 0 5px;background:var(--pp-gold)}
+.pp-frow:active{transform:translateY(4px);box-shadow:var(--plate-sh-p)}
+.pp-frow .no{font:400 62px/1 'Anton','Impact',sans-serif;color:transparent;-webkit-text-stroke:1.6px var(--pp-sand);text-align:center;letter-spacing:.01em}
+.pp-frow .tx{display:flex;flex-direction:column;gap:3px;min-width:0}
+.pp-frow .t{font:800 21px/1.15 'Tajawal',sans-serif}
+.pp-frow .e{align-self:flex-start;font:700 9px/1.2 'Jost',sans-serif;letter-spacing:.22em;color:var(--pp-sand)}
+.pp-frow .d{font:500 12px/1.5 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-mut);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+.pp-frow .m{display:flex;align-items:center;justify-content:flex-start;gap:6px;margin-top:3px;font:700 10px/1 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-sand)}
+.pp-frow .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--f-well);color:var(--pp-van);box-shadow:inset 0 3px 5px rgba(0,0,0,.65),inset 0 -1px 0 rgba(190,255,230,.12)}
+.pp-frow .ic svg{width:26px;height:26px}
+
+/* ---------- ألعاب: أرفف ---------- */
+.pp-g-head{padding:12px 4px 4px}
+.pp-g-head h1{font-size:46px;font-weight:900;line-height:1;margin-top:8px}
+.pp-shelf-h{display:flex;align-items:center;gap:14px;margin:28px 4px 16px}
+.pp-shelf-h h3{font-size:22px;font-weight:800;line-height:1.15}
+.pp-shelf-h small{display:block;margin-top:3px;font:500 12px/1.3 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-mut)}
+.pp-shelf-h .ln{flex:1;height:4px;border-radius:5px;background:var(--f-well);box-shadow:inset 0 2px 3px rgba(0,0,0,.7),0 1px 0 rgba(190,255,230,.1)}
+.pp-lay{display:grid;gap:16px}
+.pp-lay .pp-tile{width:auto;height:auto;min-height:0}
+.pp-big{grid-template-columns:1fr 1fr}
+.pp-big .pp-tile{aspect-ratio:.86}
+.pp-big .pp-tile .ic{width:60px;height:60px}
+.pp-wide{grid-template-columns:1fr}
+.pp-wide .pp-tile{height:122px;padding:16px 18px;justify-content:center}
+.pp-wide .pp-tile .ic{top:50%;margin-top:-37px;width:74px;height:74px;inset-inline-end:18px}
+.pp-wide .pp-tile .t{font-size:24px}
+.pp-wide .pp-tile .wm{width:170px;height:170px;bottom:-40px;inset-inline-start:-18px;opacity:.1}
+.pp-trio{grid-template-columns:1fr 1fr 1fr;gap:12px}
+.pp-trio .pp-tile{aspect-ratio:.78;padding:10px}
+.pp-trio .pp-tile .ic{width:44px;height:44px;top:12px;inset-inline-end:auto;inset-inline-start:12px}
+.pp-trio .pp-tile .t{font-size:15px}
+.pp-trio .pp-tile .e,.pp-trio .pp-tile .st{display:none}
+.pp-trio .pp-tile .wm{width:100px;height:100px;bottom:-14px;inset-inline-start:-14px}
+
+/* ---------- قريباً: COMING SOON هو العنوان ---------- */
+.pp-soon{display:flex;flex-direction:column;align-items:center;text-align:center;padding:44px 4px 0}
+.pp-lock{position:relative;width:124px;height:124px;border-radius:50%;display:grid;place-items:center;margin:0 0 40px;color:var(--pp-van);
+  background:radial-gradient(circle at 36% 26%,#35563a,#0a0f0c 70%);
+  box-shadow:0 7px 0 var(--f-deep),0 14px 22px rgba(0,0,0,.35),inset 0 3px 0 rgba(190,255,230,.2),inset 0 -5px 0 rgba(0,0,0,.3),0 0 0 3px var(--f-edge)}
+.pp-lock svg{width:54px;height:54px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.6))}
+.pp-soon .pp-kick{font-size:23px;letter-spacing:.3em;padding-inline-start:.3em;color:var(--pp-van);text-shadow:0 3px 0 rgba(0,0,0,.6)}
+.pp-soon p{max-width:290px;margin:16px 0 0;font:500 14px/1.7 'IBM Plex Sans Arabic','Tajawal',sans-serif;color:var(--pp-mut)}
+.pp-ghosts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;width:100%;margin-top:34px}
+.pp-ghost{aspect-ratio:.72;border-radius:20px;position:relative;overflow:hidden;background:var(--f-well);
+  box-shadow:inset 0 4px 8px rgba(0,0,0,.65),inset 0 -1px 0 rgba(190,255,230,.1),0 0 0 2px #10241c}
+.pp-ghost::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(110,224,179,.12) 50%,transparent 65%);transform:translateX(-120%);animation:ppShine 3.2s ease-in-out infinite}
+.pp-ghost:nth-child(2)::after{animation-delay:.5s}.pp-ghost:nth-child(3)::after{animation-delay:1s}
+@keyframes ppShine{60%,100%{transform:translateX(120%)}}
+.pp-soon .pp-btn{margin-top:30px}
+
+/* ---------- النافبار: بار منحوت بفتحة + دايرة دهبي ---------- */
+.pp-nav{position:fixed;z-index:60;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(calc(100% - 24px),440px);height:70px;
+  display:flex;align-items:stretch;padding:0 20px;direction:rtl}
+.pp-navbg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;filter:drop-shadow(0 6px 0 var(--f-deep)) drop-shadow(0 12px 10px rgba(0,0,0,.3))}
+.pp-navpath{fill:#0a0f0c;stroke:var(--f-edge);stroke-width:2}
+.pp-orb{position:absolute;z-index:2;left:0;top:-17px;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;pointer-events:none;will-change:transform;
+  background:var(--pp-gold);color:#03160f;
+  box-shadow:0 5px 0 var(--pp-gold-d),inset 0 2px 0 rgba(255,255,255,.75),inset 0 -3px 4px rgba(0,70,48,.3),0 0 0 4px #0a0f0c}
+.pp-orb .oi{display:grid;place-items:center}
+.pp-orb svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.pp-nav button{appearance:none;border:0;background:none;position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 0 9px;
+  color:#6c8c7e;cursor:pointer;font:700 10.5px/1 'Tajawal','IBM Plex Sans Arabic',sans-serif;-webkit-tap-highlight-color:transparent;transition:color .3s}
+.pp-nav button .ico{display:grid;place-items:center;height:24px;transition:opacity .25s,transform .35s cubic-bezier(.3,1.4,.4,1)}
+.pp-nav button svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pp-nav button.on{color:var(--pp-gold-s)}
+.pp-nav button.on .ico{opacity:0;transform:scale(.4)}
+.pp-nav button:active .ico{transform:scale(.85)}
+.pp-nav .av{width:23px;height:23px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px currentColor}
+
+/* ---------- انتقال فتح اللعبة ---------- */
+.pp-wipe{position:fixed;inset:0;z-index:99990;display:grid;place-items:center;pointer-events:none;background:radial-gradient(circle at 50% 42%,#0b3a2b,#050706 66%)}
+.pp-wipe .pp-brand{animation:ppPop .5s var(--pp-ease) both}
+@keyframes ppPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+
+@media (max-width:360px){
+  .pp-tile{width:128px;height:176px}.pp-frow .no{font-size:52px}.pp-frow{grid-template-columns:54px 1fr 40px}
+  .pp-cells i{width:34px}.pp-greet h1{font-size:26px}
+}
+@media (max-height:640px){
+  .pp-greet h1{font-size:25px}.pp-slab{height:56px}.pp-join{height:68px}.pp-stat{padding:7px 4px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pp-page:not([hidden]) .pp-s{animation:none}.pp-nav button svg,.pp-tile,.pp-frow,.pp-waves{transition:none}.pp-ghost::after,.pp-emblem .rings,.pp-emblem .pp-mark{animation:none}
+}
+
+html:not([data-theme="vm"]) .credits-toggle{filter:sepia(.5) saturate(.8) hue-rotate(40deg) brightness(1.1)}
