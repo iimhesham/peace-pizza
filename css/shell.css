@@ -84,8 +84,8 @@ html:not([data-theme="vm"]) #hub .hm-wallet.__old:active,html:not([data-theme="v
 #ppShell[data-page="home"] .pp-pages{padding-bottom:0}
 .pp-page[hidden]{display:none!important}
 .pp-page{padding:0 14px}
-.pp-page:not([hidden]) .pp-s{animation:ppRise .5s var(--pp-ease) both;animation-delay:calc(min(var(--i,0),7)*45ms + 40ms)}
-@keyframes ppRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.pp-page:not([hidden]) .pp-s{animation:ppRise .26s ease-out both;animation-delay:calc(min(var(--i,0),3)*28ms)}
+@keyframes ppRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .pp-page h1,.pp-page h2,.pp-page h3{margin:0;font-family:'Tajawal','IBM Plex Sans Arabic',sans-serif;color:var(--pp-van);text-shadow:0 3px 0 rgba(0,0,0,.55)}
 .pp-kick{display:block;font:700 10.5px/1 'Jost','Plus Jakarta Sans',sans-serif;letter-spacing:.32em;color:var(--pp-sand)}
 .pp-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#9be37a;box-shadow:0 0 0 2px rgba(0,0,0,.5);margin-inline-end:5px}
@@ -228,11 +228,12 @@ html:not([data-theme="vm"]) #hub .hm-wallet.__old:active,html:not([data-theme="v
 .pp-orb svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .pp-nav button{appearance:none;border:0;background:none;position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding:0 0 9px;
   color:#6c8c7e;cursor:pointer;font:700 10.5px/1 'Tajawal','IBM Plex Sans Arabic',sans-serif;-webkit-tap-highlight-color:transparent;transition:color .3s}
-.pp-nav button .ico{display:grid;place-items:center;height:24px;transition:opacity .25s,transform .35s cubic-bezier(.3,1.4,.4,1)}
+.pp-nav button .ico{display:grid;place-items:center;height:24px;transition:opacity .18s,transform .18s ease-out}
 .pp-nav button svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .pp-nav button.on{color:var(--pp-gold-s)}
 .pp-nav button.on .ico{opacity:0;transform:scale(.4)}
-.pp-nav button:active .ico{transform:scale(.85)}
+.pp-nav button:active .ico{transform:scale(.88)}
+.pp-nav button{touch-action:manipulation}
 .pp-nav .av{width:23px;height:23px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px currentColor}
 
 /* ---------- انتقال فتح اللعبة ---------- */
@@ -260,9 +261,13 @@ html:not([data-theme="vm"]) body.mode-home .fog{display:none!important}
 /* ---------- كروت الألعاب: منحوتة أكتر + بلون اللعبة الأصلي (--g1/--g2/--ga من theme-vm.js) ---------- */
 .pp-tile{border-radius:24px;--gd:color-mix(in srgb,var(--g2) 45%,#000);
   background:linear-gradient(172deg,var(--g1),var(--g2));
-  box-shadow:0 8px 0 var(--gd,#000),0 16px 20px rgba(0,0,0,.45),inset 0 2.5px 0 rgba(255,255,255,.3),inset 0 -5px 0 rgba(0,0,0,.34),inset 0 0 0 2px rgba(var(--ga,110,224,179),.38)}
+  box-shadow:0 8px 0 var(--gd,#000),0 12px 12px rgba(0,0,0,.3),inset 0 2.5px 0 rgba(255,255,255,.3),inset 0 -5px 0 rgba(0,0,0,.34),inset 0 0 0 2px rgba(var(--ga,110,224,179),.38)}
 .pp-tile::before{content:"";position:absolute;inset:0 0 auto 0;height:44%;border-radius:24px 24px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.17),transparent);pointer-events:none;z-index:1}
 .pp-tile .e{color:rgb(var(--ga,110,224,179))}
-.pp-tile .ic{filter:drop-shadow(0 4px 0 rgba(0,0,0,.45)) drop-shadow(0 9px 10px rgba(0,0,0,.35))}
+.pp-tile .ic{filter:drop-shadow(0 4px 0 rgba(0,0,0,.4))}
 .pp-tile:active{transform:translateY(7px);box-shadow:0 1px 0 var(--gd,#000),inset 0 2.5px 0 rgba(255,255,255,.2),inset 0 -5px 0 rgba(0,0,0,.34),inset 0 0 0 2px rgba(var(--ga,110,224,179),.38)}
 .pp-lay{gap:22px}.pp-trio{gap:16px}
+
+/* أداء: الكروت والنافبار على طبقة GPU خاصة، والتوهّج الدايم بيقف لو المستخدم مش بيتفاعل */
+.pp-tile{transform:translateZ(0);transition:transform .12s ease-out,box-shadow .12s ease-out}
+.pp-page[hidden]{content-visibility:hidden}
