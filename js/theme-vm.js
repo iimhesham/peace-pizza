@@ -387,12 +387,12 @@
     pendingMove=false;
     var cx=b.offsetLeft+b.offsetWidth/2,ico=b.querySelector(".ico");
     var html='<span class="oi">'+(ico&&!ico.querySelector("img")?ico.innerHTML:"")+'</span>';
-    if(orb.getAttribute("data-t")!==n){orb.innerHTML=html;orb.setAttribute("data-t",n);var oi=orb.firstChild;if(anim&&oi&&oi.animate&&!RM)oi.animate([{transform:"scale(.4) rotate(-40deg)",opacity:0},{transform:"scale(1) rotate(0)",opacity:1}],{duration:420,delay:120,easing:"cubic-bezier(.3,1.5,.4,1)",fill:"backwards"});}
+    if(orb.getAttribute("data-t")!==n){orb.innerHTML=html;orb.setAttribute("data-t",n);var oi=orb.firstChild;if(anim&&oi&&oi.animate&&!RM)oi.animate([{transform:"scale(.7)",opacity:0},{transform:"scale(1) rotate(0)",opacity:1}],{duration:220,delay:60,easing:"ease-out",fill:"backwards"});}
     cancelAnimationFrame(navRaf);
     if(!anim||navCx==null||RM){draw(cx);return;}
-    var from=navCx,t0=performance.now(),D=360;
+    var from=navCx,t0=performance.now(),D=240;
     (function step(now){
-      var k=Math.min(1,(now-t0)/D),e=1+2.2*Math.pow(k-1,3)+1.2*Math.pow(k-1,2);
+      var k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3);
       draw(from+(cx-from)*e);
       if(k<1)navRaf=requestAnimationFrame(step);else draw(cx);
     })(t0);
