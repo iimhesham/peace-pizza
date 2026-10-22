@@ -299,3 +299,36 @@ body.mode-ucl #toast{background:#0a1a6e;color:#fff;border:2px solid #4fd0ff;font
 .u-xi li i{font-family:var(--bd);font-weight:700;font-size:18px}
 .u-wait{font-family:var(--bd);font-size:12px;letter-spacing:2px;font-weight:600}
 @media (max-width:340px){.u-logo{font-size:20px}}
+
+/* ===== v3: live match, controls, golden boot ===== */
+.u-ctl{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.u-ctl .u-seg-b{min-height:40px;font-size:12px}
+.u-live{border-color:rgba(79,208,255,.6);box-shadow:var(--glow)}
+.u-live .u-led strong{transition:color .2s}
+.u-live .u-led small{display:block;margin-top:2px;font-family:var(--bd);font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--gr)}
+.u-live.is-wait .u-led small{color:var(--sv)}
+.u-led.is-g{animation:uGoal .9s ease-out}
+.u-led.is-c{animation:uConc .9s ease-out}
+@keyframes uGoal{0%{box-shadow:0 0 0 0 rgba(93,255,176,.9);background:rgba(93,255,176,.35)}100%{box-shadow:0 0 0 22px rgba(93,255,176,0)}}
+@keyframes uConc{0%{box-shadow:0 0 0 0 rgba(255,77,109,.9);background:rgba(255,77,109,.4)}100%{box-shadow:0 0 0 22px rgba(255,77,109,0)}}
+.u-agg{text-align:center;font-family:var(--bd);font-size:12px;font-weight:700;letter-spacing:2px;color:var(--gd);padding:0 10px 4px}
+.u-feed{padding:4px 12px 12px;min-height:8px}
+.u-feed li{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:14px;animation:uDrop .25s steps(3)}
+.u-feed li span{font-family:var(--bd);font-weight:600;font-size:13px;min-width:36px;color:var(--sv)}
+.u-feed li i{width:8px;height:8px;border-radius:50%;background:var(--gr)}
+.u-feed li b{font-weight:700;color:#fff}
+.u-feed li.them i{background:var(--rd)}
+.u-feed li.them b{color:var(--rd)}
+.u-feed li em{margin-left:auto;font-style:normal;font-family:var(--bd);font-size:10px;font-weight:700;letter-spacing:1px;color:var(--rd)}
+.u-gl li.them b{color:var(--rd)}
+.u-play{margin:4px 12px 14px;width:calc(100% - 24px)}
+.u-mt{margin-top:12px}
+.u-rec{margin-top:16px;padding:10px 6px;border:1px solid rgba(255,210,63,.35);border-radius:14px;background:rgba(0,0,0,.3)}
+.u-rec small{display:block;margin:0;font-family:var(--bd);font-size:10px;letter-spacing:3px;color:var(--sv)}
+.u-rec strong{display:block;font-family:var(--bd);font-weight:700;font-size:54px;line-height:1.05;color:var(--gd);text-shadow:0 0 20px rgba(255,210,63,.55)}
+.u-rec span{font-size:12px;color:var(--sv)}
+.u-boot{margin-top:14px;padding:10px;border:1px dashed var(--gd);border-radius:12px}
+.u-boot small{display:block;margin:0;font-family:var(--bd);font-size:10px;letter-spacing:3px;color:var(--gd)}
+.u-boot b{display:block;margin-top:4px;font-family:var(--bd);font-size:17px;letter-spacing:1px;color:#fff}
+.u-xi li u{text-decoration:none;font-family:var(--bd);font-size:12px;font-weight:700;color:var(--gd)}
+.u-verdict + .u-rrow{margin-bottom:12px}
