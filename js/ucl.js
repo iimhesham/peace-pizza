@@ -458,20 +458,20 @@ function shareCard(){
   var g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0b2fb8");g.addColorStop(.5,"#061478");g.addColorStop(1,"#02061c");x.fillStyle=g;x.fillRect(0,0,W,H);
   x.strokeStyle="rgba(79,208,255,.12)";x.lineWidth=1;for(var i=0;i<W;i+=54){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke();}for(i=0;i<H;i+=54){x.beginPath();x.moveTo(0,i);x.lineTo(W,i);x.stroke();}
   x.strokeStyle="#4fd0ff";x.lineWidth=4;x.strokeRect(30,30,W-60,H-60);
-  x.textAlign="center";x.fillStyle="#4fd0ff";x.font="600 30px 'Chakra Petch',system-ui,sans-serif";x.fillText("C H A M P I O N S   X I",W/2,110);
-  x.fillStyle="#fff";x.font="700 84px 'Chakra Petch',system-ui,sans-serif";x.fillText(r.tier.label,W/2,230);
-  x.fillStyle="#c9d3e8";x.font="500 32px 'Chakra Petch',system-ui,sans-serif";x.fillText(r.tier.sub,W/2,285);
-  x.fillStyle="#ffd23f";x.font="700 190px 'Chakra Petch',system-ui,sans-serif";x.fillText(r.wins+"–"+r.losses,W/2,470);
-  x.fillStyle="#c9d3e8";x.font="600 30px 'Chakra Petch',system-ui,sans-serif";
+  x.textAlign="center";x.fillStyle="#4fd0ff";x.font="600 30px Inter,system-ui,sans-serif";x.fillText("C H A M P I O N S   X I",W/2,110);
+  x.fillStyle="#fff";x.font="700 84px Inter,system-ui,sans-serif";x.fillText(r.tier.label,W/2,230);
+  x.fillStyle="#c9d3e8";x.font="500 32px Inter,system-ui,sans-serif";x.fillText(r.tier.sub,W/2,285);
+  x.fillStyle="#ffd23f";x.font="700 190px Inter,system-ui,sans-serif";x.fillText(r.wins+"–"+r.losses,W/2,470);
+  x.fillStyle="#c9d3e8";x.font="600 30px Inter,system-ui,sans-serif";
   x.fillText(r.scored+" GOALS FOR   ·   "+r.conceded+" AGAINST   ·   "+Math.round(S.team.ovr)+" OVERALL",W/2,540);
-  if(T.max){x.fillStyle="#ffd23f";x.font="700 34px 'Chakra Petch',system-ui,sans-serif";x.fillText("GOLDEN BOOT  "+T.boot.join(" · ").toUpperCase()+"  "+T.max,W/2,605);}
+  if(T.max){x.fillStyle="#ffd23f";x.font="700 34px Inter,system-ui,sans-serif";x.fillText("GOLDEN BOOT  "+T.boot.join(" · ").toUpperCase()+"  "+T.max,W/2,605);}
   x.textAlign="left";var y=680;
   S.slots.forEach(function(s){var p=S.picks[s.i];if(!p)return;
-    x.fillStyle="#2b6bff";x.fillRect(110,y-34,84,44);x.fillStyle="#fff";x.font="700 26px 'Chakra Petch',system-ui,sans-serif";x.textAlign="center";x.fillText(s.pos,152,y-3);
-    x.textAlign="left";x.font="600 36px 'Chakra Petch',system-ui,sans-serif";x.fillText(p.n,220,y-2);
-    x.fillStyle="#8fb2ff";x.font="500 28px 'Chakra Petch',system-ui,sans-serif";x.fillText(p.ab+" "+p.ss,620,y-2);
-    x.textAlign="right";x.fillStyle="#5dffb0";x.font="700 38px 'Chakra Petch',system-ui,sans-serif";x.fillText(String(p.r),W-110,y-2);y+=54;});
-  x.textAlign="center";x.fillStyle="#4fd0ff";x.font="500 26px 'Chakra Petch',system-ui,sans-serif";x.fillText(S.fid+" · "+STYLE_LABEL[S.style]+" · seed #"+r.seed,W/2,H-70);
+    x.fillStyle="#2b6bff";x.fillRect(110,y-34,84,44);x.fillStyle="#fff";x.font="700 26px Inter,system-ui,sans-serif";x.textAlign="center";x.fillText(s.pos,152,y-3);
+    x.textAlign="left";x.font="600 36px Inter,system-ui,sans-serif";x.fillText(p.n,220,y-2);
+    x.fillStyle="#8fb2ff";x.font="500 28px Inter,system-ui,sans-serif";x.fillText(p.ab+" "+p.ss,620,y-2);
+    x.textAlign="right";x.fillStyle="#5dffb0";x.font="700 38px Inter,system-ui,sans-serif";x.fillText(String(p.r),W-110,y-2);y+=54;});
+  x.textAlign="center";x.fillStyle="#4fd0ff";x.font="500 26px Inter,system-ui,sans-serif";x.fillText(S.fid+" · "+STYLE_LABEL[S.style]+" · seed #"+r.seed,W/2,H-70);
   c.toBlob(function(b){
     if(!b){say("Couldn't build the card");return;}
     var f;try{f=new File([b],"champions-xi.png",{type:"image/png"});}catch(e){f=null;}
