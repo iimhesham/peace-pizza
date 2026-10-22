@@ -242,3 +242,9 @@ body.mode-ucl #toast{background:rgba(20,26,44,.92);color:#e9eefb;border:1px soli
 @media (min-width:700px){#uclRoot{padding-top:22px}}
 @media (max-width:340px){.u-logo{font-size:25px}.u-led strong{font-size:25px}.u-slot{width:54px}.u-nm{font-size:9px;max-width:54px}}
 @media (prefers-reduced-motion:reduce){#ucl *{animation:none!important;transition:none!important}}
+
+/* يغلب قواعد h1/h2 العامة في app.css */
+#ucl .u-label{font-family:var(--f);font-size:11px;font-weight:600;line-height:1.4;letter-spacing:.14em;color:var(--mu)}
+#ucl .u-logo{font-family:var(--f);font-size:30px;font-weight:700;line-height:1.05;letter-spacing:-.02em}
+#ucl .u-verdict h2{font-family:var(--f);font-size:24px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+#ucl .u-big-t,#ucl .u-board b,#ucl .u-gl h4{font-family:var(--f)}
