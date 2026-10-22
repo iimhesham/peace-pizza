@@ -115,13 +115,13 @@ function viewSetup(){
   var md='<button type="button" class="u-seg-b'+(S.mode==="classic"?' is-on':'')+'" data-act="mode" data-v="classic">Classic</button>'+
          '<button type="button" class="u-seg-b'+(S.mode==="memory"?' is-on':'')+'" data-act="mode" data-v="memory">From memory</button>';
   var b=S.stats.best?(TIER_RANK[S.stats.best]>=6?"★ ":"")+S.stats.best.toUpperCase():"—";
-  return '<section class="u-hero">'+stars(8)+
+  return '<div class="u-hero">'+stars(8)+
     '<h1 class="u-logo">CHAMPIONS<br>XI</h1><p class="u-tag">Roll a winning club. Pick one star. Win all '+U.TOTAL_MATCHES+'.</p>'+
-    '<div class="u-flow"><span><b>1</b>ROLL</span><span><b>2</b>PICK</span><span><b>3</b>WIN</span></div></section>'+
-    '<section class="u-panel"><h2 class="u-label">Formation</h2><div class="u-chips">'+fm+'</div><div class="u-mini">'+miniPitch(S.fid)+'</div></section>'+
-    '<section class="u-panel"><h2 class="u-label">Style</h2><div class="u-seg">'+st+'</div></section>'+
-    '<section class="u-panel"><h2 class="u-label">Mode</h2><div class="u-seg">'+md+'</div>'+
-    '<p class="u-hint">'+(S.mode==="classic"?"Ratings are visible while you pick.":"Names and positions only. Ratings stay hidden until the cup is over.")+'</p></section>'+
+    '<div class="u-flow"><span><b>1</b>ROLL</span><span><b>2</b>PICK</span><span><b>3</b>WIN</span></div></div>'+
+    '<div class="u-panel"><h2 class="u-label">Formation</h2><div class="u-chips">'+fm+'</div><div class="u-mini">'+miniPitch(S.fid)+'</div></div>'+
+    '<div class="u-panel"><h2 class="u-label">Style</h2><div class="u-seg">'+st+'</div></div>'+
+    '<div class="u-panel"><h2 class="u-label">Mode</h2><div class="u-seg">'+md+'</div>'+
+    '<p class="u-hint">'+(S.mode==="classic"?"Ratings are visible while you pick.":"Names and positions only. Ratings stay hidden until the cup is over.")+'</p></div>'+
     '<ul class="u-rules"><li><b>11</b><span>picks</span></li><li><b>'+MAXRR+'</b><span>re-rolls</span></li><li><b>'+U.TOTAL_MATCHES+'</b><span>matches</span></li></ul>'+
     '<button type="button" class="u-btn u-big" data-act="start">Kick off draft</button>'+
     '<div class="u-record"><div><b>'+S.stats.runs+'</b><span>cups</span></div><div><b>'+S.stats.titles+'</b><span>titles</span></div><div><b>'+S.stats.flawless+'</b><span>flawless</span></div><div><b class="u-sm">'+esc(b)+'</b><span>best</span></div></div>'+
@@ -184,7 +184,7 @@ function bars(t,hide){
 function viewReady(){
   var t=U.makeTeam(S.slots,S.picks,S.style),hide=S.mode==="memory";
   return '<div class="u-ready"><h2 class="u-label">Squad complete</h2><p class="u-big-t">Your '+S.fid+' is ready</p></div>'+
-    pitch(null)+'<section class="u-panel">'+bars(t,hide)+(hide?'<p class="u-hint">Ratings are revealed after the cup.</p>':'')+'</section>'+
+    pitch(null)+'<div class="u-panel">'+bars(t,hide)+(hide?'<p class="u-hint">Ratings are revealed after the cup.</p>':'')+'</div>'+
     '<button type="button" class="u-btn u-big" data-act="sim">Play the knockout</button>'+
     '<button type="button" class="u-btn u-alt u-wide" data-act="again">Redo draft</button>';
 }
@@ -232,10 +232,10 @@ function verdict(){
   var xi="";
   S.slots.forEach(function(s){var p=S.picks[s.i];if(p)xi+='<li><span class="u-pos">'+s.pos+'</span><b>'+esc(p.n)+'</b><em>'+esc(p.ab)+' '+esc(p.ss)+'</em><i>'+p.r+'</i></li>';});
   var wins=r.wins,tot=r.played;
-  return '<section class="u-verdict t-'+tr.id+'">'+stars(8)+'<small>FINAL VERDICT</small><h2>'+esc(tr.label)+'</h2><p>'+esc(tr.sub)+'</p>'+
-    '<div class="u-vstats"><div><b>'+wins+'</b><span>won</span></div><div><b>'+r.draws+'</b><span>drawn</span></div><div><b>'+r.losses+'</b><span>lost</span></div><div><b>'+r.scored+'–'+r.conceded+'</b><span>goals</span></div></div></section>'+
-    '<section class="u-panel"><h2 class="u-label">Team strength</h2>'+bars(tm,false)+'</section>'+
-    '<section class="u-panel"><h2 class="u-label">Your XI · ratings revealed</h2><ul class="u-xi">'+xi+'</ul></section>'+
+  return '<div class="u-verdict t-'+tr.id+'">'+stars(8)+'<small>FINAL VERDICT</small><h2>'+esc(tr.label)+'</h2><p>'+esc(tr.sub)+'</p>'+
+    '<div class="u-vstats"><div><b>'+wins+'</b><span>won</span></div><div><b>'+r.draws+'</b><span>drawn</span></div><div><b>'+r.losses+'</b><span>lost</span></div><div><b>'+r.scored+'–'+r.conceded+'</b><span>goals</span></div></div></div>'+
+    '<div class="u-panel"><h2 class="u-label">Team strength</h2>'+bars(tm,false)+'</div>'+
+    '<div class="u-panel"><h2 class="u-label">Your XI · ratings revealed</h2><ul class="u-xi">'+xi+'</ul></div>'+
     '<button type="button" class="u-btn u-big" data-act="again">Play again</button>'+
     '<button type="button" class="u-btn u-alt u-wide" data-act="back">Change settings</button>'+
     '<button type="button" class="u-btn u-ghostb u-wide" data-act="home">Back to home</button>';
