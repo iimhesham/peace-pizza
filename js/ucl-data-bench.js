@@ -36,6 +36,44 @@ var ADD={
  "rma-2014":[["Arbeloa","RB","",77,0],["Illarramendi","DM","CM",78,0],["Casemiro","DM","",76,0],["Morata","ST","",78,0],["Jesé","LW","",74,0],["Nacho","CB","",76,0],["Diego López","GK","",80,0]],
  "bar-2015":[["Rafinha","CM","RW",76,0],["Adriano","LB","RB",77,0],["Montoya","RB","",74,0],["Bartra","CB","",76,0],["S. Roberto","CM","",72,0],["Sandro","ST","",72,0],["Munir","ST","",72,0]]
 };
+
+/* FIX: تصحيح التشكيلة الأساسية في النهائي (s) والمراكز — من قايمة نهائيات بعتها المستخدم (Grok) وتمت مطابقتها
+   مع جداول FBref وويكيبيديا قدر الإمكان. غير مؤكدة 100٪ لحد ما تتراجع على مصدر رسمي. */
+var EXTRA={
+ "rma-2000":[["Karembeu","CB","RB",80,1],["Sanchís","CB","",78,0]],
+ "rma-2002":[["César","GK","",82,1]],
+ "mil-1990":[["Evani","CM","",78,0],["Massaro","ST","",80,0],["F. Galli","CB","",79,0],["Pazzagli","GK","",72,0]],
+ "bar-1992":[["Alexanko","CB","",75,0],["Goikoetxea","CB","",74,0]],
+ "crv-1991":[["Radinović","LB","",76,1]],
+ "om-1993":[["Durand","ST","",76,0],["Thomas","ST","",74,0],["Casoni","CB","",74,0]],
+ "mil-1994":[["Eranio","CM","RM",76,0],["Simone","ST","",76,0],["F. Galli","CB","",78,0],["Lentini","RM","AM",76,0]],
+ "ajx-1995":[["Kanu","ST","",82,0],["Scholten","AM","",76,0],["Winter","CM","DM",78,0],["Silooy","LB","",74,0]],
+ "juv-1996":[["Padovano","ST","",76,0],["Tacchinardi","CM","DM",77,0],["Porrini","RB","",75,0],["Rampulla","GK","",73,0]],
+ "bvb-1997":[["Herrlich","ST","",76,0],["Freund","DM","CM",78,0],["Tretschok","CM","",75,0]],
+ "rma-1998":[["Morientes","ST","",78,0],["Jaime","CM","RM",76,0],["Amavisca","LW","",76,0],["F. Sanz","CB","",74,0]],
+ "mun-1999":[["Blomqvist","LM","LW",78,0],["Van der Gouw","GK","",72,0],["P. Neville","LB","RB",75,0],["Berg","CB","",77,0]],
+ "che-2012":[["Bertrand","LM","LB",74,0]],
+ "rma-2014":[["Coentrão","LB","",80,0]]
+};
+var FIX={
+ "rma-2000":{"Hierro":{s:0}},
+ "bay-2001":{"Andersson":{s:1,pos:"CB"},"Hargreaves":{s:1,pos:"DM",alt:"CM"},"Jeremies":{s:0},"Jancker":{s:0}},
+ "rma-2002":{"Casillas":{s:0},"Solari":{s:1},"McManaman":{s:0}},
+ "mil-2003":{"Costacurta":{s:1,pos:"CB",alt:"RB"},"Pancaro":{s:0}},
+ "por-2004":{"Pedro Mendes":{s:1},"Alenichev":{s:0}},
+ "liv-2005":{"Hamann":{s:0},"Traoré":{s:1},"Riise":{pos:"LM",alt:"LB"},"Kewell":{pos:"RM",alt:"LW"}},
+ "bar-2006":{"Oleguer":{s:1,pos:"RB",alt:"CB"},"Belletti":{s:0}},
+ "mil-1990":{"Donadoni":{s:0},"Evani":{s:1,pos:"LM",alt:"CM"}},
+ "crv-1991":{"Šabanadžović":{s:0},"Savićević":{pos:"AM",alt:"LW"},"Mihajlović":{s:1,pos:"CM",alt:"LB"},"Binić":{pos:"ST",alt:"CM"},"Marović":{pos:"RB",alt:"RM"}},
+ "bar-1992":{"Salinas":{s:0},"Begiristain":{s:1,pos:"RW",alt:"AM"}},
+ "che-2012":{"Ivanović":{s:0},"Terry":{s:0},"Ramires":{s:0},"Malouda":{s:0},"Bosingwa":{s:1,pos:"RB"},"Cahill":{s:1,pos:"CB"},"Bertrand":{s:1,pos:"LM",alt:"LB"},"Kalou":{s:1,pos:"RM",alt:"RW"}},
+ "bay-2013":{"J. Martínez":{s:0},"Luiz Gustavo":{s:1,pos:"DM"}},
+ "rma-2014":{"Marcelo":{s:0},"Coentrão":{s:1,pos:"LB"}},
+ "mil-1994":{"Costacurta":{s:0},"Boban":{s:1,pos:"CM",alt:"AM"},"Desailly":{pos:"CB",alt:"DM"}},
+ "ajx-1995":{"Kluivert":{s:0},"R. de Boer":{s:1,pos:"RM",alt:"AM"}},
+ "mun-1999":{"Keane":{s:0},"Scholes":{s:0},"Butt":{s:1,pos:"CM"},"Blomqvist":{s:1,pos:"LM",alt:"LW"},"Giggs":{pos:"RM",alt:"LM"},"Beckham":{pos:"CM",alt:"RM"}},
+ "bar-2009":{"Alves":{s:0},"Abidal":{s:0},"Puyol":{s:1,pos:"RB",alt:"CB"},"Y. Touré":{s:1,pos:"CB",alt:"DM"},"Busquets":{s:1,pos:"DM"},"Sylvinho":{s:1,pos:"LB"}}
+};
 var NEW=[
  {id:"rma-1956",club:"Real Madrid",ab:"RMA",yr:1956,ss:"1955–56",c:["#f4f4f4","#febe10"],coach:"José Villalonga",fin:"4–3 Stade de Reims",p:[
   ["Alonso","GK","",80,1],["Atienza","RB","",76,1],["Marquitos","CB","",80,1],["Lesmes","LB","",76,1],["Muñoz","DM","CM",82,1],["Zárraga","CM","DM",80,1],
@@ -121,7 +159,7 @@ var NEW=[
  {id:"por-2004",club:"FC Porto",ab:"POR",yr:2004,ss:"2003–04",c:["#003d99","#ffffff"],coach:"José Mourinho",fin:"3–0 Monaco",p:[
   ["Vítor Baía","GK","",86,1],["Paulo Ferreira","RB","",83,1],["R. Carvalho","CB","",87,1],["Jorge Costa","CB","",82,1],["Nuno Valente","LB","",80,1],["Costinha","DM","",84,1],
   ["Maniche","CM","",86,1],["Deco","AM","",92,1],["Alenichev","LM","AM",82,1],["Carlos Alberto","RW","",80,1],["Derlei","ST","",84,1],
-  ["McCarthy","ST","",82,0],["Pedro Emanuel","CB","",80,0]]},
+  ["McCarthy","ST","",82,0],["Pedro Emanuel","CB","",80,0],["Pedro Mendes","CM","",80,0],["Bosingwa","RB","",76,0],["Jankauskas","ST","",76,0],["R. Costa","CB","",74,0],["M. Ferreira","CM","",74,0]]},
  {id:"rma-2016",club:"Real Madrid",ab:"RMA",yr:2016,ss:"2015–16",c:["#f4f4f4","#febe10"],coach:"Zinedine Zidane",fin:"1–1 Atlético Madrid (5–3 pens)",p:[
   ["Navas","GK","",87,1],["Carvajal","RB","",83,1],["Pepe","CB","",84,1],["Ramos","CB","",90,1],["Marcelo","LB","",88,1],["Casemiro","DM","",85,1],
   ["Modrić","CM","",90,1],["Kroos","CM","",89,1],["Bale","RW","",90,1],["Benzema","ST","",88,1],["C. Ronaldo","LW","ST",95,1],
@@ -134,11 +172,14 @@ Object.keys(ADD).forEach(function(id){
   var have={};s.p.forEach(function(p){have[last(p.n)]=1;});
   ADD[id].forEach(function(p){if(have[last(p[0])])return;have[last(p[0])]=1;s.p.push(mk(p));});
 });
+
 NEW.forEach(function(n){
   if(byId[n.id])return;
   var s={id:n.id,club:n.club,ab:n.ab,yr:n.yr,ss:n.ss,c:n.c,coach:n.coach,fin:n.fin,p:n.p.map(mk)};
   D.seasons.push(s);byId[n.id]=s;
 });
+Object.keys(EXTRA).forEach(function(id){var t=byId[id];if(!t)return;var have={};t.p.forEach(function(p){have[last(p.n)]=1;});EXTRA[id].forEach(function(p){if(!have[last(p[0])])t.p.push(mk(p));});});
+Object.keys(FIX).forEach(function(id){var t=byId[id];if(!t)return;Object.keys(FIX[id]).forEach(function(nm){var f=FIX[id][nm],hit=null;t.p.forEach(function(p){if(last(p.n)===last(nm))hit=p;});if(!hit)return;for(var k in f)hit[k]=f[k];});});
 D.seasons.sort(function(a,b){return a.yr-b.yr;});
 D.bench=true;
 })(typeof window!=="undefined"?window:globalThis);
