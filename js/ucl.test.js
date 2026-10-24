@@ -1,5 +1,5 @@
 /* اختبار محرك أبطال أوروبا + معايرة الصعوبة. run: node js/ucl.test.js [--calib] */
-const U=require("./ucl-engine.js"),D=require("./ucl-data.js");
+const U=require("./ucl-engine.js"),D=require("./ucl-data.js");require("./ucl-data-bench.js");
 let pass=0,fail=0;
 const ok=(c,m)=>{if(c)pass++;else{fail++;console.log(" FAIL "+m);}};
 const S=D.seasons;
