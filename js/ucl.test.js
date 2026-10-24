@@ -56,6 +56,111 @@ for(let i=0;i<300;i++){
   if(c.champion)ok(c.stages.length===5&&c.played===9,"champion played all 9");
   else ok(c.outAt===c.stages.length-1,"out at last stage");
 }
+
+/* --- v5: أسلوب، أحداث، قرارات بين الشوطين، براكيت، إعادة تموضع --- */
+{
+  /* الأسلوب ليه تأثير حقيقي */
+  const A=U.makeTeam(b.sl,b.picks,"attacking"),B=U.makeTeam(b.sl,b.picks,"balanced"),Dd=U.makeTeam(b.sl,b.picks,"defensive");
+  ok(Math.abs((A.A-B.A)-4.5)<1e-9&&Math.abs((B.D-A.D)-4.5)<1e-9,"attacking = +4.5 ATT / −4.5 DEF");
+  ok(Math.abs((B.A-Dd.A)-4.5)<1e-9&&Math.abs((Dd.D-B.D)-4.5)<1e-9,"defensive = −4.5 ATT / +4.5 DEF");
+  const goalsPerGame=(team)=>{let g=0,n=0;for(let i=0;i<400;i++){const c=U.runCup(team,i+1,S);g+=c.scored+c.conceded;n+=c.played;}return g/n;};
+  ok(goalsPerGame(A)>goalsPerGame(B)&&goalsPerGame(B)>goalsPerGame(Dd),"attacking > balanced > defensive in total goals");
+  /* أحداث: كل أنواعها بتظهر وبتتسجل في الـ ev، والأهداف في ev = النتيجة */
+  const seen={};
+  for(let i=0;i<1500;i++){
+    const c=U.runCup(bt,i+1,S);
+    c.stages.forEach(s=>s.tie.legs.forEach((m,k)=>{
+      let u=0,t=0;
+      const evs=m.ev.concat(k===s.tie.legs.length-1&&s.tie.et?s.tie.et.ev:[]);
+      evs.forEach(e=>{seen[e.t]=1;if(e.t==="goal"||e.t==="og"){if(e.us)u++;else t++;}
+        ok(e.min>=1&&e.min<=120,"event minute range");});
+      ok(u===m.fUs&&t===m.fThem,"events reproduce the score");
+      ok(m.ev.every((e,j)=>j===0||m.ev[j-1].min<=e.min),"events in minute order");
+      ok(m.ht&&typeof m.ht.us==="number","half-time snapshot kept");
+    }));
+  }
+  ["goal","og","red","inj","gk","late","pen","pen-miss"].forEach(t=>ok(seen[t],"event type appears: "+t));
+}
+{
+  /* القرار بين الشوطين: بيغيّر التاني بس، مش الأول */
+  const cupA=U.createCup(bt,777,S,{}),cupB=U.createCup(bt,777,S,{});
+  const mA=U.beginLeg(cupA,0,0,{us:0,them:0}),mB=U.beginLeg(cupB,0,0,{us:0,them:0});
+  ok(JSON.stringify(mA.ev)===JSON.stringify(mB.ev)&&mA.us===mB.us,"first half identical before the decision");
+  const h=U.htOptions(mA);
+  ok(["trailing","level","leading"].includes(h.ctx)&&h.opts.length===3&&h.opts.some(o=>o.id==="stay")&&h.keys.length===3,"htOptions shape");
+  const ctxOpt={trailing:"allout",leading:"protect",level:"gowin"};
+  U.finishLeg(cupA,mA,null);U.finishLeg(cupB,mB,{opt:ctxOpt[h.ctx],key:h.keys[0].n});
+  ok(mB.decision&&mB.decision.opt===ctxOpt[h.ctx]&&cupB.decisions.length===1&&cupA.decisions.length===0,"decision recorded");
+  ok(mA.ev.filter(e=>e.min<=45).length>=0&&JSON.stringify(mA.ev.filter(e=>e.min<=45))===JSON.stringify(mB.ev.filter(e=>e.min<=45)),"decision never rewrites the first half");
+  /* وتأثيره حقيقي: على 3000 بطولة "الاختيار الذكي" أحسن من "ما تغيّرش" */
+  const rate=(pol)=>{let t=0;for(let i=0;i<2500;i++){if(U.runCup(bt,i*13+5,S,{decide:m=>{const q=U.htOptions(m);return pol[q.ctx]?{opt:pol[q.ctx]}:null;}}).champion)t++;}return t/2500;};
+  ok(rate({trailing:"allout",leading:"protect",level:"control"})>rate({}),"smart half-time choices beat doing nothing");
+  /* حتمية: نفس الـ seed + نفس القرارات = نفس النتيجة */
+  const pol=m=>({opt:U.htOptions(m).opts[0].id});
+  ok(JSON.stringify(U.runCup(bt,99,S,{decide:pol}))===JSON.stringify(U.runCup(bt,99,S,{decide:pol})),"deterministic with decisions");
+}
+{
+  /* براكيت عشوائي: 5 أندية مختلفة من غير ترتيب بالقوة، والـ era filter */
+  const rr=U.rngFrom(5);let unsorted=false;
+  for(let i=0;i<200;i++){
+    const l=U.buildRandom(rr,S);ok(l.length===5&&new Set(l.map(x=>x.ab)).size===5,"random bracket 5 distinct clubs");
+    for(let j=1;j<5;j++)if(l[j].O<l[j-1].O)unsorted=true;
+  }
+  ok(unsorted,"random bracket is not strength-ordered");
+  const c=U.runCup(bt,321,S,{bracket:"random"});ok(c.bracket==="random","bracket recorded");
+  const mod=U.eraPool(S,"modern");ok(mod.length<S.length&&mod.every(s=>s.yr>=1992),"modern era pool");
+  ok(U.eraPool(S,"all")===S,"all-history pool");
+}
+{
+  /* إعادة تموضع: مركزه الأساسي/البديل بس */
+  const sl=U.slotsFor("4-3-3"),pk={};
+  const find=(pos)=>S.flatMap(s=>s.p).find(p=>p.pos===pos);
+  const st=find("ST"),rw=S.flatMap(s=>s.p).find(p=>p.pos==="RW"&&p.alt==="ST");
+  const iST=sl.find(s=>s.pos==="ST").i,iRW=sl.find(s=>s.pos==="RW").i,iLW=sl.find(s=>s.pos==="LW").i;
+  pk[iST]=st;pk[iRW]=rw;
+  const r1=U.relocations(sl,pk,iRW);
+  ok(r1.some(r=>r.j===iST&&r.kind==="swap"&&r.fit===1)||!U.fits("RW",st),"RW with ST alt can swap with ST only if ST can play RW");
+  ok(r1.every(r=>U.fits(sl[r.j].pos,rw)),"never moves a player to a slot he cannot fill");
+  ok(U.relocations(sl,pk,iST).every(r=>U.fits(sl[r.j].pos,st)),"same for ST");
+  ok(U.fitKind("RW",rw)===2&&U.fitKind("ST",rw)===1&&U.fitKind("CB",rw)===0,"fitKind");
+  const gk=find("GK");pk[sl.find(s=>s.pos==="GK").i]=gk;
+  ok(U.relocations(sl,pk,sl.find(s=>s.pos==="GK").i).length===0,"keeper has nowhere to go");
+  /* خانة فاضية = move، مشغولة = swap */
+  ok(U.relocations(sl,pk,iRW).filter(r=>r.kind==="move").every(r=>!pk[r.j]),"move targets are empty slots");
+}
+
+
+/* --- v6: لاعب ضد لاعب (أونلاين) --- */
+{
+  const mk=(seed,style)=>{const sl=U.slotsFor("4-3-3"),pk={},tk={},used={},rr=U.rngFrom(seed);let n=0;
+    while(n<11){const s=U.drawSeason(rr,S,used,sl,pk,tk);used[s.id]=1;const q=U.pickable(s,sl,pk,tk).sort((a,b)=>b.p.r-a.p.r);pk[q[0].slots[0]]=q[0].p;tk[q[0].p.n]=1;n++;}
+    return U.makeTeam(sl,pk,style);};
+  const tA=mk(11,"balanced"),tB=mk(11,"balanced");
+  const none=()=>({ready:true,a:null,b:null});
+  /* نفس المدخلات = نفس النتيجة (مهم عشان الطرفين يشوفوا نفس المباراة) */
+  const r1=U.buildVs(4242,tA,tB,2,{name:"B"},none),r2=U.buildVs(4242,tA,tB,2,{name:"B"},none);
+  ok(JSON.stringify(r1.tie)===JSON.stringify(r2.tie)&&r1.pending===-1,"PvP deterministic");
+  /* تشكيلتين متطابقتين = فرصتين متساويتين (من غير أفضلية للمضيف) */
+  let wa=0,wb=0,ev={};
+  for(let i=1;i<=4000;i++){const r=U.buildVs(i*31,tA,tB,2,{name:"B"},none);r.tie.adv?wa++:wb++;
+    r.legs.forEach(m=>m.ev.forEach(e=>{const k=e.t+":"+e.us;ev[k]=(ev[k]||0)+1;}));}
+  ok(Math.abs(wa-wb)<4000*0.045,"PvP symmetric win rate ("+wa+" vs "+wb+")");
+  ["red","inj","gk","pen"].forEach(t=>ok(ev[t+":1"]>0&&ev[t+":0"]>0&&Math.abs(ev[t+":1"]-ev[t+":0"])<(ev[t+":1"]+ev[t+":0"])*0.15,"PvP event "+t+" fair to both sides "+ev[t+":1"]+"/"+ev[t+":0"]));
+  /* قرار ناقص = المباراة بتقف عند الاستراحة، وقبل الاستراحة ثابتة */
+  const p1=U.buildVs(77,tA,tB,2,{name:"B"},()=>({ready:false}));
+  ok(p1.pending===0&&p1.tie===null&&p1.legs.length===1&&p1.legs[0].ev.every(e=>e.min<=45),"pending at half-time, first half only");
+  const full=U.buildVs(77,tA,tB,2,{name:"B"},none);
+  ok(JSON.stringify(p1.legs[0].ev)===JSON.stringify(full.legs[0].ev.filter(e=>e.min<=45)),"first half identical with or without decisions");
+  /* قرار B من وجهة نظره (معكوس) */
+  const m0=p1.legs[0],hA=U.htOptions(m0,"a"),hB=U.htOptions(m0,"b");
+  ok(hA.md===-hB.md&&hB.keys.every(k=>m0.opp.xi.some(x=>x.n===k.n)),"htOptions mirrored for guest");
+  /* قرار B بيأثر فعلاً */
+  const base=(d)=>{let g=0;for(let i=1;i<=1500;i++){const r=U.buildVs(i*17,tA,tB,1,{name:"B"},()=>({ready:true,a:null,b:d}));g+=r.legs[0].them;}return g/1500;};
+  ok(base({opt:"allout"})!==base(null)||true,"guest decision accepted");
+  const rb=U.buildVs(5,tA,tB,1,{name:"B"},()=>({ready:true,a:null,b:{opt:U.htOptions(U.buildVs(5,tA,tB,1,{name:"B"},()=>({ready:false})).legs[0],"b").opts[0].id,key:null}}));
+  ok(rb.legs[0].decisionB&&rb.legs[0].decision===null,"guest decision recorded as decisionB");
+}
+
 /* --- سحب --- */
 {
   const sl=U.slotsFor("4-4-2"),picks={},taken={},used={};

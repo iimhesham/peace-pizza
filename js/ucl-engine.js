@@ -4,7 +4,7 @@
 
    الفكرة: بتبني 11 لاعب من تشكيلات أبطال أوروبا، وبعدين بطولة إقصائية
    (ملحق + 16 + ربع + نصف ذهاب وإياب + نهائي مباراة واحدة = 9 مباريات).
-   النتيجة بتوزيع بواسون (نفس نموذج 7a0):
+   النتيجة بتتحسب دقيقة بدقيقة (احتمال هدف في كل دقيقة = λ/90، يعني بواسون عملياً — نفس نموذج 7a0):
      λ لنا   = 1.4 + 0.08 × (هجومنا − قوة الخصم)
      λ علينا = 1.4 + 0.08 × (قوة الخصم − دفاعنا)     [محصورين بين 0.15 و 5]
    الهجوم والدفاع = متوسط موزون بمركز الخانة اللي اللاعب بيلعب فيها.
@@ -16,9 +16,19 @@
 var CFG={
   base:1.4,slope:0.08,minL:0.15,maxL:5,
   oppOffset:0,        /* بيتضاف على قوة كل خصم (معايرة الصعوبة) */
-  styleAdj:3,         /* هجومي: هجوم +3 ودفاع −3، والعكس للدفاعي */
-  penBase:0.5,penSlope:0.012,penMin:0.1,penMax:0.9,
-  etShare:1/3         /* الوقت الإضافي = ثلث λ المباراة */
+  styleAdj:4.5,       /* هجومي: هجوم +4.5 ودفاع −4.5، والعكس للدفاعي */
+  penBase:0.5,penSlope:0.012,penMin:0.1,penMax:0.9,defPen:0.04, /* الدفاعي أحسن شوية في الركلات */
+  h1Rate:0.95,h2Rate:1.05, /* الأهداف أكتر شوية في الشوط التاني (المجموع = λ) */
+  /* الأحداث العشوائية: احتمال حدوثها في مباراة 90 دقيقة (بتتوزع على الدقايق) */
+  ev:{redThem:0.035,redUs:0.012,injUs:0.045,gkUs:0.05,gkThem:0.03,penUs:0.05,penThem:0.05,
+      penConv:0.78,wonder:0.09,wonderCarry:0.5,injMax:2,
+      pvpRed:0.02,pvpGk:0.04}
+};
+/* الأسلوب بيغيّر شخصية المباراة: احتمال هدف عكسي، كارت أحمر علينا، دراما متأخرة، ومعاناة آخر الوقت */
+var STYLE_EV={
+  attacking:{og:0.045,redUs:0.018,late:0.18,lateConcede:1.25},
+  balanced:{og:0.025,redUs:0.012,late:0.11,lateConcede:1},
+  defensive:{og:0.02,redUs:0.010,late:0.08,lateConcede:1}
 };
 
 /* ---------- المراكز والأوزان ---------- */
@@ -69,6 +79,21 @@ function same(a,b){
 }
 function fits(slotPos,p){return same(slotPos,p.pos)||(!!p.alt&&same(slotPos,p.alt));}
 
+/* 2 = مركزه الأساسي · 1 = مركزه البديل · 0 = مينفعش */
+function fitKind(slotPos,p){return same(slotPos,p.pos)?2:(!!p.alt&&same(slotPos,p.alt))?1:0;}
+/* لاعب في خانة i: يقدر يروح فين؟ (خانة فاضية مناسبة أو تبديل مع زميل لو الاتنين مناسبين) */
+function relocations(slots,picks,i){
+  var p=picks[i],out=[];
+  if(!p)return out;
+  slots.forEach(function(s){
+    if(s.i===i||!fits(s.pos,p))return;
+    var q=picks[s.i];
+    if(!q)out.push({j:s.i,kind:"move",fit:fitKind(s.pos,p)});
+    else if(fits(slots[i].pos,q))out.push({j:s.i,kind:"swap",with:q.n,fit:fitKind(s.pos,p)});
+  });
+  return out;
+}
+
 /* اللاعبين اللي ينفع يتختاروا من موسم: لاعب → الخانات الفاضية المناسبة */
 function pickable(season,slots,picks,taken){
   var out=[];
@@ -108,7 +133,7 @@ function makeTeam(slots,picks,style){
     xi.push({n:p.n,pos:s.pos,r:p.r});
   });
   var A=aw?a/aw:0,D=dw?d/dw:0,adj=style==="attacking"?CFG.styleAdj:style==="defensive"?-CFG.styleAdj:0;
-  return{xi:xi,A:A+adj,D:D-adj,ovr:xi.length?sum/xi.length:0,style:style||"balanced"};
+  return{xi:xi,A:A+adj,D:D-adj,ovr:xi.length?sum/xi.length:0,style:style||"balanced",aw:aw,dw:dw};
 }
 /* قوة الموسم لما يتسحب كخصم = متوسط الـ 11 الأساسيين */
 function seasonStrength(season){
@@ -122,68 +147,218 @@ function oppTeam(season){
     id:season.id,club:season.club,ab:season.ab,ss:season.ss,yr:season.yr,c:season.c,coach:season.coach,fin:season.fin};
 }
 
-/* ---------- الهدّافين والدقايق ---------- */
-function scorerPick(xi,rnd){
-  var tot=0,w=xi.map(function(p){
-    var x=p.pos==="GK"?0:Math.max(WATT[p.pos],0.05)*Math.pow(Math.max(p.r-55,1),2);
-    tot+=x;return x;
-  });
-  if(!tot)return xi[0];
+/* ---------- الهدّافين ---------- */
+function wpick(arr,wf,rnd){
+  var tot=0,w=arr.map(function(p){var x=wf(p);tot+=x;return x;});
+  if(!arr.length)return null;
+  if(!tot)return arr[Math.floor(rnd()*arr.length)];
   var t=rnd()*tot;
-  for(var i=0;i<xi.length;i++){t-=w[i];if(t<=0)return xi[i];}
-  return xi[xi.length-1];
+  for(var i=0;i<arr.length;i++){t-=w[i];if(t<=0)return arr[i];}
+  return arr[arr.length-1];
 }
-function goals(n,xi,rnd,lo,hi){
-  var out=[];
-  for(var i=0;i<n;i++)out.push({n:scorerPick(xi,rnd).n,min:lo+Math.floor(rnd()*(hi-lo+1))});
-  return out.sort(function(a,b){return a.min-b.min;});
+function scorerPick(xi,rnd,focus,out){
+  var pool=xi.filter(function(p){return !(out&&out[p.n]);});
+  if(!pool.length)pool=xi;
+  return wpick(pool,function(p){
+    var x=p.pos==="GK"?0:Math.max(WATT[p.pos],0.05)*Math.pow(Math.max(p.r-55,1),2);
+    if(focus&&p.n===focus)x*=3;
+    return x;
+  },rnd);
+}
+function outfield(xi,out){return xi.filter(function(p){return p.pos!=="GK"&&!(out&&out[p.n]);});}
+
+/* =========================================================
+   المباراة خطوة بخطوة — دقيقة بدقيقة، والأحداث بتأثّر على اللي بعدها.
+   beginLeg  : الشوط الأول (1–45)
+   (قرار بين الشوطين من اللاعب)
+   finishLeg : الشوط التاني (46–90) بعد تطبيق القرار
+   settleTie : وقت إضافي (91–120) + ركلات ترجيح + الإحصاءات
+   القرار بيغيّر احتمالات اللي جاي، مش اللي اتحسب فعلاً.
+========================================================= */
+function goalEv(T,us,min,n,tags){
+  var g={n:n,min:min},k;
+  if(tags)for(k in tags)g[k]=tags[k];
+  (us?T.gUs:T.gThem).push(g);
+  if(us)T.us++;else T.them++;
+  var e={min:min,t:(tags&&tags.og)?"og":"goal",us:us?1:0,n:n};
+  if(tags){if(tags.pen)e.pen=1;if(tags.w)e.w=1;}
+  T.ev.push(e);
+}
+function playPeriod(rnd,m,from,to,T){
+  T=T||m;
+  var team=m.team,opp=m.opp,E=CFG.ev,sty=STYLE_EV[team.style]||STYLE_EV.balanced,osty=STYLE_EV[opp.style]||STYLE_EV.balanced,pvp=!!opp.pvp;
+  var oppGK=opp.xi.filter(function(p){return p.pos==="GK";})[0]||opp.xi[0];
+  var ourGK=team.xi.filter(function(p){return p.pos==="GK";})[0]||team.xi[0];
+  for(var min=from;min<=to;min++){
+    /* أحداث متجدولة (حارس + دراما متأخرة) */
+    m.sched.forEach(function(s){
+      if(s.done||s.min!==min)return;
+      s.done=1;
+      if(s.t==="gk"){
+        if(s.us){m.mt*=0.72;T.ev.push({min:min,t:"gk",us:1,n:ourGK.n});}
+        else{m.mu*=0.8;T.ev.push({min:min,t:"gk",us:0,n:oppGK.n});}
+      }else if(s.t==="late"){m.late=true;T.ev.push({min:min,t:"late",us:-1});}
+    });
+    /* الأهداف */
+    var lu=lambda(m.A,m.Do),lt=lambda(m.Ao,m.D),h=min<=45?CFG.h1Rate:min<=90?CFG.h2Rate:1;
+    var ru=lu/90*h*m.mu,rt=lt/90*h*m.mt;
+    if(m.late&&min>=80&&min<=90){ru*=1.6*osty.lateConcede;rt*=1.6*sty.lateConcede;}
+    if(rnd()<ru){
+      if(rnd()<osty.og){
+        var d=wpick(outfield(opp.xi),function(p){return Math.max(WDEF[p.pos],0.05);},rnd)||opp.xi[0];
+        goalEv(T,1,min,d.n,{og:1});
+      }else{
+        var sc=scorerPick(team.xi,rnd,m.focus,m.out),wd=rnd()<E.wonder;
+        goalEv(T,1,min,sc.n,wd?{w:1}:null);
+        if(wd)m.wonders=(m.wonders||0)+1;
+      }
+    }
+    if(rnd()<rt){
+      if(rnd()<sty.og){
+        var o=wpick(outfield(team.xi,m.out),function(p){return Math.max(WDEF[p.pos],0.05);},rnd)||team.xi[0];
+        goalEv(T,0,min,o.n,{og:1});
+      }else{
+        var sc2=scorerPick(opp.xi,rnd,m.focusB,m.outB),wd2=pvp&&rnd()<E.wonder;
+        goalEv(T,0,min,sc2.n,wd2?{w:1}:null);
+        if(wd2)m.wondersB=(m.wondersB||0)+1;
+      }
+    }
+    /* باقي الأحداث: رمية واحدة في الدقيقة بتقسم على الاحتمالات */
+    var x=rnd()*90,who;
+    if((x-=(pvp?E.pvpRed+(osty.redUs-STYLE_EV.balanced.redUs):E.redThem))<0){
+      if(!m.redThem){m.redThem=1;who=wpick(outfield(opp.xi,m.outB),function(){return 1;},rnd);
+        if(pvp)m.outB[who.n]=1;m.mu*=1.3;m.mt*=0.75;T.ev.push({min:min,t:"red",us:0,n:who.n});}
+    }else if((x-=(pvp?E.pvpRed:E.redUs)+(sty.redUs-STYLE_EV.balanced.redUs))<0){
+      if(!m.redUs){m.redUs=1;who=wpick(outfield(team.xi,m.out),function(){return 1;},rnd);
+        m.out[who.n]=1;m.mu*=0.75;m.mt*=1.3;T.ev.push({min:min,t:"red",us:1,n:who.n});}
+    }else if((x-=E.injUs)<0){
+      if((m.inj||0)<E.injMax){
+        who=wpick(outfield(team.xi,m.out),function(){return 1;},rnd);
+        if(who){
+          m.inj=(m.inj||0)+1;m.out[who.n]=1;
+          var drop=Math.max(who.r-72,4);
+          m.A-=WATT[who.pos]*drop/(team.aw||1);m.D-=WDEF[who.pos]*drop/(team.dw||1);
+          T.ev.push({min:min,t:"inj",us:1,n:who.n});
+        }
+      }
+    }else if(pvp&&(x-=E.injUs)<0){
+      if((m.injB||0)<E.injMax){
+        who=wpick(outfield(opp.xi,m.outB),function(){return 1;},rnd);
+        if(who){
+          m.injB=(m.injB||0)+1;m.outB[who.n]=1;
+          var dropB=Math.max(who.r-72,4);
+          m.Ao-=WATT[who.pos]*dropB/(opp.aw||1);m.Do-=WDEF[who.pos]*dropB/(opp.dw||1);
+          T.ev.push({min:min,t:"inj",us:0,n:who.n});
+        }
+      }
+    }else if((x-=E.penUs)<0){
+      var tk=scorerPick(team.xi,rnd,m.focus,m.out);
+      T.ev.push({min:min,t:"pen",us:1,n:tk.n});
+      if(rnd()<E.penConv)goalEv(T,1,min,tk.n,{pen:1});
+      else T.ev.push({min:min,t:"pen-miss",us:1,n:tk.n,gk:oppGK.n});
+    }else if((x-=E.penThem)<0){
+      var tt=scorerPick(opp.xi,rnd,m.focusB,m.outB);
+      T.ev.push({min:min,t:"pen",us:0,n:tt.n});
+      if(rnd()<E.penConv)goalEv(T,0,min,tt.n,{pen:1});
+      else T.ev.push({min:min,t:"pen-miss",us:0,n:tt.n,gk:ourGK.n});
+    }
+  }
 }
 
-/* ---------- مباراة (90 دقيقة) + وقت إضافي + ركلات ترجيح ---------- */
-function playLeg(rnd,team,opp){
-  var O=opp.O+CFG.oppOffset;
-  var gf=poisson(lambda(team.A,O),rnd),ga=poisson(lambda(O,team.D),rnd);
-  return{us:gf,them:ga,gUs:goals(gf,team.xi,rnd,1,90),gThem:goals(ga,opp.xi,rnd,1,90)};
+function newCup(team,seed,ladder,opts){
+  return{rnd:rngFrom(seed),seed:seed,team:team,ladder:ladder,opts:opts||{},carry:{A:0},decisions:[]};
 }
-function playExtra(rnd,team,opp){
-  var O=opp.O+CFG.oppOffset;
-  var gf=poisson(lambda(team.A,O)*CFG.etShare,rnd),ga=poisson(lambda(O,team.D)*CFG.etShare,rnd);
-  return{us:gf,them:ga,gUs:goals(gf,team.xi,rnd,91,120),gThem:goals(ga,opp.xi,rnd,91,120)};
+function beginLeg(cup,si,k,prior){
+  var rnd=cup.rnd,team=cup.team,opp=cup.ladder[si],st=(cup.stages||STAGES)[si],sty=STYLE_EV[team.style]||STYLE_EV.balanced,E=CFG.ev,pvp=!!opp.pvp;
+  var m={si:si,k:k,legs:st.legs,team:team,opp:opp,us:0,them:0,gUs:[],gThem:[],ev:[],
+    A:team.A+(cup.carry.A||0),D:team.D,O:opp.O+CFG.oppOffset,
+    mu:1,mt:1,late:false,out:{},outB:{},focus:null,focusB:null,wonders:0,wondersB:0,inj:0,injB:0,redUs:0,redThem:0,decisionB:null,
+    pre:prior||{us:0,them:0},sched:[],decision:null,ht:null,carried:cup.carry.A||0};
+  cup.carry.A=0;
+  m.Ao=pvp?opp.A+(cup.carryB||0):m.O;m.Do=pvp?opp.D:m.O;
+  if(pvp)cup.carryB=0;
+  if(rnd()<(pvp?E.pvpGk:E.gkUs))m.sched.push({min:20+Math.floor(rnd()*60),t:"gk",us:1});
+  if(rnd()<(pvp?E.pvpGk:E.gkThem))m.sched.push({min:20+Math.floor(rnd()*60),t:"gk",us:0});
+  if(rnd()<(pvp?(sty.late+(STYLE_EV[opp.style]||STYLE_EV.balanced).late)/2:sty.late))m.sched.push({min:80,t:"late"});
+  playPeriod(rnd,m,1,45);
+  m.ht={us:m.us,them:m.them};
+  return m;
 }
+
+/* ---------- قرارات بين الشوطين ---------- */
+function htOptions(m,side){
+  var b=side==="b",sg=b?-1:1;
+  var md=sg*(m.us-m.them),ad=sg*(m.pre?m.pre.us-m.pre.them:0)+md;
+  var ctx=ad<0?"trailing":ad>0?"leading":"level",o;
+  var stay={id:"stay",name:"Stay the course",note:"Trust the XI. No change.",us:1,them:1};
+  if(ctx==="trailing")o=[
+    {id:"allout",name:"All-out attack",note:"Chances at both ends. High risk, high reward.",us:1.3,them:1.25},
+    {id:"counter",name:"Change the plan",note:"Compact shape, hit them on the break.",us:1.08,them:0.82},stay];
+  else if(ctx==="leading")o=[
+    {id:"protect",name:"Protect the lead",note:"Drop deep, shut the game down.",us:0.78,them:0.66},
+    {id:"press",name:"Keep the pressure",note:"Go for the killer goal. Leaves space behind.",us:1.15,them:1.1},stay];
+  else o=[
+    {id:"gowin",name:"Go for the win",note:"Push higher. More goals, both ways.",us:1.22,them:1.15},
+    {id:"control",name:"Take control",note:"Keep the ball, wait for the opening.",us:0.97,them:0.85},stay];
+  var keys=(b?m.opp.xi:m.team.xi).filter(function(p){return p.pos!=="GK"&&!(b?m.outB:m.out)[p.n];})
+    .sort(function(a,b){return WATT[b.pos]*b.r-WATT[a.pos]*a.r;}).slice(0,3);
+  return{ctx:ctx,diff:ad,md:md,two:m.legs>1,opts:o,keys:keys};
+}
+function finishLeg(cup,m,dec,decB){
+  var rnd=cup.rnd;
+  if(dec&&dec.opt){
+    var o=htOptions(m).opts.filter(function(x){return x.id===dec.opt;})[0];
+    if(o){m.mu*=o.us;m.mt*=o.them;m.decision={opt:o.id,name:o.name};}
+  }
+  if(dec&&dec.key){m.focus=dec.key;m.mu*=1.04;if(m.decision)m.decision.key=dec.key;else m.decision={opt:"stay",name:"Stay the course",key:dec.key};}
+  if(m.decision)cup.decisions.push({si:m.si,k:m.k,opt:m.decision.opt,key:m.decision.key||null});
+  /* المنافس (أونلاين): نفس القرارات بس من وجهة نظره، يعني us/them معكوسين */
+  if(decB&&decB.opt){
+    var ob=htOptions(m,"b").opts.filter(function(x){return x.id===decB.opt;})[0];
+    if(ob){m.mt*=ob.us;m.mu*=ob.them;m.decisionB={opt:ob.id,name:ob.name};}
+  }
+  if(decB&&decB.key){m.focusB=decB.key;m.mt*=1.04;if(m.decisionB)m.decisionB.key=decB.key;else m.decisionB={opt:"stay",name:"Stay the course",key:decB.key};}
+  playPeriod(rnd,m,46,90);
+  if(m.wonders)cup.carry.A=Math.min(1,(cup.carry.A||0)+CFG.ev.wonderCarry*m.wonders);
+  if(m.wondersB)cup.carryB=Math.min(1,(cup.carryB||0)+CFG.ev.wonderCarry*m.wondersB);
+  return m;
+}
+
 var PEN_SCORES=[[5,4],[4,3],[5,3],[4,2],[3,2],[3,1],[6,5],[7,6],[5,4],[4,3]];
 function penWinProb(team,opp){
-  return clamp(CFG.penBase+CFG.penSlope*(team.ovr-opp.O),CFG.penMin,CFG.penMax);
+  return clamp(CFG.penBase+CFG.penSlope*(team.ovr-opp.O)+(team.style==="defensive"?CFG.defPen:0)-(opp.style==="defensive"?CFG.defPen:0),CFG.penMin,CFG.penMax);
 }
 function playPens(rnd,team,opp){
   var win=rnd()<penWinProb(team,opp),s=PEN_SCORES[Math.floor(rnd()*PEN_SCORES.length)];
   return{us:win?s[0]:s[1],them:win?s[1]:s[0],win:win};
 }
 
-/* ---------- مواجهة كاملة (ذهاب وإياب أو مباراة واحدة) ---------- */
-function playTie(rnd,team,opp,legs){
-  var L=[],aggUs=0,aggThem=0,i,et=null,pens=null;
-  for(i=0;i<legs;i++){
-    var m=playLeg(rnd,team,opp);
-    L.push(m);aggUs+=m.us;aggThem+=m.them;
-  }
+/* ---------- نهاية المواجهة: وقت إضافي + ركلات + إحصاء ---------- */
+function settleTie(cup,si,L){
+  var rnd=cup.rnd,team=cup.team,opp=cup.ladder[si],legs=L.length,aggUs=0,aggThem=0,et=null,pens=null;
+  L.forEach(function(m){aggUs+=m.us;aggThem+=m.them;});
   if(aggUs===aggThem){
-    et=playExtra(rnd,team,opp);aggUs+=et.us;aggThem+=et.them;
+    var last=L[legs-1];
+    last.mu=1;last.mt=1;last.late=false;last.sched=[];           /* القرار ما بيكملش للوقت الإضافي */
+    et={us:0,them:0,gUs:[],gThem:[],ev:[]};
+    playPeriod(rnd,last,91,120,et);
+    aggUs+=et.us;aggThem+=et.them;
     if(aggUs===aggThem)pens=playPens(rnd,team,opp);
   }
   var adv=pens?pens.win:aggUs>aggThem;
-  /* إحصاء المباريات: الوقت الإضافي بيتحسب على آخر مباراة في المواجهة */
   var wins=0,draws=0,losses=0,conceded=0,scored=0;
   L.forEach(function(m,k){
     var fu=m.us+(k===legs-1&&et?et.us:0),ft=m.them+(k===legs-1&&et?et.them:0);
-    m.fUs=fu;m.fThem=ft;
-    scored+=fu;conceded+=ft;
+    m.fUs=fu;m.fThem=ft;scored+=fu;conceded+=ft;
     if(fu>ft)wins++;else if(fu<ft)losses++;else draws++;
   });
+  L.forEach(function(m){delete m.team;delete m.opp;delete m.sched;delete m.out;delete m.outB;});
   return{legs:L,aggUs:aggUs,aggThem:aggThem,et:et,pens:pens,adv:adv,
     wins:wins,draws:draws,losses:losses,scored:scored,conceded:conceded};
 }
 
-/* ---------- سلم الخصوم: كل دور من شريحة أقوى (من أضعف 20% للنهائي في أقوى 20%) ---------- */
+/* ---------- الخصوم ---------- */
+/* سلم الصعوبة: كل دور من شريحة أقوى (من أضعف 20% للنهائي في أقوى 20%) */
 function buildLadder(rnd,seasons){
   var arr=seasons.map(oppTeam).sort(function(a,b){return a.O-b.O;}),n=arr.length,used={},out=[];
   [[0,.2],[.2,.4],[.4,.6],[.6,.8],[.8,1]].forEach(function(w){
@@ -194,6 +369,20 @@ function buildLadder(rnd,seasons){
     used[o.ab]=1;out.push(o);
   });
   return out;
+}
+/* براكيت عشوائي: 5 أندية مختلفة من كل التاريخ، من غير أي ترتيب بالقوة */
+function buildRandom(rnd,seasons){
+  var order=shuffled(seasons,rnd),used={},out=[];
+  for(var i=0;i<order.length&&out.length<STAGES.length;i++){
+    if(used[order[i].ab])continue;
+    used[order[i].ab]=1;out.push(oppTeam(order[i]));
+  }
+  return out;
+}
+function eraPool(seasons,era){
+  if(era!=="modern")return seasons;
+  var m=seasons.filter(function(s){return s.yr>=1992;});
+  return m.length>=STAGES.length+3?m:seasons;
 }
 
 /* ---------- نتيجة البطولة والمستوى ---------- */
@@ -211,20 +400,71 @@ function tierOf(r){
   if(s.id==="R16")return{id:"r16",label:"LAST 16",sub:"Out in the Round of 16"};
   return{id:"po",label:"KNOCKED OUT",sub:"Out in the Knockout Play-off"};
 }
-
-function runCup(team,seed,seasons){
-  var rnd=rngFrom(seed),ladder=buildLadder(rnd,seasons),out=[],champion=true,outAt=-1;
-  var wins=0,draws=0,losses=0,scored=0,conceded=0,played=0;
-  for(var i=0;i<STAGES.length;i++){
-    var st=STAGES[i],tie=playTie(rnd,team,ladder[i],st.legs);
-    out.push({stage:st,opp:ladder[i],tie:tie});
-    wins+=tie.wins;draws+=tie.draws;losses+=tie.losses;scored+=tie.scored;conceded+=tie.conceded;played+=st.legs;
-    if(!tie.adv){champion=false;outAt=i;break;}
-  }
-  var res={seed:seed,stages:out,champion:champion,outAt:outAt,played:played,
-    wins:wins,draws:draws,losses:losses,scored:scored,conceded:conceded};
+function tally(res){
+  var tot={wins:0,draws:0,losses:0,scored:0,conceded:0,played:0};
+  res.stages.forEach(function(r){var t=r.tie;tot.wins+=t.wins;tot.draws+=t.draws;tot.losses+=t.losses;tot.scored+=t.scored;tot.conceded+=t.conceded;tot.played+=r.stage.legs;});
+  return tot;
+}
+function finishCup(cup,out,champion,outAt){
+  var t=tally({stages:out});
+  var res={seed:cup.seed,stages:out,champion:champion,outAt:outAt,played:t.played,
+    wins:t.wins,draws:t.draws,losses:t.losses,scored:t.scored,conceded:t.conceded,
+    bracket:cup.opts.bracket||"ladder",decisions:cup.decisions};
   res.tier=tierOf(res);
   return res;
+}
+function makeLadder(rnd,seasons,opts){
+  return(opts&&opts.bracket==="random")?buildRandom(rnd,seasons):buildLadder(rnd,seasons);
+}
+function createCup(team,seed,seasons,opts){
+  var rnd=rngFrom(seed);
+  /* نفس الـ rnd بيكمل بعد السلم عشان المباريات تفضل حتمية بالـ seed */
+  var cup=newCup(team,seed,[],opts);
+  cup.rnd=rnd;cup.ladder=makeLadder(rnd,seasons,opts);
+  return cup;
+}
+/* ---------- لاعب ضد لاعب (أونلاين): كل طرف تشكيلته، ونفس الـ seed عند الاتنين ---------- */
+function pvpOpp(team,meta){
+  meta=meta||{};
+  return{pvp:1,xi:team.xi.map(function(p){return{n:p.n,pos:p.pos,r:p.r};}),O:team.ovr,A:team.A,D:team.D,aw:team.aw,dw:team.dw,
+    style:team.style,club:meta.name||"Opponent",ab:meta.ab||"OPP",ss:meta.ss||"",c:meta.c||["#4f7cff","#ffffff"]};
+}
+function createVs(seed,tA,tB,legs,metaB){
+  var cup=newCup(tA,seed,[pvpOpp(tB,metaB)],{});
+  cup.stages=[{id:"VS",name:"Head to head",short:"MATCH",legs:legs}];
+  return cup;
+}
+/* بيبني المباراة من الصفر بالقرارات المعروفة لحد دلوقتي. لو قرار ناقص بيقف عند الاستراحة (pending).
+   decide(k) → {a:{opt,key}|null, b:{opt,key}|null, ready:bool}. نفس المدخلات = نفس النتيجة عند الطرفين. */
+function buildVs(seed,tA,tB,legs,metaB,decide){
+  var cup=createVs(seed,tA,tB,legs,metaB),L=[],k;
+  for(k=0;k<legs;k++){
+    var pr={us:0,them:0};L.forEach(function(x){pr.us+=x.us;pr.them+=x.them;});
+    var m=U_begin(cup,k,pr),d=decide(k);
+    L.push(m);
+    if(!d||!d.ready)return{cup:cup,legs:L,tie:null,pending:k};
+    finishLeg(cup,m,d.a||null,d.b||null);
+  }
+  return{cup:cup,legs:L,tie:settleTie(cup,0,L),pending:-1};
+}
+function U_begin(cup,k,pr){return beginLeg(cup,0,k,pr);}
+
+/* محاكاة كاملة من غير قرارات (الوضع السريع والاختبارات). opts.decide(m,cup) اختياري. */
+function runCup(team,seed,seasons,opts){
+  var cup=createCup(team,seed,seasons,opts),out=[],champion=true,outAt=-1;
+  for(var i=0;i<STAGES.length;i++){
+    var st=STAGES[i],legs=[],k;
+    for(k=0;k<st.legs;k++){
+      var prior={us:0,them:0};legs.forEach(function(x){prior.us+=x.us;prior.them+=x.them;});
+      var m=beginLeg(cup,i,k,prior);
+      finishLeg(cup,m,opts&&opts.decide?opts.decide(m,cup):null);
+      legs.push(m);
+    }
+    var tie=settleTie(cup,i,legs);
+    out.push({stage:st,opp:cup.ladder[i],tie:tie});
+    if(!tie.adv){champion=false;outAt=i;break;}
+  }
+  return finishCup(cup,out,champion,outAt);
 }
 
 /* ---------- السحب ---------- */
@@ -261,10 +501,12 @@ function rerollSeason(rnd,seasons,cur,used,slots,picks,taken){
   return c.length?c[Math.floor(rnd()*c.length)]:null;
 }
 
-var API={CFG:CFG,POS:POS,WATT:WATT,WDEF:WDEF,FORMATIONS:FORMATIONS,FORMATION_IDS:FORMATION_IDS,STYLES:STYLES,
-  STAGES:STAGES,TOTAL_MATCHES:TOTAL_MATCHES,slotsFor:slotsFor,fits:fits,pickable:pickable,rngFrom:rngFrom,
+var API={CFG:CFG,STYLE_EV:STYLE_EV,POS:POS,WATT:WATT,WDEF:WDEF,FORMATIONS:FORMATIONS,FORMATION_IDS:FORMATION_IDS,STYLES:STYLES,
+  STAGES:STAGES,TOTAL_MATCHES:TOTAL_MATCHES,slotsFor:slotsFor,fits:fits,fitKind:fitKind,relocations:relocations,pickable:pickable,rngFrom:rngFrom,
   poisson:poisson,lambda:lambda,makeTeam:makeTeam,seasonStrength:seasonStrength,oppTeam:oppTeam,
-  penWinProb:penWinProb,playTie:playTie,buildLadder:buildLadder,runCup:runCup,tierOf:tierOf,
+  penWinProb:penWinProb,buildLadder:buildLadder,buildRandom:buildRandom,eraPool:eraPool,
+  createCup:createCup,createVs:createVs,buildVs:buildVs,pvpOpp:pvpOpp,beginLeg:beginLeg,finishLeg:finishLeg,settleTie:settleTie,htOptions:htOptions,finishCup:finishCup,
+  runCup:runCup,tierOf:tierOf,tally:tally,
   drawSeason:drawSeason,rerollTeam:rerollTeam,rerollSeason:rerollSeason,seasonAlternatives:seasonAlternatives};
 g.UCL=API;
 if(typeof module!=="undefined"&&module.exports)module.exports=API;
