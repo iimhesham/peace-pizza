@@ -1,5 +1,5 @@
 /* =========================================================
-   Online Champions XI: head to head. Two players, no host, no judge.
+   Online Europe XI: head to head. Two players, no host, no judge.
    One player opens a room, the other joins with the code.
    Each player drafts a private XI, then the same match is simulated on both phones
    from the same seed. At half-time both managers pick a decision.
@@ -72,12 +72,12 @@ function lobby(ctx,S){
     '<div class="ol-sec">Era</div><div class="ol-chips">'+
       '<button type="button" class="ol-chip'+(era==="all"?' on':'')+'" onclick="OLUCL.opt(\'era\',\'all\')">All history</button>'+
       '<button type="button" class="ol-chip'+(era==="modern"?' on':'')+'" onclick="OLUCL.opt(\'era\',\'modern\')">Modern (1992+)</button></div>'
-    :'<div class="ol-sec">Match</div><p class="uco-sum">'+(legs===1?'Single match':'Two legs')+' · '+(era==="modern"?'Modern era':'All history')+'</p>';
+    :'<div class="ol-sec">Match</div><p class="uco-sum">'+(legs===1?'Single match':'Two legs')+' · All 3 cups · '+(era==="modern"?'Modern era':'All history')+'</p>';
   I.shell('<div class="ol-ticket" onclick="OL.copy()"><small>Room code · tap to share</small><div class="ol-code">'+e(ctx.code)+'</div><span>Send this code to a friend</span></div>'+
     '<div class="uco-wait"><div class="uco-dots"><i></i><i></i><i></i></div>Waiting for your opponent to join...</div>'+set+
     '<div class="uco-rules">Each of you drafts a secret XI from title-winning clubs. Then the same match plays out on both phones, and at half-time you each choose how to play the second half. Winner gets <b>+5</b> points in stats.</div>'+
     (host?'<button type="button" class="ol-b r" onclick="OL.close()">Close Room</button>':'<button type="button" class="ol-s" onclick="OLUCL.leave()">Leave Room</button>'),
-    {room:true,t:"CHAMPIONS XI",g:"ucl"});
+    {room:true,t:"EUROPE XI",g:"ucl"});
 }
 
 function draw(){
@@ -90,7 +90,7 @@ function draw(){
     lobby(ctx,S);return;
   }
   if(mounted!==key){
-    I.shell('<div class="ol-w">Loading...</div>',{room:true,t:"CHAMPIONS XI",g:"ucl",playing:true});
+    I.shell('<div class="ol-w">Loading...</div>',{room:true,t:"EUROPE XI",g:"ucl",playing:true});
     UCLO.mount(cfg);mounted=key;
   }
   UCLO.sync(sn);

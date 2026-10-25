@@ -1,5 +1,5 @@
 /* =========================================================
-   UCL — واجهة لعبة «أبطال أوروبا» (CHAMPIONS XI). أوفلاين على جهاز واحد.
+   UCL — واجهة لعبة «كؤوس أوروبا» (EUROPE XI: دوري الأبطال + اليوروبا + المؤتمر). أوفلاين على جهاز واحد.
    المنطق: js/ucl-engine.js · البيانات: js/ucl-data.js · الشكل: css/ucl.css
    الواجهة كلها بتتبني من JS جوه #uclRoot (زي Sudoku)، بالإنجليزي من الشمال لليمين.
 
@@ -27,7 +27,7 @@ var TIER_STARS={po:0,r16:1,quarter:2,semi:3,finalist:3,champions:4,unbeaten:4,fl
 var TIER_NAME={po:"KNOCKED OUT",r16:"LAST 16",quarter:"QUARTER-FINALIST",semi:"SEMI-FINALIST",finalist:"FINALIST",champions:"CHAMPIONS",unbeaten:"UNBEATEN",flawless:"FLAWLESS",immaculate:"IMMACULATE"};
 
 var S={
-  view:"setup",fid:"4-3-3",style:"balanced",mode:"classic",bracket:"ladder",era:"all",pres:"cinematic",manage:true,
+  view:"setup",fid:"4-3-3",style:"balanced",mode:"classic",bracket:"ladder",era:"all",comps:["ucl","uel","uecl"],tab:"cups",pres:"cinematic",manage:true,
   slots:[],picks:{},taken:{},used:{},count:0,
   cur:null,phase:"idle",rolling:false,revealing:false,rerolls:MAXRR,rrUsed:-1,sel:null,flt:"ALL",sheet:null,
   team:null,res:null,cup:null,stages:[],tieLegs:[],reveal:0,timers:[],counted:false,auto:true,speed:"normal",live:null,xiOpen:false,
@@ -45,7 +45,7 @@ function lum(hex){var n=parseInt(hex.slice(1),16);return(0.299*(n>>16&255)+0.587
 function ink(hex){return lum(hex)>0.6?"#0a0f2a":"#ffffff";}
 function clearTimers(){S.timers.forEach(function(t){clearTimeout(t);clearInterval(t);});S.timers=[];}
 function later(fn,ms){var t=setTimeout(fn,ms);S.timers.push(t);return t;}
-function pool(){return U.eraPool(SEASONS,S.on?S.on.era:S.era);}
+function pool(){return U.poolFor(SEASONS,S.on?S.on.era:S.era,S.on?S.on.cups:S.comps);}
 var scEl=document.getElementById("ucl");
 function getY(){return S.on&&scEl?scEl.scrollTop:window.scrollY;}
 function setY(y){if(S.on&&scEl)scEl.scrollTop=y;else window.scrollTo(0,y);}
@@ -93,8 +93,10 @@ var ACH=[
   {id:"modern",n:"Modern Master",d:"Win the title in Modern Era mode.",t:function(r){return r.champion&&S.era==="modern";}},
   {id:"boot",n:"Golden Boot",d:"One player scores 6+ in a single cup.",t:function(r,f){return f.maxG>=6;}},
   {id:"wonder",n:"Wonder Goal",d:"Score a wonder goal.",t:function(r,f){return f.wonder;}},
-  {id:"under",n:"Underdog",d:"Win the title with an XI rated under 88.",t:function(r){return r.champion&&S.team&&S.team.ovr<88;}}
+  {id:"under",n:"Underdog",d:"Win the title with an XI rated under 88.",t:function(r){return r.champion&&S.team&&S.team.ovr<88;}},
+  {id:"triple",n:"Triple Crown",d:"Win the title with players from all three cups in your XI.",t:function(r){return r.champion&&cupsInXI()===3;}}
 ];
+function cupsInXI(){var m={};Object.keys(S.picks).forEach(function(k){m[S.picks[k].cp||"ucl"]=1;});return Object.keys(m).length;}
 function runFacts(){
   var f={comeback:false,decs:0,gambler:false,wonder:false,maxG:0,big:0,g:{}};
   S.res.stages.forEach(function(st){
@@ -112,14 +114,53 @@ function runFacts(){
 }
 
 /* ---------- رسومات ---------- */
-function crest(c,ab,sz){
-  var f=c[0],s=c[1],t=ink(f),fs=ab.length>3?8:ab.length>2?10:12;
-  return '<svg class="u-crest" viewBox="0 0 48 54" width="'+sz+'" height="'+Math.round(sz*54/48)+'" aria-hidden="true">'+
-    '<path d="M3 3h42v24c0 13-9.5 19.5-21 24C12.5 46.5 3 40 3 27z" fill="'+f+'" stroke="'+s+'" stroke-width="3"/>'+
-    '<path d="M3 3h42v9H3z" fill="'+s+'"/>'+
-    '<text x="24" y="36" text-anchor="middle" font-size="'+fs+'" fill="'+t+'">'+esc(ab)+'</text></svg>';
+var COMPS={
+  ucl:{id:"ucl",n:"Champions League",s:"UCL",c:"#3d7bff",l:"#8db4ff"},
+  uel:{id:"uel",n:"Europa League",s:"UEL",c:"#f2680c",l:"#ffa24d"},
+  uecl:{id:"uecl",n:"Conference League",s:"UECL",c:"#1fb36b",l:"#6ff0b0"}
+};
+function compOf(s){return U.compOf(s);}
+function compName(s){var id=compOf(s);return(id==="uel"&&s.yr&&s.yr<=2009)?"UEFA Cup":COMPS[id].n;}
+function compTag(id){id=COMPS[id]?id:"ucl";return'<span class="u-ct c-'+id+'">'+COMPS[id].s+'</span>';}
+var CID=0;
+var PATS=["plain","half","band","hoops","chevron"];
+var PAT={MIL:"stripes",INT:"stripes",JUV:"stripes",BAR:"stripes",ATM:"stripes",CRV:"stripes",POR:"stripes",CSK:"half",
+  SEV:"band",AJX:"band",PSG:"band",FEY:"half",BEN:"half",HSV:"hoops",CEL:"hoops",TOT:"plain",RMA:"plain",MUN:"plain",LIV:"plain",CHE:"plain",MCI:"plain",BAY:"plain",BVB:"plain",
+  CRY:"chevron",ATA:"stripes",SGE:"half",WHU:"chevron",AVL:"half",ROM:"half",OLY:"stripes",GAL:"half",VAL:"chevron",ZEN:"hoops",SHA:"stripes",VIL:"plain"};
+var SHAPES=["M6 7Q28 1 50 7V30C50 46 39 55 28 61C17 55 6 46 6 30Z","M5 5H51V31C51 46 38 55 28 61C18 55 5 46 5 31Z","M28 6A24 24 0 1 1 27.99 6Z"];
+function hash(s){var h=7;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
+function starPts(cx,cy,R,r){var p=[],k;for(k=0;k<10;k++){var a=-Math.PI/2+k*Math.PI/5,q=k%2?r:R;p.push((cx+q*Math.cos(a)).toFixed(1)+","+(cy+q*Math.sin(a)).toFixed(1));}return p.join(" ");}
+function glyph(id,cx,cy,k){
+  if(id==="uel")return'<path transform="translate('+cx+' '+cy+') scale('+k+')" d="M.15-1 L-.62.12 H-.08 L-.22 1 L.62-.18 H.1Z" fill="#fff"/>';
+  if(id==="uecl")return'<g transform="translate('+cx+' '+cy+') scale('+k+')"><path d="M0-1C.8-.5.8.5 0 1C-.8.5-.8-.5 0-1Z" fill="#fff"/><path d="M0-.55V.6" stroke="'+COMPS.uecl.c+'" stroke-width=".16" fill="none"/></g>';
+  return'<polygon transform="translate('+cx+' '+cy+') scale('+k+')" points="'+starPts(0,0,1,.42)+'" fill="#fff"/>';
 }
-var XI_CREST=crest(["#0e3bb8","#e8f2ff"],"XI",44);
+function compIcon(id,sz){
+  id=COMPS[id]?id:"ucl";var C=COMPS[id],g="ci"+(++CID);
+  return'<svg class="u-ci" viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" aria-hidden="true"><defs><linearGradient id="'+g+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+C.l+'"/><stop offset="1" stop-color="'+C.c+'"/></linearGradient></defs>'+
+    '<circle cx="12" cy="12" r="11" fill="url(#'+g+')" stroke="rgba(255,255,255,.85)" stroke-width="1.3"/>'+glyph(id,12,12.4,6.4)+'</svg>';
+}
+function crest(c,ab,sz,comp){
+  var f=c[0],s=c[1],h=hash(ab),shp=h%3,pat=PAT[ab]||PATS[(h>>3)%PATS.length],d=SHAPES[shp],n=++CID,cl="cc"+n,gl="cg"+n,bg="cm"+n,L="";
+  var fs=ab.length>3?9:ab.length>2?11:13;
+  if(pat==="stripes"){for(var i=1;i<7;i+=2)L+='<rect x="'+(4+i*9.6-9.6)+'" y="0" width="9.6" height="64" fill="'+s+'"/>';}
+  else if(pat==="hoops")L='<rect x="0" y="13" width="56" height="10" fill="'+s+'"/><rect x="0" y="33" width="56" height="10" fill="'+s+'"/>';
+  else if(pat==="half")L='<rect x="28" y="0" width="28" height="64" fill="'+s+'"/>';
+  else if(pat==="band")L='<rect x="21" y="0" width="14" height="64" fill="'+s+'"/>';
+  else if(pat==="chevron")L='<path d="M0 18L28 40L56 18V30L28 52L0 30Z" fill="'+s+'"/>';
+  else L='<rect x="0" y="0" width="56" height="15" fill="'+s+'"/>';
+  var med="";
+  if(comp&&COMPS[comp]){var C=COMPS[comp];
+    med='<defs><linearGradient id="'+bg+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+C.l+'"/><stop offset="1" stop-color="'+C.c+'"/></linearGradient></defs>'+
+      '<circle cx="44" cy="50" r="10.5" fill="url(#'+bg+')" stroke="#0b0e14" stroke-width="3"/><circle cx="44" cy="50" r="10.5" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.4"/>'+glyph(comp,44,50.4,5.6);}
+  return'<svg class="u-crest" viewBox="0 0 56 64" width="'+sz+'" height="'+Math.round(sz*64/56)+'" aria-hidden="true">'+
+    '<defs><clipPath id="'+cl+'"><path d="'+d+'"/></clipPath><linearGradient id="'+gl+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>'+
+    '<path d="'+d+'" fill="'+f+'" stroke="#0b0e14" stroke-width="3.2" stroke-linejoin="round"/>'+
+    '<g clip-path="url(#'+cl+')">'+L+'<rect x="0" y="0" width="56" height="34" fill="url(#'+gl+')"/></g>'+
+    '<path d="'+d+'" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.1" stroke-linejoin="round"/>'+
+    '<text x="28" y="'+(shp===2?36:37)+'" text-anchor="middle" font-size="'+fs+'" font-weight="800" fill="#fff" stroke="rgba(0,0,0,.72)" stroke-width="2.6" stroke-linejoin="round" paint-order="stroke" style="font-family:Inter,system-ui,sans-serif;letter-spacing:.02em">'+esc(ab)+'</text>'+med+'</svg>';
+}
+var XI_CREST=crest(["#12151c","#f2680c"],"XI",44);
 function starsRow(n,glow){
   var o="";for(var i=0;i<5;i++)o+='<i class="'+(i<n?'on':'')+'"></i>';
   return '<span class="u-starrow'+(glow?' is-glow':'')+'" aria-label="'+n+' of 5 stars">'+o+"</span>";
@@ -176,7 +217,7 @@ function bar(){
   var back=S.on?"oleave":S.view==="setup"?"home":"back";
   return '<header class="u-bar"><button type="button" class="u-ib" data-act="'+back+'" aria-label="'+(back==="home"?"Back to home":back==="oleave"?"Leave room":"Back to settings")+'">'+
     '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>'+
-    '<div class="u-title"><b>CHAMPIONS XI</b><span>Dream team · Cup winners</span></div><span class="u-ib u-ghost"></span></header>';
+    '<div class="u-title"><b>EUROPE XI</b><span>Dream team · Cup winners</span></div><span class="u-ib u-ghost"></span></header>';
 }
 
 /* ---------- 1) الإعداد ---------- */
@@ -192,40 +233,67 @@ function trophyRoom(){
     o+='<li class="'+(on?'is-on':'')+'"><i></i><div><b>'+esc(a.n)+'</b><span>'+esc(a.d)+'</span></div></li>';
   });
   var best=S.stats.best?TIER_NAME[S.stats.best]||S.stats.best.toUpperCase():"—";
-  return '<details class="u-panel u-troph"><summary><span>Trophy room</span><em>'+n+'/'+ACH.length+'</em></summary>'+
+  return '<details class="u-panel u-troph" open><summary><span>Trophy room</span><em>'+n+'/'+ACH.length+'</em></summary>'+
     '<div class="u-pb"><div><b>'+esc(best)+'</b><span>best finish</span></div><div><b>'+S.stats.titles+'</b><span>titles</span></div><div><b>'+S.stats.imm+'</b><span>immaculate</span></div><div><b>'+S.stats.gf+'</b><span>most goals</span></div><div><b>'+(S.stats.big||0)+'</b><span>biggest win</span></div></div>'+
     '<ul class="u-ach">'+o+'</ul></details>';
 }
+function compStat(id){
+  var l=SEASONS.filter(function(s){return compOf(s)===id;}),a=9999,b=0;
+  l.forEach(function(s){if(s.yr<a)a=s.yr;if(s.yr>b)b=s.yr;});
+  return{n:l.length,a:a,b:b};
+}
+function cupCard(id){
+  var C=COMPS[id],st=compStat(id);
+  return '<div class="u-cup c-'+id+'">'+compIcon(id,42)+'<span class="u-cup-t"><b>'+C.n+'</b><small>'+st.n+' title-winning seasons · '+st.a+'–'+st.b+'</small></span></div>';
+}
+var TABS=[["cups","Cups"],["squad","Squad"],["match","Match"],["record","Record"]];
+function setupTabs(){
+  var o='<nav class="u-tabs" role="tablist" aria-label="Setup">';
+  TABS.forEach(function(t){o+='<button type="button" role="tab" class="u-tab t-'+t[0]+(S.tab===t[0]?' is-on':'')+'" aria-selected="'+(S.tab===t[0])+'" data-act="tab" data-v="'+t[0]+'">'+t[1]+'</button>';});
+  return o+'</nav>';
+}
+function cupsLabel(){
+  return"All 3 cups";
+}
 function viewSetup(){
-  var fm="";
-  U.FORMATION_IDS.forEach(function(f){fm+='<button type="button" class="u-chip'+(f===S.fid?' is-on':'')+'" data-act="fid" data-v="'+f+'">'+f+'</button>';});
-  var st=seg("style",S.style,U.STYLES.map(function(x){return[x,STYLE_LABEL[x]];}));
-  var br=seg("bracket",S.bracket,[["ladder","Classic Path"],["random","Random Bracket"]]);
-  var era=seg("era",S.era,[["all","All history"],["modern","Modern (1992+)"]]);
-  var pr=seg("pres",S.pres,[["cinematic","Cinematic"],["fast","Fast"]]);
-  var mg=seg("manage",S.manage?"1":"0",[["1","Manage"],["0","Auto"]]);
-  var md=seg("mode",S.mode,[["classic","Visible"],["memory","Hidden"]]);
-  var b=S.stats.best?(TIER_RANK[S.stats.best]>=6?"★ ":"")+(TIER_NAME[S.stats.best]||S.stats.best.toUpperCase()):"—";
-  return '<div class="u-hero">'+
-    '<h1 class="u-logo">CHAMPIONS<br>XI</h1><p class="u-tag">Roll a winning club. Pick one star. Manage the cup. Win all '+U.TOTAL_MATCHES+'.</p>'+
+  if(!S.tab)S.tab="cups";
+  var n=pool().length,p="";
+  if(S.tab==="cups"){
+    var era=seg("era",S.era,[["all","All history"],["modern","Modern (1992+)"]]);
+    p='<div class="u-panel"><h2 class="u-label">One draft, three cups</h2><div class="u-cups">'+cupCard("ucl")+cupCard("uel")+cupCard("uecl")+'</div>'+
+      '<p class="u-hint">Every roll can land on a winner of any of the three cups, and so can every opponent. The badge on each club shows which cup it won.</p></div>'+
+      '<div class="u-panel"><h2 class="u-label">Era</h2>'+era+'<p class="u-hint">'+(S.era==="modern"?"Only seasons from 1992 on, for your draft and your opponents.":"Every title-winning season of all three cups.")+'</p></div>'+
+      '<p class="u-note"><b>How ratings work.</b> A player is rated on the cup run his club won, not on his career. A Europa League star is rated against that tournament.</p>';
+  }else if(S.tab==="squad"){
+    var fm="";
+    U.FORMATION_IDS.forEach(function(f){fm+='<button type="button" class="u-chip'+(f===S.fid?' is-on':'')+'" data-act="fid" data-v="'+f+'">'+f+'</button>';});
+    var st=seg("style",S.style,U.STYLES.map(function(x){return[x,STYLE_LABEL[x]];}));
+    p='<div class="u-panel"><h2 class="u-label">Formation</h2><div class="u-chips">'+fm+'</div><div class="u-mini">'+miniPitch(S.fid)+'</div></div>'+
+      '<div class="u-panel"><h2 class="u-label">Playing style</h2>'+st+'<p class="u-hint">'+STYLE_DESC[S.style]+'</p></div>';
+  }else if(S.tab==="match"){
+    var br=seg("bracket",S.bracket,[["ladder","Classic Path"],["random","Random Bracket"]]);
+    var pr=seg("pres",S.pres,[["cinematic","Cinematic"],["fast","Fast"]]);
+    var mg=seg("manage",S.manage?"1":"0",[["1","Manage"],["0","Auto"]]);
+    var md=seg("mode",S.mode,[["classic","Visible"],["memory","Hidden"]]);
+    p='<div class="u-panel"><h2 class="u-label">Tournament</h2>'+br+
+      '<p class="u-hint">'+(S.bracket==="ladder"?"Opponents get stronger every round, from the weakest 20% up to the strongest. Best for chasing Immaculate.":"Five clubs drawn from the whole pool, no order. A super team in the Last 16, a weaker side in the Final. High variance.")+'</p></div>'+
+      '<div class="u-panel"><h2 class="u-label">Match experience</h2>'+pr+
+      '<p class="u-hint">'+(S.pres==="cinematic"?"Match by match. Goals, cards and injuries as they happen. Skip any time.":"Instant results. No half-time decisions. Good for grinding.")+'</p>'+
+      (S.pres==="cinematic"?'<h2 class="u-label u-lh2">Half-time decisions</h2>'+mg+'<p class="u-hint">'+(S.manage?"At the break you choose how to play the second half. It changes what comes next, never what already happened.":"The XI plays the second half without changes.")+'</p>':'')+'</div>'+
+      '<div class="u-panel"><h2 class="u-label">Ratings</h2>'+md+'<p class="u-hint">'+(S.mode==="classic"?"Ratings are visible while you pick.":"Names and positions only. Ratings stay hidden until the cup is over.")+'</p></div>';
+  }else{
+    var b=S.stats.best?(TIER_RANK[S.stats.best]>=6?"★ ":"")+(TIER_NAME[S.stats.best]||S.stats.best.toUpperCase()):"—";
+    p='<div class="u-record"><div><b>'+S.stats.runs+'</b><span>cups</span></div><div><b>'+S.stats.titles+'</b><span>titles</span></div><div><b>'+S.stats.flawless+'</b><span>flawless</span></div><div><b class="u-sm">'+esc(b)+'</b><span>best</span></div></div>'+
+      trophyRoom()+
+      '<p class="u-beta"><span>BETA</span>'+SEASONS.length+' title-winning seasons across three cups · squads and ratings are provisional estimates.</p>';
+  }
+  return '<div class="u-hero"><div class="u-hero-r"><h1 class="u-logo">EUROPE<span>XI</span></h1><div class="u-trio">'+compIcon("ucl",26)+compIcon("uel",26)+compIcon("uecl",26)+'</div></div>'+
+    '<p class="u-tag">Roll a winning club from Europe\'s cups. Pick one star. Manage the run. Win all '+U.TOTAL_MATCHES+'.</p>'+
     '<div class="u-flow"><span><b>1</b>ROLL</span><span><b>2</b>PICK</span><span><b>3</b>MANAGE</span></div></div>'+
-    '<div class="u-panel"><h2 class="u-label">Formation</h2><div class="u-chips">'+fm+'</div><div class="u-mini">'+miniPitch(S.fid)+'</div></div>'+
-    '<div class="u-panel"><h2 class="u-label">Playing style</h2>'+st+'<p class="u-hint">'+STYLE_DESC[S.style]+'</p></div>'+
-    '<div class="u-panel"><h2 class="u-label">Tournament</h2>'+br+
-    '<p class="u-hint">'+(S.bracket==="ladder"?"Opponents get stronger every round, from the weakest 20% up to the strongest. Best for chasing Immaculate.":"Five clubs drawn from the whole pool, no order. A 2020s super team in the Last 16, a weaker side in the Final. High variance.")+'</p>'+
-    '<h2 class="u-label u-lh2">Era</h2>'+era+'<p class="u-hint">'+(S.era==="modern"?"Only title-winning seasons from 1992 on, for your draft and your opponents.":"Every title-winning season, 1960 to today.")+'</p></div>'+
-    '<div class="u-panel"><h2 class="u-label">Match experience</h2>'+pr+
-    '<p class="u-hint">'+(S.pres==="cinematic"?"Match by match. Goals, cards and injuries as they happen. Skip any time.":"Instant results. No half-time decisions. Good for grinding.")+'</p>'+
-    (S.pres==="cinematic"?'<h2 class="u-label u-lh2">Half-time decisions</h2>'+mg+'<p class="u-hint">'+(S.manage?"At the break you choose how to play the second half. It changes what comes next, never what already happened.":"The XI plays the second half without changes.")+'</p>':'')+
-    '</div>'+
-    '<div class="u-panel"><h2 class="u-label">Ratings</h2>'+md+
-    '<p class="u-hint">'+(S.mode==="classic"?"Ratings are visible while you pick.":"Names and positions only. Ratings stay hidden until the cup is over.")+'</p></div>'+
-    '<ul class="u-rules"><li><b>11</b><span>picks</span></li><li><b>'+MAXRR+'</b><span>re-rolls</span></li><li><b>'+U.TOTAL_MATCHES+'</b><span>matches</span></li></ul>'+
-    '<button type="button" class="u-btn u-big" data-act="start">Kick off draft</button>'+
-    '<button type="button" class="u-btn u-alt u-wide u-onl" data-act="online">Play online · head to head</button>'+
-    '<div class="u-record"><div><b>'+S.stats.runs+'</b><span>cups</span></div><div><b>'+S.stats.titles+'</b><span>titles</span></div><div><b>'+S.stats.flawless+'</b><span>flawless</span></div><div><b class="u-sm">'+esc(b)+'</b><span>best</span></div></div>'+
-    trophyRoom()+
-    '<p class="u-beta"><span>BETA</span>'+pool().length+' title-winning seasons · squads and ratings are provisional estimates.</p>';
+    setupTabs()+'<div class="u-tabp" role="tabpanel">'+p+'</div>'+
+    '<div class="u-dock"><p class="u-sum"><b>'+cupsLabel()+'</b><i></i>'+n+' seasons<i></i>'+S.fid+'<i></i>'+STYLE_LABEL[S.style]+'</p>'+
+    '<div class="u-dock-b"><button type="button" class="u-btn u-big" data-act="start">Kick off draft</button>'+
+    '<button type="button" class="u-btn u-alt u-onl" data-act="online">Play online</button></div></div>';
 }
 
 /* ---------- 2) السحب والاختيار ---------- */
@@ -237,8 +305,9 @@ function statusBar(){
 }
 function drawnCard(s,mode){
   var cls="u-draw"+(mode==="reveal"?" is-reveal":mode==="roll"?" is-flip":"");
-  return '<article class="'+cls+'" style="--c0:'+s.c[0]+';--c1:'+s.c[1]+'"><span class="u-draw-c">'+crest(s.c,s.ab,64)+'</span><div class="u-draw-t"><small>'+(mode==="roll"?"ROLLING…":"DRAWN")+'</small><b>'+esc(s.club)+'</b>'+
-    '<span class="u-ssn">'+esc(s.ss)+'</span><em>'+esc(s.coach)+' · Final '+esc(s.fin)+'</em></div></article>';
+  var cid=compOf(s),C=COMPS[cid];
+  return '<article class="'+cls+' c-'+cid+'" style="--c0:'+s.c[0]+';--c1:'+s.c[1]+';--cc:'+C.c+';--cl:'+C.l+'"><span class="u-draw-c">'+crest(s.c,s.ab,64,cid)+'</span><div class="u-draw-t"><small>'+(mode==="roll"?"ROLLING…":"DRAWN")+'</small><b>'+esc(s.club)+'</b>'+
+    '<span class="u-ssn">'+esc(s.ss)+'</span><span class="u-cp">'+compIcon(cid,16)+esc(compName(s))+'</span><em>'+esc(s.coach)+' · Final '+esc(s.fin)+'</em></div></article>';
 }
 function fltBar(s){
   var o='<div class="u-flt" role="group" aria-label="Filter by position">';
@@ -286,7 +355,7 @@ function viewDraft(){
       '<h2 class="u-label u-lh">Pick one player</h2>'+fltBar(S.cur)+listRows(S.cur);
     if(S.sel)hot=S.sel.slots;
   }else{
-    o+='<div class="u-drawbox is-empty"><p>Roll to draw a Champions winner and the season it won the cup.</p></div>'+
+    o+='<div class="u-drawbox is-empty"><p>Roll to draw a winning club and the season it lifted the cup.</p></div>'+
       '<button type="button" class="u-btn u-big u-roll" data-act="roll">'+dieSvg()+' Roll</button>';
   }
   o+='<h2 class="u-label u-lh">Your XI · '+S.fid+' · '+STYLE_LABEL[S.style]+'</h2>'+pitch(hot,S.count>0);
@@ -367,7 +436,7 @@ function tieCard(r){
     '<header><b>'+esc(r.stage.name)+'</b><span>'+(two?'2 LEGS':'1 MATCH')+'</span></header>'+
     '<div class="u-vs"><div class="u-side">'+XI_CREST+'<b>YOUR XI</b><small>'+S.fid+'</small></div>'+
     '<div class="u-led"><strong>'+(two?t.aggUs+'–'+t.aggThem:big)+'</strong><small>'+(two?'AGGREGATE':'FULL TIME')+'</small></div>'+
-    '<div class="u-side">'+crest(opp.c,opp.ab,44)+'<b>'+esc(opp.club)+'</b><small>'+esc(opp.ss)+(S.mode==="memory"&&!S.res?'':' · '+Math.round(opp.O))+'</small></div></div>'+
+    '<div class="u-side">'+crest(opp.c,opp.ab,44,compOf(opp))+'<b>'+esc(opp.club)+'</b><small>'+compTag(compOf(opp))+esc(opp.ss)+(S.mode==="memory"&&!S.res?'':' · '+Math.round(opp.O))+'</small></div></div>'+
     '<ul class="u-legs">'+legs+'</ul>'+(note?'<p class="u-tnote">'+note+'</p>':'')+
     '<details class="u-goals"><summary>Match report</summary>'+goalLines(t,opp)+'</details>'+
     '<footer class="u-res">'+(win?'<span>▶ THROUGH</span>':'<span>✖ ELIMINATED</span>')+'</footer></article>';
@@ -403,7 +472,7 @@ function verdict(){
   var r=S.res,tm=S.team,tr=r.tier,T=tallyGoals(),F=S.fin||{},path="";
   r.stages.forEach(function(st){
     var t=st.tie,two=st.stage.legs>1,sc=two?t.aggUs+'–'+t.aggThem:t.legs[0].us+(t.et?'+'+t.et.us:'')+'–'+t.legs[0].them+(t.et?'+'+t.et.them:'');
-    path+='<li class="'+(t.adv?'w':'l')+'">'+crest(st.opp.c,st.opp.ab,26)+'<div><b>'+esc(st.opp.club)+'</b><small>'+st.stage.short+' · '+esc(st.opp.ss)+'</small></div>'+
+    path+='<li class="'+(t.adv?'w':'l')+'">'+crest(st.opp.c,st.opp.ab,26,compOf(st.opp))+'<div><b>'+esc(st.opp.club)+'</b><small>'+st.stage.short+' · '+compTag(compOf(st.opp))+esc(st.opp.ss)+'</small></div>'+
       '<strong>'+sc+'</strong><em>'+(t.pens?'PENS':t.et?'AET':t.adv?'W':'L')+'</em></li>';
   });
   var bp=bestPlayer(T);
@@ -472,7 +541,7 @@ function liveCard(){
   return '<article class="u-tie u-live'+(wait?' is-wait':'')+(ht?' is-ht':'')+'" id="uLive"><header><b>'+esc(r.name)+'</b><span>'+legName+'</span></header>'+
     '<div class="u-vs"><div class="u-side">'+XI_CREST+'<b>YOUR XI</b><small>'+S.fid+'</small></div>'+
     '<div class="u-led" id="uLed"><strong id="uSc">'+sc[0]+'–'+sc[1]+'</strong><small id="uClk">'+clk+'</small></div>'+
-    '<div class="u-side">'+crest(opp.c,opp.ab,44)+'<b>'+esc(opp.club)+'</b><small>'+esc(opp.ss)+(S.mode==="memory"?'':' · '+Math.round(opp.O))+'</small></div></div>'+
+    '<div class="u-side">'+crest(opp.c,opp.ab,44,compOf(opp))+'<b>'+esc(opp.club)+'</b><small>'+compTag(compOf(opp))+esc(opp.ss)+(S.mode==="memory"?'':' · '+Math.round(opp.O))+'</small></div></div>'+
     (two&&L.k?'<p class="u-agg" id="uAgg">AGG '+(pg[0]+sc[0])+'–'+(pg[1]+sc[1])+'</p>':'')+
     (prev?'<ul class="u-legs">'+prev+'</ul>':'')+
     (L.state==="pens"&&L.etTie&&L.etTie.pens?'<p class="u-tnote"><span>Penalties '+L.etTie.pens.us+'–'+L.etTie.pens.them+'</span></p>':'')+
@@ -553,7 +622,7 @@ function playerSheet(i){
 function squadSheet(){
   var T=S.res?tallyGoals():null,xi="";
   S.slots.forEach(function(s){var p=S.picks[s.i];if(p){var gl=T&&T.g[p.n]||0;
-    xi+='<li><span class="u-pos">'+s.pos+'</span><b>'+esc(p.n)+'</b><em>'+esc(p.ab)+' '+esc(p.ss)+'</em>'+(gl?'<u>'+gl+' ⚽</u>':'')+'<i class="'+rc(p.r)+'">'+(hideRatings()?'??':p.r)+'</i></li>';}});
+    xi+='<li><span class="u-pos">'+s.pos+'</span><b>'+esc(p.n)+'</b><em>'+esc(p.ab)+' '+esc(p.ss)+compTag(p.cp)+'</em>'+(gl?'<u>'+gl+' ⚽</u>':'')+'<i class="'+rc(p.r)+'">'+(hideRatings()?'??':p.r)+'</i></li>';}});
   return '<div class="u-sheet" data-act="sheet-x"><div class="u-sheet-card" role="dialog" aria-label="Full squad"><button type="button" class="u-sx" data-act="sheet-x" aria-label="Close">✕</button>'+
     '<h3 class="u-label">Your XI · '+S.fid+' · '+STYLE_LABEL[S.style]+'</h3><ul class="u-xi">'+xi+'</ul></div></div>';
 }
@@ -622,7 +691,7 @@ function doRoll(kind){
 
 function place(p,slotIdx){
   var s=S.cur;
-  S.picks[slotIdx]={n:p.n,r:p.r,pos:p.pos,alt:p.alt,c:s.c,ab:s.ab,ss:s.ss,club:s.club};
+  S.picks[slotIdx]={n:p.n,r:p.r,pos:p.pos,alt:p.alt,c:s.c,ab:s.ab,ss:s.ss,club:s.club,cp:compOf(s)};
   S.taken[p.n]=1;S.count++;S.cur=null;S.phase="idle";S.sel=null;
   click();
   if(S.count>=11){S.view="ready";render();toTop();return;}
@@ -877,7 +946,7 @@ function shareCard(){
   c.toBlob(function(b){
     if(!b){say("Couldn't build the card");return;}
     var f;try{f=new File([b],"champions-xi.png",{type:"image/png"});}catch(e){f=null;}
-    if(f&&navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Champions XI"}).catch(function(){});return;}
+    if(f&&navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:"Europe XI"}).catch(function(){});return;}
     var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="champions-xi.png";document.body.appendChild(a);a.click();a.remove();
     setTimeout(function(){URL.revokeObjectURL(a.href);},4000);say("Card saved");
   },"image/png");
@@ -899,6 +968,7 @@ root.addEventListener("click",function(e){
     case"mode":S.mode=v;click();saveSettings();render(true);break;
     case"bracket":S.bracket=v;click();saveSettings();render(true);break;
     case"era":S.era=v;click();saveSettings();render(true);break;
+    case"tab":S.tab=v;click();render();toTop();break;
     case"pres":S.pres=v;click();saveSettings();render(true);break;
     case"manage":S.manage=v==="1";click();saveSettings();render(true);break;
     case"start":startDraft();break;
@@ -955,7 +1025,7 @@ var OC1=["#0e3bb8","#e8f2ff"],OC2=["#b8340e","#fff0e8"],watch=0;
 function safe(t){return String(t==null?"":t).replace(/[;|=~^"\\]/g," ").replace(/\s+/g," ").trim();}
 function abbr(n){var w=String(n||"?").trim().split(/\s+/),a=(w.length>1?w[0].charAt(0)+w[1].charAt(0):w[0].slice(0,3)).toUpperCase();return a||"OPP";}
 function encodeXI(R){
-  return JSON.stringify({R:R,f:S.fid,s:S.style,p:S.slots.map(function(sl){var p=S.picks[sl.i];return[safe(p.n),p.pos,p.alt||"",p.r,safe(p.ab),safe(p.ss),safe(p.club),p.c[0],p.c[1]];})});
+  return JSON.stringify({R:R,f:S.fid,s:S.style,p:S.slots.map(function(sl){var p=S.picks[sl.i];return[safe(p.n),p.pos,p.alt||"",p.r,safe(p.ab),safe(p.ss),safe(p.club),p.c[0],p.c[1],p.cp||"ucl"];})});
 }
 function decodeXI(str,R){
   if(!str)return null;
@@ -964,7 +1034,7 @@ function decodeXI(str,R){
     if(!j||j.R!==R||!U.FORMATIONS[j.f]||U.STYLES.indexOf(j.s)<0||!j.p||j.p.length!==11)return null;
     var slots=U.slotsFor(j.f),picks={},seen={};
     for(var i=0;i<11;i++){
-      var a=j.p[i],p={n:String(a[0]),pos:String(a[1]),alt:String(a[2]||""),r:Math.max(60,Math.min(99,+a[3]||60)),ab:String(a[4]),ss:String(a[5]),club:String(a[6]),c:[String(a[7]),String(a[8])]};
+      var a=j.p[i],p={n:String(a[0]),pos:String(a[1]),alt:String(a[2]||""),r:Math.max(60,Math.min(99,+a[3]||60)),ab:String(a[4]),ss:String(a[5]),club:String(a[6]),c:[String(a[7]),String(a[8])],cp:COMPS[a[9]]?a[9]:"ucl"};
       if(U.POS.indexOf(p.pos)<0||seen[p.n]||!U.fits(slots[i].pos,p)||!/^#[0-9a-fA-F]{6}$/.test(p.c[0])||!/^#[0-9a-fA-F]{6}$/.test(p.c[1]))return null;
       seen[p.n]=1;picks[i]=p;
     }
@@ -993,7 +1063,7 @@ function unmountOn(){
 }
 function mountOn(cfg){
   clearTimers();loadSave();resetDraft();
-  S.on={cfg:cfg,snap:null,round:0,era:"all",pb:null,vs:null,dec:null,dA:null,dB:null,hd:{a:{},b:{}},fw:{a:{},b:{}},legs:2,showXI:""};
+  S.on={cfg:cfg,snap:null,round:0,era:"all",cups:U.COMP_IDS.slice(),pb:null,vs:null,dec:null,dA:null,dB:null,hd:{a:{},b:{}},fw:{a:{},b:{}},legs:2,showXI:""};
   S.view="osetup";S.sheet=null;
   if(watch)clearInterval(watch);
   watch=setInterval(function(){if(S.on&&!document.body.classList.contains("ol-open"))unmountOn();},800);
