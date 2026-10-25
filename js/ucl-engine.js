@@ -144,7 +144,7 @@ function seasonStrength(season){
 function oppTeam(season){
   var st=season.p.filter(function(p){return p.s;});
   return{xi:st.map(function(p){return{n:p.n,pos:p.pos,r:p.r};}),O:seasonStrength(season),
-    id:season.id,club:season.club,ab:season.ab,ss:season.ss,yr:season.yr,c:season.c,coach:season.coach,fin:season.fin};
+    id:season.id,comp:season.comp||"ucl",club:season.club,ab:season.ab,ss:season.ss,yr:season.yr,c:season.c,coach:season.coach,fin:season.fin};
 }
 
 /* ---------- الهدّافين ---------- */
@@ -385,6 +385,16 @@ function eraPool(seasons,era){
   return m.length>=STAGES.length+3?m:seasons;
 }
 
+/* فلتر البطولات: comps = قايمة من ucl/uel/uecl (فاضية = الكل). كل موسم ليه comp (الافتراضي ucl). */
+var COMP_IDS=["ucl","uel","uecl"];
+function compOf(s){var c=s&&(s.comp||s.cp);return COMP_IDS.indexOf(c)>-1?c:"ucl";}
+function poolFor(seasons,era,comps){
+  var list=seasons;
+  if(comps&&comps.length&&comps.length<COMP_IDS.length)list=seasons.filter(function(s){return comps.indexOf(compOf(s))>-1;});
+  if(!list.length)list=seasons;
+  return eraPool(list,era);
+}
+
 /* ---------- نتيجة البطولة والمستوى ---------- */
 function tierOf(r){
   if(r.champion){
@@ -504,7 +514,7 @@ function rerollSeason(rnd,seasons,cur,used,slots,picks,taken){
 var API={CFG:CFG,STYLE_EV:STYLE_EV,POS:POS,WATT:WATT,WDEF:WDEF,FORMATIONS:FORMATIONS,FORMATION_IDS:FORMATION_IDS,STYLES:STYLES,
   STAGES:STAGES,TOTAL_MATCHES:TOTAL_MATCHES,slotsFor:slotsFor,fits:fits,fitKind:fitKind,relocations:relocations,pickable:pickable,rngFrom:rngFrom,
   poisson:poisson,lambda:lambda,makeTeam:makeTeam,seasonStrength:seasonStrength,oppTeam:oppTeam,
-  penWinProb:penWinProb,buildLadder:buildLadder,buildRandom:buildRandom,eraPool:eraPool,
+  penWinProb:penWinProb,buildLadder:buildLadder,buildRandom:buildRandom,eraPool:eraPool,poolFor:poolFor,compOf:compOf,COMP_IDS:COMP_IDS,
   createCup:createCup,createVs:createVs,buildVs:buildVs,pvpOpp:pvpOpp,beginLeg:beginLeg,finishLeg:finishLeg,settleTie:settleTie,htOptions:htOptions,finishCup:finishCup,
   runCup:runCup,tierOf:tierOf,tally:tally,
   drawSeason:drawSeason,rerollTeam:rerollTeam,rerollSeason:rerollSeason,seasonAlternatives:seasonAlternatives};

@@ -1,5 +1,5 @@
 /* اختبار محرك أبطال أوروبا + معايرة الصعوبة. run: node js/ucl.test.js [--calib] */
-const U=require("./ucl-engine.js"),D=require("./ucl-data.js");require("./ucl-data-bench.js");
+const U=require("./ucl-engine.js"),D=require("./ucl-data.js");require("./ucl-data-bench.js");require("./uel-data.js");require("./uecl-data.js");
 let pass=0,fail=0;
 const ok=(c,m)=>{if(c)pass++;else{fail++;console.log(" FAIL "+m);}};
 const S=D.seasons;
@@ -204,6 +204,28 @@ if(process.argv.includes("--calib")){
     console.log("greedy draft avg ovr".padEnd(26),(acc/K).toFixed(1),"| title",(100*t/(K*150)).toFixed(1)+"%","flawless+",(100*fl/(K*150)).toFixed(2)+"%");
   });
   U.CFG.oppOffset=0;
+}
+
+/* ---------- البطولات الثلاث (UCL / UEL / UECL) ---------- */
+{
+  const by={ucl:0,uel:0,uecl:0};
+  D.seasons.forEach(s=>{const c=U.compOf(s);by[c]++;ok(U.COMP_IDS.includes(c),"comp valid "+s.id);});
+  ok(by.uel===27&&by.uecl===5&&by.ucl>=60,"season counts per cup");
+  const ids=new Set();D.seasons.forEach(s=>{ok(!ids.has(s.id),"unique id "+s.id);ids.add(s.id);});
+  ["uel","uecl"].forEach(c=>{
+    const pl=U.poolFor(D.seasons,"all",[c]);
+    ok(pl.length===by[c]&&pl.every(s=>U.compOf(s)===c),"poolFor only "+c);
+    for(let seed=1;seed<=60;seed++){
+      const t=U.makeTeam(U.slotsFor("4-3-3"),(()=>{const pk={};U.slotsFor("4-3-3").forEach((sl,i)=>{const s=pl[(seed+i)%pl.length];const q=s.p.filter(p=>p.s&&U.fits(sl.pos,p))[0]||s.p.filter(p=>p.s)[0];pk[sl.i]=Object.assign({},q,{c:s.c,ab:s.ab,ss:s.ss,club:s.club});});return pk;})(),"balanced");
+      ok(t&&isFinite(t.ovr),"team in "+c);
+      const cup=U.createCup(t,seed,pl,{bracket:"ladder"});
+      ok(cup&&cup.ladder&&cup.ladder.length===U.STAGES.length,"cup builds in "+c);
+      cup.ladder.forEach(o=>ok(U.compOf(o)===c,"opponent stays in "+c));
+    }
+  });
+  ok(U.poolFor(D.seasons,"modern",["uel","uecl"]).length>=5,"modern small pool falls back");
+  ok(U.poolFor(D.seasons,"all",[]).length===D.seasons.length,"empty comps = all");
+  ok(U.oppTeam(D.seasons.find(s=>s.comp==="uel")).comp==="uel","oppTeam keeps comp");
 }
 console.log("UCL tests: "+pass+" passed, "+fail+" failed");
 process.exit(fail?1:0);

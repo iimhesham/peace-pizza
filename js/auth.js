@@ -141,7 +141,7 @@
         walletSync(user);
       });
       auth.getRedirectResult().catch(function(){});
-      loadScript("js/badges.js?v=3").then(function(){return loadScript("js/online.js?v=22");}).catch(function(){});
+      loadScript("js/badges.js?v=3").then(function(){return loadScript("js/online.js?v=23");}).catch(function(){});
     }).catch(function(){if(chip)chip.style.display="none";});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
