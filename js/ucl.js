@@ -123,11 +123,11 @@ function compOf(s){return U.compOf(s);}
 function compName(s){var id=compOf(s);return(id==="uel"&&s.yr&&s.yr<=2009)?"UEFA Cup":COMPS[id].n;}
 function compTag(id){id=COMPS[id]?id:"ucl";return'<span class="u-ct c-'+id+'">'+COMPS[id].s+'</span>';}
 var CID=0;
-var PATS=["plain","half","band","hoops","chevron"];
+var PATS=["plain","half","band","hoops","chevron","sash","quarters","cross"];
 var PAT={MIL:"stripes",INT:"stripes",JUV:"stripes",BAR:"stripes",ATM:"stripes",CRV:"stripes",POR:"stripes",CSK:"half",
   SEV:"band",AJX:"band",PSG:"band",FEY:"half",BEN:"half",HSV:"hoops",CEL:"hoops",TOT:"plain",RMA:"plain",MUN:"plain",LIV:"plain",CHE:"plain",MCI:"plain",BAY:"plain",BVB:"plain",
   CRY:"chevron",ATA:"stripes",SGE:"half",WHU:"chevron",AVL:"half",ROM:"half",OLY:"stripes",GAL:"half",VAL:"chevron",ZEN:"hoops",SHA:"stripes",VIL:"plain"};
-var SHAPES=["M6 7Q28 1 50 7V30C50 46 39 55 28 61C17 55 6 46 6 30Z","M5 5H51V31C51 46 38 55 28 61C18 55 5 46 5 31Z","M28 6A24 24 0 1 1 27.99 6Z"];
+var SHAPES=["M6 7Q28 1 50 7V30C50 46 39 55 28 61C17 55 6 46 6 30Z","M5 5H51V31C51 46 38 55 28 61C18 55 5 46 5 31Z","M28 6A24 24 0 1 1 27.99 6Z","M28 3L50 12V34L28 61L6 34V12Z","M6 10Q17 2 28 8Q39 2 50 10V32C50 47 39 55 28 61C17 55 6 47 6 32Z","M10 5H46Q51 5 51 10V40Q51 52 28 61Q5 52 5 40V10Q5 5 10 5Z"];
 function hash(s){var h=7;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
 function starPts(cx,cy,R,r){var p=[],k;for(k=0;k<10;k++){var a=-Math.PI/2+k*Math.PI/5,q=k%2?r:R;p.push((cx+q*Math.cos(a)).toFixed(1)+","+(cy+q*Math.sin(a)).toFixed(1));}return p.join(" ");}
 function glyph(id,cx,cy,k){
@@ -140,13 +140,23 @@ function compIcon(id,sz){
   return'<svg class="u-ci" viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" aria-hidden="true"><defs><linearGradient id="'+g+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+C.l+'"/><stop offset="1" stop-color="'+C.c+'"/></linearGradient></defs>'+
     '<circle cx="12" cy="12" r="11" fill="url(#'+g+')" stroke="rgba(255,255,255,.85)" stroke-width="1.3"/>'+glyph(id,12,12.4,6.4)+'</svg>';
 }
+function emblem(k){
+  var S=' stroke="rgba(0,0,0,.7)" stroke-width="1" stroke-linejoin="round" paint-order="stroke"';
+  if(k===0)return'<polygon points="'+starPts(28,19,5,2.1)+'" fill="#fff"'+S+'/>';
+  if(k===1)return'<circle cx="28" cy="19" r="4.5" fill="#fff"'+S+'/><path d="M28 16.4l2.3 1.7-.9 2.7h-2.8l-.9-2.7z" fill="#1a1d26"/>';
+  if(k===2)return'<path d="M23 22l-1-6.4 3.4 2.9 2.6-4.2 2.6 4.2 3.4-2.9-1 6.4z" fill="#fff"'+S+'/>';
+  return'<path d="M28 14l4.6 5-4.6 5-4.6-5z" fill="#fff"'+S+'/>';
+}
 function crest(c,ab,sz,comp){
-  var f=c[0],s=c[1],h=hash(ab),shp=h%3,pat=PAT[ab]||PATS[(h>>3)%PATS.length],d=SHAPES[shp],n=++CID,cl="cc"+n,gl="cg"+n,bg="cm"+n,L="";
+  var f=c[0],s=c[1],h=hash(ab),shp=h%SHAPES.length,pat=PAT[ab]||PATS[(h>>3)%PATS.length],d=SHAPES[shp],n=++CID,cl="cc"+n,gl="cg"+n,bg="cm"+n,L="";
   var fs=ab.length>3?9:ab.length>2?11:13;
   if(pat==="stripes"){for(var i=1;i<7;i+=2)L+='<rect x="'+(4+i*9.6-9.6)+'" y="0" width="9.6" height="64" fill="'+s+'"/>';}
   else if(pat==="hoops")L='<rect x="0" y="13" width="56" height="10" fill="'+s+'"/><rect x="0" y="33" width="56" height="10" fill="'+s+'"/>';
   else if(pat==="half")L='<rect x="28" y="0" width="28" height="64" fill="'+s+'"/>';
   else if(pat==="band")L='<rect x="21" y="0" width="14" height="64" fill="'+s+'"/>';
+  else if(pat==="sash")L='<path d="M0 46L56 12V26L0 60Z" fill="'+s+'"/>';
+  else if(pat==="quarters")L='<rect x="0" y="0" width="28" height="32" fill="'+s+'"/><rect x="28" y="32" width="28" height="32" fill="'+s+'"/>';
+  else if(pat==="cross")L='<rect x="24" y="0" width="8" height="64" fill="'+s+'"/><rect x="0" y="27" width="56" height="8" fill="'+s+'"/>';
   else if(pat==="chevron")L='<path d="M0 18L28 40L56 18V30L28 52L0 30Z" fill="'+s+'"/>';
   else L='<rect x="0" y="0" width="56" height="15" fill="'+s+'"/>';
   var med="";
@@ -158,7 +168,33 @@ function crest(c,ab,sz,comp){
     '<path d="'+d+'" fill="'+f+'" stroke="#0b0e14" stroke-width="3.2" stroke-linejoin="round"/>'+
     '<g clip-path="url(#'+cl+')">'+L+'<rect x="0" y="0" width="56" height="34" fill="url(#'+gl+')"/></g>'+
     '<path d="'+d+'" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.1" stroke-linejoin="round"/>'+
+    '<path d="'+d+'" transform="translate(28 32) scale(.84) translate(-28 -32)" fill="none" stroke="rgba(255,255,255,.32)" stroke-width="1" stroke-linejoin="round"/>'+emblem((h>>6)%4)+
     '<text x="28" y="'+(shp===2?36:37)+'" text-anchor="middle" font-size="'+fs+'" font-weight="800" fill="#fff" stroke="rgba(0,0,0,.72)" stroke-width="2.6" stroke-linejoin="round" paint-order="stroke" style="font-family:Inter,system-ui,sans-serif;letter-spacing:.02em">'+esc(ab)+'</text>'+med+'</svg>';
+}
+var JY='<svg class="u-jy" viewBox="0 0 40 40" aria-hidden="true"><use href="#uJy"/></svg>';
+(function(){
+  if(typeof document==="undefined"||document.getElementById("uJySprite"))return;
+  var sp='<svg id="uJySprite" width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'+
+    '<linearGradient id="uJg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".24"/></linearGradient>'+
+    '<symbol id="uJy" viewBox="0 0 40 40">'+
+    '<path d="M14 4C16 7 24 7 26 4L35 7.5 39 17.5 31.5 21V37H8.5V21L1 17.5 5 7.5Z" style="fill:var(--c0)"/>'+
+    '<path d="M5 7.5L1 17.5 8.5 21V6.1ZM35 7.5L39 17.5 31.5 21V6.1Z" style="fill:var(--c1)"/>'+
+    '<path d="M14 4C16 7 24 7 26 4L24.6 3.2C22.5 5.3 17.5 5.3 15.4 3.2Z" style="fill:var(--c1)"/>'+
+    '<path d="M14 4C16 7 24 7 26 4L35 7.5 39 17.5 31.5 21V37H8.5V21L1 17.5 5 7.5Z" fill="url(#uJg)"/>'+
+    '<path d="M8.5 34.5H31.5" stroke="rgba(0,0,0,.18)" stroke-width="1.4" fill="none"/>'+
+    '<path d="M14 4C16 7 24 7 26 4L35 7.5 39 17.5 31.5 21V37H8.5V21L1 17.5 5 7.5Z" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.3" stroke-linejoin="round"/>'+
+    '</symbol></defs></svg>';
+  document.body.insertAdjacentHTML("afterbegin",sp);
+})();
+function trophyArt(){
+  return'<svg class="u-art" viewBox="0 0 120 64" width="132" height="70" aria-hidden="true"><defs><linearGradient id="uTg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#d49a1f"/></linearGradient></defs>'+
+    '<path d="M44 8h32v16c0 11-7 18-16 19-9-1-16-8-16-19z" fill="url(#uTg)"/>'+
+    '<path d="M44 13h-9v7c0 6 4 10 10 10M76 13h9v7c0 6-4 10-10 10" fill="none" stroke="#d49a1f" stroke-width="3" stroke-linecap="round"/>'+
+    '<path d="M50 11v13c0 5 3 9 7 11" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.2" stroke-linecap="round"/>'+
+    '<rect x="56.5" y="43" width="7" height="8" fill="#d49a1f"/><rect x="47" y="51" width="26" height="7" rx="2.5" fill="url(#uTg)"/>'+
+    '<polygon points="'+starPts(60,24,5.2,2.2)+'" fill="#fff" fill-opacity=".9"/>'+
+    '<circle cx="19" cy="48" r="10" fill="#fff"/><path d="M19 41.6l5 3.6-1.9 5.8h-6.2l-1.9-5.8z" fill="#1a1d26"/><circle cx="19" cy="48" r="10" fill="none" stroke="rgba(0,0,0,.45)" stroke-width="1.4"/>'+
+    '<polygon points="'+starPts(100,16,4.2,1.8)+'" fill="#7aa7ff"/><polygon points="'+starPts(92,44,3,1.3)+'" fill="#f5c451"/><polygon points="'+starPts(28,14,2.6,1.1)+'" fill="#f5c451"/></svg>';
 }
 var XI_CREST=crest(["#12151c","#f2680c"],"XI",44);
 function starsRow(n,glow){
@@ -187,7 +223,10 @@ function miniPitch(fid){
 }
 function pitchLines(){
   return '<svg class="u-lines" viewBox="0 0 100 128" preserveAspectRatio="none" aria-hidden="true">'+
+    '<g class="gr"><rect x="3" y="18.25" width="94" height="15.25"/><rect x="3" y="48.75" width="94" height="15.25"/><rect x="3" y="79.25" width="94" height="15.25"/><rect x="3" y="109.75" width="94" height="15.25"/></g>'+
+    '<rect x="44" y="0.4" width="12" height="2.6" class="net"/><rect x="44" y="125" width="12" height="2.6" class="net"/>'+
     '<rect x="3" y="3" width="94" height="122" rx="1.5"/><path d="M3 64h94"/><circle cx="50" cy="64" r="10.5"/><circle cx="50" cy="64" r="0.9" class="fill"/>'+
+    '<path d="M41.06 20A10.5 10.5 0 0 0 58.94 20M41.06 108A10.5 10.5 0 0 1 58.94 108M5 3A2 2 0 0 1 3 5M95 3A2 2 0 0 0 97 5M3 123A2 2 0 0 1 5 125M95 125A2 2 0 0 1 97 123"/><circle cx="50" cy="14.5" r="0.7" class="fill"/><circle cx="50" cy="113.5" r="0.7" class="fill"/>'+
     '<rect x="24" y="3" width="52" height="17"/><rect x="38" y="3" width="24" height="6.5"/>'+
     '<rect x="24" y="108" width="52" height="17"/><rect x="38" y="118.5" width="24" height="6.5"/></svg>';
 }
@@ -201,7 +240,7 @@ function pitch(hot,tip){
     var st='left:'+s.x.toFixed(2)+'%;top:'+s.y.toFixed(2)+'%';
     if(p){
       o+='<button type="button" class="u-slot is-filled" style="'+st+'" data-act="xi" data-i="'+s.i+'" aria-label="'+esc(p.n)+', '+s.pos+'. Details">'+
-        '<span class="u-shirt" style="--c0:'+p.c[0]+';--c1:'+p.c[1]+';--tx:'+ink(p.c[0])+'">'+(hideRatings()?esc(s.pos):p.r)+'</span>'+
+        '<span class="u-shirt" style="--c0:'+p.c[0]+';--c1:'+p.c[1]+';--tx:'+ink(p.c[0])+'">'+JY+'<b>'+(hideRatings()?esc(s.pos):p.r)+'</b></span>'+
         '<span class="u-nm">'+esc(p.n)+'</span></button>';
     }else{
       o+='<button type="button" class="u-slot is-empty'+(isHot?' is-hot':'')+'" style="'+st+'" data-act="slot" data-i="'+s.i+'"'+
@@ -355,7 +394,7 @@ function viewDraft(){
       '<h2 class="u-label u-lh">Pick one player</h2>'+fltBar(S.cur)+listRows(S.cur);
     if(S.sel)hot=S.sel.slots;
   }else{
-    o+='<div class="u-drawbox is-empty"><p>Roll to draw a winning club and the season it lifted the cup.</p></div>'+
+    o+='<div class="u-drawbox is-empty">'+trophyArt()+'<p>Roll to draw a winning club and the season it lifted the cup.</p></div>'+
       '<button type="button" class="u-btn u-big u-roll" data-act="roll">'+dieSvg()+' Roll</button>';
   }
   o+='<h2 class="u-label u-lh">Your XI · '+S.fid+' · '+STYLE_LABEL[S.style]+'</h2>'+pitch(hot,S.count>0);
@@ -476,7 +515,7 @@ function verdict(){
       '<strong>'+sc+'</strong><em>'+(t.pens?'PENS':t.et?'AET':t.adv?'W':'L')+'</em></li>';
   });
   var bp=bestPlayer(T);
-  var bpHtml=bp?'<div class="u-bp"><span class="u-shirt" style="--c0:'+bp.p.c[0]+';--c1:'+bp.p.c[1]+';--tx:'+ink(bp.p.c[0])+'">'+bp.p.r+'</span><div><small>BEST PLAYER OF THE RUN</small><b>'+esc(bp.p.n)+'</b><span>'+esc(bp.p.ab)+' '+esc(bp.p.ss)+' · '+(bp.g?bp.g+(bp.g===1?' goal':' goals'):bp.pos)+'</span></div></div>':'';
+  var bpHtml=bp?'<div class="u-bp"><span class="u-shirt" style="--c0:'+bp.p.c[0]+';--c1:'+bp.p.c[1]+';--tx:'+ink(bp.p.c[0])+'">'+JY+'<b>'+bp.p.r+'</b></span><div><small>BEST PLAYER OF THE RUN</small><b>'+esc(bp.p.n)+'</b><span>'+esc(bp.p.ab)+' '+esc(bp.p.ss)+' · '+(bp.g?bp.g+(bp.g===1?' goal':' goals'):bp.pos)+'</span></div></div>':'';
   var boot=T.max?'<div class="u-boot"><small>GOLDEN BOOT</small><b>'+T.boot.map(function(n){return esc(n.toUpperCase())+' '+T.max;}).join(' · ')+'</b></div>':'';
   var pb='';
   if(F.newBest)pb='<p class="u-pbn is-new">★ New personal best</p>';
@@ -593,7 +632,7 @@ function playerSheet(i){
   var natural=U.fitKind(slot.pos,p)===2;
   var wa=Math.round(U.WATT[slot.pos]*100),wd=Math.round(U.WDEF[slot.pos]*100);
   var o='<div class="u-sheet" data-act="sheet-x"><div class="u-sheet-card" role="dialog" aria-label="'+esc(p.n)+'"><button type="button" class="u-sx" data-act="sheet-x" aria-label="Close">✕</button>'+
-    '<div class="u-sh-h"><span class="u-shirt u-shirt-l" style="--c0:'+p.c[0]+';--c1:'+p.c[1]+';--tx:'+ink(p.c[0])+'">'+(hide?esc(slot.pos):p.r)+'</span>'+
+    '<div class="u-sh-h"><span class="u-shirt u-shirt-l" style="--c0:'+p.c[0]+';--c1:'+p.c[1]+';--tx:'+ink(p.c[0])+'">'+JY+'<b>'+(hide?esc(slot.pos):p.r)+'</b></span>'+
     '<div><b>'+esc(p.n)+'</b><span>'+esc(p.club)+' · '+esc(p.ss)+'</span></div></div>'+
     '<ul class="u-sh-g"><li><small>PLAYING AS</small><b>'+slot.pos+'</b><em class="u-fit '+(natural?'f-main':'f-alt')+'">'+(natural?'NATURAL':'ALT ROLE')+'</em></li>'+
     '<li><small>NATURAL</small><b>'+p.pos+'</b></li><li><small>ALT</small><b>'+(p.alt||'—')+'</b></li>'+
@@ -1252,7 +1291,7 @@ function roPitch(d){
   var o='<div class="u-pitch u-ro">'+pitchLines();
   d.slots.forEach(function(s){
     var p=d.picks[s.i],st='left:'+s.x.toFixed(2)+'%;top:'+s.y.toFixed(2)+'%';
-    o+='<div class="u-slot is-filled" style="'+st+'"><span class="u-shirt" style="--c0:'+p.c[0]+';--c1:'+p.c[1]+';--tx:'+ink(p.c[0])+'">'+p.r+'</span><span class="u-nm">'+esc(p.n)+'</span></div>';
+    o+='<div class="u-slot is-filled" style="'+st+'"><span class="u-shirt" style="--c0:'+p.c[0]+';--c1:'+p.c[1]+';--tx:'+ink(p.c[0])+'">'+JY+'<b>'+p.r+'</b></span><span class="u-nm">'+esc(p.n)+'</span></div>';
   });
   return o+'</div>';
 }
