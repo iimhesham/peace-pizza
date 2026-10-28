@@ -244,7 +244,7 @@ function compStat(id){
 }
 function cupCard(id){
   var C=COMPS[id],st=compStat(id);
-  return '<div class="u-cup c-'+id+'">'+compIcon(id,42)+'<span class="u-cup-t"><b>'+C.n+'</b><small>'+st.n+' title-winning seasons · '+st.a+'–'+st.b+'</small></span></div>';
+  return '<div class="u-cup c-'+id+'">'+compIcon(id,42)+'<span class="u-cup-t"><b>'+C.n+'</b><small>'+st.n+(id==="ucl"?' champion + finalist seasons':' title-winning seasons')+' · '+st.a+'–'+st.b+'</small></span></div>';
 }
 var TABS=[["cups","Cups"],["squad","Squad"],["match","Match"],["record","Record"]];
 function setupTabs(){
@@ -262,7 +262,7 @@ function viewSetup(){
     var era=seg("era",S.era,[["all","All history"],["modern","Modern (1992+)"]]);
     p='<div class="u-panel"><h2 class="u-label">One draft, three cups</h2><div class="u-cups">'+cupCard("ucl")+cupCard("uel")+cupCard("uecl")+'</div>'+
       '<p class="u-hint">Every roll can land on a winner of any of the three cups, and so can every opponent. The badge on each club shows which cup it won.</p></div>'+
-      '<div class="u-panel"><h2 class="u-label">Era</h2>'+era+'<p class="u-hint">'+(S.era==="modern"?"Only seasons from 1992 on, for your draft and your opponents.":"Every title-winning season of all three cups.")+'</p></div>'+
+      '<div class="u-panel"><h2 class="u-label">Era</h2>'+era+'<p class="u-hint">'+(S.era==="modern"?"Only seasons from 1992 on, for your draft and your opponents.":"Every title-winning (and UCL finalist) season of all three cups.")+'</p></div>'+
       '<p class="u-note"><b>How ratings work.</b> A player is rated on the cup run his club won, not on his career. A Europa League star is rated against that tournament.</p>';
   }else if(S.tab==="squad"){
     var fm="";
@@ -285,7 +285,7 @@ function viewSetup(){
     var b=S.stats.best?(TIER_RANK[S.stats.best]>=6?"★ ":"")+(TIER_NAME[S.stats.best]||S.stats.best.toUpperCase()):"—";
     p='<div class="u-record"><div><b>'+S.stats.runs+'</b><span>cups</span></div><div><b>'+S.stats.titles+'</b><span>titles</span></div><div><b>'+S.stats.flawless+'</b><span>flawless</span></div><div><b class="u-sm">'+esc(b)+'</b><span>best</span></div></div>'+
       trophyRoom()+
-      '<p class="u-beta"><span>BETA</span>'+SEASONS.length+' title-winning seasons across three cups · squads and ratings are provisional estimates.</p>';
+      '<p class="u-beta"><span>BETA</span>'+SEASONS.length+' seasons across three cups (UCL champions + finalists) · squads and ratings are provisional estimates.</p>';
   }
   return '<div class="u-hero"><div class="u-hero-r"><h1 class="u-logo">EUROPE<span>XI</span></h1><div class="u-trio">'+compIcon("ucl",26)+compIcon("uel",26)+compIcon("uecl",26)+'</div></div>'+
     '<p class="u-tag">Roll a winning club from Europe\'s cups. Pick one star. Manage the run. Win all '+U.TOTAL_MATCHES+'.</p>'+
@@ -307,7 +307,7 @@ function drawnCard(s,mode){
   var cls="u-draw"+(mode==="reveal"?" is-reveal":mode==="roll"?" is-flip":"");
   var cid=compOf(s),C=COMPS[cid];
   return '<article class="'+cls+' c-'+cid+'" style="--c0:'+s.c[0]+';--c1:'+s.c[1]+';--cc:'+C.c+';--cl:'+C.l+'"><span class="u-draw-c">'+crest(s.c,s.ab,64,cid)+'</span><div class="u-draw-t"><small>'+(mode==="roll"?"ROLLING…":"DRAWN")+'</small><b>'+esc(s.club)+'</b>'+
-    '<span class="u-ssn">'+esc(s.ss)+'</span><span class="u-cp">'+compIcon(cid,16)+esc(compName(s))+'</span><em>'+esc(s.coach)+' · Final '+esc(s.fin)+'</em></div></article>';
+    '<span class="u-ssn">'+esc(s.ss)+'</span><span class="u-cp">'+compIcon(cid,16)+esc(compName(s))+(s.ru?' · FINALIST':'')+'</span><em>'+esc(s.coach)+' · Final '+esc(s.fin)+'</em></div></article>';
 }
 function fltBar(s){
   var o='<div class="u-flt" role="group" aria-label="Filter by position">';
