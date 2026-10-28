@@ -127,8 +127,13 @@ body.mode-ucl #toast{background:rgba(20,26,44,.92);color:#e9eefb;border:1px soli
 .u-lines{position:absolute;inset:0;width:100%;height:100%}
 .u-lines *{fill:none;stroke:rgba(255,255,255,.16);stroke-width:.6;vector-effect:non-scaling-stroke}
 .u-lines .fill{fill:rgba(255,255,255,.35)}
+.u-lines .gr rect{fill:rgba(255,255,255,.028);stroke:none}
+.u-lines .net{fill:rgba(255,255,255,.08);stroke:rgba(255,255,255,.22)}
+.u-drawbox .u-art{display:block;margin:0 auto 6px;opacity:.95}
 .u-slot{position:absolute;transform:translate(-50%,-50%);width:62px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0;background:none;border:0;z-index:2}
-.u-shirt{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;font-size:13px;font-weight:700;color:var(--tx);background:linear-gradient(135deg,var(--c0) 0 68%,var(--c1) 68%);border:1.5px solid rgba(255,255,255,.85);box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.u-shirt{position:relative;display:block;width:42px;height:42px;font-size:12.5px;font-weight:800;color:var(--tx);filter:drop-shadow(0 4px 6px rgba(0,0,0,.5));transition:transform .12s}
+.u-jy{position:absolute;inset:0;width:100%;height:100%;display:block}
+.u-shirt b{position:absolute;left:50%;top:62%;transform:translate(-50%,-50%);font-weight:800;line-height:1;letter-spacing:-.02em}
 .u-nm{max-width:66px;padding:2px 6px;border-radius:6px;background:rgba(6,9,18,.78);backdrop-filter:blur(6px);font-size:10px;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 .u-ring{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.28);background:rgba(255,255,255,.03);font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--mu)}
 .u-slot.is-empty{width:46px;min-width:44px;min-height:44px;justify-content:center}
@@ -278,7 +283,7 @@ body.mode-ucl #toast{background:rgba(20,26,44,.92);color:#e9eefb;border:1px soli
 
 /* الملعب: لاعب ينضغط عليه + معاينة */
 .u-slot.is-filled{cursor:pointer;min-width:48px;min-height:48px}
-.u-slot.is-filled:hover .u-shirt{border-color:var(--ac);box-shadow:0 0 0 4px rgba(122,167,255,.25),0 4px 12px rgba(0,0,0,.5)}
+.u-slot.is-filled:hover .u-shirt{filter:drop-shadow(0 0 7px var(--ac)) drop-shadow(0 4px 6px rgba(0,0,0,.5))}
 .u-slot.is-filled:active .u-shirt{transform:scale(.92)}
 .u-slot.is-prev .u-ring{border:2px solid var(--ac);background:rgba(79,124,255,.28);color:#fff;box-shadow:0 0 0 5px rgba(79,124,255,.18);animation:uPulse 1.1s ease-in-out infinite}
 .u-slot.is-prev-alt .u-ring{border:2px dashed var(--gd);background:rgba(245,196,81,.14);color:var(--gd);box-shadow:0 0 0 5px rgba(245,196,81,.12)}
