@@ -404,7 +404,8 @@ function viewDraft(){
 /* ---------- 3) جاهز للمحاكاة ---------- */
 function bars(t,hide){
   function row(l,v){return '<div class="u-bar-r"><span>'+l+'</span><div class="u-meter"><i style="width:'+(hide?0:Math.max(0,Math.min(100,(v-60)*100/40)))+'%"></i></div><b>'+(hide?'??':Math.round(v))+'</b></div>';}
-  return '<div class="u-bars">'+row("ATT",t.A)+row("DEF",t.D)+row("OVR",t.ovr)+'</div>';
+  var ch=t.chem?'<div class="u-bar-r"><span>CHEM</span><div class="u-meter"><i style="width:'+Math.round(t.chem.frac*100)+'%"></i></div><b>+'+t.chem.bonus.toFixed(1)+'</b></div>':'';
+  return '<div class="u-bars">'+row("ATT",t.A)+row("DEF",t.D)+row("OVR",t.ovr)+ch+'</div>';
 }
 function setupLine(){
   return '<ul class="u-chipline"><li>'+S.fid+'</li><li>'+STYLE_LABEL[S.style]+'</li><li>'+(S.bracket==="ladder"?"Classic Path":"Random Bracket")+'</li>'+

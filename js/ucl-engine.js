@@ -15,6 +15,8 @@
 /* ---------- ضبط المعادلة (كلها قابلة للمعايرة) ---------- */
 var CFG={
   base:1.4,slope:0.08,minL:0.15,maxL:5,
+  chemMax:3.5,        /* أقصى بونص كيمياء على الهجوم والدفاع (XI كامل من نفس الموسم) */
+  chemSeason:1,chemClub:0.5,chemCap:3, /* نقاط الرابط: زميل من نفس الموسم = 1، من نفس النادي في موسم تاني = 0.5، سقف اللاعب 3 */
   oppOffset:0,        /* بيتضاف على قوة كل خصم (معايرة الصعوبة) */
   styleAdj:4.5,       /* هجومي: هجوم +4.5 ودفاع −4.5، والعكس للدفاعي */
   penBase:0.5,penSlope:0.012,penMin:0.1,penMax:0.9,defPen:0.04, /* الدفاعي أحسن شوية في الركلات */
@@ -124,6 +126,26 @@ function clamp(x,a,b){return x<a?a:x>b?b:x;}
 function lambda(a,b){return clamp(CFG.base+CFG.slope*(a-b),CFG.minL,CFG.maxL);}
 
 /* ---------- قوة الفريق ---------- */
+/* ---------- الكيمياء: روابط النادي والموسم بين اللاعبين المختارين ---------- */
+function chemistry(slots,picks){
+  var list=[],club={},seas={};
+  slots.forEach(function(s){
+    var p=picks[s.i];if(!p||!p.ab)return;
+    var ks=p.ab+"|"+(p.ss||"");
+    club[p.ab]=(club[p.ab]||0)+1;seas[ks]=(seas[ks]||0)+1;
+  });
+  var tot=0,n=0,per={};
+  slots.forEach(function(s){
+    var p=picks[s.i];if(!p)return;
+    n++;
+    if(!p.ab){per[s.i]=0;return;}
+    var ks=p.ab+"|"+(p.ss||""),sameS=seas[ks]-1,sameC=club[p.ab]-seas[ks];
+    var pts=Math.min(CFG.chemCap,sameS*CFG.chemSeason+sameC*CFG.chemClub);
+    per[s.i]=pts;tot+=pts;
+  });
+  var frac=n?tot/(n*CFG.chemCap):0;
+  return{frac:frac,bonus:frac*CFG.chemMax,per:per,max:CFG.chemCap};
+}
 function makeTeam(slots,picks,style){
   var xi=[],a=0,aw=0,d=0,dw=0,sum=0;
   slots.forEach(function(s){
@@ -132,8 +154,9 @@ function makeTeam(slots,picks,style){
     a+=p.r*wa;aw+=wa;d+=p.r*wd;dw+=wd;sum+=p.r;
     xi.push({n:p.n,pos:s.pos,r:p.r});
   });
+  var ch=chemistry(slots,picks);
   var A=aw?a/aw:0,D=dw?d/dw:0,adj=style==="attacking"?CFG.styleAdj:style==="defensive"?-CFG.styleAdj:0;
-  return{xi:xi,A:A+adj,D:D-adj,ovr:xi.length?sum/xi.length:0,style:style||"balanced",aw:aw,dw:dw};
+  return{xi:xi,A:A+adj+ch.bonus,D:D-adj+ch.bonus,ovr:xi.length?sum/xi.length:0,style:style||"balanced",aw:aw,dw:dw,chem:ch};
 }
 /* قوة الموسم لما يتسحب كخصم = متوسط الـ 11 الأساسيين */
 function seasonStrength(season){
@@ -513,7 +536,7 @@ function rerollSeason(rnd,seasons,cur,used,slots,picks,taken){
 
 var API={CFG:CFG,STYLE_EV:STYLE_EV,POS:POS,WATT:WATT,WDEF:WDEF,FORMATIONS:FORMATIONS,FORMATION_IDS:FORMATION_IDS,STYLES:STYLES,
   STAGES:STAGES,TOTAL_MATCHES:TOTAL_MATCHES,slotsFor:slotsFor,fits:fits,fitKind:fitKind,relocations:relocations,pickable:pickable,rngFrom:rngFrom,
-  poisson:poisson,lambda:lambda,makeTeam:makeTeam,seasonStrength:seasonStrength,oppTeam:oppTeam,
+  poisson:poisson,lambda:lambda,makeTeam:makeTeam,chemistry:chemistry,seasonStrength:seasonStrength,oppTeam:oppTeam,
   penWinProb:penWinProb,buildLadder:buildLadder,buildRandom:buildRandom,eraPool:eraPool,poolFor:poolFor,compOf:compOf,COMP_IDS:COMP_IDS,
   createCup:createCup,createVs:createVs,buildVs:buildVs,pvpOpp:pvpOpp,beginLeg:beginLeg,finishLeg:finishLeg,settleTie:settleTie,htOptions:htOptions,finishCup:finishCup,
   runCup:runCup,tierOf:tierOf,tally:tally,
